@@ -27,7 +27,7 @@ class LoginFragment : Fragment() {
         val name : TextView = constraintLayout.findViewById(R.id.name_field)
         val age : TextView = constraintLayout.findViewById(R.id.age_field)
         viewModel.getUser(0).observe(viewLifecycleOwner, {user ->
-            name.text = user.description
+            name.text = user.access_token
         })
         return constraintLayout
     }

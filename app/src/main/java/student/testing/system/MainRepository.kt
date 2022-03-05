@@ -11,6 +11,6 @@ class MainRepository @Inject constructor(
     private val remoteData : MainRemoteData
 ) {
 
-    //suspend fun auth() = remoteData.auth(AuthReq("Stdio", "pass"))
-    suspend fun auth() = remoteData.createOperation(CreateOperationReq("2022-02-05", "income", 32100f, "Работай пж"))
+    suspend fun auth() = remoteData.auth("grant_type=&username=Stdio&password=pass&scope=&client_id=&client_secret=")
+    //suspend fun auth() = remoteData.createOperation(CreateOperationReq("2022-02-05", "income", 32100f, "Работай пж"))
 }
