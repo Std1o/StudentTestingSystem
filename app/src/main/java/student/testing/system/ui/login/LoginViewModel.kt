@@ -1,17 +1,13 @@
-package student.testing.system.ui
+package student.testing.system.ui.login
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import student.testing.system.MainRepository
-import student.testing.system.api.models.CreateOperationReq
 import student.testing.system.api.models.Token
-import student.testing.system.models.User
 import javax.inject.Inject
 
 @HiltViewModel
