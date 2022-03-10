@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import student.testing.system.MainRepository
+import student.testing.system.api.network.MainRepository
 import student.testing.system.api.models.Token
 import javax.inject.Inject
 

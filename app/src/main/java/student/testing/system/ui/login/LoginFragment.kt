@@ -11,10 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.api.DataState
+import student.testing.system.api.network.DataState
 import student.testing.system.databinding.LoginFragmentBinding
 
 

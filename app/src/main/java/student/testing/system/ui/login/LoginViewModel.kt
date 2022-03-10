@@ -3,11 +3,10 @@ package student.testing.system.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import student.testing.system.MainRepository
-import student.testing.system.api.DataState
+import student.testing.system.api.network.MainRepository
+import student.testing.system.api.network.DataState
 import student.testing.system.api.models.Token
 import student.testing.system.common.Utils
 import javax.inject.Inject

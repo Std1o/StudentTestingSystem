@@ -1,4 +1,4 @@
-package student.testing.system.api
+package student.testing.system.api.network
 
 import student.testing.system.api.models.signup.SignUpReq
 import javax.inject.Inject

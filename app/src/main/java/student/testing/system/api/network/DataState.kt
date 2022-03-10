@@ -1,4 +1,4 @@
-package student.testing.system.api
+package student.testing.system.api.network
 
 sealed class DataState<out R> {
     object Initial : DataState<Nothing>()

@@ -1,7 +1,7 @@
-package student.testing.system
+package student.testing.system.api.network
 
 import kotlinx.coroutines.flow.flow
-import student.testing.system.api.MainRemoteData
+import student.testing.system.api.network.MainRemoteData
 import student.testing.system.api.models.signup.SignUpReq
 import javax.inject.Inject
 import javax.inject.Singleton

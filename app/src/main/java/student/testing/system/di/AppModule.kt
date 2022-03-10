@@ -8,8 +8,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import student.testing.system.api.MainRemoteData
-import student.testing.system.api.MainService
+import student.testing.system.api.network.MainRemoteData
+import student.testing.system.api.network.MainService
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
