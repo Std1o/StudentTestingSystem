@@ -10,6 +10,10 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import student.testing.system.R
 
 @AndroidEntryPoint
@@ -26,9 +30,12 @@ class LoginFragment : Fragment() {
                 as ConstraintLayout
         val name : TextView = constraintLayout.findViewById(R.id.name_field)
         val age : TextView = constraintLayout.findViewById(R.id.age_field)
-        viewModel.getUser(0).observe(viewLifecycleOwner, {user ->
-            name.text = user.access_token
-        })
+        MainScope().launch {
+            viewModel.getUser(0).collect { it
+                name.text = it.access_token
+            }
+        }
+
         return constraintLayout
     }
 
