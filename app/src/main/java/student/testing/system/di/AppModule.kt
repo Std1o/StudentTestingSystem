@@ -18,7 +18,7 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun providesBaseUrl() : String = "http://192.168.0.232:80/"
+    fun providesBaseUrl() : String = "http://ezapitest.ml/"
 
     @Provides
     fun getHttpLoggingInterceptor(): HttpLoggingInterceptor {

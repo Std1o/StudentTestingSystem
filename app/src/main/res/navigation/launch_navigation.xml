@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="student.testing.system.SignUpFragment"
+        android:name="student.testing.system.ui.signup.SignUpFragment"
         android:label="sign_up_fragment"
         tools:layout="@layout/sign_up_fragment" />
 </navigation>

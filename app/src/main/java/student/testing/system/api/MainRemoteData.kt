@@ -1,10 +1,9 @@
 package student.testing.system.api
 
-import student.testing.system.api.models.AuthReq
-import student.testing.system.api.models.CreateOperationReq
+import student.testing.system.api.models.signup.SignUpReq
 import javax.inject.Inject
 
 class MainRemoteData @Inject constructor(private val mainService : MainService) {
     suspend fun auth(request: String) = mainService.auth("application/json", "application/x-www-form-urlencoded", request)
-    //suspend fun createOperation(request: CreateOperationReq) = mainService.createOperation(request)
+    suspend fun signUp(request: SignUpReq) = mainService.signUp(request)
 }
