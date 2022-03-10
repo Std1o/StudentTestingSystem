@@ -13,7 +13,7 @@ import student.testing.system.common.Utils
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(val repository: MainRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
     fun auth(): StateFlow<DataState<Token>> {
         val stateFlow = MutableStateFlow<DataState<Token>>(DataState.Loading)
@@ -21,15 +21,11 @@ class LoginViewModel @Inject constructor(val repository: MainRepository) : ViewM
             repository.auth().catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
-                print(it.isSuccessful)
                 if (it.isSuccessful) {
                     stateFlow.emit(DataState.Success(it.body()!!))
                 } else {
-                    if (it.errorBody() == null) {
-                        stateFlow.emit(DataState.Error("Unknown error"))
-                    } else {
-                        stateFlow.emit(DataState.Error(Utils.encodeErrorCode(it.errorBody()!!)))
-                    }
+                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
+                    stateFlow.emit(DataState.Error(errorMessage))
                 }
             }
         }

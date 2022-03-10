@@ -12,7 +12,10 @@ class Utils {
     companion object{
 
         @Throws(JSONException::class)
-        fun encodeErrorCode(errorBody: ResponseBody): String {
+        fun encodeErrorCode(errorBody: ResponseBody?): String {
+            if (errorBody == null) {
+                return "Unknown error"
+            }
             val source = errorBody.source()
             val buffer: Buffer = source.buffer()
             val charset: Charset = Charset.forName("UTF-8")
