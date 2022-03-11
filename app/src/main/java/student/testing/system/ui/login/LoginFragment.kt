@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
+import student.testing.system.common.AccountSession
 import student.testing.system.databinding.LoginFragmentBinding
 
 
@@ -58,8 +59,8 @@ class LoginFragment : Fragment() {
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
-                        Log.d("status", it.data.access_token)
-                        print(it.data.access_token)
+                        AccountSession.instance.token = it.data.access_token
+                        Log.d("token", AccountSession.instance.token!!)
                     }
                 }
             }
