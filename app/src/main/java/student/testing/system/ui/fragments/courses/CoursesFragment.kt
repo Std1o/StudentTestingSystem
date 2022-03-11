@@ -48,6 +48,7 @@ class CoursesFragment : Fragment() {
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = coursesAdapter
         getCourses()
+        getUser()
         binding.btnAdd.setOnClickListener() {
             CourseAddingDialogFragment
                 .newInstance()
@@ -82,6 +83,29 @@ class CoursesFragment : Fragment() {
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         coursesAdapter.setDataList(it.data as MutableList<CourseResponse>)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getUser() {
+        lifecycleScope.launch {
+            viewModel.getUser().collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        val snackbar =
+                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
+                        snackbar.show()
+                    }
+                    is DataState.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        AccountSession.instance.userId = it.data.id
+                        Log.d("userId", AccountSession.instance.userId.toString())
                     }
                 }
             }

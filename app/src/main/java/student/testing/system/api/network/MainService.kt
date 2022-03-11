@@ -7,6 +7,7 @@ import student.testing.system.api.models.courses.CourseCreationReq
 import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.api.models.signup.SignUpReq
+import student.testing.system.models.User
 
 
 interface MainService {
@@ -16,6 +17,9 @@ interface MainService {
 
     @POST("auth/sign-up")
     suspend fun signUp(@Body request: SignUpReq): Response<Token>
+
+    @GET("auth/user")
+    suspend fun getUser(@Header("Authorization") token: String): Response<User>
 
     @GET("courses/")
     suspend fun getCourses(@Header("Authorization") token: String): Response<List<CourseResponse>>
