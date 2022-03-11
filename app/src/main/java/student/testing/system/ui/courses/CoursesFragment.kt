@@ -1,25 +1,19 @@
 package student.testing.system.ui.courses
 
-import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import student.testing.system.R
 import student.testing.system.api.network.DataState
-import student.testing.system.common.AccountSession
 import student.testing.system.databinding.CoursesFragmentBinding
-import student.testing.system.databinding.LoginFragmentBinding
-import student.testing.system.ui.MainActivity
-import student.testing.system.ui.login.LoginViewModel
+import student.testing.system.ui.dialogFragments.CourseAddingDialogFragment
 
 @AndroidEntryPoint
 class CoursesFragment : Fragment() {
@@ -27,6 +21,10 @@ class CoursesFragment : Fragment() {
     private val viewModel by viewModels<CoursesViewModel>()
     private lateinit var _binding: CoursesFragmentBinding
     private val binding get() = _binding
+    companion object {
+        private const val KEY_COURSE_ADDING = "teamsSettings"
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +32,11 @@ class CoursesFragment : Fragment() {
     ): View {
         _binding = CoursesFragmentBinding.inflate(inflater, container, false)
         getCourses()
+        binding.btnAdd.setOnClickListener() {
+            CourseAddingDialogFragment
+                .newInstance()
+                .show(requireActivity().supportFragmentManager, KEY_COURSE_ADDING);
+        }
         return binding.root
     }
 
