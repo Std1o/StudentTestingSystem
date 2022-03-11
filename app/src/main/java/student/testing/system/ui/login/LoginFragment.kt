@@ -1,6 +1,7 @@
 package student.testing.system.ui.login
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.databinding.LoginFragmentBinding
+import student.testing.system.ui.MainActivity
 
 
 @AndroidEntryPoint
@@ -60,7 +62,7 @@ class LoginFragment : Fragment() {
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         AccountSession.instance.token = it.data.access_token
-                        Log.d("token", AccountSession.instance.token!!)
+                        startActivity(Intent(requireContext(), MainActivity::class.java))
                     }
                 }
             }
