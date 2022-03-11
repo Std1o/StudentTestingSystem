@@ -5,14 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.databinding.CoursesFragmentBinding
+import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.dialogFragments.CourseAddingDialogFragment
 
 @AndroidEntryPoint
@@ -24,20 +27,27 @@ class CoursesFragment : Fragment() {
     companion object {
         private const val KEY_COURSE_ADDING = "teamsSettings"
     }
-
+    lateinit var coursesAdapter: CoursesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = CoursesFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        coursesAdapter = CoursesAdapter()
+        binding.rv.layoutManager = LinearLayoutManager(requireContext())
+        binding.rv.adapter = coursesAdapter
         getCourses()
         binding.btnAdd.setOnClickListener() {
             CourseAddingDialogFragment
                 .newInstance()
                 .show(requireActivity().supportFragmentManager, KEY_COURSE_ADDING);
         }
-        return binding.root
     }
 
     private fun getCourses() {
@@ -54,7 +64,7 @@ class CoursesFragment : Fragment() {
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
-                        Log.d("course", it.data.toString())
+                        coursesAdapter.setDataList(it.data)
                     }
                 }
             }
