@@ -34,6 +34,7 @@ class CoursesFragment : Fragment() {
     companion object {
         const val KEY_COURSE_ADDING = "courseAdding"
         const val ARG_COURSE = "course"
+        const val ARG_COURSE_ID = "courseId"
     }
 
     lateinit var coursesAdapter: CoursesAdapter
@@ -50,7 +51,9 @@ class CoursesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         coursesAdapter = CoursesAdapter(object : CoursesAdapter.ClickListener {
             override fun onClick(courseId: Int) {
-                startActivity(Intent(requireContext(), CourseReviewActivity::class.java))
+                val intent = Intent(requireContext(), CourseReviewActivity::class.java)
+                intent.putExtra(ARG_COURSE_ID, courseId)
+                startActivity(intent)
             }
 
             override fun onLongClick(courseId: Int) {

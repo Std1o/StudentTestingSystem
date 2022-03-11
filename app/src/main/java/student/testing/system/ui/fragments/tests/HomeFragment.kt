@@ -1,6 +1,7 @@
 package student.testing.system.ui.fragments.tests
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import student.testing.system.databinding.FragmentHomeBinding
+import student.testing.system.ui.fragments.courses.CoursesFragment
 
 class HomeFragment : Fragment() {
 
@@ -29,10 +31,14 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("args", arguments.toString())
+        val courseId = arguments?.getInt(CoursesFragment.ARG_COURSE_ID)
+        binding.textHome.text = courseId.toString()
     }
 
     override fun onDestroyView() {
