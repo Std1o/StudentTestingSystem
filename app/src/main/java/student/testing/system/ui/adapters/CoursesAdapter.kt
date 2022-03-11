@@ -11,7 +11,7 @@ import student.testing.system.databinding.ItemCourseBinding
 
 class CoursesAdapter() : RecyclerView.Adapter<CoursesAdapter.HoursViewHolder>() {
 
-    private var dataList: List<CourseResponse> = emptyList()
+    private var dataList = mutableListOf<CourseResponse>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HoursViewHolder {
         val binding = ItemCourseBinding
@@ -20,11 +20,11 @@ class CoursesAdapter() : RecyclerView.Adapter<CoursesAdapter.HoursViewHolder>() 
     }
 
     fun addItem(item: CourseResponse) {
-        dataList.plus(item)
-        notifyItemChanged(itemCount + 1)
+        dataList += item
+        notifyItemChanged(itemCount)
     }
 
-    fun setDataList(dataList: List<CourseResponse>) {
+    fun setDataList(dataList: MutableList<CourseResponse>) {
         this.dataList = dataList
         notifyDataSetChanged()
     }

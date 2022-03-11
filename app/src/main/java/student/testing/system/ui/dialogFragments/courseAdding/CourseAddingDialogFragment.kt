@@ -1,9 +1,9 @@
 package student.testing.system.ui.dialogFragments.courseAdding
 
+import android.R
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +11,16 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
+import student.testing.system.common.TextResultClickListener
 import student.testing.system.databinding.FragmentCourseAddingDialogBinding
+import student.testing.system.ui.fragments.courses.CoursesFragment.Companion.ARG_COURSE
+import student.testing.system.ui.fragments.courses.CoursesFragment.Companion.KEY_COURSE_ADDING
+
 
 @AndroidEntryPoint
 class CourseAddingDialogFragment : BottomSheetDialogFragment() {
@@ -35,23 +40,39 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.create.setOnClickListener() {
-            showCourseCreationDialog()
+            val listener = object : TextResultClickListener {
+                override fun onClick(text: String) {
+                    createCourse(text)
+                }
+            }
+            showAlertDialog("Создать курс", "Введите название", "Создать", listener)
+        }
+        binding.join.setOnClickListener() {
+            val listener = object : TextResultClickListener {
+                override fun onClick(text: String) {
+                    // TODO
+                }
+            }
+            showAlertDialog("Присоединиться к курсу", "Код курса", "Присоединиться", listener)
         }
     }
 
-    fun showCourseCreationDialog(){
+    private fun showAlertDialog(
+        title: String,
+        hint: String,
+        positiveBtnText: String,
+        listener: TextResultClickListener
+    ) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Создать курс")
+        builder.setTitle(title)
         val input = EditText(requireContext())
-        input.hint = "Введите название"
+        input.hint = hint
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
-        builder.setPositiveButton("Создать") { dialog, which ->
-            var name = input.text.toString()
-            createCourse(name)
+        builder.setPositiveButton(positiveBtnText) { dialog, which ->
+            listener.onClick(input.text.toString())
         }
         builder.setNegativeButton("Отмена", { dialog, which -> dialog.cancel() })
-
         builder.show()
     }
 
@@ -64,11 +85,16 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        val snackbar = Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
+                        val snackbar =
+                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
                         snackbar.show()
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
+                        val result = Bundle()
+                        result.putSerializable(ARG_COURSE, it.data)
+                        parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
+                        dismiss()
                         Log.d("created course", it.data.toString())
                     }
                 }
