@@ -14,10 +14,10 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
-    fun auth(): StateFlow<DataState<Token>> {
+    fun auth(email: String, password: String): StateFlow<DataState<Token>> {
         val stateFlow = MutableStateFlow<DataState<Token>>(DataState.Loading)
         viewModelScope.launch {
-            repository.auth().catch {
+            repository.auth(email, password).catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.R
@@ -30,34 +31,39 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = LoginFragmentBinding.inflate(inflater, container, false)
-        _binding.btnSignUp.setOnClickListener {
+        binding.btnSignUp.setOnClickListener {
             val bundle = Bundle()
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_loginFragment_to_signUpFragment, bundle)
         }
 
-        lifecycleScope.launch {
-            viewModel.auth()
-                .collect {
-                    when(it){
-                        is DataState.Loading -> {
-                            Log.d("status", "Loading")
-                            print("Loading")
-                        }
-                        is DataState.Error -> {
-                            Log.d("status", it.exception)
-                            print(it.exception)
-                        }
-                        is DataState.Success -> {
-                            Log.d("status", it.data.access_token)
-                            print(it.data.access_token)
-
-                        }
-                    }
-                }
+        binding.btnLogin.setOnClickListener() {
+            auth(binding.login.text.toString(), binding.password.text.toString())
         }
 
         return binding.root
+    }
+
+    private fun auth(email: String, password: String) {
+        lifecycleScope.launch {
+            viewModel.auth(email, password).collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        val snackbar = Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
+                        snackbar.show()
+                    }
+                    is DataState.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        Log.d("status", it.data.access_token)
+                        print(it.data.access_token)
+                    }
+                }
+            }
+        }
     }
 
 }
