@@ -51,6 +51,9 @@ class CoursesAdapter(val listener: ClickListener) :
                     .load("http://ezapitest.ml/images/${course.img}")
                     .transform(CenterCrop(), RoundedCorners(16))
                     .into(binding.imageView)
+                holder.itemView.setOnClickListener() {
+                    listener.onClick(course.id)
+                }
                 holder.itemView.setOnLongClickListener() {
                     listener.onLongClick(course.id)
                     true

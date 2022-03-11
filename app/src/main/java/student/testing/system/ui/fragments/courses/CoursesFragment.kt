@@ -1,5 +1,6 @@
 package student.testing.system.ui.fragments.courses
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.TextResultClickListener
 import student.testing.system.databinding.CoursesFragmentBinding
+import student.testing.system.ui.CourseReviewActivity
 import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.dialogFragments.courseAdding.CourseAddingDialogFragment
 
@@ -48,7 +50,7 @@ class CoursesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         coursesAdapter = CoursesAdapter(object : CoursesAdapter.ClickListener {
             override fun onClick(courseId: Int) {
-
+                startActivity(Intent(requireContext(), CourseReviewActivity::class.java))
             }
 
             override fun onLongClick(courseId: Int) {
