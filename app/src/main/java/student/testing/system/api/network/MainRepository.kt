@@ -13,7 +13,7 @@ class MainRepository @Inject constructor(
 ) {
 
     suspend fun auth(email: String, password: String) = flow { emit(remoteData.auth("grant_type=&username=$email&password=$password&scope=&client_id=&client_secret="))}
-    suspend fun signUp(email: String, username: String, password: String) = remoteData.signUp(SignUpReq(email, username, password))
+    suspend fun signUp(email: String, username: String, password: String) = flow { emit(remoteData.signUp(SignUpReq(email, username, password)))}
     suspend fun getCourses() = flow { emit(remoteData.getCourses())}
     suspend fun createCourse(name: String) = flow { emit(remoteData.createCourse(CourseCreationReq(name)))}
 }
