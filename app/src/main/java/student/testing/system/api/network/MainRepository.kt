@@ -2,6 +2,7 @@ package student.testing.system.api.network
 
 import kotlinx.coroutines.flow.flow
 import student.testing.system.api.models.courses.CourseCreationReq
+import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.network.MainRemoteData
 import student.testing.system.api.models.signup.SignUpReq
 import javax.inject.Inject
@@ -16,4 +17,5 @@ class MainRepository @Inject constructor(
     suspend fun signUp(email: String, username: String, password: String) = flow { emit(remoteData.signUp(SignUpReq(email, username, password)))}
     suspend fun getCourses() = flow { emit(remoteData.getCourses())}
     suspend fun createCourse(name: String) = flow { emit(remoteData.createCourse(CourseCreationReq(name)))}
+    suspend fun joinCourse(courseCode: String) = flow { emit(remoteData.joinCourse(courseCode, CourseJoiningReq(courseCode)))}
 }

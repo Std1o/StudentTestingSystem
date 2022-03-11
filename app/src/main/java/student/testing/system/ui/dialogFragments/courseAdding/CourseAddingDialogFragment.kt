@@ -50,7 +50,7 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
         binding.join.setOnClickListener() {
             val listener = object : TextResultClickListener {
                 override fun onClick(text: String) {
-                    // TODO
+                    joinCourse(text)
                 }
             }
             showAlertDialog("Присоединиться к курсу", "Код курса", "Присоединиться", listener)
@@ -95,7 +95,32 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
                         result.putSerializable(ARG_COURSE, it.data)
                         parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
                         dismiss()
-                        Log.d("created course", it.data.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun joinCourse(courseCode: String) {
+        lifecycleScope.launch {
+            viewModel.joinCourse(courseCode).collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        val snackbar =
+                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
+                        snackbar.show()
+                    }
+                    is DataState.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        val result = Bundle()
+                        result.putSerializable(ARG_COURSE, it.data)
+                        parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
+                        dismiss()
+                        Log.d("joined to course", it.data.toString())
                     }
                 }
             }
