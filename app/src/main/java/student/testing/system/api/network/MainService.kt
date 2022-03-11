@@ -6,6 +6,7 @@ import student.testing.system.api.models.Token
 import student.testing.system.api.models.courses.CourseCreationReq
 import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.models.courses.CourseResponse
+import student.testing.system.api.models.courses.DeleteCourseReq
 import student.testing.system.api.models.signup.SignUpReq
 import student.testing.system.models.User
 
@@ -29,4 +30,10 @@ interface MainService {
 
     @POST("courses/{courseCode}")
     suspend fun joinCourse(@Header("Authorization") token: String, @Path("courseCode") courseCode: String, @Body request: CourseJoiningReq): Response<CourseResponse>
+
+    @GET("courses/{courseId}")
+    suspend fun getCourse(@Header("Authorization") token: String, @Path("courseId") courseId: Int): Response<CourseResponse>
+
+    @DELETE("courses/{courseId}")
+    suspend fun deleteCourse(@Header("Authorization") token: String, @Path("courseId") courseId: Int): Response<Void>
 }

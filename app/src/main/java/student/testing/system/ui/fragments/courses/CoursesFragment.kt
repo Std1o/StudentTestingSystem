@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
+import student.testing.system.common.TextResultClickListener
 import student.testing.system.databinding.CoursesFragmentBinding
 import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.dialogFragments.courseAdding.CourseAddingDialogFragment
@@ -44,7 +46,15 @@ class CoursesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        coursesAdapter = CoursesAdapter()
+        coursesAdapter = CoursesAdapter(object : CoursesAdapter.ClickListener {
+            override fun onClick(courseId: Int) {
+
+            }
+
+            override fun onLongClick(courseId: Int) {
+                confirmDeletion(courseId)
+            }
+        })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = coursesAdapter
         getCourses()
@@ -89,6 +99,40 @@ class CoursesFragment : Fragment() {
         }
     }
 
+    private fun confirmDeletion(courseId: Int) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Удалить?")
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            deleteCourse(courseId)
+        }
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+            dialog.cancel()
+        }
+        builder.show()
+    }
+
+    private fun deleteCourse(courseId: Int) {
+        lifecycleScope.launch {
+            viewModel.deleteCourse(courseId).collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        val snackbar =
+                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
+                        snackbar.show()
+                    }
+                    is DataState.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        coursesAdapter.deleteById(it.data)
+                    }
+                }
+            }
+        }
+    }
+
     private fun getUser() {
         lifecycleScope.launch {
             viewModel.getUser().collect {
@@ -105,7 +149,6 @@ class CoursesFragment : Fragment() {
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         AccountSession.instance.userId = it.data.id
-                        Log.d("userId", AccountSession.instance.userId.toString())
                     }
                 }
             }

@@ -9,7 +9,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.ItemCourseBinding
 
-class CoursesAdapter() : RecyclerView.Adapter<CoursesAdapter.HoursViewHolder>() {
+class CoursesAdapter(val listener: ClickListener) :
+    RecyclerView.Adapter<CoursesAdapter.HoursViewHolder>() {
 
     private var dataList = mutableListOf<CourseResponse>()
 
@@ -29,22 +30,41 @@ class CoursesAdapter() : RecyclerView.Adapter<CoursesAdapter.HoursViewHolder>() 
         notifyDataSetChanged()
     }
 
+    fun deleteById(id: Int) {
+        var position = getPositionById(id)
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    private fun getPositionById(id: Int): Int {
+        return dataList.indexOf(dataList.find { it.id == id })
+    }
+
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: HoursViewHolder, position: Int) {
-        with(holder){
+        with(holder) {
             with(dataList[position]) {
                 val course = dataList[position]
                 binding.tvName.text = course.name
                 Glide.with(holder.itemView.context)
                     .load("http://ezapitest.ml/images/${course.img}")
-                    .transform( CenterCrop(), RoundedCorners(16))
-                    .into(binding.imageView);
+                    .transform(CenterCrop(), RoundedCorners(16))
+                    .into(binding.imageView)
+                holder.itemView.setOnLongClickListener() {
+                    listener.onLongClick(course.id)
+                    true
+                }
             }
         }
     }
 
-    inner class HoursViewHolder(val binding: ItemCourseBinding)
-        :RecyclerView.ViewHolder(binding.root)
+    inner class HoursViewHolder(val binding: ItemCourseBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    interface ClickListener {
+        fun onClick(courseId: Int)
+        fun onLongClick(courseId: Int)
+    }
 
 }

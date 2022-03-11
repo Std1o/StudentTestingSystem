@@ -19,4 +19,6 @@ class MainRepository @Inject constructor(
     suspend fun getCourses() = flow { emit(remoteData.getCourses())}
     suspend fun createCourse(name: String) = flow { emit(remoteData.createCourse(CourseCreationReq(name)))}
     suspend fun joinCourse(courseCode: String) = flow { emit(remoteData.joinCourse(courseCode, CourseJoiningReq(courseCode)))}
+    suspend fun getCourse(courseId: Int) = flow { emit(remoteData.getCourse(courseId))}
+    suspend fun deleteCourse(courseId: Int) = flow { emit(remoteData.deleteCourse(courseId))}
 }

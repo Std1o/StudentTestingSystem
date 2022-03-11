@@ -13,4 +13,6 @@ class MainRemoteData @Inject constructor(private val mainService : MainService) 
     suspend fun getCourses() = mainService.getCourses("Bearer ${AccountSession.instance.token!!}")
     suspend fun createCourse(request: CourseCreationReq) = mainService.createCourse("Bearer ${AccountSession.instance.token!!}", request)
     suspend fun joinCourse(courseCode: String, request: CourseJoiningReq) = mainService.joinCourse("Bearer ${AccountSession.instance.token!!}", courseCode, request)
+    suspend fun getCourse(courseId: Int) = mainService.getCourse("Bearer ${AccountSession.instance.token!!}", courseId)
+    suspend fun deleteCourse(courseId: Int) = mainService.deleteCourse("Bearer ${AccountSession.instance.token!!}", courseId)
 }

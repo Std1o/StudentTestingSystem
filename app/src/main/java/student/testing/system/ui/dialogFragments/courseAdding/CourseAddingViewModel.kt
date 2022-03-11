@@ -36,7 +36,7 @@ class CourseAddingViewModel @Inject constructor(private val repository: MainRepo
     fun joinCourse(courseCode : String): StateFlow<DataState<CourseResponse>> {
         val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
         viewModelScope.launch {
-            repository.createCourse(courseCode).catch {
+            repository.joinCourse(courseCode).catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {
