@@ -1,6 +1,5 @@
-package student.testing.system.ui.dialogFragments
+package student.testing.system.ui.dialogFragments.courseAdding
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -17,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.databinding.FragmentCourseAddingDialogBinding
-import student.testing.system.ui.courses.CoursesViewModel
 
 @AndroidEntryPoint
 class CourseAddingDialogFragment : BottomSheetDialogFragment() {

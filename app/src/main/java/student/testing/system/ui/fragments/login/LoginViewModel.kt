@@ -1,4 +1,4 @@
-package student.testing.system.ui.login
+package student.testing.system.ui.fragments.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

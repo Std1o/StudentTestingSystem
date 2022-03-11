@@ -1,11 +1,9 @@
-package student.testing.system.ui.courses
+package student.testing.system.ui.fragments.courses
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +14,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.databinding.CoursesFragmentBinding
 import student.testing.system.ui.adapters.CoursesAdapter
-import student.testing.system.ui.dialogFragments.CourseAddingDialogFragment
+import student.testing.system.ui.dialogFragments.courseAdding.CourseAddingDialogFragment
 
 @AndroidEntryPoint
 class CoursesFragment : Fragment() {

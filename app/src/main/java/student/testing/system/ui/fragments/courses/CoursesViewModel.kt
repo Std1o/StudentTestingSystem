@@ -1,4 +1,5 @@
-package student.testing.system.ui.dialogFragments
+package student.testing.system.ui.fragments.courses
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,14 +13,13 @@ import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
 import javax.inject.Inject
 
-
 @HiltViewModel
-class CourseAddingViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class CoursesViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
-    fun createCourse(name : String): StateFlow<DataState<CourseResponse>> {
-        val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
+    fun getCourses(): StateFlow<DataState<List<CourseResponse>>> {
+        val stateFlow = MutableStateFlow<DataState<List<CourseResponse>>>(DataState.Loading)
         viewModelScope.launch {
-            repository.createCourse(name).catch {
+            repository.getCourses().catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {

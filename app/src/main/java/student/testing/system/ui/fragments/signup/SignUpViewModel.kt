@@ -1,4 +1,4 @@
-package student.testing.system.ui.signup
+package student.testing.system.ui.fragments.signup
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
