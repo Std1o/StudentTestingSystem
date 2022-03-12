@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -15,7 +14,6 @@ import student.testing.system.R
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.FragmentCourseReviewBinding
 import student.testing.system.ui.fragments.courses.CoursesFragment
-import student.testing.system.ui.fragments.tests.TestsViewModel
 
 class CourseReviewFragment : Fragment() {
 
@@ -30,12 +28,8 @@ class CourseReviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(TestsViewModel::class.java)
-
         _binding = FragmentCourseReviewBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

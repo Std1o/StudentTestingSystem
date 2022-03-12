@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Система тестирования студентов</string>
+    <string name="app_name">Система тестирования</string>
     <string name="title_activity_course_review">CourseReviewActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

@@ -1,0 +1,70 @@
+package student.testing.system.ui.adapters
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import student.testing.system.api.models.courses.CourseResponse
+import student.testing.system.databinding.ItemCourseBinding
+import student.testing.system.databinding.ItemTestBinding
+import student.testing.system.models.Test
+
+class TestsAdapter(val listener: ClickListener) :
+    RecyclerView.Adapter<TestsAdapter.CourseViewHolder>() {
+
+    private var dataList = mutableListOf<Test>()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
+        val binding = ItemTestBinding
+            .inflate(LayoutInflater.from(parent.context), parent, false)
+        return CourseViewHolder(binding)
+    }
+
+    fun addItem(item: Test) {
+        dataList += item
+        notifyItemChanged(itemCount)
+    }
+
+    fun setDataList(dataList: MutableList<Test>) {
+        this.dataList = dataList
+        notifyDataSetChanged()
+    }
+
+    fun deleteById(id: Int) {
+        var position = getPositionById(id)
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    private fun getPositionById(id: Int): Int {
+        return dataList.indexOf(dataList.find { it.id == id })
+    }
+
+    override fun getItemCount() = dataList.size
+
+    override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
+        with(holder) {
+            val test = dataList[position]
+            binding.name.text = test.name
+            binding.date.text = test.creationTime
+            holder.itemView.setOnClickListener() {
+                listener.onClick(test)
+            }
+            holder.itemView.setOnLongClickListener() {
+                listener.onLongClick(test.id)
+                true
+            }
+        }
+    }
+
+    inner class CourseViewHolder(val binding: ItemTestBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    interface ClickListener {
+        fun onClick(course: Test)
+        fun onLongClick(testId: Int)
+    }
+
+}

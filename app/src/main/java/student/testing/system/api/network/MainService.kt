@@ -8,6 +8,7 @@ import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.api.models.courses.DeleteCourseReq
 import student.testing.system.api.models.signup.SignUpReq
+import student.testing.system.models.Test
 import student.testing.system.models.User
 
 
@@ -36,4 +37,7 @@ interface MainService {
 
     @DELETE("courses/{courseId}")
     suspend fun deleteCourse(@Header("Authorization") token: String, @Path("courseId") courseId: Int): Response<Void>
+
+    @GET("tests/")
+    suspend fun getTests(@Header("Authorization") token: String, @Query("course_id") courseId: Int): Response<List<Test>>
 }
