@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import student.testing.system.R
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.ui.fragments.CourseSharedViewModel
@@ -32,8 +33,6 @@ class TestsFragment : Fragment() {
 
         _binding = FragmentTestsBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val textView: TextView = binding.textHome
         return root
     }
 
@@ -41,7 +40,7 @@ class TestsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (arguments == null) return
         val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
-        binding.textHome.text = course.courseCode
+        binding.tvCode.text = getString(R.string.course_code, course.courseCode)
         sharedViewModel.setCourse(course)
     }
 
