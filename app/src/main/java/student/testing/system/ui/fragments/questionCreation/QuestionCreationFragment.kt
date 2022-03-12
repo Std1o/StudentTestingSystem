@@ -2,31 +2,50 @@ package student.testing.system.ui.fragments.questionCreation
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import student.testing.system.R
+import student.testing.system.common.TextResultClickListener
+import student.testing.system.databinding.QuestionCreationFragmentBinding
+import student.testing.system.databinding.TestCreationFragmentBinding
 
 class QuestionCreationFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = QuestionCreationFragment()
-    }
-
-    private lateinit var viewModel: QuestionCreationViewModel
+    private lateinit var _binding: QuestionCreationFragmentBinding
+    private val binding get() = _binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.question_creation_fragment, container, false)
+    ): View {
+        _binding = QuestionCreationFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(QuestionCreationViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.btnAdd.setOnClickListener() {
+            addAnswer()
+        }
+    }
+
+    private fun addAnswer() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Добавление ответа")
+        val input = EditText(requireContext())
+        input.hint = "Введите ответ"
+        input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        builder.setView(input)
+        builder.setPositiveButton("Ок") { dialog, which ->
+            // TODO
+        }
+        builder.setNegativeButton("Отмена", { dialog, which -> dialog.cancel() })
+        builder.show()
     }
 
 }
