@@ -1,6 +1,7 @@
 package student.testing.system.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +51,15 @@ class CourseReviewFragment : Fragment() {
         val navGraph = navInflater.inflate(R.navigation.course_review_navigation)
         navGraph.addArgument(CoursesFragment.ARG_COURSE, arg1)
         navController.graph = navGraph
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            Log.d("destination", destination.id.toString())
+            Log.d("required destination", R.id.navigation_users.toString())
+            when(destination.id) {
+                R.id.navigation_users -> {
+                    destination.addArgument(CoursesFragment.ARG_COURSE, arg1)
+                }
+            }
+        }
         navView.setupWithNavController(navController)
     }
 

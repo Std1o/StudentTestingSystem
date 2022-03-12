@@ -12,6 +12,6 @@
 
     <fragment
         android:id="@+id/navigation_users"
-        android:name="student.testing.system.ui.fragments.participants.DashboardFragment"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="student.testing.system.ui.fragments.participants.ParticipantsFragment"
+        tools:layout="@layout/fragment_participants" />
 </navigation>

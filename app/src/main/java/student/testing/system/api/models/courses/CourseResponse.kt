@@ -6,7 +6,7 @@ import java.io.Serializable
 data class CourseResponse(
     var name: String, var id: Int,
     @field:SerializedName("owner_id")
-    var ownerId: String,
+    var ownerId: Int,
     var img: String,
     @field:SerializedName("course_code")
     var courseCode: String,

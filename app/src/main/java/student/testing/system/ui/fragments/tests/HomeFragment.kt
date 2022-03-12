@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.FragmentHomeBinding
+import student.testing.system.ui.fragments.CourseSharedViewModel
 import student.testing.system.ui.fragments.courses.CoursesFragment
 
 class HomeFragment : Fragment() {
@@ -19,6 +21,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val sharedViewModel: CourseSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +43,7 @@ class HomeFragment : Fragment() {
         if (arguments == null) return
         val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
         binding.textHome.text = course.courseCode
+        sharedViewModel.setCourse(course)
     }
 
     override fun onDestroyView() {

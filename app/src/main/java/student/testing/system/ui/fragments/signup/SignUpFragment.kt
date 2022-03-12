@@ -31,7 +31,7 @@ class SignUpFragment : Fragment() {
         _binding = SignUpFragmentBinding.inflate(inflater, container, false)
 
         binding.btnSignUp.setOnClickListener {
-            signUp(binding.email.text.toString(), binding.name.toString(), binding.password.text.toString())
+            signUp(binding.email.text.toString(), binding.name.text.toString(), binding.password.text.toString())
         }
         return binding.root
     }
