@@ -10,14 +10,14 @@ import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.ItemCourseBinding
 
 class CoursesAdapter(val listener: ClickListener) :
-    RecyclerView.Adapter<CoursesAdapter.HoursViewHolder>() {
+    RecyclerView.Adapter<CoursesAdapter.CourseViewHolder>() {
 
     private var dataList = mutableListOf<CourseResponse>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HoursViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val binding = ItemCourseBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        return HoursViewHolder(binding)
+        return CourseViewHolder(binding)
     }
 
     fun addItem(item: CourseResponse) {
@@ -42,27 +42,25 @@ class CoursesAdapter(val listener: ClickListener) :
 
     override fun getItemCount() = dataList.size
 
-    override fun onBindViewHolder(holder: HoursViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         with(holder) {
-            with(dataList[position]) {
-                val course = dataList[position]
-                binding.tvName.text = course.name
-                Glide.with(holder.itemView.context)
-                    .load("http://ezapitest.ml/images/${course.img}")
-                    .transform(CenterCrop(), RoundedCorners(16))
-                    .into(binding.imageView)
-                holder.itemView.setOnClickListener() {
-                    listener.onClick(course)
-                }
-                holder.itemView.setOnLongClickListener() {
-                    listener.onLongClick(course.id)
-                    true
-                }
+            val course = dataList[position]
+            binding.tvName.text = course.name
+            Glide.with(holder.itemView.context)
+                .load("http://ezapitest.ml/images/${course.img}")
+                .transform(CenterCrop(), RoundedCorners(16))
+                .into(binding.imageView)
+            holder.itemView.setOnClickListener() {
+                listener.onClick(course)
+            }
+            holder.itemView.setOnLongClickListener() {
+                listener.onLongClick(course.id)
+                true
             }
         }
     }
 
-    inner class HoursViewHolder(val binding: ItemCourseBinding) :
+    inner class CourseViewHolder(val binding: ItemCourseBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     interface ClickListener {
