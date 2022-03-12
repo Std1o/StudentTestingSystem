@@ -8,6 +8,7 @@ import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.api.models.courses.DeleteCourseReq
 import student.testing.system.api.models.signup.SignUpReq
+import student.testing.system.api.models.tests.TestCreationReq
 import student.testing.system.models.Test
 import student.testing.system.models.User
 
@@ -40,4 +41,7 @@ interface MainService {
 
     @GET("tests/")
     suspend fun getTests(@Header("Authorization") token: String, @Query("course_id") courseId: Int): Response<List<Test>>
+
+    @POST("tests/")
+    suspend fun createTest(@Header("Authorization") token: String, @Body request: TestCreationReq): Response<Test>
 }

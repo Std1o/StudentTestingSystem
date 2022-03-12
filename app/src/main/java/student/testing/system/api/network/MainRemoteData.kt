@@ -3,6 +3,7 @@ package student.testing.system.api.network
 import student.testing.system.api.models.courses.CourseCreationReq
 import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.models.signup.SignUpReq
+import student.testing.system.api.models.tests.TestCreationReq
 import student.testing.system.common.AccountSession
 import javax.inject.Inject
 
@@ -16,4 +17,5 @@ class MainRemoteData @Inject constructor(private val mainService : MainService) 
     suspend fun getCourse(courseId: Int) = mainService.getCourse("Bearer ${AccountSession.instance.token!!}", courseId)
     suspend fun deleteCourse(courseId: Int) = mainService.deleteCourse("Bearer ${AccountSession.instance.token!!}", courseId)
     suspend fun getTests(courseId: Int) = mainService.getTests("Bearer ${AccountSession.instance.token!!}", courseId)
+    suspend fun createTest(request: TestCreationReq) = mainService.createTest("Bearer ${AccountSession.instance.token!!}", request)
 }

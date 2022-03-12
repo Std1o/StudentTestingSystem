@@ -67,6 +67,13 @@ class TestsFragment : Fragment() {
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = testsAdapter
         getTests(course.id)
+
+        binding.btnAdd.setOnClickListener() {
+            val bundle = Bundle()
+            bundle.putSerializable(CoursesFragment.ARG_COURSE, course)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_navigation_tests_to_testCreationFragment, bundle)
+        }
     }
 
     private fun getTests(courseId: Int) {

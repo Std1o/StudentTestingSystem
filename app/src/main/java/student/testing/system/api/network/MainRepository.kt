@@ -5,6 +5,8 @@ import student.testing.system.api.models.courses.CourseCreationReq
 import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.network.MainRemoteData
 import student.testing.system.api.models.signup.SignUpReq
+import student.testing.system.api.models.tests.TestCreationReq
+import student.testing.system.models.Question
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,4 +24,7 @@ class MainRepository @Inject constructor(
     suspend fun getCourse(courseId: Int) = flow { emit(remoteData.getCourse(courseId))}
     suspend fun deleteCourse(courseId: Int) = flow { emit(remoteData.deleteCourse(courseId))}
     suspend fun getTests(courseId: Int) = flow { emit(remoteData.getTests(courseId))}
+    suspend fun createCourse(courseId: Int, name: String, creationTIme: String, questions: List<Question>) = flow { emit(remoteData.createTest(
+        TestCreationReq(courseId, name, creationTIme, questions)
+    ))}
 }
