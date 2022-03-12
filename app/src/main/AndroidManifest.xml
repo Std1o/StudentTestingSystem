@@ -14,10 +14,6 @@
         android:theme="@style/Theme.StudentTestingSystem"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.CourseReviewActivity"
-            android:exported="false"
-            android:label="@string/title_activity_course_review" />
-        <activity
             android:name=".ui.MainActivity"
             android:exported="false" />
         <activity

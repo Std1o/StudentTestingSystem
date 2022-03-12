@@ -9,5 +9,15 @@
         android:id="@+id/coursesFragment"
         android:name="student.testing.system.ui.fragments.courses.CoursesFragment"
         android:label="courses_fragment"
-        tools:layout="@layout/courses_fragment" />
+        tools:layout="@layout/courses_fragment" >
+        <action
+            android:id="@+id/action_coursesFragment_to_courseReviewFragment"
+            app:destination="@id/courseReviewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/courseReviewFragment"
+        android:name="student.testing.system.ui.fragments.CourseReviewFragment"
+        android:label="CourseReview"
+        tools:layout="@layout/fragment_course_review" />
 </navigation>
