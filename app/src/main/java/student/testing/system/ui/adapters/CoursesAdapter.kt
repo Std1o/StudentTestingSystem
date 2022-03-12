@@ -52,7 +52,7 @@ class CoursesAdapter(val listener: ClickListener) :
                     .transform(CenterCrop(), RoundedCorners(16))
                     .into(binding.imageView)
                 holder.itemView.setOnClickListener() {
-                    listener.onClick(course.id)
+                    listener.onClick(course)
                 }
                 holder.itemView.setOnLongClickListener() {
                     listener.onLongClick(course.id)
@@ -66,7 +66,7 @@ class CoursesAdapter(val listener: ClickListener) :
         RecyclerView.ViewHolder(binding.root)
 
     interface ClickListener {
-        fun onClick(courseId: Int)
+        fun onClick(course: CourseResponse)
         fun onLongClick(courseId: Int)
     }
 

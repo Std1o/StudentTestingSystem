@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.FragmentHomeBinding
 import student.testing.system.ui.fragments.courses.CoursesFragment
 
@@ -36,9 +37,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("args", arguments.toString())
-        val courseId = arguments?.getInt(CoursesFragment.ARG_COURSE_ID)
-        binding.textHome.text = courseId.toString()
+        if (arguments == null) return
+        val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
+        binding.textHome.text = course.courseCode
     }
 
     override fun onDestroyView() {

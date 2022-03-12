@@ -34,7 +34,6 @@ class CoursesFragment : Fragment() {
     companion object {
         const val KEY_COURSE_ADDING = "courseAdding"
         const val ARG_COURSE = "course"
-        const val ARG_COURSE_ID = "courseId"
     }
 
     lateinit var coursesAdapter: CoursesAdapter
@@ -50,9 +49,9 @@ class CoursesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         coursesAdapter = CoursesAdapter(object : CoursesAdapter.ClickListener {
-            override fun onClick(courseId: Int) {
+            override fun onClick(course: CourseResponse) {
                 val intent = Intent(requireContext(), CourseReviewActivity::class.java)
-                intent.putExtra(ARG_COURSE_ID, courseId)
+                intent.putExtra(ARG_COURSE, course)
                 startActivity(intent)
             }
 
@@ -77,7 +76,6 @@ class CoursesFragment : Fragment() {
             .supportFragmentManager
             .setFragmentResultListener(KEY_COURSE_ADDING, this) { requestKey, bundle ->
                 val result = bundle.getSerializable(ARG_COURSE)
-                Log.d("result", result.toString())
                 coursesAdapter.addItem(result as CourseResponse)
             }
     }
