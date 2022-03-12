@@ -9,7 +9,7 @@
         android:id="@+id/loginFragment"
         android:name="student.testing.system.ui.fragments.login.LoginFragment"
         android:label="login_fragment"
-        tools:layout="@layout/login_fragment" >
+        tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -18,5 +18,5 @@
         android:id="@+id/signUpFragment"
         android:name="student.testing.system.ui.fragments.signup.SignUpFragment"
         android:label="sign_up_fragment"
-        tools:layout="@layout/sign_up_fragment" />
+        tools:layout="@layout/fragment_sign_up" />
 </navigation>

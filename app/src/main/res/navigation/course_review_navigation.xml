@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/navigation_tests"
-        android:name="student.testing.system.ui.fragments.tests.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        android:name="student.testing.system.ui.fragments.tests.TestsFragment"
+        tools:layout="@layout/fragment_tests" />
 
     <fragment
         android:id="@+id/navigation_users"

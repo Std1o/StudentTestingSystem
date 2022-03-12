@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
-import student.testing.system.databinding.LoginFragmentBinding
+import student.testing.system.databinding.FragmentLoginBinding
 import student.testing.system.ui.MainActivity
 
 
@@ -24,7 +24,7 @@ import student.testing.system.ui.MainActivity
 class LoginFragment : Fragment() {
 
     private val viewModel by viewModels<LoginViewModel>()
-    private lateinit var _binding: LoginFragmentBinding
+    private lateinit var _binding: FragmentLoginBinding
     private val binding get() = _binding
 
     @SuppressLint("SetTextI18n")
@@ -32,7 +32,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = LoginFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.btnSignUp.setOnClickListener {
             val bundle = Bundle()
             Navigation.findNavController(binding.root)

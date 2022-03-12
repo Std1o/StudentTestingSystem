@@ -15,7 +15,7 @@ import student.testing.system.R
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.FragmentCourseReviewBinding
 import student.testing.system.ui.fragments.courses.CoursesFragment
-import student.testing.system.ui.fragments.tests.HomeViewModel
+import student.testing.system.ui.fragments.tests.TestsViewModel
 
 class CourseReviewFragment : Fragment() {
 
@@ -31,7 +31,7 @@ class CourseReviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this).get(TestsViewModel::class.java)
 
         _binding = FragmentCourseReviewBinding.inflate(inflater, container, false)
         val root: View = binding.root

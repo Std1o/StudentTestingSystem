@@ -1,9 +1,13 @@
 <resources>
-    <string name="app_name">StudentTestingSystem</string>
+    <string name="app_name">Система тестирования студентов</string>
     <string name="title_activity_course_review">CourseReviewActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="tests">Тесты</string>
     <string name="participants">Участники</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Пароль</string>
+    <string name="name">Имя</string>
+    <string name="sign_up">Зарегистрироваться</string>
 </resources>

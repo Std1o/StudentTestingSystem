@@ -14,21 +14,21 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
-import student.testing.system.databinding.SignUpFragmentBinding
+import student.testing.system.databinding.FragmentSignUpBinding
 import student.testing.system.ui.MainActivity
 
 @AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
     private val viewModel by viewModels<SignUpViewModel>()
-    private lateinit var _binding: SignUpFragmentBinding
+    private lateinit var _binding: FragmentSignUpBinding
     private val binding get() = _binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = SignUpFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         binding.btnSignUp.setOnClickListener {
             signUp(binding.email.text.toString(), binding.name.text.toString(), binding.password.text.toString())
