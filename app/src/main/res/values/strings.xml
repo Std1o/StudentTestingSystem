@@ -12,4 +12,9 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="course_code">Код курса: %s</string>
     <string name="publish">Опубликовать</string>
+
+    <array name="answers_mode">
+        <item>Один из списка</item>
+        <item>Несколько из списка</item>
+    </array>
 </resources>

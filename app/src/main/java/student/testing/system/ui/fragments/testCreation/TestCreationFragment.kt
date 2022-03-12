@@ -6,27 +6,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import student.testing.system.R
+import student.testing.system.databinding.CoursesFragmentBinding
+import student.testing.system.databinding.TestCreationFragmentBinding
 
 class TestCreationFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = TestCreationFragment()
-    }
-
-    private lateinit var viewModel: TestCreationViewModel
+    private lateinit var _binding: TestCreationFragmentBinding
+    private val binding get() = _binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.test_creation_fragment, container, false)
+    ): View {
+        _binding = TestCreationFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TestCreationViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.btnAdd.setOnClickListener() {
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_testCreationFragment_to_questionCreationFragment)
+        }
     }
-
 }
