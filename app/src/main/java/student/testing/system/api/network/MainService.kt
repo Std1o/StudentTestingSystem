@@ -16,32 +16,33 @@ import student.testing.system.models.User
 interface MainService {
 
     @POST("auth/sign-in")
-    suspend fun auth(@Header("accept") accept: String, @Header("Content-Type") contentType: String, @Body request: String): Response<Token>
+    @Headers("accept: application/json", "Content-Type: application/x-www-form-urlencoded")
+    suspend fun auth(@Body request: String): Response<Token>
 
     @POST("auth/sign-up")
     suspend fun signUp(@Body request: SignUpReq): Response<Token>
 
     @GET("auth/user")
-    suspend fun getUser(@Header("Authorization") token: String): Response<User>
+    suspend fun getUser(): Response<User>
 
     @GET("courses/")
-    suspend fun getCourses(@Header("Authorization") token: String): Response<List<CourseResponse>>
+    suspend fun getCourses(): Response<List<CourseResponse>>
 
     @POST("courses/")
-    suspend fun createCourse(@Header("Authorization") token: String, @Body request: CourseCreationReq): Response<CourseResponse>
+    suspend fun createCourse(@Body request: CourseCreationReq): Response<CourseResponse>
 
     @POST("courses/{courseCode}")
-    suspend fun joinCourse(@Header("Authorization") token: String, @Path("courseCode") courseCode: String, @Body request: CourseJoiningReq): Response<CourseResponse>
+    suspend fun joinCourse(@Path("courseCode") courseCode: String, @Body request: CourseJoiningReq): Response<CourseResponse>
 
     @GET("courses/{courseId}")
-    suspend fun getCourse(@Header("Authorization") token: String, @Path("courseId") courseId: Int): Response<CourseResponse>
+    suspend fun getCourse(@Path("courseId") courseId: Int): Response<CourseResponse>
 
     @DELETE("courses/{courseId}")
-    suspend fun deleteCourse(@Header("Authorization") token: String, @Path("courseId") courseId: Int): Response<Void>
+    suspend fun deleteCourse(@Path("courseId") courseId: Int): Response<Void>
 
     @GET("tests/")
-    suspend fun getTests(@Header("Authorization") token: String, @Query("course_id") courseId: Int): Response<List<Test>>
+    suspend fun getTests(@Query("course_id") courseId: Int): Response<List<Test>>
 
     @POST("tests/")
-    suspend fun createTest(@Header("Authorization") token: String, @Body request: TestCreationReq): Response<Test>
+    suspend fun createTest(@Body request: TestCreationReq): Response<Test>
 }
