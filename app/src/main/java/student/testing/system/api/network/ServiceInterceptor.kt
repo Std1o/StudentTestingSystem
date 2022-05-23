@@ -9,14 +9,12 @@ class ServiceInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        if (request.header("accept") == null) {
-            val token = AccountSession.instance.token
-            if (!token.isNullOrEmpty()) {
-                val finalToken = "Bearer $token"
-                request = request.newBuilder()
-                    .addHeader("Authorization", finalToken)
-                    .build()
-            }
+        val token = AccountSession.instance.token
+        if (!token.isNullOrEmpty()) {
+            val finalToken = "Bearer $token"
+            request = request.newBuilder()
+                .addHeader("Authorization", finalToken)
+                .build()
         }
         return chain.proceed(request)
     }
