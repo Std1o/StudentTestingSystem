@@ -63,7 +63,7 @@ class TestsAdapter(val listener: ClickListener) :
         RecyclerView.ViewHolder(binding.root)
 
     interface ClickListener {
-        fun onClick(course: Test)
+        fun onClick(test: Test)
         fun onLongClick(testId: Int)
     }
 

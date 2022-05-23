@@ -4,7 +4,6 @@ import student.testing.system.api.models.courses.CourseCreationReq
 import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.models.signup.SignUpReq
 import student.testing.system.api.models.tests.TestCreationReq
-import student.testing.system.common.AccountSession
 import javax.inject.Inject
 
 class MainRemoteData @Inject constructor(private val mainService : MainService) {
@@ -18,4 +17,5 @@ class MainRemoteData @Inject constructor(private val mainService : MainService) 
     suspend fun deleteCourse(courseId: Int) = mainService.deleteCourse(courseId)
     suspend fun getTests(courseId: Int) = mainService.getTests(courseId)
     suspend fun createTest(request: TestCreationReq) = mainService.createTest(request)
+    suspend fun getResult(testId: Int, courseId: Int) = mainService.getResult(testId, courseId)
 }

@@ -59,10 +59,10 @@ class TestsFragment : Fragment() {
 
         testsAdapter = TestsAdapter(object : TestsAdapter.ClickListener {
             override fun onClick(test: Test) {
-                // TODO
+                getResult(test.id, test.courseId)
             }
 
-            override fun onLongClick(courseId: Int) {
+            override fun onLongClick(testId: Int) {
                 // TODO
             }
         })
@@ -104,6 +104,27 @@ class TestsFragment : Fragment() {
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         testsAdapter.setDataList(it.data as MutableList<Test>)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getResult(testId: Int, courseId: Int) {
+        lifecycleScope.launch {
+            viewModel.getResult(testId, courseId).collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        val snackbar =
+                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
+                        snackbar.show()
+                    }
+                    is DataState.Success -> {
+
                     }
                 }
             }
