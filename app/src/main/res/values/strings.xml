@@ -12,6 +12,7 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="course_code">Код курса: %s</string>
     <string name="publish">Опубликовать</string>
+    <string name="course_code_copied">Код курса скопирован</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>

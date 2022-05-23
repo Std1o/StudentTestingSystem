@@ -1,14 +1,15 @@
 package student.testing.system.ui.fragments.tests
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,13 +19,13 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.api.network.DataState
+import student.testing.system.common.AccountSession
+import student.testing.system.common.showIf
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.models.Test
-import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.adapters.TestsAdapter
 import student.testing.system.ui.fragments.CourseSharedViewModel
 import student.testing.system.ui.fragments.courses.CoursesFragment
-import student.testing.system.ui.fragments.courses.CoursesViewModel
 
 @AndroidEntryPoint
 class TestsFragment : Fragment() {
@@ -35,17 +36,18 @@ class TestsFragment : Fragment() {
     private val viewModel by viewModels<TestsViewModel>()
     lateinit var testsAdapter: TestsAdapter
 
+    companion object {
+        const val COURSE_CODE = "course_code"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(TestsViewModel::class.java)
 
         _binding = FragmentTestsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,11 +70,21 @@ class TestsFragment : Fragment() {
         binding.rv.adapter = testsAdapter
         getTests(course.id)
 
-        binding.btnAdd.setOnClickListener() {
+        binding.btnAdd.showIf(course.ownerId == AccountSession.instance.userId)
+        binding.btnAdd.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(CoursesFragment.ARG_COURSE, course)
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_navigation_tests_to_testCreationFragment, bundle)
+        }
+        binding.tvCode.setOnLongClickListener {
+            val clipboard = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText(COURSE_CODE, course.courseCode);
+            clipboard.setPrimaryClip(clip)
+            val snackbar =
+                Snackbar.make(binding.root, R.string.course_code_copied, Snackbar.LENGTH_SHORT)
+            snackbar.show()
+            true
         }
     }
 
