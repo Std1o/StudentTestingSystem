@@ -1,4 +1,5 @@
-package student.testing.system.ui.dialogFragments.courseAdding
+package student.testing.system.viewmodels
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,11 +13,11 @@ import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
 import javax.inject.Inject
 
-
 @HiltViewModel
-class CourseAddingViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class CourseAddingViewModel @Inject constructor(private val repository: MainRepository) :
+    ViewModel() {
 
-    fun createCourse(name : String): StateFlow<DataState<CourseResponse>> {
+    fun createCourse(name: String): StateFlow<DataState<CourseResponse>> {
         val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
         viewModelScope.launch {
             repository.createCourse(name).catch {
@@ -33,7 +34,7 @@ class CourseAddingViewModel @Inject constructor(private val repository: MainRepo
         return stateFlow
     }
 
-    fun joinCourse(courseCode : String): StateFlow<DataState<CourseResponse>> {
+    fun joinCourse(courseCode: String): StateFlow<DataState<CourseResponse>> {
         val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
         viewModelScope.launch {
             repository.joinCourse(courseCode).catch {

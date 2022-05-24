@@ -1,7 +1,6 @@
-package student.testing.system.ui.fragments.participants
+package student.testing.system.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.FragmentParticipantsBinding
 import student.testing.system.ui.adapters.ParticipantsAdapter
-import student.testing.system.ui.fragments.CourseSharedViewModel
-import student.testing.system.ui.fragments.courses.CoursesFragment
+import student.testing.system.viewmodels.CourseSharedViewModel
 
 class ParticipantsFragment : Fragment() {
 

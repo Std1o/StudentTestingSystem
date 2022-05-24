@@ -1,4 +1,4 @@
-package student.testing.system.ui
+package student.testing.system.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

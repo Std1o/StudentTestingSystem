@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_tests"
-        android:name="student.testing.system.ui.fragments.tests.TestsFragment"
+        android:name="student.testing.system.ui.fragments.TestsFragment"
         tools:layout="@layout/fragment_tests" >
         <action
             android:id="@+id/action_navigation_tests_to_testCreationFragment"
@@ -16,11 +16,11 @@
 
     <fragment
         android:id="@+id/navigation_users"
-        android:name="student.testing.system.ui.fragments.participants.ParticipantsFragment"
+        android:name="student.testing.system.ui.fragments.ParticipantsFragment"
         tools:layout="@layout/fragment_participants" />
     <fragment
         android:id="@+id/testCreationFragment"
-        android:name="student.testing.system.ui.fragments.testCreation.TestCreationFragment"
+        android:name="student.testing.system.ui.fragments.TestCreationFragment"
         android:label="test_creation_fragment"
         tools:layout="@layout/test_creation_fragment" >
         <action
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/questionCreationFragment"
-        android:name="student.testing.system.ui.fragments.questionCreation.QuestionCreationFragment"
+        android:name="student.testing.system.ui.fragments.QuestionCreationFragment"
         android:label="question_creation_fragment"
         tools:layout="@layout/question_creation_fragment" />
 </navigation>

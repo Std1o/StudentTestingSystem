@@ -1,6 +1,5 @@
-package student.testing.system.ui.dialogFragments.courseAdding
+package student.testing.system.ui.dialogFragments
 
-import android.R
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -18,8 +17,9 @@ import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.common.TextResultClickListener
 import student.testing.system.databinding.FragmentCourseAddingDialogBinding
-import student.testing.system.ui.fragments.courses.CoursesFragment.Companion.ARG_COURSE
-import student.testing.system.ui.fragments.courses.CoursesFragment.Companion.KEY_COURSE_ADDING
+import student.testing.system.ui.fragments.CoursesFragment.Companion.ARG_COURSE
+import student.testing.system.ui.fragments.CoursesFragment.Companion.KEY_COURSE_ADDING
+import student.testing.system.viewmodels.CourseAddingViewModel
 
 
 @AndroidEntryPoint

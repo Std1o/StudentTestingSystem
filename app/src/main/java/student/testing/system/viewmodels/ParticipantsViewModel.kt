@@ -1,4 +1,4 @@
-package student.testing.system.ui.fragments.participants
+package student.testing.system.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

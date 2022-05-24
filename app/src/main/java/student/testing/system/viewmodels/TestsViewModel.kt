@@ -1,5 +1,8 @@
-package student.testing.system.ui.fragments.courses
+package student.testing.system.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,21 +10,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import student.testing.system.api.models.Token
 import student.testing.system.api.models.courses.CourseResponse
+import student.testing.system.api.models.tests.TestResult
 import student.testing.system.api.network.DataState
 import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
-import student.testing.system.models.User
+import student.testing.system.models.Test
 import javax.inject.Inject
 
 @HiltViewModel
-class CoursesViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class TestsViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
-    fun getCourses(): StateFlow<DataState<List<CourseResponse>>> {
-        val stateFlow = MutableStateFlow<DataState<List<CourseResponse>>>(DataState.Loading)
+    fun getTests(courseId: Int): StateFlow<DataState<List<Test>>> {
+        val stateFlow = MutableStateFlow<DataState<List<Test>>>(DataState.Loading)
         viewModelScope.launch {
-            repository.getCourses().catch {
+            repository.getTests(courseId).catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {
@@ -35,32 +38,16 @@ class CoursesViewModel @Inject constructor(private val repository: MainRepositor
         return stateFlow
     }
 
-    fun getUser(): StateFlow<DataState<User>> {
-        val stateFlow = MutableStateFlow<DataState<User>>(DataState.Loading)
+    fun getResult(testId: Int, courseId: Int): StateFlow<DataState<TestResult>> {
+        val stateFlow = MutableStateFlow<DataState<TestResult>>(DataState.Loading)
         viewModelScope.launch {
-            repository.getUser().catch {
+            repository.getResult(testId, courseId).catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {
                     stateFlow.emit(DataState.Success(it.body()!!))
                 } else {
-                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                    stateFlow.emit(DataState.Error(errorMessage))
-                }
-            }
-        }
-        return stateFlow
-    }
-
-    fun deleteCourse(courseId: Int): StateFlow<DataState<Int>> {
-        val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
-        viewModelScope.launch {
-            repository.deleteCourse(courseId).catch {
-                stateFlow.emit(DataState.Error(it.message ?: " "))
-            }.collect {
-                if (it.isSuccessful) {
-                    stateFlow.emit(DataState.Success(courseId))
-                } else {
+                    Log.d("errorCode", it.code().toString())
                     val errorMessage = Utils.encodeErrorCode(it.errorBody())
                     stateFlow.emit(DataState.Error(errorMessage))
                 }

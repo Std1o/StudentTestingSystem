@@ -1,4 +1,4 @@
-package student.testing.system.ui.fragments.testCreation
+package student.testing.system.ui.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle

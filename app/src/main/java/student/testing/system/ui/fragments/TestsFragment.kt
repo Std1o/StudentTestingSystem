@@ -1,4 +1,4 @@
-package student.testing.system.ui.fragments.tests
+package student.testing.system.ui.fragments
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -24,8 +24,8 @@ import student.testing.system.common.showIf
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.models.Test
 import student.testing.system.ui.adapters.TestsAdapter
-import student.testing.system.ui.fragments.CourseSharedViewModel
-import student.testing.system.ui.fragments.courses.CoursesFragment
+import student.testing.system.viewmodels.CourseSharedViewModel
+import student.testing.system.viewmodels.TestsViewModel
 
 @AndroidEntryPoint
 class TestsFragment : Fragment() {

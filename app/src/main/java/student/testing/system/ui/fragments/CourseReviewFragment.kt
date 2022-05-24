@@ -13,7 +13,6 @@ import androidx.navigation.ui.setupWithNavController
 import student.testing.system.R
 import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.databinding.FragmentCourseReviewBinding
-import student.testing.system.ui.fragments.courses.CoursesFragment
 
 class CourseReviewFragment : Fragment() {
 

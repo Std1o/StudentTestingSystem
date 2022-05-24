@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.api.models.courses.Participant
 import student.testing.system.common.AccountSession
 import student.testing.system.databinding.ItemParticipantBinding
-import student.testing.system.ui.MainActivity
 
 
 class ParticipantsAdapter(private val dataList: List<Participant>, private val courseOwnerId: Int) :

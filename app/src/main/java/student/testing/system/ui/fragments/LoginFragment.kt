@@ -1,44 +1,55 @@
-package student.testing.system.ui.fragments.signup
+package student.testing.system.ui.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
-import student.testing.system.databinding.FragmentSignUpBinding
-import student.testing.system.ui.MainActivity
+import student.testing.system.databinding.FragmentLoginBinding
+import student.testing.system.ui.activity.MainActivity
+import student.testing.system.viewmodels.LoginViewModel
+
 
 @AndroidEntryPoint
-class SignUpFragment : Fragment() {
+class LoginFragment : Fragment() {
 
-    private val viewModel by viewModels<SignUpViewModel>()
-    private lateinit var _binding: FragmentSignUpBinding
+    private val viewModel by viewModels<LoginViewModel>()
+    private lateinit var _binding: FragmentLoginBinding
     private val binding get() = _binding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
-
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.btnSignUp.setOnClickListener {
-            signUp(binding.email.text.toString(), binding.name.text.toString(), binding.password.text.toString())
+            val bundle = Bundle()
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_loginFragment_to_signUpFragment, bundle)
         }
+
+        binding.btnLogin.setOnClickListener() {
+            auth(binding.login.text.toString(), binding.password.text.toString())
+        }
+
         return binding.root
     }
 
-    private fun signUp(email: String, username: String, password: String) {
+    private fun auth(email: String, password: String) {
         lifecycleScope.launch {
-            viewModel.signUp(email, username, password).collect {
+            viewModel.auth(email, password).collect {
                 when (it) {
                     is DataState.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
@@ -51,6 +62,7 @@ class SignUpFragment : Fragment() {
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         AccountSession.instance.token = it.data.access_token
+                        requireActivity().finish()
                         startActivity(Intent(requireContext(), MainActivity::class.java))
                     }
                 }

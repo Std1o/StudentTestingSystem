@@ -1,6 +1,5 @@
-package student.testing.system.ui.fragments.courses
+package student.testing.system.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,9 +18,9 @@ import student.testing.system.api.models.courses.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.databinding.CoursesFragmentBinding
-import student.testing.system.ui.fragments.CourseReviewFragment
 import student.testing.system.ui.adapters.CoursesAdapter
-import student.testing.system.ui.dialogFragments.courseAdding.CourseAddingDialogFragment
+import student.testing.system.ui.dialogFragments.CourseAddingDialogFragment
+import student.testing.system.viewmodels.CoursesViewModel
 
 
 @AndroidEntryPoint

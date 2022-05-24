@@ -1,4 +1,4 @@
-package student.testing.system.ui.fragments.questionCreation
+package student.testing.system.viewmodels
 
 import androidx.lifecycle.ViewModel
 
