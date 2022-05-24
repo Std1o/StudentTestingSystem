@@ -1,9 +1,6 @@
 package student.testing.system.api.network
 
-import student.testing.system.api.models.courses.CourseCreationReq
-import student.testing.system.api.models.courses.CourseJoiningReq
-import student.testing.system.api.models.signup.SignUpReq
-import student.testing.system.api.models.tests.TestCreationReq
+import student.testing.system.api.models.*
 import javax.inject.Inject
 
 class MainRemoteData @Inject constructor(private val mainService : MainService) {

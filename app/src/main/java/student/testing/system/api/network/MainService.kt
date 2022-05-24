@@ -2,12 +2,9 @@ package student.testing.system.api.network
 
 import retrofit2.Response
 import retrofit2.http.*
+import student.testing.system.api.models.*
 import student.testing.system.api.models.Token
-import student.testing.system.api.models.courses.CourseCreationReq
-import student.testing.system.api.models.courses.CourseJoiningReq
 import student.testing.system.api.models.courses.CourseResponse
-import student.testing.system.api.models.signup.SignUpReq
-import student.testing.system.api.models.tests.TestCreationReq
 import student.testing.system.api.models.tests.TestResult
 import student.testing.system.models.Test
 import student.testing.system.models.User
@@ -50,5 +47,8 @@ interface MainService {
     suspend fun createTest(@Body request: TestCreationReq): Response<Test>
 
     @GET("tests/result/{test_id}")
-    suspend fun getResult(@Path("test_id") testId: Int, @Query("course_id") courseId: Int): Response<TestResult>
+    suspend fun getResult(
+        @Path("test_id") testId: Int,
+        @Query("course_id") courseId: Int
+    ): Response<TestResult>
 }
