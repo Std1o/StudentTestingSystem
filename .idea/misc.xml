@@ -13,14 +13,16 @@
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog_item.xml" value="0.14175724637681159" />
-        <entry key="app/src/main/res/layout/fragment_course_review.xml" value="0.14175724637681159" />
+        <entry key="app/src/main/res/layout/fragment_course_review.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.12537993920972645" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_participants.xml" value="0.14175724637681159" />
+        <entry key="app/src/main/res/layout/fragment_passing_test.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_sign_up.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_tests.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/item_course.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/item_multi_answer.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/item_test.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_user.xml" value="0.33" />
         <entry key="app/src/main/res/layout/login_fragment.xml" value="0.25" />

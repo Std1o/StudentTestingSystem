@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +36,7 @@ class TestsFragment : Fragment() {
     private val sharedViewModel: CourseSharedViewModel by activityViewModels()
     private val viewModel by viewModels<TestsViewModel>()
     lateinit var testsAdapter: TestsAdapter
+    lateinit var selectedTest: Test
 
     companion object {
         const val COURSE_CODE = "course_code"
@@ -59,6 +61,7 @@ class TestsFragment : Fragment() {
 
         testsAdapter = TestsAdapter(object : TestsAdapter.ClickListener {
             override fun onClick(test: Test) {
+                selectedTest = test
                 getResult(test.id, test.courseId)
             }
 
@@ -122,6 +125,8 @@ class TestsFragment : Fragment() {
                         val snackbar =
                             Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
                         snackbar.show()
+                        val action = TestsFragmentDirections.navigateToTestPassing(selectedTest)
+                        findNavController().navigate(action)
                     }
                     is DataState.Success -> {
 

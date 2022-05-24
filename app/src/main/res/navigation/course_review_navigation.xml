@@ -12,6 +12,12 @@
         <action
             android:id="@+id/action_navigation_tests_to_testCreationFragment"
             app:destination="@id/testCreationFragment" />
+        <action
+            android:id="@+id/navigate_to_test_passing"
+            app:destination="@id/testPassingFragment">
+            <argument android:name="test"
+                app:argType="student.testing.system.models.Test"/>
+        </action>
     </fragment>
 
     <fragment
@@ -32,4 +38,9 @@
         android:name="student.testing.system.ui.fragments.QuestionCreationFragment"
         android:label="question_creation_fragment"
         tools:layout="@layout/question_creation_fragment" />
+    <fragment
+        android:id="@+id/testPassingFragment"
+        android:name="student.testing.system.ui.fragments.TestPassingFragment"
+        android:label="fragment_passing_test"
+        tools:layout="@layout/fragment_passing_test" />
 </navigation>
