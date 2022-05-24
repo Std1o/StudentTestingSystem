@@ -2,13 +2,10 @@ package student.testing.system.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide.init
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import student.testing.system.api.models.courses.CourseResponse
-import student.testing.system.api.network.DataState
-import student.testing.system.common.Utils
+import student.testing.system.models.CourseResponse
 
 class CourseSharedViewModel : ViewModel() {
 

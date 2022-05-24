@@ -5,7 +5,7 @@ import agency.tango.android.avatarview.loader.PicassoLoader
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import student.testing.system.api.models.courses.Participant
+import student.testing.system.models.Participant
 import student.testing.system.common.AccountSession
 import student.testing.system.databinding.ItemParticipantBinding
 

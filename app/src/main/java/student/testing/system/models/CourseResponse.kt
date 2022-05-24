@@ -1,4 +1,4 @@
-package student.testing.system.api.models.courses
+package student.testing.system.models
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

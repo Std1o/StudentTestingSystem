@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.api.models.courses.CourseResponse
+import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showIf

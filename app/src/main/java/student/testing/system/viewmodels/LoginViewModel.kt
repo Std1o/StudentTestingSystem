@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.MainRepository
 import student.testing.system.api.network.DataState
-import student.testing.system.api.models.Token
+import student.testing.system.models.Token
 import student.testing.system.common.Utils
 import javax.inject.Inject
 

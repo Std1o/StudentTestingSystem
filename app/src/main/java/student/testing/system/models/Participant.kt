@@ -1,4 +1,4 @@
-package student.testing.system.api.models.courses
+package student.testing.system.models
 
 import java.io.Serializable
 

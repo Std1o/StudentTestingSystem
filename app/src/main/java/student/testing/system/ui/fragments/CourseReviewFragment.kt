@@ -11,7 +11,7 @@ import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import student.testing.system.R
-import student.testing.system.api.models.courses.CourseResponse
+import student.testing.system.models.CourseResponse
 import student.testing.system.databinding.FragmentCourseReviewBinding
 
 class CourseReviewFragment : Fragment() {

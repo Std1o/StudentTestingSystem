@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import student.testing.system.api.models.courses.CourseResponse
+import student.testing.system.models.CourseResponse
 import student.testing.system.databinding.FragmentParticipantsBinding
 import student.testing.system.ui.adapters.ParticipantsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel

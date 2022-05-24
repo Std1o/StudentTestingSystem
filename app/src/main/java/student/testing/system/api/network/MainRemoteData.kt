@@ -1,6 +1,6 @@
 package student.testing.system.api.network
 
-import student.testing.system.api.models.*
+import student.testing.system.models.*
 import javax.inject.Inject
 
 class MainRemoteData @Inject constructor(private val mainService : MainService) {

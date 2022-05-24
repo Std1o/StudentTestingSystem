@@ -1,8 +1,6 @@
 package student.testing.system.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,8 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import student.testing.system.api.models.courses.CourseResponse
-import student.testing.system.api.models.tests.TestResult
+import student.testing.system.models.TestResult
 import student.testing.system.api.network.DataState
 import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
