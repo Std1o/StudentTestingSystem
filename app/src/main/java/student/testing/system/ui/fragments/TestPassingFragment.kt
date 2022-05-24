@@ -30,7 +30,6 @@ class TestPassingFragment : Fragment() {
     private lateinit var _binding: FragmentPassingTestBinding
     private val binding get() = _binding
 
-    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

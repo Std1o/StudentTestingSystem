@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.13804457953394123" />
         <entry key="app/src/main/res/drawable/ic_plus.xml" value="0.1195" />
         <entry key="app/src/main/res/drawable/ic_tests.xml" value="0.1195" />
         <entry key="app/src/main/res/drawable/ic_users.xml" value="0.1195" />
@@ -13,7 +14,7 @@
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog_item.xml" value="0.14175724637681159" />
-        <entry key="app/src/main/res/layout/fragment_course_review.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_course_review.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.12537993920972645" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.14175724637681159" />

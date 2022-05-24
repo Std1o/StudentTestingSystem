@@ -11,6 +11,7 @@ import androidx.navigation.NavArgument
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import student.testing.system.R
+import student.testing.system.common.showIf
 import student.testing.system.models.CourseResponse
 import student.testing.system.databinding.FragmentCourseReviewBinding
 
@@ -45,11 +46,16 @@ class CourseReviewFragment : Fragment() {
         navGraph.addArgument(CoursesFragment.ARG_COURSE, arg1)
         navController.graph = navGraph
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            Log.d("destination", destination.id.toString())
-            Log.d("required destination", R.id.navigation_users.toString())
             when(destination.id) {
                 R.id.navigation_users -> {
+                    binding.navView.showIf(true)
                     destination.addArgument(CoursesFragment.ARG_COURSE, arg1)
+                }
+                R.id.navigation_tests -> {
+                    binding.navView.showIf(true)
+                }
+                else -> {
+                    binding.navView.showIf(false)
                 }
             }
         }
