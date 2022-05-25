@@ -16,6 +16,16 @@ data class TestCreationReq(
     val questions: List<Question>
 )
 
+data class UserQuestion(
+    @SerializedName("question_id") val questionId: Int,
+    val answers: List<UserAnswer>
+)
+
+data class UserAnswer(
+    @SerializedName("answer_id") val answerId: Int,
+    @SerializedName("is_selected") val isSelected: Boolean
+)
+
 data class TestResultReq(
     @SerializedName("test_id") val test_id: Int,
     @SerializedName("course_id") val courseId: Int
