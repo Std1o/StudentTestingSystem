@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import student.testing.system.R
 import student.testing.system.common.TextResultClickListener
@@ -16,6 +17,7 @@ import student.testing.system.common.showToast
 import student.testing.system.databinding.QuestionCreationFragmentBinding
 import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.models.Answer
+import student.testing.system.models.Question
 import student.testing.system.ui.adapters.AnswersAdapter
 
 class QuestionCreationFragment : Fragment() {
@@ -43,7 +45,9 @@ class QuestionCreationFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             for (ans in adapter.dataList) {
                 if (ans.isRight) {
-                    showToast("Ура")
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                        TestCreationFragment.ARG_QUESTION, Question(binding.etQuestion.text.toString(), adapter.dataList, null))
+                    requireActivity().onBackPressed()
                     return@setOnClickListener
                 }
             }

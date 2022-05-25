@@ -7,14 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import student.testing.system.R
+import student.testing.system.common.showToast
 import student.testing.system.databinding.CoursesFragmentBinding
 import student.testing.system.databinding.TestCreationFragmentBinding
+import student.testing.system.models.Question
 
 class TestCreationFragment : Fragment() {
 
     private lateinit var _binding: TestCreationFragmentBinding
     private val binding get() = _binding
+
+    companion object {
+        const val ARG_QUESTION = "question"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,8 +34,12 @@ class TestCreationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAdd.setOnClickListener() {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_testCreationFragment_to_questionCreationFragment)
+            findNavController().navigate(R.id.action_testCreationFragment_to_questionCreationFragment)
+        }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Question>(
+            ARG_QUESTION
+        )?.observe(viewLifecycleOwner) {
+            showToast(it.answers.toString())
         }
     }
 }
