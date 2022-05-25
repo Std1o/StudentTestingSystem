@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.formatToString
+import student.testing.system.common.showIf
 import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.models.Question
 import student.testing.system.models.Test
@@ -39,6 +40,7 @@ class TestCreationFragment : Fragment() {
 
     companion object {
         const val ARG_QUESTION = "question"
+        const val ARG_TEST = "test"
     }
 
     override fun onCreateView(
@@ -79,12 +81,9 @@ class TestCreationFragment : Fragment() {
                 Date().formatToString("yyyy-MM-dd")!!,
                 adapter.dataList
             ).collect {
+                binding.progressBar.showIf(it is DataState.Loading)
                 when (it) {
-                    is DataState.Loading -> {
-                        //binding.progressBar.visibility = View.VISIBLE
-                    }
                     is DataState.Error -> {
-                        //binding.progressBar.visibility = View.GONE
                         val snackbar =
                             Snackbar.make(
                                 binding.root,
@@ -94,8 +93,9 @@ class TestCreationFragment : Fragment() {
                         snackbar.show()
                     }
                     is DataState.Success -> {
-                        //binding.progressBar.visibility = View.GONE
-                        //testsAdapter.setDataList(it.data as MutableList<Test>)
+                        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                            ARG_TEST, it.data)
+                        requireActivity().onBackPressed()
                     }
                 }
             }

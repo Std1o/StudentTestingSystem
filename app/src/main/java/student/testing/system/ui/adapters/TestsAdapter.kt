@@ -48,7 +48,7 @@ class TestsAdapter(val listener: ClickListener) :
                 listener.onClick(test)
             }
             holder.itemView.setOnLongClickListener() {
-                listener.onLongClick(test.id ?: -1)
+                listener.onLongClick(test.id)
                 true
             }
         }

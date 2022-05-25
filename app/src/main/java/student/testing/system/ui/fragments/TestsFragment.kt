@@ -23,6 +23,7 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showIf
 import student.testing.system.databinding.FragmentTestsBinding
+import student.testing.system.models.Question
 import student.testing.system.models.Test
 import student.testing.system.ui.adapters.TestsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel
@@ -62,7 +63,7 @@ class TestsFragment : Fragment() {
         testsAdapter = TestsAdapter(object : TestsAdapter.ClickListener {
             override fun onClick(test: Test) {
                 selectedTest = test
-                getResult(test.id ?: -1, test.courseId)
+                getResult(test.id, test.courseId)
             }
 
             override fun onLongClick(testId: Int) {
@@ -77,8 +78,12 @@ class TestsFragment : Fragment() {
         binding.btnAdd.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(CoursesFragment.ARG_COURSE, course)
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_navigation_tests_to_testCreationFragment, bundle)
+                findNavController().navigate(R.id.action_navigation_tests_to_testCreationFragment, bundle)
+        }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Test>(
+            TestCreationFragment.ARG_TEST
+        )?.observe(viewLifecycleOwner) {
+            testsAdapter.addItem(it)
         }
         binding.tvCode.setOnLongClickListener {
             val clipboard = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
