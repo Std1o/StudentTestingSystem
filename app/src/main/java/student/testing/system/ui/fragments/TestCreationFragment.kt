@@ -13,12 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.api.network.DataState
 import student.testing.system.common.formatToString
-import student.testing.system.common.showToast
-import student.testing.system.databinding.CoursesFragmentBinding
 import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.models.Question
 import student.testing.system.models.Test
@@ -27,6 +28,7 @@ import student.testing.system.viewmodels.CourseSharedViewModel
 import student.testing.system.viewmodels.TestsViewModel
 import java.util.*
 
+@AndroidEntryPoint
 class TestCreationFragment : Fragment() {
 
     private val sharedViewModel: CourseSharedViewModel by activityViewModels()
@@ -63,7 +65,38 @@ class TestCreationFragment : Fragment() {
         binding.btnPublish.setOnClickListener {
             lifecycleScope.launch {
                 sharedViewModel.courseFlow.distinctUntilChanged().collect {
-                    val test = Test(it.id, binding.etName.text.toString(), Date().formatToString("yyyy-MM-dd")!!, adapter.dataList, null)
+                    createTest(it.id)
+                }
+            }
+        }
+    }
+
+    private fun createTest(courseId: Int) {
+        lifecycleScope.launch {
+            viewModel.createTest(
+                courseId,
+                binding.etName.text.toString(),
+                Date().formatToString("yyyy-MM-dd")!!,
+                adapter.dataList
+            ).collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        //binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        //binding.progressBar.visibility = View.GONE
+                        val snackbar =
+                            Snackbar.make(
+                                binding.root,
+                                it.exception,
+                                Snackbar.LENGTH_SHORT
+                            )
+                        snackbar.show()
+                    }
+                    is DataState.Success -> {
+                        //binding.progressBar.visibility = View.GONE
+                        //testsAdapter.setDataList(it.data as MutableList<Test>)
+                    }
                 }
             }
         }

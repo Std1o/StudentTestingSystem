@@ -12,6 +12,7 @@ import student.testing.system.models.TestResult
 import student.testing.system.api.network.DataState
 import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
+import student.testing.system.models.Question
 import student.testing.system.models.Test
 import javax.inject.Inject
 
@@ -22,6 +23,23 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
         val stateFlow = MutableStateFlow<DataState<List<Test>>>(DataState.Loading)
         viewModelScope.launch {
             repository.getTests(courseId).catch {
+                stateFlow.emit(DataState.Error(it.message ?: " "))
+            }.collect {
+                if (it.isSuccessful) {
+                    stateFlow.emit(DataState.Success(it.body()!!))
+                } else {
+                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
+                    stateFlow.emit(DataState.Error(errorMessage))
+                }
+            }
+        }
+        return stateFlow
+    }
+
+    fun createTest(courseId: Int, name: String, creationTIme: String, questions: List<Question>): StateFlow<DataState<Test>> {
+        val stateFlow = MutableStateFlow<DataState<Test>>(DataState.Loading)
+        viewModelScope.launch {
+            repository.createTest(courseId, name, creationTIme, questions).catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {

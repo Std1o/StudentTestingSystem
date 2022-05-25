@@ -10,9 +10,9 @@ data class CourseJoiningReq(@SerializedName("course_code") val courseCode: Strin
 data class SignUpReq(val email: String, val username: String, val password: String)
 
 data class TestCreationReq(
-    @field:SerializedName("course_id") val courseId: Int,
+    @SerializedName("course_id") val courseId: Int,
     val name: String,
-    @field:SerializedName("creation_time") val creationTIme: String,
+    @SerializedName("creation_time") val creationTIme: String,
     val questions: List<Question>
 )
 
