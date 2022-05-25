@@ -62,7 +62,7 @@ class TestsFragment : Fragment() {
         testsAdapter = TestsAdapter(object : TestsAdapter.ClickListener {
             override fun onClick(test: Test) {
                 selectedTest = test
-                getResult(test.id, test.courseId)
+                getResult(test.id ?: -1, test.courseId)
             }
 
             override fun onLongClick(testId: Int) {

@@ -2,22 +2,35 @@ package student.testing.system.ui.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.common.formatToString
 import student.testing.system.common.showToast
 import student.testing.system.databinding.CoursesFragmentBinding
 import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.models.Question
+import student.testing.system.models.Test
 import student.testing.system.ui.adapters.QuestionsAdapter
+import student.testing.system.viewmodels.CourseSharedViewModel
+import student.testing.system.viewmodels.TestsViewModel
+import java.util.*
 
 class TestCreationFragment : Fragment() {
 
+    private val sharedViewModel: CourseSharedViewModel by activityViewModels()
+    private val viewModel by viewModels<TestsViewModel>()
     private lateinit var _binding: TestCreationFragmentBinding
     private val binding get() = _binding
     lateinit var adapter: QuestionsAdapter
@@ -46,6 +59,13 @@ class TestCreationFragment : Fragment() {
             ARG_QUESTION
         )?.observe(viewLifecycleOwner) {
             adapter.addItem(it)
+        }
+        binding.btnPublish.setOnClickListener {
+            lifecycleScope.launch {
+                sharedViewModel.courseFlow.distinctUntilChanged().collect {
+                    val test = Test(it.id, binding.etName.text.toString(), Date().formatToString("yyyy-MM-dd")!!, adapter.dataList, null)
+                }
+            }
         }
     }
 }

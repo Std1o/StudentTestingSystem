@@ -1,5 +1,6 @@
 package student.testing.system.common
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -7,6 +8,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -21,6 +24,12 @@ fun View.showIf(visible: Boolean) {
 fun Fragment.showToast(message:String, duration:Int = Toast.LENGTH_SHORT){
     Toast.makeText(requireContext(),message,duration).show()
 }
+
+@SuppressLint("SimpleDateFormat")
+fun String.toDate(pattern: String): Date? = SimpleDateFormat(pattern).parse(this)
+
+@SuppressLint("SimpleDateFormat")
+fun Date.formatToString(pattern: String): String? = SimpleDateFormat(pattern).format(this)
 
 /** Fragment binding delegate, may be used since onViewCreated up to onDestroyView (inclusive) */
 fun <T : ViewBinding> Fragment.viewBinding(factory: (View) -> T): ReadOnlyProperty<Fragment, T> =
