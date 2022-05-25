@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import student.testing.system.R
 import student.testing.system.common.TextResultClickListener
+import student.testing.system.common.showToast
 import student.testing.system.databinding.QuestionCreationFragmentBinding
 import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.models.Answer
@@ -39,6 +40,15 @@ class QuestionCreationFragment : Fragment() {
         binding.btnAdd.setOnClickListener() {
             addAnswer()
         }
+        binding.btnSave.setOnClickListener {
+            for (ans in adapter.dataList) {
+                if (ans.isRight) {
+                    showToast("Ура")
+                    return@setOnClickListener
+                }
+            }
+            showToast("Пожалуйста, назначьте правильные ответы")
+        }
     }
 
     private fun addAnswer() {
@@ -49,7 +59,7 @@ class QuestionCreationFragment : Fragment() {
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
         builder.setPositiveButton("Ок") { dialog, which ->
-            adapter.addItem(Answer(input.text.toString(), true, null))
+            adapter.addItem(Answer(input.text.toString(), false, null))
         }
         builder.setNegativeButton("Отмена", { dialog, which -> dialog.cancel() })
         builder.show()

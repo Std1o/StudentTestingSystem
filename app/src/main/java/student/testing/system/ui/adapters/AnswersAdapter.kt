@@ -13,7 +13,7 @@ import student.testing.system.models.Answer
 import student.testing.system.models.CourseResponse
 
 
-class AnswersAdapter(private val dataList: ArrayList<Answer>) :
+class AnswersAdapter(val dataList: ArrayList<Answer>) :
     RecyclerView.Adapter<AnswersAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
@@ -31,7 +31,11 @@ class AnswersAdapter(private val dataList: ArrayList<Answer>) :
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         with(holder) {
-            binding.checkBox.text = dataList[position].answer
+            val answer = dataList[position]
+            binding.checkBox.text = answer.answer
+            binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+                answer.isRight = isChecked
+            }
         }
     }
 

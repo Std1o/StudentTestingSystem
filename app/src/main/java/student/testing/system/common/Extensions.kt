@@ -1,6 +1,7 @@
 package student.testing.system.common
 
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -15,6 +16,10 @@ fun View.showIf(visible: Boolean) {
     } else {
         View.GONE
     }
+}
+
+fun Fragment.showToast(message:String, duration:Int = Toast.LENGTH_SHORT){
+    Toast.makeText(requireContext(),message,duration).show()
 }
 
 /** Fragment binding delegate, may be used since onViewCreated up to onDestroyView (inclusive) */
