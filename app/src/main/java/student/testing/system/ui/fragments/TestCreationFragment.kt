@@ -26,6 +26,7 @@ import student.testing.system.models.Question
 import student.testing.system.models.Test
 import student.testing.system.ui.adapters.QuestionsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel
+import student.testing.system.viewmodels.TestCreationViewModel
 import student.testing.system.viewmodels.TestsViewModel
 import java.util.*
 
@@ -33,7 +34,8 @@ import java.util.*
 class TestCreationFragment : Fragment() {
 
     private val sharedViewModel: CourseSharedViewModel by activityViewModels()
-    private val viewModel by viewModels<TestsViewModel>()
+    private val testsViewModel by viewModels<TestsViewModel>()
+    private val viewModel: TestCreationViewModel by activityViewModels()
     private lateinit var _binding: TestCreationFragmentBinding
     private val binding get() = _binding
     lateinit var adapter: QuestionsAdapter
@@ -59,10 +61,10 @@ class TestCreationFragment : Fragment() {
         binding.btnAdd.setOnClickListener() {
             findNavController().navigate(R.id.action_testCreationFragment_to_questionCreationFragment)
         }
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Question>(
-            ARG_QUESTION
-        )?.observe(viewLifecycleOwner) {
-            adapter.addItem(it)
+        lifecycleScope.launch {
+            viewModel.questionsFlow.distinctUntilChanged().collect {
+                adapter.setDataList(it)
+            }
         }
         binding.btnPublish.setOnClickListener {
             lifecycleScope.launch {
@@ -75,7 +77,7 @@ class TestCreationFragment : Fragment() {
 
     private fun createTest(courseId: Int) {
         lifecycleScope.launch {
-            viewModel.createTest(
+            testsViewModel.createTest(
                 courseId,
                 binding.etName.text.toString(),
                 Date().formatToString("yyyy-MM-dd")!!,

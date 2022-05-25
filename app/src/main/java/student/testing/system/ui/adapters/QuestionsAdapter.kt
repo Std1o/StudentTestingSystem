@@ -5,15 +5,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.databinding.ItemQuestionBinding
 import student.testing.system.models.Question
+import student.testing.system.models.Test
 
 
-class QuestionsAdapter(val dataList: ArrayList<Question>) :
+class QuestionsAdapter(var dataList: ArrayList<Question>) :
     RecyclerView.Adapter<QuestionsAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val binding = ItemQuestionBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CourseViewHolder(binding)
+    }
+
+    @JvmName("setDataList1")
+    fun setDataList(dataList: ArrayList<Question>) {
+        this.dataList = dataList
+        notifyDataSetChanged()
     }
 
     fun addItem(item: Question) {

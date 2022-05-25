@@ -43,5 +43,10 @@
         tools:layout="@layout/fragment_passing_test">
         <argument android:name="test"
             app:argType="student.testing.system.models.Test"/>
+        <argument android:name="position"
+            app:argType="integer"/>
+        <action
+            android:id="@+id/action_testPassingFragment_self"
+            app:destination="@id/testPassingFragment" />
     </fragment>
 </navigation>

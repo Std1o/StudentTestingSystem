@@ -9,8 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.TextResultClickListener
 import student.testing.system.common.showToast
@@ -19,12 +22,15 @@ import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
 import student.testing.system.ui.adapters.AnswersAdapter
+import student.testing.system.viewmodels.TestCreationViewModel
 
+@AndroidEntryPoint
 class QuestionCreationFragment : Fragment() {
 
     private lateinit var _binding: QuestionCreationFragmentBinding
     private val binding get() = _binding
     private lateinit var adapter: AnswersAdapter
+    private val viewModel: TestCreationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +51,7 @@ class QuestionCreationFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             for (ans in adapter.dataList) {
                 if (ans.isRight) {
-                    findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                        TestCreationFragment.ARG_QUESTION, Question(binding.etQuestion.text.toString(), adapter.dataList, null))
+                    viewModel.addQuestion(Question(binding.etQuestion.text.toString(), adapter.dataList, null))
                     requireActivity().onBackPressed()
                     return@setOnClickListener
                 }
