@@ -1,40 +1,32 @@
 package student.testing.system.ui.fragments
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
-import com.google.android.material.snackbar.Snackbar
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.api.network.DataState
-import student.testing.system.common.AccountSession
-import student.testing.system.databinding.FragmentLoginBinding
+import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentPassingTestBinding
-import student.testing.system.databinding.FragmentTestsBinding
-import student.testing.system.ui.activity.MainActivity
-import student.testing.system.viewmodels.LoginViewModel
+import student.testing.system.ui.adapters.AnswersAdapter
 
 
 @AndroidEntryPoint
-class TestPassingFragment : Fragment() {
+class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
 
     //private val viewModel by viewModels<LoginViewModel>()
-    private lateinit var _binding: FragmentPassingTestBinding
-    private val binding get() = _binding
+    private val binding by viewBinding(FragmentPassingTestBinding::bind)
+    private val args: TestPassingFragmentArgs by navArgs()
+    private lateinit var adapter: AnswersAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPassingTestBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val test = args.test
+        val question = test.questions[0]
+        binding.tvQuestion.text = question.question
+        adapter = AnswersAdapter(test.questions[0].answers)
+        binding.rv.layoutManager = LinearLayoutManager(requireContext())
+        binding.rv.adapter = adapter
     }
 }
