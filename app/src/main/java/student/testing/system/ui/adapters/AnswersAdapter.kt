@@ -10,15 +10,21 @@ import student.testing.system.common.AccountSession
 import student.testing.system.databinding.ItemMultiAnswerBinding
 import student.testing.system.databinding.ItemParticipantBinding
 import student.testing.system.models.Answer
+import student.testing.system.models.CourseResponse
 
 
-class AnswersAdapter(private val dataList: List<Answer>) :
+class AnswersAdapter(private val dataList: ArrayList<Answer>) :
     RecyclerView.Adapter<AnswersAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val binding = ItemMultiAnswerBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CourseViewHolder(binding)
+    }
+
+    fun addItem(item: Answer) {
+        dataList += item
+        notifyItemChanged(itemCount)
     }
 
     override fun getItemCount() = dataList.size

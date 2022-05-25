@@ -9,6 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentPassingTestBinding
+import student.testing.system.models.Answer
 import student.testing.system.ui.adapters.AnswersAdapter
 
 
@@ -25,7 +26,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
         val test = args.test
         val question = test.questions[0]
         binding.tvQuestion.text = question.question
-        adapter = AnswersAdapter(test.questions[0].answers)
+        adapter = AnswersAdapter(test.questions[0].answers as ArrayList<Answer>)
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
     }
