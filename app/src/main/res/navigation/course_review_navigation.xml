@@ -19,6 +19,9 @@
         <action
             android:id="@+id/viewResult"
             app:destination="@id/resultReviewFragment" />
+        <action
+            android:id="@+id/viewResults"
+            app:destination="@id/resultsReviewFragment2" />
     </fragment>
 
     <fragment
@@ -61,5 +64,13 @@
         tools:layout="@layout/fragment_result_review">
         <argument android:name="testResult"
             app:argType="student.testing.system.models.TestResult"/>
+    </fragment>
+    <fragment
+        android:id="@+id/resultsReviewFragment2"
+        android:name="student.testing.system.ui.fragments.ResultsReviewFragment"
+        android:label="fragment_results_review"
+        tools:layout="@layout/fragment_results_review">
+        <argument android:name="results"
+            app:argType="student.testing.system.models.ParticipantsResults"/>
     </fragment>
 </navigation>

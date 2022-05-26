@@ -22,6 +22,7 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showIf
+import student.testing.system.common.showToast
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.models.Question
 import student.testing.system.models.Test
@@ -63,7 +64,11 @@ class TestsFragment : Fragment() {
         testsAdapter = TestsAdapter(object : TestsAdapter.ClickListener {
             override fun onClick(test: Test) {
                 selectedTest = test
-                getResult(test.id, test.courseId)
+                if (course.ownerId == AccountSession.instance.userId) {
+                    getResults(test.id, test.courseId)
+                } else {
+                    getResult(test.id, test.courseId)
+                }
             }
 
             override fun onLongClick(testId: Int) {
@@ -132,6 +137,27 @@ class TestsFragment : Fragment() {
                     }
                     is DataState.Success -> {
                         val action = TestsFragmentDirections.viewResult(it.data)
+                        findNavController().navigate(action)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getResults(testId: Int, courseId: Int) {
+        lifecycleScope.launch {
+            viewModel.getResults(testId, courseId).collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        showToast(it.exception)
+                    }
+                    is DataState.Success -> {
+                        binding.progressBar.showIf(it is DataState.Loading)
+                        val action = TestsFragmentDirections.viewResults(it.data)
                         findNavController().navigate(action)
                     }
                 }

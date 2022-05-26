@@ -12,6 +12,7 @@ import student.testing.system.models.TestResult
 import student.testing.system.api.network.DataState
 import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
+import student.testing.system.models.ParticipantsResults
 import student.testing.system.models.Question
 import student.testing.system.models.Test
 import javax.inject.Inject
@@ -57,6 +58,24 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
         val stateFlow = MutableStateFlow<DataState<TestResult>>(DataState.Loading)
         viewModelScope.launch {
             repository.getResult(testId, courseId).catch {
+                stateFlow.emit(DataState.Error(it.message ?: " "))
+            }.collect {
+                if (it.isSuccessful) {
+                    stateFlow.emit(DataState.Success(it.body()!!))
+                } else {
+                    Log.d("errorCode", it.code().toString())
+                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
+                    stateFlow.emit(DataState.Error(errorMessage))
+                }
+            }
+        }
+        return stateFlow
+    }
+
+    fun getResults(testId: Int, courseId: Int): StateFlow<DataState<ParticipantsResults>> {
+        val stateFlow = MutableStateFlow<DataState<ParticipantsResults>>(DataState.Loading)
+        viewModelScope.launch {
+            repository.getResults(testId, courseId).catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {

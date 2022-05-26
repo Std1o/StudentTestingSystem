@@ -58,4 +58,10 @@ interface MainService {
         @Path("test_id") testId: Int,
         @Query("course_id") courseId: Int
     ): Response<TestResult>
+
+    @GET("tests/results/{test_id}")
+    suspend fun getResults(
+        @Path("test_id") testId: Int,
+        @Query("course_id") courseId: Int
+    ): Response<ParticipantsResults>
 }

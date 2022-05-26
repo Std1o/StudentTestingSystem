@@ -16,4 +16,5 @@ class MainRemoteData @Inject constructor(private val mainService : MainService) 
     suspend fun createTest(request: TestCreationReq) = mainService.createTest(request)
     suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) = mainService.calculateResult(testId, courseId, request)
     suspend fun getResult(testId: Int, courseId: Int) = mainService.getResult(testId, courseId)
+    suspend fun getResults(testId: Int, courseId: Int) = mainService.getResults(testId, courseId)
 }
