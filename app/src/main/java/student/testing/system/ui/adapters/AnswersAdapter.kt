@@ -15,7 +15,7 @@ import student.testing.system.models.Answer
 import student.testing.system.models.CourseResponse
 
 
-class AnswersAdapter(val dataList: ArrayList<Answer>) :
+class AnswersAdapter(val dataList: ArrayList<Answer>, val forCreating: Boolean) :
     RecyclerView.Adapter<AnswersAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
@@ -38,6 +38,7 @@ class AnswersAdapter(val dataList: ArrayList<Answer>) :
             binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
                 answer.isRight = isChecked
             }
+            if (!forCreating) return
             binding.checkBox.setOnLongClickListener {
                 confirmDeletion(position, binding.root.context)
                 true

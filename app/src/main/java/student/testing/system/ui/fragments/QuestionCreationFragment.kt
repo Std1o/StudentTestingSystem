@@ -42,7 +42,7 @@ class QuestionCreationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = AnswersAdapter(arrayListOf())
+        adapter = AnswersAdapter(arrayListOf(), true)
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
         binding.btnAdd.setOnClickListener() {
