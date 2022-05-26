@@ -1,7 +1,9 @@
 package student.testing.system.ui.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.databinding.ItemQuestionBinding
 import student.testing.system.models.Question
@@ -34,7 +36,24 @@ class QuestionsAdapter(var dataList: ArrayList<Question>) :
         with(holder) {
             val question = dataList[position]
             binding.tvTitle.text = question.question
+            binding.cv.setOnLongClickListener {
+                confirmDeletion(position, binding.root.context)
+                true
+            }
         }
+    }
+
+    private fun confirmDeletion(position: Int, context: Context) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Удалить?")
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            dataList.removeAt(position)
+            notifyItemRemoved(position)
+        }
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+            dialog.cancel()
+        }
+        builder.show()
     }
 
     inner class CourseViewHolder(val binding: ItemQuestionBinding) :
