@@ -134,7 +134,8 @@ class TestsFragment : Fragment() {
                         findNavController().navigate(action)
                     }
                     is DataState.Success -> {
-
+                        val action = TestsFragmentDirections.viewResult(it.data)
+                        findNavController().navigate(action)
                     }
                 }
             }

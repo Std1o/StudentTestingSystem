@@ -20,6 +20,7 @@
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_participants.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_passing_test.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_result_review.xml" value="0.12537993920972645" />
         <entry key="app/src/main/res/layout/fragment_sign_up.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_tests.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/item_course.xml" value="0.22" />
@@ -27,6 +28,7 @@
         <entry key="app/src/main/res/layout/item_question.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/item_test.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_user.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/item_user_result.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/login_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/question_creation_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/sign_up_fragment.xml" value="0.2" />
