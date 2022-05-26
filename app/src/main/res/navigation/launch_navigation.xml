@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/card_flip_right_in"
+            app:exitAnim="@anim/card_flip_right_out"
+            app:popEnterAnim="@anim/card_flip_left_in"
+            app:popExitAnim="@anim/card_flip_left_out" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

@@ -11,17 +11,33 @@
         tools:layout="@layout/fragment_tests" >
         <action
             android:id="@+id/action_navigation_tests_to_testCreationFragment"
-            app:destination="@id/testCreationFragment" />
+            app:destination="@id/testCreationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/navigate_to_test_passing"
-            app:destination="@id/testPassingFragment">
+            app:destination="@id/testPassingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
         </action>
         <action
             android:id="@+id/viewResult"
-            app:destination="@id/resultReviewFragment" />
+            app:destination="@id/resultReviewFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/viewResults"
-            app:destination="@id/resultsReviewFragment2" />
+            app:destination="@id/resultsReviewFragment2"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -35,7 +51,11 @@
         tools:layout="@layout/test_creation_fragment" >
         <action
             android:id="@+id/action_testCreationFragment_to_questionCreationFragment"
-            app:destination="@id/questionCreationFragment" />
+            app:destination="@id/questionCreationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/questionCreationFragment"
@@ -55,7 +75,11 @@
             android:id="@+id/action_testPassingFragment_self"
             app:destination="@id/testPassingFragment"
             app:popUpTo="@id/testPassingFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/resultReviewFragment"
