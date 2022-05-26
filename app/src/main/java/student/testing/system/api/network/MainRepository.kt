@@ -23,6 +23,7 @@ class MainRepository @Inject constructor(
     suspend fun createTest(courseId: Int, name: String, creationTIme: String, questions: List<Question>) = flow { emit(remoteData.createTest(
         TestCreationReq(courseId, name, creationTIme, questions)
     ))}
+    suspend fun deleteTest(testId: Int, courseId: Int) = flow { emit(remoteData.deleteTest(testId, courseId))}
     suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) = flow { emit(remoteData.calculateResult(testId, courseId, request))}
     suspend fun getResult(testId: Int, courseId: Int) = flow { emit(remoteData.getResult(testId, courseId))}
     suspend fun getResults(testId: Int, courseId: Int) = flow { emit(remoteData.getResults(testId, courseId))}

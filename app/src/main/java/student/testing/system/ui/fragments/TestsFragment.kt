@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -72,7 +73,7 @@ class TestsFragment : Fragment() {
             }
 
             override fun onLongClick(testId: Int) {
-                // TODO
+                confirmDeletion(testId, course.id)
             }
         })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
@@ -99,6 +100,18 @@ class TestsFragment : Fragment() {
             snackbar.show()
             true
         }
+    }
+
+    private fun confirmDeletion(testId: Int, courseId: Int) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Удалить?")
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            deleteTest(testId, courseId)
+        }
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+            dialog.cancel()
+        }
+        builder.show()
     }
 
     private fun getTests(courseId: Int) {
@@ -159,6 +172,26 @@ class TestsFragment : Fragment() {
                         binding.progressBar.showIf(it is DataState.Loading)
                         val action = TestsFragmentDirections.viewResults(it.data)
                         findNavController().navigate(action)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun deleteTest(testId: Int, courseId: Int) {
+        lifecycleScope.launch {
+            viewModel.deleteTest(testId, courseId).collect {
+                when (it) {
+                    is DataState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+                    is DataState.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        showToast(it.exception)
+                    }
+                    is DataState.Success -> {
+                        binding.progressBar.showIf(it is DataState.Loading)
+                        testsAdapter.deleteById(testId)
                     }
                 }
             }

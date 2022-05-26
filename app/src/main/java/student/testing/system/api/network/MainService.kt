@@ -46,6 +46,9 @@ interface MainService {
     @POST("tests/")
     suspend fun createTest(@Body request: TestCreationReq): Response<Test>
 
+    @DELETE("tests/{test_id}")
+    suspend fun deleteTest(@Path("test_id") testId: Int, @Query("course_id") courseId: Int): Response<Void>
+
     @POST("tests/{test_id}")
     suspend fun calculateResult(
         @Path("test_id") testId: Int,
