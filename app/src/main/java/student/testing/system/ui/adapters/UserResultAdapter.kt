@@ -4,9 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import student.testing.system.databinding.ItemParticipantBinding
 import student.testing.system.databinding.ItemUserResultBinding
-import student.testing.system.models.Answer
+import student.testing.system.models.AnswerResult
 import student.testing.system.models.TestResult
 
 
@@ -24,10 +23,11 @@ class UserResultAdapter(private val testResult: TestResult) :
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         with(holder) {
             binding.tvIndex.text = "${position + 1}"
-            binding.tvScore.text = testResult.score.toString()
-            binding.tvQuestion.text = testResult.questions[position].question
+            val question = testResult.questions[position]
+            binding.tvScore.text = question.score.toString()
+            binding.tvQuestion.text = question.question
             binding.rv.layoutManager = LinearLayoutManager(binding.root.context)
-            val adapter = AnswersAdapter(testResult.questions[position].answers as ArrayList<Answer>)
+            val adapter = AnswersResultAdapter(testResult.questions[position].answers as ArrayList<AnswerResult>)
             binding.rv.adapter = adapter
         }
     }

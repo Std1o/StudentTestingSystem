@@ -10,7 +10,7 @@ data class TestResult(
     @SerializedName("course_id") val courseId: Int,
     val name: String,
     @SerializedName("creation_time") val creationTime: String,
-    val questions: List<Question>, val id: Int,
+    val questions: List<QuestionResult>, val id: Int,
     @SerializedName("max_score") val maxScore: Int,
     val score: Double
 ): Parcelable
