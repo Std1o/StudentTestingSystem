@@ -1,21 +1,28 @@
 package student.testing.system.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.api.network.DataState
+import student.testing.system.common.AccountSession
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentPassingTestBinding
 import student.testing.system.models.Answer
 import student.testing.system.models.UserAnswer
 import student.testing.system.models.UserQuestion
+import student.testing.system.ui.activity.MainActivity
 import student.testing.system.ui.adapters.AnswersAdapter
 import student.testing.system.viewmodels.TestCreationViewModel
 import student.testing.system.viewmodels.TestPassingViewModel
@@ -47,7 +54,11 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
             }
             viewModel.userQuestions += UserQuestion(question.id!!, userAnswers)
             if (test.questions.count() - 1 == position) {
-                viewModel.calculateResult(test.id, test.courseId)
+                lifecycleScope.launch {
+                    viewModel.calculateResult(test.id, test.courseId).collect {
+                        requireActivity().onBackPressed()
+                    }
+                }
             } else {
                 val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position)
                 findNavController().navigate(action)

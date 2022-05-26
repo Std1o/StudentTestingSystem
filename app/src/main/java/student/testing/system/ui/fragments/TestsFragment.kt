@@ -127,9 +127,6 @@ class TestsFragment : Fragment() {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        val snackbar =
-                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                        snackbar.show()
                         val action = TestsFragmentDirections.navigateToTestPassing(selectedTest, 0)
                         findNavController().navigate(action)
                     }
