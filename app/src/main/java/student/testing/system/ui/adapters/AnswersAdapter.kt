@@ -2,8 +2,10 @@ package student.testing.system.ui.adapters
 
 import agency.tango.android.avatarview.IImageLoader
 import agency.tango.android.avatarview.loader.PicassoLoader
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.models.Participant
 import student.testing.system.common.AccountSession
@@ -36,7 +38,24 @@ class AnswersAdapter(val dataList: ArrayList<Answer>) :
             binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
                 answer.isRight = isChecked
             }
+            binding.checkBox.setOnLongClickListener {
+                confirmDeletion(position, binding.root.context)
+                true
+            }
         }
+    }
+
+    private fun confirmDeletion(position: Int, context: Context) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Удалить?")
+        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+            dataList.removeAt(position)
+            notifyItemRemoved(position)
+        }
+        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+            dialog.cancel()
+        }
+        builder.show()
     }
 
     inner class CourseViewHolder(val binding: ItemMultiAnswerBinding) :

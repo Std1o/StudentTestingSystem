@@ -14,14 +14,7 @@ import student.testing.system.R
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentPassingTestBinding
 import student.testing.system.databinding.FragmentResultReviewBinding
-import student.testing.system.models.Answer
-import student.testing.system.models.UserAnswer
-import student.testing.system.models.UserQuestion
-import student.testing.system.ui.adapters.AnswersAdapter
 import student.testing.system.ui.adapters.UserResultAdapter
-import student.testing.system.viewmodels.TestCreationViewModel
-import student.testing.system.viewmodels.TestPassingViewModel
-import student.testing.system.viewmodels.TestsViewModel
 
 
 @AndroidEntryPoint
