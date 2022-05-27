@@ -11,7 +11,7 @@
         <entry key="app/src/main/res/layout/activity_launch.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/courses_fragment.xml" value="0.14175724637681159" />
-        <entry key="app/src/main/res/layout/fragment_course_adding_dialog.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/fragment_course_adding_dialog.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog_item.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_course_review.xml" value="0.18" />

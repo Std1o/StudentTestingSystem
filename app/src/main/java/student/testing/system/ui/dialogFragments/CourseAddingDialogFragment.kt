@@ -128,10 +128,9 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(): CourseAddingDialogFragment =
-            CourseAddingDialogFragment().apply {
-
-            }
+        fun newInstance(): CourseAddingDialogFragment {
+            return CourseAddingDialogFragment()
+        }
     }
 
     override fun onDestroyView() {
