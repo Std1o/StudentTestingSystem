@@ -54,10 +54,10 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
         return stateFlow
     }
 
-    fun deleteTest(testId: Int, courseId: Int): StateFlow<DataState<Int>> {
+    fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int): StateFlow<DataState<Int>> {
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {
-            repository.deleteTest(testId, courseId).catch {
+            repository.deleteTest(testId, courseId, courseOwnerId).catch {
                 stateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {
                 if (it.isSuccessful) {

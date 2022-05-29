@@ -18,12 +18,12 @@ class MainRepository @Inject constructor(
     suspend fun createCourse(name: String) = flow { emit(remoteData.createCourse(CourseCreationReq(name)))}
     suspend fun joinCourse(courseCode: String) = flow { emit(remoteData.joinCourse(courseCode, CourseJoiningReq(courseCode)))}
     suspend fun getCourse(courseId: Int) = flow { emit(remoteData.getCourse(courseId))}
-    suspend fun deleteCourse(courseId: Int) = flow { emit(remoteData.deleteCourse(courseId))}
+    suspend fun deleteCourse(courseId: Int, courseOwnerId: Int) = flow { emit(remoteData.deleteCourse(courseId, courseOwnerId))}
     suspend fun getTests(courseId: Int) = flow { emit(remoteData.getTests(courseId))}
     suspend fun createTest(courseId: Int, name: String, creationTIme: String, questions: List<Question>) = flow { emit(remoteData.createTest(
         TestCreationReq(courseId, name, creationTIme, questions)
     ))}
-    suspend fun deleteTest(testId: Int, courseId: Int) = flow { emit(remoteData.deleteTest(testId, courseId))}
+    suspend fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) = flow { emit(remoteData.deleteTest(testId, courseId, courseOwnerId))}
     suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) = flow { emit(remoteData.calculateResult(testId, courseId, request))}
     suspend fun getResult(testId: Int, courseId: Int) = flow { emit(remoteData.getResult(testId, courseId))}
     suspend fun getResults(testId: Int, courseId: Int) = flow { emit(remoteData.getResults(testId, courseId))}

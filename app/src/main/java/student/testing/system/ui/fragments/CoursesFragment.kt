@@ -55,8 +55,8 @@ class CoursesFragment : Fragment() {
                     .navigate(R.id.action_coursesFragment_to_courseReviewFragment, bundle)
             }
 
-            override fun onLongClick(courseId: Int) {
-                confirmDeletion(courseId)
+            override fun onLongClick(courseId: Int, courseOwnerId: Int) {
+                confirmDeletion(courseId, courseOwnerId)
             }
         })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
@@ -102,11 +102,11 @@ class CoursesFragment : Fragment() {
         }
     }
 
-    private fun confirmDeletion(courseId: Int) {
+    private fun confirmDeletion(courseId: Int, courseOwnerId: Int) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Удалить?")
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            deleteCourse(courseId)
+            deleteCourse(courseId, courseOwnerId)
         }
         builder.setNegativeButton(android.R.string.no) { dialog, which ->
             dialog.cancel()
@@ -114,9 +114,9 @@ class CoursesFragment : Fragment() {
         builder.show()
     }
 
-    private fun deleteCourse(courseId: Int) {
+    private fun deleteCourse(courseId: Int, courseOwnerId: Int) {
         lifecycleScope.launch {
-            viewModel.deleteCourse(courseId).collect {
+            viewModel.deleteCourse(courseId, courseOwnerId).collect {
                 when (it) {
                     is DataState.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE

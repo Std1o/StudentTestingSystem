@@ -54,7 +54,7 @@ class CoursesAdapter(val listener: ClickListener) :
                 listener.onClick(course)
             }
             holder.itemView.setOnLongClickListener() {
-                listener.onLongClick(course.id)
+                listener.onLongClick(course.id, course.ownerId)
                 true
             }
         }
@@ -65,7 +65,7 @@ class CoursesAdapter(val listener: ClickListener) :
 
     interface ClickListener {
         fun onClick(course: CourseResponse)
-        fun onLongClick(courseId: Int)
+        fun onLongClick(courseId: Int, courseOwnerId: Int)
     }
 
 }

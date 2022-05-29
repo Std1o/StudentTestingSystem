@@ -38,7 +38,7 @@ interface MainService {
     suspend fun getCourse(@Path("courseId") courseId: Int): Response<CourseResponse>
 
     @DELETE("courses/{courseId}")
-    suspend fun deleteCourse(@Path("courseId") courseId: Int): Response<Void>
+    suspend fun deleteCourse(@Path("courseId") courseId: Int, @Query("course_owner_id") courseOwnerId: Int): Response<Void>
 
     @GET("tests/")
     suspend fun getTests(@Query("course_id") courseId: Int): Response<List<Test>>
@@ -47,7 +47,7 @@ interface MainService {
     suspend fun createTest(@Body request: TestCreationReq): Response<Test>
 
     @DELETE("tests/{test_id}")
-    suspend fun deleteTest(@Path("test_id") testId: Int, @Query("course_id") courseId: Int): Response<Void>
+    suspend fun deleteTest(@Path("test_id") testId: Int, @Query("course_id") courseId: Int, @Query("course_owner_id") courseOwnerId: Int): Response<Void>
 
     @POST("tests/{test_id}")
     suspend fun calculateResult(

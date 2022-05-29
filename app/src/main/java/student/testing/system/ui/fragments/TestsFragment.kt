@@ -73,7 +73,7 @@ class TestsFragment : Fragment() {
             }
 
             override fun onLongClick(testId: Int) {
-                confirmDeletion(testId, course.id)
+                confirmDeletion(testId, course.id, course.ownerId)
             }
         })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
@@ -102,11 +102,11 @@ class TestsFragment : Fragment() {
         }
     }
 
-    private fun confirmDeletion(testId: Int, courseId: Int) {
+    private fun confirmDeletion(testId: Int, courseId: Int, courseOwnerId: Int) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Удалить?")
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            deleteTest(testId, courseId)
+            deleteTest(testId, courseId, courseOwnerId)
         }
         builder.setNegativeButton(android.R.string.no) { dialog, which ->
             dialog.cancel()
@@ -178,9 +178,9 @@ class TestsFragment : Fragment() {
         }
     }
 
-    private fun deleteTest(testId: Int, courseId: Int) {
+    private fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) {
         lifecycleScope.launch {
-            viewModel.deleteTest(testId, courseId).collect {
+            viewModel.deleteTest(testId, courseId, courseOwnerId).collect {
                 when (it) {
                     is DataState.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
