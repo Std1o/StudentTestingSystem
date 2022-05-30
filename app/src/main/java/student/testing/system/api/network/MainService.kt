@@ -1,5 +1,6 @@
 package student.testing.system.api.network
 
+import com.google.gson.annotations.SerializedName
 import retrofit2.Response
 import retrofit2.http.*
 import student.testing.system.models.*
@@ -70,5 +71,9 @@ interface MainService {
     ): Response<ParticipantsResults>
 
     @POST("course/moderators/")
-    suspend fun addModerator(@Body request: CourseCreationReq): Response<CourseResponse>
+    suspend fun addModerator(
+        @Query("course_id") courseId: Int,
+        @Query("course_owner_id") courseOwnerId: Int,
+        @Query("moderator_id") moderatorId: Int
+    ): Response<List<Participant>>
 }

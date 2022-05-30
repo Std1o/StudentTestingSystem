@@ -25,6 +25,7 @@ data class UserAnswer(
 )
 
 data class AddOrDeleteModeratorReq(
-    @SerializedName("test_id") val test_id: Int,
-    @SerializedName("course_id") val courseId: Int
+    @SerializedName("course_id") val courseId: Int,
+    @SerializedName("course_owner_id") val courseOwnerId: Int,
+    @SerializedName("moderator_id") val moderatorId: Int
 )

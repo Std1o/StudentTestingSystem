@@ -17,4 +17,5 @@ class MainRemoteData @Inject constructor(private val mainService : MainService) 
     suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) = mainService.calculateResult(testId, courseId, request)
     suspend fun getResult(testId: Int, courseId: Int) = mainService.getResult(testId, courseId)
     suspend fun getResults(testId: Int, courseId: Int) = mainService.getResults(testId, courseId)
+    suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) = mainService.addModerator(courseId, courseOwnerId, moderatorId)
 }

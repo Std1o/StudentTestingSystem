@@ -10,12 +10,15 @@ import student.testing.system.models.Participant
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showIf
 import student.testing.system.databinding.ItemParticipantBinding
+import student.testing.system.models.CourseResponse
 
 
 class ParticipantsAdapter(private val dataList: List<Participant>,
-                          private val moderators: List<Participant>,
+                          private var moderators: List<Participant>,
                           private val courseOwnerId: Int) :
     RecyclerView.Adapter<ParticipantsAdapter.CourseViewHolder>() {
+
+    var listener: LongClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val binding = ItemParticipantBinding
@@ -23,11 +26,22 @@ class ParticipantsAdapter(private val dataList: List<Participant>,
         return CourseViewHolder(binding)
     }
 
+    fun updateModerators(moderators: List<Participant>) {
+        this.moderators = moderators
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         with(holder) {
             val participant: Participant = dataList[position]
+            if (listener != null) {
+                holder.itemView.setOnLongClickListener {
+                    listener!!.onLongClick(participant.id)
+                    true
+                }
+            }
             val imageLoader: IImageLoader = PicassoLoader()
             imageLoader.loadImage(binding.avatarView, "nothing", participant.username)
             binding.tvName.text = participant.username
@@ -43,4 +57,8 @@ class ParticipantsAdapter(private val dataList: List<Participant>,
 
     inner class CourseViewHolder(val binding: ItemParticipantBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    interface LongClickListener {
+        fun onLongClick(participantId: Int)
+    }
 }
