@@ -1,13 +1,17 @@
 package student.testing.system.common
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import student.testing.system.R
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
@@ -23,6 +27,16 @@ fun View.showIf(visible: Boolean) {
 
 fun Fragment.showToast(message:String, duration:Int = Toast.LENGTH_SHORT){
     Toast.makeText(requireContext(),message,duration).show()
+}
+
+fun Fragment.confirmAction(@StringRes title: Int, listener: DialogInterface.OnClickListener) {
+    val builder = AlertDialog.Builder(requireContext())
+    builder.setTitle(title)
+    builder.setPositiveButton(R.string.ok, listener)
+    builder.setNegativeButton(R.string.cancel) { dialog, which ->
+        dialog.cancel()
+    }
+    builder.show()
 }
 
 @SuppressLint("SimpleDateFormat")

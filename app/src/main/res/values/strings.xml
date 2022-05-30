@@ -13,6 +13,9 @@
     <string name="course_code">Код курса: %s</string>
     <string name="publish">Опубликовать</string>
     <string name="course_code_copied">Код курса скопирован</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete_request">Удалить?</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>

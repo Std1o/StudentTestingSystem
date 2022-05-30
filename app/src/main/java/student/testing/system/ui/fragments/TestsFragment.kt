@@ -22,6 +22,7 @@ import student.testing.system.R
 import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
+import student.testing.system.common.confirmAction
 import student.testing.system.common.showIf
 import student.testing.system.common.showToast
 import student.testing.system.databinding.FragmentTestsBinding
@@ -73,7 +74,9 @@ class TestsFragment : Fragment() {
             }
 
             override fun onLongClick(testId: Int) {
-                confirmDeletion(testId, course.id, course.ownerId)
+                confirmAction(R.string.delete_request) { _, _ ->
+                    deleteTest(testId, course.id, course.ownerId)
+                }
             }
         })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
@@ -100,18 +103,6 @@ class TestsFragment : Fragment() {
             snackbar.show()
             true
         }
-    }
-
-    private fun confirmDeletion(testId: Int, courseId: Int, courseOwnerId: Int) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Удалить?")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            deleteTest(testId, courseId, courseOwnerId)
-        }
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-            dialog.cancel()
-        }
-        builder.show()
     }
 
     private fun getTests(courseId: Int) {

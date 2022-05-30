@@ -17,6 +17,7 @@ import student.testing.system.R
 import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
+import student.testing.system.common.confirmAction
 import student.testing.system.databinding.CoursesFragmentBinding
 import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.dialogFragments.CourseAddingDialogFragment
@@ -56,7 +57,9 @@ class CoursesFragment : Fragment() {
             }
 
             override fun onLongClick(courseId: Int, courseOwnerId: Int) {
-                confirmDeletion(courseId, courseOwnerId)
+                confirmAction(R.string.delete_request) { _, _ ->
+                    deleteCourse(courseId, courseOwnerId)
+                }
             }
         })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
@@ -100,18 +103,6 @@ class CoursesFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun confirmDeletion(courseId: Int, courseOwnerId: Int) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Удалить?")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            deleteCourse(courseId, courseOwnerId)
-        }
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-            dialog.cancel()
-        }
-        builder.show()
     }
 
     private fun deleteCourse(courseId: Int, courseOwnerId: Int) {
