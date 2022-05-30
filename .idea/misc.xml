@@ -26,7 +26,7 @@
         <entry key="app/src/main/res/layout/fragment_tests.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/item_course.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_multi_answer.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/item_participant.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/item_participant.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_question.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_single_answer.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/item_test.xml" value="0.25" />

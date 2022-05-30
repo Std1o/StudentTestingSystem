@@ -5,12 +5,16 @@ import agency.tango.android.avatarview.loader.PicassoLoader
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import student.testing.system.R
 import student.testing.system.models.Participant
 import student.testing.system.common.AccountSession
+import student.testing.system.common.showIf
 import student.testing.system.databinding.ItemParticipantBinding
 
 
-class ParticipantsAdapter(private val dataList: List<Participant>, private val courseOwnerId: Int) :
+class ParticipantsAdapter(private val dataList: List<Participant>,
+                          private val moderators: List<Participant>,
+                          private val courseOwnerId: Int) :
     RecyclerView.Adapter<ParticipantsAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
@@ -29,6 +33,10 @@ class ParticipantsAdapter(private val dataList: List<Participant>, private val c
             binding.tvName.text = participant.username
             if (courseOwnerId == AccountSession.instance.userId) {
                 binding.tvMail.text = participant.email
+            }
+            binding.ivStar.showIf(participant.id == courseOwnerId || participant in moderators)
+            if (participant in moderators) {
+                binding.ivStar.setColorFilter(R.color.gray)
             }
         }
     }

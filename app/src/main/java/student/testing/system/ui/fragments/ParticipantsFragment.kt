@@ -42,7 +42,7 @@ class ParticipantsFragment : Fragment() {
     }
 
     private fun initRV(course : CourseResponse) {
-        participantsAdapter = ParticipantsAdapter(course.participants, course.ownerId)
+        participantsAdapter = ParticipantsAdapter(course.participants,course.moderators, course.ownerId)
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = participantsAdapter
     }

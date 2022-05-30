@@ -10,5 +10,6 @@ data class CourseResponse(
     var img: String,
     @field:SerializedName("course_code")
     var courseCode: String,
-    var participants: List<Participant>
+    var participants: List<Participant>,
+    var moderators: List<Participant>
 ) : Serializable
