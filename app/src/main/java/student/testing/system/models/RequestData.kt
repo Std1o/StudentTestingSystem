@@ -26,7 +26,7 @@ data class UserAnswer(
     @SerializedName("is_selected") val isSelected: Boolean
 )
 
-data class TestResultReq(
+data class AddOrDeleteModeratorReq(
     @SerializedName("test_id") val test_id: Int,
     @SerializedName("course_id") val courseId: Int
 )

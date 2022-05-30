@@ -28,11 +28,9 @@ interface MainService {
     @POST("courses/")
     suspend fun createCourse(@Body request: CourseCreationReq): Response<CourseResponse>
 
-    @POST("courses/{courseCode}")
+    @POST("courses/{course_code}")
     suspend fun joinCourse(
-        @Path("courseCode") courseCode: String,
-        @Body request: CourseJoiningReq
-    ): Response<CourseResponse>
+        @Path("course_code") courseCode: String): Response<CourseResponse>
 
     @GET("courses/{courseId}")
     suspend fun getCourse(@Path("courseId") courseId: Int): Response<CourseResponse>
@@ -67,4 +65,7 @@ interface MainService {
         @Path("test_id") testId: Int,
         @Query("course_id") courseId: Int
     ): Response<ParticipantsResults>
+
+    @POST("course/moderators/")
+    suspend fun addModerator(@Body request: CourseCreationReq): Response<CourseResponse>
 }
