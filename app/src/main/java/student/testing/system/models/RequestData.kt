@@ -5,8 +5,6 @@ import student.testing.system.models.Question
 
 data class CourseCreationReq(val name: String)
 
-data class CourseJoiningReq(@SerializedName("course_code") val courseCode: String)
-
 data class SignUpReq(val email: String, val username: String, val password: String)
 
 data class TestCreationReq(
