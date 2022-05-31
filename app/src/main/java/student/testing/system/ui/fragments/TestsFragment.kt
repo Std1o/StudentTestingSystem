@@ -83,7 +83,8 @@ class TestsFragment : Fragment() {
         binding.rv.adapter = testsAdapter
         getTests(course.id)
 
-        binding.btnAdd.showIf(course.ownerId == AccountSession.instance.userId)
+        val userId = AccountSession.instance.userId
+        binding.btnAdd.showIf(course.moderators.any { it.id == userId } || course.ownerId == userId)
         binding.btnAdd.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(CoursesFragment.ARG_COURSE, course)
