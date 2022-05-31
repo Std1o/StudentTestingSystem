@@ -83,4 +83,11 @@ interface MainService {
         @Query("course_owner_id") courseOwnerId: Int,
         @Query("moderator_id") moderatorId: Int
     ): Response<List<Participant>>
+
+    @DELETE("/course/management/participants")
+    suspend fun deleteParticipant(
+        @Query("course_id") courseId: Int,
+        @Query("course_owner_id") courseOwnerId: Int,
+        @Query("participant_id") participantId: Int
+    ): Response<List<Participant>>
 }

@@ -93,10 +93,28 @@ class ParticipantsFragment : Fragment() {
                     }
                 }
                 R.id.action_delete -> {
-
+                    confirmAction(R.string.delete_request) { _, _ ->
+                        deleteParticipant(course, participant.id)
+                    }
                 }
             }
             true
+        }
+    }
+
+    private fun deleteParticipant(course: CourseResponse, participantId: Int) {
+        lifecycleScope.launch {
+            viewModel.deleteParticipant(course.id, course.ownerId, participantId).collect {
+                binding.progressBar.showIf(it is DataState.Loading)
+                if (it is DataState.Success) {
+                    adapter.updateDataList(it.data)
+                } else if (it is DataState.Error) {
+                    binding.progressBar.visibility = View.GONE
+                    val snackbar =
+                        Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
+                    snackbar.show()
+                }
+            }
         }
     }
 

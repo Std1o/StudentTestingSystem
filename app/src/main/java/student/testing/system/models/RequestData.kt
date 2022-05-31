@@ -23,9 +23,3 @@ data class UserAnswer(
     @SerializedName("answer_id") val answerId: Int,
     @SerializedName("is_selected") val isSelected: Boolean
 )
-
-data class AddOrDeleteModeratorReq(
-    @SerializedName("course_id") val courseId: Int,
-    @SerializedName("course_owner_id") val courseOwnerId: Int,
-    @SerializedName("moderator_id") val moderatorId: Int
-)

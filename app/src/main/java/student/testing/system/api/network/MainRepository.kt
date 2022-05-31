@@ -28,4 +28,5 @@ class MainRepository @Inject constructor(
     suspend fun getResults(testId: Int, courseId: Int) = flow { emit(remoteData.getResults(testId, courseId))}
     suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) = flow { emit(remoteData.addModerator(courseId, courseOwnerId, moderatorId))}
     suspend fun deleteModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) = flow { emit(remoteData.deleteModerator(courseId, courseOwnerId, moderatorId))}
+    suspend fun deleteParticipant(courseId: Int, courseOwnerId: Int, participantId: Int) = flow { emit(remoteData.deleteParticipant(courseId, courseOwnerId, participantId))}
 }

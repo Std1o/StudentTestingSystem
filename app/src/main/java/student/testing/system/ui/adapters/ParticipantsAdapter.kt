@@ -16,7 +16,7 @@ import student.testing.system.databinding.ItemParticipantBinding
 import student.testing.system.models.CourseResponse
 
 
-class ParticipantsAdapter(private val dataList: List<Participant>,
+class ParticipantsAdapter(private var dataList: List<Participant>,
                           var moderators: List<Participant>,
                           private val courseOwnerId: Int) :
     RecyclerView.Adapter<ParticipantsAdapter.CourseViewHolder>() {
@@ -27,6 +27,11 @@ class ParticipantsAdapter(private val dataList: List<Participant>,
         val binding = ItemParticipantBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CourseViewHolder(binding)
+    }
+
+    fun updateDataList(dataList: List<Participant>) {
+        this.dataList = dataList
+        notifyDataSetChanged()
     }
 
     fun updateModerators(moderators: List<Participant>) {
