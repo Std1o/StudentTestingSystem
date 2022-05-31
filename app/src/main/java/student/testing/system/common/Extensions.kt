@@ -92,8 +92,8 @@ fun <T> Flow<T>.launchWhenStartedCollect(viewLifecycleOwner: LifecycleOwner) {
     }
 }
 
-fun <T> StateFlow<DataState<T>>.makeDefaultRequest(fragment: Fragment, progressBar: ProgressBar, listener: (T) -> Unit) {
-    this@makeDefaultRequest.onEach {
+fun <T> StateFlow<DataState<T>>.subscribeForUI(fragment: Fragment, progressBar: ProgressBar, listener: (T) -> Unit) {
+    this@subscribeForUI.onEach {
         progressBar.showIf(it is DataState.Loading)
         if (it is DataState.Success) {
             listener.invoke(it.data)
