@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.common.TextResultClickListener
+import student.testing.system.common.showSnackbar
 import student.testing.system.databinding.FragmentCourseAddingDialogBinding
 import student.testing.system.ui.fragments.CoursesFragment.Companion.ARG_COURSE
 import student.testing.system.ui.fragments.CoursesFragment.Companion.KEY_COURSE_ADDING
@@ -85,9 +86,7 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        val snackbar =
-                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                        snackbar.show()
+                        showSnackbar(it.exception)
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE

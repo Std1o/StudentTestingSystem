@@ -21,6 +21,7 @@
     <string name="appoint_moderator">Назначить модератором</string>
     <string name="remove_from_moderators">Исключить из модераторов</string>
     <string name="delete">Удалить</string>
+    <string name="assign_correct_answers">Пожалуйста, назначьте правильные ответы</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>

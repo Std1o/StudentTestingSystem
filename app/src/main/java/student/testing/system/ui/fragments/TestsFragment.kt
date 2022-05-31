@@ -7,15 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.R
@@ -24,9 +21,8 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.confirmAction
 import student.testing.system.common.showIf
-import student.testing.system.common.showToast
+import student.testing.system.common.showSnackbar
 import student.testing.system.databinding.FragmentTestsBinding
-import student.testing.system.models.Question
 import student.testing.system.models.Test
 import student.testing.system.ui.adapters.TestsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel
@@ -99,9 +95,7 @@ class TestsFragment : Fragment() {
             val clipboard = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText(COURSE_CODE, course.courseCode);
             clipboard.setPrimaryClip(clip)
-            val snackbar =
-                Snackbar.make(binding.root, R.string.course_code_copied, Snackbar.LENGTH_SHORT)
-            snackbar.show()
+            showSnackbar(R.string.course_code_copied)
             true
         }
     }
@@ -115,9 +109,7 @@ class TestsFragment : Fragment() {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        val snackbar =
-                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                        snackbar.show()
+                        showSnackbar(it.exception)
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
@@ -158,7 +150,7 @@ class TestsFragment : Fragment() {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        showToast(it.exception)
+                        showSnackbar(it.exception)
                     }
                     is DataState.Success -> {
                         binding.progressBar.showIf(it is DataState.Loading)
@@ -179,7 +171,7 @@ class TestsFragment : Fragment() {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        showToast(it.exception)
+                        showSnackbar(it.exception)
                     }
                     is DataState.Success -> {
                         binding.progressBar.showIf(it is DataState.Loading)

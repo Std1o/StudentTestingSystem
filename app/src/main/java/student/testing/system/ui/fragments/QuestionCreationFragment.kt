@@ -1,6 +1,5 @@
 package student.testing.system.ui.fragments
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.InputType
 import androidx.fragment.app.Fragment
@@ -10,25 +9,15 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.api.network.DataState
-import student.testing.system.common.TextResultClickListener
 import student.testing.system.common.confirmAction
-import student.testing.system.common.showIf
-import student.testing.system.common.showToast
+import student.testing.system.common.showSnackbar
 import student.testing.system.databinding.QuestionCreationFragmentBinding
-import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
 import student.testing.system.ui.adapters.AnswersAdapter
-import student.testing.system.ui.adapters.ParticipantsAdapter
 import student.testing.system.viewmodels.TestCreationViewModel
 
 @AndroidEntryPoint
@@ -69,7 +58,7 @@ class QuestionCreationFragment : Fragment() {
                     return@setOnClickListener
                 }
             }
-            showToast("Пожалуйста, назначьте правильные ответы")
+            showSnackbar(R.string.assign_correct_answers)
         }
     }
 

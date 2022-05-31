@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
+import student.testing.system.common.showSnackbar
 import student.testing.system.databinding.FragmentSignUpBinding
 import student.testing.system.ui.activity.MainActivity
 import student.testing.system.viewmodels.SignUpViewModel
@@ -45,8 +46,7 @@ class SignUpFragment : Fragment() {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        val snackbar = Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                        snackbar.show()
+                        showSnackbar(it.exception)
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE

@@ -11,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -20,6 +19,7 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.confirmAction
 import student.testing.system.common.showIf
+import student.testing.system.common.showSnackbar
 import student.testing.system.databinding.FragmentParticipantsBinding
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant
@@ -110,9 +110,7 @@ class ParticipantsFragment : Fragment() {
                     adapter.updateDataList(it.data)
                 } else if (it is DataState.Error) {
                     binding.progressBar.visibility = View.GONE
-                    val snackbar =
-                        Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                    snackbar.show()
+                    showSnackbar(it.exception)
                 }
             }
         }
@@ -126,9 +124,7 @@ class ParticipantsFragment : Fragment() {
                     adapter.updateModerators(it.data)
                 } else if (it is DataState.Error) {
                     binding.progressBar.visibility = View.GONE
-                    val snackbar =
-                        Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                    snackbar.show()
+                    showSnackbar(it.exception)
                 }
             }
         }
@@ -142,9 +138,7 @@ class ParticipantsFragment : Fragment() {
                     adapter.updateModerators(it.data)
                 } else if (it is DataState.Error) {
                     binding.progressBar.visibility = View.GONE
-                    val snackbar =
-                        Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                    snackbar.show()
+                    showSnackbar(it.exception)
                 }
             }
         }

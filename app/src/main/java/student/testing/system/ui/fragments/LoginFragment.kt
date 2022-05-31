@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
+import student.testing.system.common.showSnackbar
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentLoginBinding
 import student.testing.system.ui.activity.MainActivity
@@ -47,8 +48,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     }
                     is DataState.Error -> {
                         binding.progressBar.visibility = View.GONE
-                        val snackbar = Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                        snackbar.show()
+                        showSnackbar(it.exception)
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
