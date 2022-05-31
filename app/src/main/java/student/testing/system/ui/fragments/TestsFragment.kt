@@ -99,82 +99,34 @@ class TestsFragment : Fragment() {
     }
 
     private fun getTests(courseId: Int) {
-        viewModel.getTests(courseId).onEach {
-            when (it) {
-                is DataState.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is DataState.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    showSnackbar(it.exception)
-                }
-                is DataState.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    testsAdapter.setDataList(it.data as MutableList<Test>)
-                }
+        viewModel.getTests(courseId).makeDefaultRequest(this, binding.progressBar) {
+            testsAdapter.setDataList(it as MutableList<Test>)
+        }
+    }
+
+    private fun getResult(testId: Int, courseId: Int) {
+        viewModel.getResult(testId, courseId).onEach {
+            binding.progressBar.showIf(it is DataState.Loading)
+            if (it is DataState.Success) {
+                val action = TestsFragmentDirections.viewResult(it.data)
+                findNavController().navigate(action)
+            } else if (it is DataState.Error) {
+                val action = TestsFragmentDirections.navigateToTestPassing(selectedTest, 0)
+                findNavController().navigate(action)
             }
         }.launchWhenStartedCollect(viewLifecycleOwner)
     }
 
-    private fun getResult(testId: Int, courseId: Int) {
-        lifecycleScope.launch {
-            viewModel.getResult(testId, courseId).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        val action = TestsFragmentDirections.navigateToTestPassing(selectedTest, 0)
-                        findNavController().navigate(action)
-                    }
-                    is DataState.Success -> {
-                        val action = TestsFragmentDirections.viewResult(it.data)
-                        findNavController().navigate(action)
-                    }
-                }
-            }
-        }
-    }
-
     private fun getResults(testId: Int, courseId: Int) {
-        lifecycleScope.launch {
-            viewModel.getResults(testId, courseId).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.showIf(it is DataState.Loading)
-                        val action = TestsFragmentDirections.viewResults(it.data)
-                        findNavController().navigate(action)
-                    }
-                }
-            }
+        viewModel.getResults(testId, courseId).makeDefaultRequest(this, binding.progressBar) {
+            val action = TestsFragmentDirections.viewResults(it)
+            findNavController().navigate(action)
         }
     }
 
     private fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) {
-        lifecycleScope.launch {
-            viewModel.deleteTest(testId, courseId, courseOwnerId).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.showIf(it is DataState.Loading)
-                        testsAdapter.deleteById(testId)
-                    }
-                }
-            }
+        viewModel.deleteTest(testId, courseId, courseOwnerId).makeDefaultRequest(this, binding.progressBar) {
+            testsAdapter.deleteById(testId)
         }
     }
 

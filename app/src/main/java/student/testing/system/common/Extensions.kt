@@ -3,6 +3,7 @@ package student.testing.system.common
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.view.View
+import android.widget.ProgressBar
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
@@ -13,15 +14,16 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.*
 import student.testing.system.R
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import student.testing.system.api.network.DataState
+import student.testing.system.models.CourseResponse
+import student.testing.system.models.Test
 
 fun View.showIf(visible: Boolean) {
     visibility = if (visible) {
@@ -88,4 +90,15 @@ fun <T> Flow<T>.launchWhenStartedCollect(viewLifecycleOwner: LifecycleOwner) {
     viewLifecycleOwner.lifecycleScope.launch {
         this@launchWhenStartedCollect.collect()
     }
+}
+
+fun <T> StateFlow<DataState<T>>.makeDefaultRequest(fragment: Fragment, progressBar: ProgressBar, listener: (T) -> Unit) {
+    this@makeDefaultRequest.onEach {
+        progressBar.showIf(it is DataState.Loading)
+        if (it is DataState.Success) {
+            listener.invoke(it.data)
+        } else if (it is DataState.Error) {
+            fragment.showSnackbar(it.exception)
+        }
+    }.launchWhenStartedCollect(fragment.viewLifecycleOwner)
 }

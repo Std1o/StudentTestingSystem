@@ -123,7 +123,6 @@ class ParticipantsFragment : Fragment() {
                 if (it is DataState.Success) {
                     adapter.updateModerators(it.data)
                 } else if (it is DataState.Error) {
-                    binding.progressBar.visibility = View.GONE
                     showSnackbar(it.exception)
                 }
             }
