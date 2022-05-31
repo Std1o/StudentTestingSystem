@@ -50,7 +50,6 @@ class SignUpFragment : Fragment() {
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
-                        AccountSession.instance.token = it.data.access_token
                         startActivity(Intent(requireContext(), MainActivity::class.java))
                     }
                 }

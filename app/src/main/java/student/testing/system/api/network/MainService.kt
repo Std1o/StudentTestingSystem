@@ -1,10 +1,8 @@
 package student.testing.system.api.network
 
-import com.google.gson.annotations.SerializedName
 import retrofit2.Response
 import retrofit2.http.*
 import student.testing.system.models.*
-import student.testing.system.models.Token
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.TestResult
 import student.testing.system.models.Test
@@ -15,10 +13,10 @@ interface MainService {
 
     @POST("auth/sign-in")
     @Headers("accept: application/json", "Content-Type: application/x-www-form-urlencoded")
-    suspend fun auth(@Body request: String): Response<Token>
+    suspend fun auth(@Body request: String): Response<PrivateUser>
 
     @POST("auth/sign-up")
-    suspend fun signUp(@Body request: SignUpReq): Response<Token>
+    suspend fun signUp(@Body request: SignUpReq): Response<PrivateUser>
 
     @GET("auth/user")
     suspend fun getUser(): Response<User>

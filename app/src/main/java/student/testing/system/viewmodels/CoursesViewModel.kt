@@ -34,23 +34,6 @@ class CoursesViewModel @Inject constructor(private val repository: MainRepositor
         return stateFlow
     }
 
-    fun getUser(): StateFlow<DataState<User>> {
-        val stateFlow = MutableStateFlow<DataState<User>>(DataState.Loading)
-        viewModelScope.launch {
-            repository.getUser().catch {
-                stateFlow.emit(DataState.Error(it.message ?: " "))
-            }.collect {
-                if (it.isSuccessful) {
-                    stateFlow.emit(DataState.Success(it.body()!!))
-                } else {
-                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                    stateFlow.emit(DataState.Error(errorMessage))
-                }
-            }
-        }
-        return stateFlow
-    }
-
     fun deleteCourse(courseId: Int, courseOwnerId: Int): StateFlow<DataState<Int>> {
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {

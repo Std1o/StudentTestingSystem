@@ -52,7 +52,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     }
                     is DataState.Success -> {
                         binding.progressBar.visibility = View.GONE
-                        AccountSession.instance.token = it.data.access_token
                         requireActivity().finish()
                         startActivity(Intent(requireContext(), MainActivity::class.java))
                     }
