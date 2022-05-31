@@ -14,14 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
-import student.testing.system.common.AccountSession
-import student.testing.system.common.confirmAction
-import student.testing.system.common.showIf
-import student.testing.system.common.showSnackbar
+import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.models.Test
 import student.testing.system.ui.adapters.TestsAdapter
@@ -101,23 +99,21 @@ class TestsFragment : Fragment() {
     }
 
     private fun getTests(courseId: Int) {
-        lifecycleScope.launch {
-            viewModel.getTests(courseId).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        testsAdapter.setDataList(it.data as MutableList<Test>)
-                    }
+        viewModel.getTests(courseId).onEach {
+            when (it) {
+                is DataState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is DataState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    showSnackbar(it.exception)
+                }
+                is DataState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    testsAdapter.setDataList(it.data as MutableList<Test>)
                 }
             }
-        }
+        }.launchWhenStartedCollect(viewLifecycleOwner)
     }
 
     private fun getResult(testId: Int, courseId: Int) {
