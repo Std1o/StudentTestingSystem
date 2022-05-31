@@ -22,7 +22,7 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_result_review) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val testResult = args.results
-        adapter = UsersResultsAdapter(testResult.results)
+        adapter = UsersResultsAdapter(testResult.results, testResult.maxScore)
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
     }

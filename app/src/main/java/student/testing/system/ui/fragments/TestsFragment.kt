@@ -99,7 +99,7 @@ class TestsFragment : Fragment() {
     }
 
     private fun getTests(courseId: Int) {
-        viewModel.getTests(courseId).subscribeForUI(this, binding.progressBar) {
+        viewModel.getTests(courseId).subscribeInUI(this, binding.progressBar) {
             testsAdapter.setDataList(it as MutableList<Test>)
         }
     }
@@ -118,14 +118,14 @@ class TestsFragment : Fragment() {
     }
 
     private fun getResults(testId: Int, courseId: Int) {
-        viewModel.getResults(testId, courseId).subscribeForUI(this, binding.progressBar) {
+        viewModel.getResults(testId, courseId).subscribeInUI(this, binding.progressBar) {
             val action = TestsFragmentDirections.viewResults(it)
             findNavController().navigate(action)
         }
     }
 
     private fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) {
-        viewModel.deleteTest(testId, courseId, courseOwnerId).subscribeForUI(this, binding.progressBar) {
+        viewModel.deleteTest(testId, courseId, courseOwnerId).subscribeInUI(this, binding.progressBar) {
             testsAdapter.deleteById(testId)
         }
     }

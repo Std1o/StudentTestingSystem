@@ -89,8 +89,8 @@ fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope
     }
 }
 
-fun <T> StateFlow<DataState<T>>.subscribeForUI(fragment: Fragment, progressBar: ProgressBar, listener: (T) -> Unit) {
-    this@subscribeForUI.onEach {
+fun <T> StateFlow<DataState<T>>.subscribeInUI(fragment: Fragment, progressBar: ProgressBar, listener: (T) -> Unit) {
+    this@subscribeInUI.onEach {
         progressBar.showIf(it is DataState.Loading)
         if (it is DataState.Success) {
             listener.invoke(it.data)

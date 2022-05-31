@@ -47,7 +47,7 @@ class ParticipantsAdapter(private var dataList: List<Participant>,
             val imageLoader: IImageLoader = PicassoLoader()
             imageLoader.loadImage(binding.avatarView, "nothing", participant.username)
             binding.tvName.text = participant.username
-            if (courseOwnerId == AccountSession.instance.userId) {
+            if (courseOwnerId == AccountSession.instance.userId && participant.id != courseOwnerId) {
                 binding.tvMail.text = participant.email
                 binding.btnMenu.showIf(true)
                 binding.btnMenu.setOnClickListener {

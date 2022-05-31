@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import student.testing.system.R
 import student.testing.system.databinding.ItemUserResultBinding
 import student.testing.system.models.AnswerResult
 import student.testing.system.models.TestResult
@@ -21,14 +22,14 @@ class UserResultAdapter(private val testResult: TestResult) :
     override fun getItemCount() = testResult.questions.count()
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        with(holder) {
-            binding.tvIndex.text = "${position + 1}"
+        with(holder.binding) {
+            tvIndex.text = "${position + 1}"
             val question = testResult.questions[position]
-            binding.tvScore.text = question.score.toString()
-            binding.tvQuestion.text = question.question
-            binding.rv.layoutManager = LinearLayoutManager(binding.root.context)
+            tvScore.text = root.context.getString(R.string.participant_result, question.score, testResult.maxScore)
+            tvQuestion.text = question.question
+            rv.layoutManager = LinearLayoutManager(root.context)
             val adapter = AnswersResultAdapter(testResult.questions[position].answers as ArrayList<AnswerResult>)
-            binding.rv.adapter = adapter
+            rv.adapter = adapter
         }
     }
 

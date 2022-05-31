@@ -2,16 +2,18 @@ package student.testing.system.ui.adapters
 
 import agency.tango.android.avatarview.IImageLoader
 import agency.tango.android.avatarview.loader.PicassoLoader
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import student.testing.system.R
 import student.testing.system.models.Participant
 import student.testing.system.common.AccountSession
 import student.testing.system.databinding.ItemParticipantBinding
 import student.testing.system.models.ParticipantResult
 
 
-class UsersResultsAdapter(private val dataList: List<ParticipantResult>) :
+class UsersResultsAdapter(private val dataList: List<ParticipantResult>, private val maxScore: Int):
     RecyclerView.Adapter<UsersResultsAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
@@ -23,12 +25,12 @@ class UsersResultsAdapter(private val dataList: List<ParticipantResult>) :
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        with(holder) {
+        with(holder.binding) {
             val participantResult: ParticipantResult = dataList[position]
             val imageLoader: IImageLoader = PicassoLoader()
-            imageLoader.loadImage(binding.avatarView, "nothing", participantResult.username)
-            binding.tvName.text = participantResult.username
-            binding.tvScore.text = participantResult.score.toString()
+            imageLoader.loadImage(avatarView, "nothing", participantResult.username)
+            tvName.text = participantResult.username
+            tvScore.text = root.context.getString(R.string.participant_result, participantResult.score, maxScore)
         }
     }
 
