@@ -47,6 +47,7 @@ class ParticipantsAdapter(private val dataList: List<Participant>,
             binding.tvName.text = participant.username
             if (courseOwnerId == AccountSession.instance.userId) {
                 binding.tvMail.text = participant.email
+                binding.btnMenu.showIf(true)
             }
             binding.ivStar.showIf(participant.id == courseOwnerId || participant in moderators)
             if (participant in moderators) {

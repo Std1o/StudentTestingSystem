@@ -28,6 +28,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             bind:av_border_width="0dp"
+            android:src="@drawable/ic_launcher_background"
             bind:av_text_size_percentage="40" />
 
         <LinearLayout
@@ -63,15 +64,29 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvMail"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textSize="13dp"
-            android:layout_gravity="bottom"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:layout_marginTop="3dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:id="@+id/btnMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                bind:srcCompat="@drawable/ic_more_vert"
+                android:visibility="gone"
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:id="@+id/tvMail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_alignParentBottom="true"
+                android:textSize="13dp" />
+        </RelativeLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
