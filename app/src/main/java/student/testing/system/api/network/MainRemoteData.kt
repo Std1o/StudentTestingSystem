@@ -6,7 +6,6 @@ import javax.inject.Inject
 class MainRemoteData @Inject constructor(private val mainService : MainService) {
     suspend fun auth(request: String) = mainService.auth(request)
     suspend fun signUp(request: SignUpReq) = mainService.signUp(request)
-    suspend fun getUser() = mainService.getUser()
     suspend fun getCourses() = mainService.getCourses()
     suspend fun createCourse(request: CourseCreationReq) = mainService.createCourse(request)
     suspend fun joinCourse(courseCode: String) = mainService.joinCourse(courseCode)

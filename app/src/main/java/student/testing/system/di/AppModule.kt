@@ -5,14 +5,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import student.testing.system.api.network.MainRemoteData
 import student.testing.system.api.network.MainService
-import student.testing.system.api.network.ServiceInterceptor
-import student.testing.system.common.AccountSession
+import student.testing.system.api.network.OAuthInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -34,7 +32,7 @@ object AppModule {
         return OkHttpClient.Builder()
             .callTimeout(1, TimeUnit.MINUTES)
             .retryOnConnectionFailure(true)
-            .addInterceptor(ServiceInterceptor())
+            .addInterceptor(OAuthInterceptor())
             .addInterceptor(httpLoggingInterceptor)
     }
 

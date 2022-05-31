@@ -18,9 +18,6 @@ interface MainService {
     @POST("auth/sign-up")
     suspend fun signUp(@Body request: SignUpReq): Response<PrivateUser>
 
-    @GET("auth/user")
-    suspend fun getUser(): Response<User>
-
     @GET("courses/")
     suspend fun getCourses(): Response<List<CourseResponse>>
 
