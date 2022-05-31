@@ -1,21 +1,17 @@
 package student.testing.system.ui.adapters
 
-import agency.tango.android.avatarview.IImageLoader
-import agency.tango.android.avatarview.loader.PicassoLoader
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import student.testing.system.models.Participant
-import student.testing.system.common.AccountSession
 import student.testing.system.databinding.ItemMultiAnswerBinding
-import student.testing.system.databinding.ItemParticipantBinding
 import student.testing.system.models.Answer
-import student.testing.system.models.CourseResponse
 
 
-class AnswersAdapter(val dataList: ArrayList<Answer>, val forCreating: Boolean) :
+class AnswersAdapter(
+    val dataList: ArrayList<Answer>,
+    private val forCreating: Boolean,
+    private val listener: LongClickListener?
+) :
     RecyclerView.Adapter<AnswersAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
@@ -29,6 +25,16 @@ class AnswersAdapter(val dataList: ArrayList<Answer>, val forCreating: Boolean) 
         notifyItemChanged(itemCount)
     }
 
+    fun deleteItem(position: Int) {
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getItemViewType(position: Int) = position
+
+
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
@@ -40,25 +46,16 @@ class AnswersAdapter(val dataList: ArrayList<Answer>, val forCreating: Boolean) 
             }
             if (!forCreating) return
             binding.checkBox.setOnLongClickListener {
-                confirmDeletion(position, binding.root.context)
+                listener?.onLongClick(position)
                 true
             }
         }
     }
 
-    private fun confirmDeletion(position: Int, context: Context) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Удалить?")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            dataList.removeAt(position)
-            notifyItemRemoved(position)
-        }
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-            dialog.cancel()
-        }
-        builder.show()
-    }
-
     inner class CourseViewHolder(val binding: ItemMultiAnswerBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    interface LongClickListener {
+        fun onLongClick(position: Int)
+    }
 }

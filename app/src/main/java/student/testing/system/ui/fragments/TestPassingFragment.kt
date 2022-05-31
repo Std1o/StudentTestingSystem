@@ -43,7 +43,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
         var position = args.position
         val question = test.questions[position]
         binding.tvQuestion.text = question.question
-        adapter = AnswersAdapter(test.questions[position].answers as ArrayList<Answer>, false)
+        adapter = AnswersAdapter(test.questions[position].answers as ArrayList<Answer>, false, null)
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
 
