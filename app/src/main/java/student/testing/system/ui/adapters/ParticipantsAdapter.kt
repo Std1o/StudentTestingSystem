@@ -14,7 +14,7 @@ import student.testing.system.models.CourseResponse
 
 
 class ParticipantsAdapter(private val dataList: List<Participant>,
-                          private var moderators: List<Participant>,
+                          var moderators: List<Participant>,
                           private val courseOwnerId: Int) :
     RecyclerView.Adapter<ParticipantsAdapter.CourseViewHolder>() {
 
@@ -38,7 +38,7 @@ class ParticipantsAdapter(private val dataList: List<Participant>,
             val participant: Participant = dataList[position]
             if (listener != null) {
                 holder.itemView.setOnLongClickListener {
-                    listener!!.onLongClick(participant.id)
+                    listener!!.onLongClick(participant)
                     true
                 }
             }
@@ -59,6 +59,6 @@ class ParticipantsAdapter(private val dataList: List<Participant>,
         RecyclerView.ViewHolder(binding.root)
 
     interface LongClickListener {
-        fun onLongClick(participantId: Int)
+        fun onLongClick(participant: Participant)
     }
 }

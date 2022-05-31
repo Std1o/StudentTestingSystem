@@ -30,4 +30,21 @@ class ParticipantsViewModel @Inject constructor(private val repository: MainRepo
         }
         return stateFlow
     }
+
+    fun deleteModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int): StateFlow<DataState<List<Participant>>> {
+        val stateFlow = MutableStateFlow<DataState<List<Participant>>>(DataState.Loading)
+        viewModelScope.launch {
+            repository.deleteModerator(courseId, courseOwnerId, moderatorId).catch {
+                stateFlow.emit(DataState.Error(it.message ?: " "))
+            }.collect {
+                if (it.isSuccessful) {
+                    stateFlow.emit(DataState.Success(it.body()!!))
+                } else {
+                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
+                    stateFlow.emit(DataState.Error(errorMessage))
+                }
+            }
+        }
+        return stateFlow
+    }
 }

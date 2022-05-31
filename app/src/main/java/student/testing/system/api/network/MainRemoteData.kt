@@ -18,4 +18,5 @@ class MainRemoteData @Inject constructor(private val mainService : MainService) 
     suspend fun getResult(testId: Int, courseId: Int) = mainService.getResult(testId, courseId)
     suspend fun getResults(testId: Int, courseId: Int) = mainService.getResults(testId, courseId)
     suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) = mainService.addModerator(courseId, courseOwnerId, moderatorId)
+    suspend fun deleteModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) = mainService.deleteModerator(courseId, courseOwnerId, moderatorId)
 }

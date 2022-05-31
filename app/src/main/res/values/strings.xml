@@ -16,6 +16,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
     <string name="delete_request">Удалить?</string>
+    <string name="appoint_moderator_request">Назначить модератором?</string>
+    <string name="remove_from_moderators_request">Исключить из модераторов?</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
