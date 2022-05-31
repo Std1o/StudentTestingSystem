@@ -37,6 +37,7 @@
         <entry key="app/src/main/res/layout/sign_up_fragment.xml" value="0.2" />
         <entry key="app/src/main/res/layout/test_creation_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.2578125" />
+        <entry key="app/src/main/res/menu/participant_context_menu.xml" value="0.25677083333333334" />
       </map>
     </option>
   </component>

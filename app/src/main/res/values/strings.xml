@@ -18,6 +18,9 @@
     <string name="delete_request">Удалить?</string>
     <string name="appoint_moderator_request">Назначить модератором?</string>
     <string name="remove_from_moderators_request">Исключить из модераторов?</string>
+    <string name="appoint_moderator">Назначить модератором</string>
+    <string name="remove_from_moderators">Исключить из модераторов</string>
+    <string name="delete">Удалить</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>

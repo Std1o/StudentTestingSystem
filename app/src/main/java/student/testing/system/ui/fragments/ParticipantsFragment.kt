@@ -2,13 +2,14 @@ package student.testing.system.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,14 +20,13 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.confirmAction
 import student.testing.system.common.showIf
-import student.testing.system.models.CourseResponse
 import student.testing.system.databinding.FragmentParticipantsBinding
+import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant
-import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.adapters.ParticipantsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel
-import student.testing.system.viewmodels.LoginViewModel
 import student.testing.system.viewmodels.ParticipantsViewModel
+
 
 @AndroidEntryPoint
 class ParticipantsFragment : Fragment() {
@@ -59,8 +59,28 @@ class ParticipantsFragment : Fragment() {
     private fun initRV(course: CourseResponse) {
         adapter = ParticipantsAdapter(course.participants, course.moderators, course.ownerId)
         if (course.ownerId == AccountSession.instance.userId) {
-            adapter.listener = object : ParticipantsAdapter.LongClickListener {
-                override fun onLongClick(participant: Participant) {
+            adapter.listener = object : ParticipantsAdapter.MenuClickListener {
+                override fun onMenuClick(view: View, participant: Participant) {
+                    showPopup(view, participant, course)
+                }
+            }
+        }
+        binding.rv.layoutManager = LinearLayoutManager(requireContext())
+        binding.rv.adapter = adapter
+    }
+
+    private fun showPopup(v: View, participant: Participant, course: CourseResponse) {
+        val popup = PopupMenu(requireActivity(), v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.participant_context_menu, popup.menu)
+        val titleRes =
+            if (participant in adapter.moderators) R.string.remove_from_moderators
+            else R.string.appoint_moderator
+        popup.menu.getItem(0).title = getString(titleRes)
+        popup.show()
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_moderator -> {
                     val title =
                         if (participant in adapter.moderators) R.string.remove_from_moderators_request
                         else R.string.appoint_moderator_request
@@ -71,12 +91,13 @@ class ParticipantsFragment : Fragment() {
                             addModerator(course, participant.id)
                         }
                     }
+                }
+                R.id.action_delete -> {
 
                 }
             }
+            true
         }
-        binding.rv.layoutManager = LinearLayoutManager(requireContext())
-        binding.rv.adapter = adapter
     }
 
     private fun deleteModerator(course: CourseResponse, participantId: Int) {
