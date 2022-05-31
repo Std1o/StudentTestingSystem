@@ -114,7 +114,7 @@ class TestsFragment : Fragment() {
                 val action = TestsFragmentDirections.navigateToTestPassing(selectedTest, 0)
                 findNavController().navigate(action)
             }
-        }.launchWhenStartedCollect(viewLifecycleOwner)
+        }.launchWhenStartedCollect(lifecycleScope)
     }
 
     private fun getResults(testId: Int, courseId: Int) {

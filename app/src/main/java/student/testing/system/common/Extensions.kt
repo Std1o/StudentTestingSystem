@@ -8,10 +8,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.*
@@ -86,8 +83,8 @@ fun <T : ViewBinding> Fragment.viewBinding(factory: (View) -> T): ReadOnlyProper
         }
     }
 
-fun <T> Flow<T>.launchWhenStartedCollect(viewLifecycleOwner: LifecycleOwner) {
-    viewLifecycleOwner.lifecycleScope.launch {
+fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope) {
+    lifecycleScope.launch {
         this@launchWhenStartedCollect.collect()
     }
 }
@@ -100,5 +97,5 @@ fun <T> StateFlow<DataState<T>>.subscribeForUI(fragment: Fragment, progressBar: 
         } else if (it is DataState.Error) {
             fragment.showSnackbar(it.exception)
         }
-    }.launchWhenStartedCollect(fragment.viewLifecycleOwner)
+    }.launchWhenStartedCollect(fragment.lifecycleScope)
 }
