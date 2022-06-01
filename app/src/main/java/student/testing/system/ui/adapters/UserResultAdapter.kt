@@ -2,6 +2,7 @@ package student.testing.system.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.R
@@ -25,7 +26,15 @@ class UserResultAdapter(private val testResult: TestResult) :
         with(holder.binding) {
             tvIndex.text = "${position + 1}"
             val question = testResult.questions[position]
-            tvScore.text = root.context.getString(R.string.participant_result, question.score, testResult.maxScore)
+            if (question.score % 1.0 != 0.0) {
+                tvScore.text = root
+                    .context
+                    .getString(R.string.participant_result, question.score, testResult.maxScore)
+            } else {
+                tvScore.text = root
+                    .context
+                    .getString(R.string.participant_int_result, question.score.toInt(), testResult.maxScore)
+            }
             tvQuestion.text = question.question
             rv.layoutManager = LinearLayoutManager(root.context)
             val adapter = AnswersResultAdapter(testResult.questions[position].answers as ArrayList<AnswerResult>)

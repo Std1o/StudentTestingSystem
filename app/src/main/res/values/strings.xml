@@ -23,6 +23,7 @@
     <string name="delete">Удалить</string>
     <string name="assign_correct_answers">Пожалуйста, назначьте правильные ответы</string>
     <string name="participant_result">%.2f/%d</string>
+    <string name="participant_int_result">%d/%d</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
