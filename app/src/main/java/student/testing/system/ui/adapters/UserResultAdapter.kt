@@ -29,11 +29,11 @@ class UserResultAdapter(private val testResult: TestResult) :
             if (question.score % 1.0 != 0.0) {
                 tvScore.text = root
                     .context
-                    .getString(R.string.participant_result, question.score, testResult.maxScore)
+                    .getString(R.string.participant_result, question.score, 1)
             } else {
                 tvScore.text = root
                     .context
-                    .getString(R.string.participant_int_result, question.score.toInt(), testResult.maxScore)
+                    .getString(R.string.participant_int_result, question.score.toInt(), 1)
             }
             tvQuestion.text = question.question
             rv.layoutManager = LinearLayoutManager(root.context)
