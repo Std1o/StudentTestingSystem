@@ -17,6 +17,7 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.confirmAction
 import student.testing.system.common.showSnackbar
+import student.testing.system.common.subscribeInUI
 import student.testing.system.databinding.CoursesFragmentBinding
 import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.dialogFragments.CourseAddingDialogFragment
@@ -82,42 +83,14 @@ class CoursesFragment : Fragment() {
     }
 
     private fun getCourses() {
-        lifecycleScope.launch {
-            viewModel.getCourses().collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        coursesAdapter.setDataList(it.data as MutableList<CourseResponse>)
-                    }
-                }
-            }
+        viewModel.getCourses().subscribeInUI(this, binding.progressBar) {
+            coursesAdapter.setDataList(it as MutableList<CourseResponse>)
         }
     }
 
     private fun deleteCourse(courseId: Int, courseOwnerId: Int) {
-        lifecycleScope.launch {
-            viewModel.deleteCourse(courseId, courseOwnerId).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        coursesAdapter.deleteById(it.data)
-                    }
-                }
-            }
+        viewModel.deleteCourse(courseId, courseOwnerId).subscribeInUI(this, binding.progressBar) {
+            coursesAdapter.deleteById(it)
         }
     }
 }

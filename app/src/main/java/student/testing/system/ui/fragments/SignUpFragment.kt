@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showSnackbar
+import student.testing.system.common.subscribeInUI
 import student.testing.system.databinding.FragmentSignUpBinding
 import student.testing.system.ui.activity.MainActivity
 import student.testing.system.viewmodels.SignUpViewModel
@@ -38,22 +39,9 @@ class SignUpFragment : Fragment() {
     }
 
     private fun signUp(email: String, username: String, password: String) {
-        lifecycleScope.launch {
-            viewModel.signUp(email, username, password).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        startActivity(Intent(requireContext(), MainActivity::class.java))
-                    }
-                }
-            }
+        viewModel.signUp(email, username, password).subscribeInUI(this, binding.progressBar) {
+            requireActivity().finish()
+            startActivity(Intent(requireContext(), MainActivity::class.java))
         }
     }
 }

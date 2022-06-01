@@ -14,6 +14,7 @@ import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showSnackbar
+import student.testing.system.common.subscribeInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentLoginBinding
 import student.testing.system.ui.activity.MainActivity
@@ -40,23 +41,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun auth(email: String, password: String) {
-        lifecycleScope.launch {
-            viewModel.auth(email, password).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        requireActivity().finish()
-                        startActivity(Intent(requireContext(), MainActivity::class.java))
-                    }
-                }
-            }
+        viewModel.auth(email, password).subscribeInUI(this, binding.progressBar) {
+            requireActivity().finish()
+            startActivity(Intent(requireContext(), MainActivity::class.java))
         }
     }
 }

@@ -18,6 +18,7 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.formatToString
 import student.testing.system.common.showIf
 import student.testing.system.common.showSnackbar
+import student.testing.system.common.subscribeInUI
 import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.ui.adapters.QuestionsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel
@@ -70,25 +71,15 @@ class TestCreationFragment : Fragment() {
     }
 
     private fun createTest(courseId: Int) {
-        lifecycleScope.launch {
-            testsViewModel.createTest(
-                courseId,
-                binding.etName.text.toString(),
-                Date().formatToString("yyyy-MM-dd")!!,
-                adapter.dataList
-            ).collect {
-                binding.progressBar.showIf(it is DataState.Loading)
-                when (it) {
-                    is DataState.Error -> {
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                            ARG_TEST, it.data)
-                        requireActivity().onBackPressed()
-                    }
-                }
-            }
+        testsViewModel.createTest(
+            courseId,
+            binding.etName.text.toString(),
+            Date().formatToString("yyyy-MM-dd")!!,
+            adapter.dataList
+        ).subscribeInUI(this, binding.progressBar) {
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                ARG_TEST, it)
+            requireActivity().onBackPressed()
         }
     }
 }

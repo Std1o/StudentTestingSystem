@@ -19,6 +19,7 @@ import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.TextResultClickListener
 import student.testing.system.common.showSnackbar
+import student.testing.system.common.subscribeInUI
 import student.testing.system.databinding.FragmentCourseAddingDialogBinding
 import student.testing.system.ui.fragments.CoursesFragment.Companion.ARG_COURSE
 import student.testing.system.ui.fragments.CoursesFragment.Companion.KEY_COURSE_ADDING
@@ -80,51 +81,20 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun createCourse(name: String) {
-        lifecycleScope.launch {
-            viewModel.createCourse(name).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showSnackbar(it.exception)
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        val result = Bundle()
-                        result.putSerializable(ARG_COURSE, it.data)
-                        parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
-                        dismiss()
-                    }
-                }
-            }
+        viewModel.createCourse(name).subscribeInUI(this, binding.progressBar) {
+            val result = Bundle()
+            result.putSerializable(ARG_COURSE, it)
+            parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
+            dismiss()
         }
     }
 
     private fun joinCourse(courseCode: String) {
-        lifecycleScope.launch {
-            viewModel.joinCourse(courseCode).collect {
-                when (it) {
-                    is DataState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        val snackbar =
-                            Snackbar.make(binding.root, it.exception, Snackbar.LENGTH_SHORT)
-                        snackbar.show()
-                    }
-                    is DataState.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        val result = Bundle()
-                        result.putSerializable(ARG_COURSE, it.data)
-                        parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
-                        dismiss()
-                        Log.d("joined to course", it.data.toString())
-                    }
-                }
-            }
+        viewModel.joinCourse(courseCode).subscribeInUI(this, binding.progressBar) {
+            val result = Bundle()
+            result.putSerializable(ARG_COURSE, it)
+            parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
+            dismiss()
         }
     }
 

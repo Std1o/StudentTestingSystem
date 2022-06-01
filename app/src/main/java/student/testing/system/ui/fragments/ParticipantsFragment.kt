@@ -16,10 +16,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
-import student.testing.system.common.AccountSession
-import student.testing.system.common.confirmAction
-import student.testing.system.common.showIf
-import student.testing.system.common.showSnackbar
+import student.testing.system.common.*
 import student.testing.system.databinding.FragmentParticipantsBinding
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant
@@ -103,44 +100,24 @@ class ParticipantsFragment : Fragment() {
     }
 
     private fun deleteParticipant(course: CourseResponse, participantId: Int) {
-        lifecycleScope.launch {
-            viewModel.deleteParticipant(course.id, course.ownerId, participantId).collect {
-                binding.progressBar.showIf(it is DataState.Loading)
-                if (it is DataState.Success) {
-                    adapter.updateDataList(it.data)
-                } else if (it is DataState.Error) {
-                    binding.progressBar.visibility = View.GONE
-                    showSnackbar(it.exception)
-                }
+        viewModel.deleteParticipant(course.id, course.ownerId, participantId)
+            .subscribeInUI(this, binding.progressBar) {
+                adapter.updateDataList(it)
             }
-        }
     }
 
     private fun deleteModerator(course: CourseResponse, participantId: Int) {
-        lifecycleScope.launch {
-            viewModel.deleteModerator(course.id, course.ownerId, participantId).collect {
-                binding.progressBar.showIf(it is DataState.Loading)
-                if (it is DataState.Success) {
-                    adapter.updateModerators(it.data)
-                } else if (it is DataState.Error) {
-                    showSnackbar(it.exception)
-                }
+        viewModel.deleteModerator(course.id, course.ownerId, participantId)
+            .subscribeInUI(this, binding.progressBar) {
+                adapter.updateModerators(it)
             }
-        }
     }
 
     private fun addModerator(course: CourseResponse, participantId: Int) {
-        lifecycleScope.launch {
-            viewModel.addModerator(course.id, course.ownerId, participantId).collect {
-                binding.progressBar.showIf(it is DataState.Loading)
-                if (it is DataState.Success) {
-                    adapter.updateModerators(it.data)
-                } else if (it is DataState.Error) {
-                    binding.progressBar.visibility = View.GONE
-                    showSnackbar(it.exception)
-                }
+        viewModel.addModerator(course.id, course.ownerId, participantId)
+            .subscribeInUI(this, binding.progressBar) {
+                adapter.updateModerators(it)
             }
-        }
     }
 
     override fun onDestroyView() {

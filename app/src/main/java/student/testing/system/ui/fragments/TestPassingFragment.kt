@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.common.subscribeInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentPassingTestBinding
 import student.testing.system.models.Answer
@@ -45,11 +46,10 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
             }
             viewModel.userQuestions += UserQuestion(question.id!!, userAnswers)
             if (test.questions.count() - 1 == position) {
-                lifecycleScope.launch {
-                    viewModel.calculateResult(test.id, test.courseId).collect {
+                viewModel.calculateResult(test.id, test.courseId)
+                    .subscribeInUI(this, binding.progressBar) {
                         requireActivity().onBackPressed()
                     }
-                }
             } else {
                 val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position)
                 findNavController().navigate(action)

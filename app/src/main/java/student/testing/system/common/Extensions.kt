@@ -32,9 +32,6 @@ fun View.showIf(visible: Boolean) {
     }
 }
 
-val Int.dp: Int
-    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
-
 fun Fragment.showSnackbar(message: String, duration:Int = Snackbar.LENGTH_SHORT){
     requireActivity().window?.let {
         Snackbar.make(it.decorView, message, duration).show()
