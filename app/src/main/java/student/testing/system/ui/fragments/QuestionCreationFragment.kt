@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.confirmAction
@@ -63,16 +64,16 @@ class QuestionCreationFragment : Fragment() {
     }
 
     private fun addAnswer() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle("Добавление ответа")
         val input = EditText(requireContext())
         input.hint = "Введите ответ"
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
-        builder.setPositiveButton("Ок") { dialog, which ->
+        builder.setPositiveButton(R.string.ok) { _, _ ->
             adapter.addItem(Answer(input.text.toString(), false, null))
         }
-        builder.setNegativeButton("Отмена", { dialog, which -> dialog.cancel() })
+        builder.setNegativeButton(R.string.cancel, null)
         builder.show()
     }
 

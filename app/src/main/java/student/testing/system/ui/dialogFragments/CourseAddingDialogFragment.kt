@@ -11,9 +11,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.TextResultClickListener
 import student.testing.system.common.showSnackbar
@@ -64,7 +66,7 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
         positiveBtnText: String,
         listener: TextResultClickListener
     ) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(title)
         val input = EditText(requireContext())
         input.hint = hint
@@ -73,7 +75,7 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
         builder.setPositiveButton(positiveBtnText) { dialog, which ->
             listener.onClick(input.text.toString())
         }
-        builder.setNegativeButton("Отмена", { dialog, which -> dialog.cancel() })
+        builder.setNegativeButton(R.string.cancel, null)
         builder.show()
     }
 

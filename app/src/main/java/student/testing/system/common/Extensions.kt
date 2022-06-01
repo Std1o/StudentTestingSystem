@@ -2,6 +2,7 @@ package student.testing.system.common
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.res.Resources
 import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
@@ -30,6 +31,9 @@ fun View.showIf(visible: Boolean) {
         View.GONE
     }
 }
+
+val Int.dp: Int
+    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
 fun Fragment.showSnackbar(message: String, duration:Int = Snackbar.LENGTH_SHORT){
     requireActivity().window?.let {
