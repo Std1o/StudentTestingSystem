@@ -19,12 +19,14 @@ import student.testing.system.models.UserAnswer
 import student.testing.system.models.UserQuestion
 import student.testing.system.ui.adapters.AnswersAdapter
 import student.testing.system.viewmodels.TestPassingViewModel
+import student.testing.system.viewmodels.TestsViewModel
 
 
 @AndroidEntryPoint
 class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
 
     private val viewModel: TestPassingViewModel by activityViewModels()
+    private val testsViewModel: TestsViewModel by activityViewModels()
     private val binding by viewBinding(FragmentPassingTestBinding::bind)
     private val args: TestPassingFragmentArgs by navArgs()
     private lateinit var adapter: AnswersAdapter
@@ -35,6 +37,10 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
         var position = args.position
         val question = test.questions[position]
         binding.tvQuestion.text = question.question
+        binding.tvQuestionNumber.text = getString(R.string.question_number, (position + 1), test.questions.count())
+        if (position == test.questions.count() - 1) {
+            binding.btnNext.setText(R.string.send)
+        }
         adapter = AnswersAdapter(test.questions[position].answers as ArrayList<Answer>, false, null)
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
@@ -49,6 +55,11 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
                 viewModel.calculateResult(test.id, test.courseId)
                     .subscribeInUI(this, binding.progressBar) {
                         requireActivity().onBackPressed()
+                    }
+                testsViewModel.getResult(test.id, test.courseId)
+                    .subscribeInUI(this, binding.progressBar) {
+                        val action = TestPassingFragmentDirections.viewResult(it)
+                        findNavController().navigate(action)
                     }
             } else {
                 val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position)
