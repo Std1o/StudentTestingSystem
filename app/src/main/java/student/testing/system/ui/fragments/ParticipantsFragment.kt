@@ -81,10 +81,10 @@ class ParticipantsFragment : Fragment() {
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_moderator -> {
-                    val title =
+                    val message =
                         if (participant in adapter.moderators) R.string.remove_from_moderators_request
                         else R.string.appoint_moderator_request
-                    confirmAction(title) { _, _ ->
+                    confirmAction(message) { _, _ ->
                         if (participant in adapter.moderators) {
                             deleteModerator(course, participant.id)
                         } else {

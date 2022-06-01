@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.*
 import student.testing.system.R
@@ -48,14 +49,14 @@ fun DialogFragment.showSnackbar(message: String, duration:Int = Snackbar.LENGTH_
     }
 }
 
-fun Fragment.confirmAction(@StringRes title: Int, listener: DialogInterface.OnClickListener) {
-    val builder = AlertDialog.Builder(requireContext())
-    builder.setTitle(title)
-    builder.setPositiveButton(R.string.ok, listener)
-    builder.setNegativeButton(R.string.cancel) { dialog, which ->
-        dialog.cancel()
-    }
-    builder.show()
+fun Fragment.confirmAction(@StringRes message: Int, listener: DialogInterface.OnClickListener) {
+    MaterialAlertDialogBuilder(requireContext())
+        .setMessage(message)
+        .setNegativeButton(R.string.cancel) { dialog, which ->
+            dialog.cancel()
+        }
+        .setPositiveButton(R.string.ok, listener)
+        .show()
 }
 
 @SuppressLint("SimpleDateFormat")
