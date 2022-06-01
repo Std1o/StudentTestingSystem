@@ -90,6 +90,8 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
     private fun deleteParticipant(course: CourseResponse, participantId: Int) {
         viewModel.deleteParticipant(course.id, course.ownerId, participantId)
             .subscribeInUI(this, binding.progressBar) {
+                course.participants = it
+                sharedViewModel.setCourse(course)
                 adapter.updateDataList(it)
             }
     }
@@ -97,6 +99,8 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
     private fun deleteModerator(course: CourseResponse, participantId: Int) {
         viewModel.deleteModerator(course.id, course.ownerId, participantId)
             .subscribeInUI(this, binding.progressBar) {
+                course.moderators = it
+                sharedViewModel.setCourse(course)
                 adapter.updateModerators(it)
             }
     }
@@ -104,6 +108,8 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
     private fun addModerator(course: CourseResponse, participantId: Int) {
         viewModel.addModerator(course.id, course.ownerId, participantId)
             .subscribeInUI(this, binding.progressBar) {
+                course.moderators = it
+                sharedViewModel.setCourse(course)
                 adapter.updateModerators(it)
             }
     }

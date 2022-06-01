@@ -43,14 +43,16 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments == null) return
         val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
+        val userId = AccountSession.instance.userId
+        val isUserModerator = course.moderators.any { it.id == userId } || course.ownerId == userId
         binding.tvCode.text = getString(R.string.course_code, course.courseCode)
         sharedViewModel.setCourse(course)
 
         testsAdapter = TestsAdapter(object : TestsAdapter.ClickListener {
             override fun onClick(test: Test) {
                 selectedTest = test
-                if (course.ownerId == AccountSession.instance.userId) {
-                    getResults(test.id, test.courseId)
+                if (isUserModerator) {
+                    getResults(test.id, test.courseId, course.ownerId)
                 } else {
                     getResult(test.id, test.courseId)
                 }
@@ -66,8 +68,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         binding.rv.adapter = testsAdapter
         getTests(course.id)
 
-        val userId = AccountSession.instance.userId
-        binding.btnAdd.showIf(course.moderators.any { it.id == userId } || course.ownerId == userId)
+        binding.btnAdd.showIf(isUserModerator)
         binding.btnAdd.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(CoursesFragment.ARG_COURSE, course)
@@ -106,8 +107,8 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         }.launchWhenStartedCollect(lifecycleScope)
     }
 
-    private fun getResults(testId: Int, courseId: Int) {
-        viewModel.getResults(testId, courseId).subscribeInUI(this, binding.progressBar) {
+    private fun getResults(testId: Int, courseId: Int, courseOwnerId: Int) {
+        viewModel.getResults(testId, courseId, courseOwnerId).subscribeInUI(this, binding.progressBar) {
             val action = TestsFragmentDirections.viewResults(it)
             findNavController().navigate(action)
         }

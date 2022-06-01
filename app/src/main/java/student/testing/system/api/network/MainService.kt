@@ -62,7 +62,8 @@ interface MainService {
     @GET("tests/results/{test_id}")
     suspend fun getResults(
         @Path("test_id") testId: Int,
-        @Query("course_id") courseId: Int
+        @Query("course_id") courseId: Int,
+        @Query("course_owner_id") courseOwnerId: Int
     ): Response<ParticipantsResults>
 
     @POST("course/moderators/")
