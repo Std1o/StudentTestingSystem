@@ -58,7 +58,7 @@ class TestCreationFragment : Fragment(R.layout.test_creation_fragment) {
     private fun createTest(courseId: Int) {
         testsViewModel.createTest(
             courseId,
-            binding.etName.text.toString(),
+            binding.etName.text.trimString(),
             Date().formatToString("yyyy-MM-dd")!!,
             adapter.dataList
         ).subscribeInUI(this, binding.progressBar) {

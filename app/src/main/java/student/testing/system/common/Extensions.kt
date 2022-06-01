@@ -3,6 +3,7 @@ package student.testing.system.common
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.res.Resources
+import android.text.Editable
 import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
@@ -101,3 +102,5 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(fragment: Fragment, progressBar: P
         }
     }.launchWhenStartedCollect(fragment.lifecycleScope)
 }
+
+fun Any?.trimString(): String = this@trimString.toString().trim()

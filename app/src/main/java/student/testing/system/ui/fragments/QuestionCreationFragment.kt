@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.confirmAction
 import student.testing.system.common.showSnackbar
+import student.testing.system.common.trimString
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.QuestionCreationFragmentBinding
 import student.testing.system.models.Answer
@@ -44,7 +45,7 @@ class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
         binding.btnSave.setOnClickListener {
             for (ans in adapter.dataList) {
                 if (ans.isRight) {
-                    viewModel.addQuestion(Question(binding.etQuestion.text.toString(), adapter.dataList, null))
+                    viewModel.addQuestion(Question(binding.etQuestion.text.trimString(), adapter.dataList))
                     requireActivity().onBackPressed()
                     return@setOnClickListener
                 }
@@ -61,7 +62,7 @@ class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
         builder.setPositiveButton(R.string.ok) { _, _ ->
-            adapter.addItem(Answer(input.text.toString(), false, null))
+            adapter.addItem(Answer(input.text.trimString(), false))
         }
         builder.setNegativeButton(R.string.cancel, null)
         builder.show()

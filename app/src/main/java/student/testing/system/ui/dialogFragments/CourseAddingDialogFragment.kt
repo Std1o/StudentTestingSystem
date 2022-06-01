@@ -20,6 +20,7 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.TextResultClickListener
 import student.testing.system.common.showSnackbar
 import student.testing.system.common.subscribeInUI
+import student.testing.system.common.trimString
 import student.testing.system.databinding.FragmentCourseAddingDialogBinding
 import student.testing.system.ui.fragments.CoursesFragment.Companion.ARG_COURSE
 import student.testing.system.ui.fragments.CoursesFragment.Companion.KEY_COURSE_ADDING
@@ -73,8 +74,8 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
         input.hint = hint
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
-        builder.setPositiveButton(positiveBtnText) { dialog, which ->
-            listener.onClick(input.text.toString())
+        builder.setPositiveButton(positiveBtnText) { _, _ ->
+            listener.onClick(input.text.trimString())
         }
         builder.setNegativeButton(R.string.cancel, null)
         builder.show()

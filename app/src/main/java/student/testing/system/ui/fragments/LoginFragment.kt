@@ -5,13 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.api.network.DataState
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentLoginBinding
 import student.testing.system.ui.activity.MainActivity
@@ -33,7 +29,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.btnLogin.setOnClickListener() {
-            auth(binding.login.text.toString(), binding.password.text.toString())
+            auth(binding.login.text.trimString(), binding.password.text.trimString())
         }
         if (!viewModel.isAuthDataSaved()) {
             binding.progressBar.showIf(false)
