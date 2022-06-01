@@ -1,9 +1,12 @@
 package student.testing.system.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,9 +19,14 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.*
 import student.testing.system.databinding.CoursesFragmentBinding
+import student.testing.system.models.Participant
+import student.testing.system.sharedPreferences.PrefsUtils
+import student.testing.system.ui.activity.LaunchActivity
+import student.testing.system.ui.activity.MainActivity
 import student.testing.system.ui.adapters.CoursesAdapter
 import student.testing.system.ui.dialogFragments.CourseAddingDialogFragment
 import student.testing.system.viewmodels.CoursesViewModel
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -27,6 +35,8 @@ class CoursesFragment : Fragment(R.layout.courses_fragment) {
     private val viewModel by viewModels<CoursesViewModel>()
     private val binding by viewBinding(CoursesFragmentBinding::bind)
     lateinit var adapter: CoursesAdapter
+    @Inject
+    lateinit var prefUtils: PrefsUtils
 
     companion object {
         const val KEY_COURSE_ADDING = "courseAdding"
@@ -58,6 +68,26 @@ class CoursesFragment : Fragment(R.layout.courses_fragment) {
                 .show(requireActivity().supportFragmentManager, KEY_COURSE_ADDING);
         }
         setFragmentResultListener()
+        binding.btnMenu.setOnClickListener(this::showPopup)
+    }
+
+    private fun showPopup(v: View) {
+        val popup = PopupMenu(requireActivity(), v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.courses_context_menu, popup.menu)
+        popup.show()
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_logout -> {
+                    confirmAction(R.string.logout_request) { _, _ ->
+                        prefUtils.clearData()
+                        requireActivity().finish()
+                        startActivity(Intent(requireContext(), LaunchActivity::class.java))
+                    }
+                }
+            }
+            true
+        }
     }
 
     private fun setFragmentResultListener() {

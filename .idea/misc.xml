@@ -10,7 +10,7 @@
         <entry key="app/src/main/res/layout/activity_course_review.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/activity_launch.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14175724637681159" />
-        <entry key="app/src/main/res/layout/courses_fragment.xml" value="0.14175724637681159" />
+        <entry key="app/src/main/res/layout/courses_fragment.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog.xml" value="0.14175724637681159" />
         <entry key="app/src/main/res/layout/fragment_course_adding_dialog_list_dialog_item.xml" value="0.14175724637681159" />
@@ -37,6 +37,7 @@
         <entry key="app/src/main/res/layout/sign_up_fragment.xml" value="0.2" />
         <entry key="app/src/main/res/layout/test_creation_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.2578125" />
+        <entry key="app/src/main/res/menu/courses_context_menu.xml" value="0.2578125" />
         <entry key="app/src/main/res/menu/participant_context_menu.xml" value="0.25677083333333334" />
       </map>
     </option>

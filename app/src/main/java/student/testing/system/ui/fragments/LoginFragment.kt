@@ -36,8 +36,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             auth(binding.login.text.toString(), binding.password.text.toString())
         }
         if (!viewModel.isAuthDataSaved()) {
-            binding.progressBar.showIf(true)
-            binding.main.showIf(false)
+            binding.progressBar.showIf(false)
+            binding.main.showIf(true)
         }
         subscribeObserver()
     }

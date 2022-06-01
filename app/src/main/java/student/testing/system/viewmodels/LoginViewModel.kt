@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: MainRepository, val prefsUtils: PrefsUtils) : ViewModel() {
 
-    val authStateFlow = MutableStateFlow<DataState<PrivateUser>>(DataState.Loading)
+    val authStateFlow = MutableStateFlow<DataState<PrivateUser>>(DataState.Initial)
 
     init {
         if (isAuthDataSaved()) {
@@ -32,6 +32,7 @@ class LoginViewModel @Inject constructor(private val repository: MainRepository,
 
     fun auth(email: String, password: String){
         viewModelScope.launch {
+            authStateFlow.emit(DataState.Loading)
             repository.auth(email, password).catch {
                 authStateFlow.emit(DataState.Error(it.message ?: " "))
             }.collect {

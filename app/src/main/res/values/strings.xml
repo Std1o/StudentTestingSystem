@@ -28,6 +28,9 @@
     <string name="send">Отправить</string>
     <string name="total_user_result">Ваш результат: %.2f</string>
     <string name="total_user_result_int">Ваш результат: %d</string>
+    <string name="courses">Курсы</string>
+    <string name="logout">Выйти</string>
+    <string name="logout_request">Выйти?</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
