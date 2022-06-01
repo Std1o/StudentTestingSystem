@@ -7,9 +7,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
-import student.testing.system.common.subscribeInUI
-import student.testing.system.common.trimString
-import student.testing.system.common.viewBinding
+import student.testing.system.common.*
 import student.testing.system.databinding.FragmentSignUpBinding
 import student.testing.system.ui.activity.MainActivity
 import student.testing.system.viewmodels.SignUpViewModel
@@ -24,6 +22,9 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             btnSignUp.setOnClickListener {
+                if (!(nameLayout.isNotEmpty() && loginLayout.isValidEmail() && passwordLayout.isNotEmpty())) {
+                    return@setOnClickListener
+                }
                 signUp(
                     email.text.trimString(),
                     name.text.trimString(),
