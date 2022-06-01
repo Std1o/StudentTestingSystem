@@ -30,6 +30,7 @@ class UsersResultsAdapter(private val dataList: List<ParticipantResult>, private
             val imageLoader: IImageLoader = PicassoLoader()
             imageLoader.loadImage(avatarView, "nothing", participantResult.username)
             tvName.text = participantResult.username
+            tvMail.text = participantResult.email
             if (participantResult.score % 1.0 != 0.0) {
                 tvScore.text = root
                     .context

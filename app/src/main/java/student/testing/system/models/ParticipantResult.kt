@@ -8,5 +8,6 @@ import kotlinx.parcelize.Parcelize
 data class ParticipantResult(
     @SerializedName("user_id") val userId: Int,
     @SerializedName("user_name") val username: String,
+    @SerializedName("user_email") val email: String,
     val score: Double
 ): Parcelable
