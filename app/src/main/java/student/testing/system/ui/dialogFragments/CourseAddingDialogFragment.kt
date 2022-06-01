@@ -2,26 +2,20 @@ package student.testing.system.ui.dialogFragments
 
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.api.network.DataState
 import student.testing.system.common.TextResultClickListener
 import student.testing.system.common.showSnackbar
 import student.testing.system.common.subscribeInUI
 import student.testing.system.common.trimString
-import student.testing.system.databinding.FragmentCourseAddingDialogBinding
+import student.testing.system.databinding.DialogFragmentCourseAddingBinding
 import student.testing.system.ui.fragments.CoursesFragment.Companion.ARG_COURSE
 import student.testing.system.ui.fragments.CoursesFragment.Companion.KEY_COURSE_ADDING
 import student.testing.system.viewmodels.CourseAddingViewModel
@@ -31,7 +25,7 @@ import student.testing.system.viewmodels.CourseAddingViewModel
 class CourseAddingDialogFragment : BottomSheetDialogFragment() {
 
     private val viewModel by viewModels<CourseAddingViewModel>()
-    private var _binding: FragmentCourseAddingDialogBinding? = null
+    private var _binding: DialogFragmentCourseAddingBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -39,7 +33,7 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentCourseAddingDialogBinding.inflate(inflater, container, false)
+        _binding = DialogFragmentCourseAddingBinding.inflate(inflater, container, false)
         return binding.root
     }
 

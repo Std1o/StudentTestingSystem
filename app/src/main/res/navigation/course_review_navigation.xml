@@ -48,7 +48,7 @@
         android:id="@+id/testCreationFragment"
         android:name="student.testing.system.ui.fragments.TestCreationFragment"
         android:label="test_creation_fragment"
-        tools:layout="@layout/test_creation_fragment" >
+        tools:layout="@layout/fragment_test_creation" >
         <action
             android:id="@+id/action_testCreationFragment_to_questionCreationFragment"
             app:destination="@id/questionCreationFragment"
@@ -61,7 +61,7 @@
         android:id="@+id/questionCreationFragment"
         android:name="student.testing.system.ui.fragments.QuestionCreationFragment"
         android:label="question_creation_fragment"
-        tools:layout="@layout/question_creation_fragment" />
+        tools:layout="@layout/fragment_question_creation" />
     <fragment
         android:id="@+id/testPassingFragment"
         android:name="student.testing.system.ui.fragments.TestPassingFragment"

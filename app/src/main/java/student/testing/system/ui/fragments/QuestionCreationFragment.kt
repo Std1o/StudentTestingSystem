@@ -3,27 +3,24 @@ package student.testing.system.ui.fragments
 import android.os.Bundle
 import android.text.InputType
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.*
-import student.testing.system.databinding.QuestionCreationFragmentBinding
+import student.testing.system.databinding.FragmentQuestionCreationBinding
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
 import student.testing.system.ui.adapters.AnswersAdapter
 import student.testing.system.viewmodels.TestCreationViewModel
 
 @AndroidEntryPoint
-class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
+class QuestionCreationFragment : Fragment(R.layout.fragment_question_creation) {
 
-    private val binding by viewBinding(QuestionCreationFragmentBinding::bind)
+    private val binding by viewBinding(FragmentQuestionCreationBinding::bind)
     private lateinit var adapter: AnswersAdapter
     private val viewModel: TestCreationViewModel by activityViewModels()
 
