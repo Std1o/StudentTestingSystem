@@ -83,7 +83,7 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
                 } else {
                     Log.d("errorCode", it.code().toString())
                     val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                    stateFlow.emit(DataState.Error(errorMessage))
+                    stateFlow.emit(DataState.Error(errorMessage, it.code()))
                 }
             }
         }

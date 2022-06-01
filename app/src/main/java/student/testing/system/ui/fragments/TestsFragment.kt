@@ -100,9 +100,11 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
             if (it is DataState.Success) {
                 val action = TestsFragmentDirections.viewResult(it.data)
                 findNavController().navigate(action)
-            } else if (it is DataState.Error) {
+            } else if (it is DataState.Error && it.code == 404) {
                 val action = TestsFragmentDirections.navigateToTestPassing(selectedTest, 0)
                 findNavController().navigate(action)
+            } else if (it is DataState.Error) {
+                showSnackbar(it.exception)
             }
         }.launchWhenStartedCollect(lifecycleScope)
     }
