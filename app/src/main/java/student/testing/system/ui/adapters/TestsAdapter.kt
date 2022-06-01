@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.databinding.ItemTestBinding
 import student.testing.system.models.Test
 
-class TestsAdapter(val listener: ClickListener) :
+class TestsAdapter(private val listener: ClickListener) :
     RecyclerView.Adapter<TestsAdapter.CourseViewHolder>() {
 
     private var dataList = mutableListOf<Test>()

@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import student.testing.system.models.CourseResponse
 import student.testing.system.databinding.ItemCourseBinding
 
-class CoursesAdapter(val listener: ClickListener) :
+class CoursesAdapter(private val listener: ClickListener) :
     RecyclerView.Adapter<CoursesAdapter.CourseViewHolder>() {
 
     private var dataList = mutableListOf<CourseResponse>()

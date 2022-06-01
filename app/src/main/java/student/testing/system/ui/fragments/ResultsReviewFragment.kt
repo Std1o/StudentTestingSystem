@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.viewBinding
-import student.testing.system.databinding.FragmentResultReviewBinding
+import student.testing.system.databinding.FragmentResultsReviewBinding
 import student.testing.system.ui.adapters.UsersResultsAdapter
 
 
 @AndroidEntryPoint
-class ResultsReviewFragment : Fragment(R.layout.fragment_result_review) {
+class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
 
-    private val binding by viewBinding(FragmentResultReviewBinding::bind)
+    private val binding by viewBinding(FragmentResultsReviewBinding::bind)
     private val args: ResultsReviewFragmentArgs by navArgs()
     private lateinit var adapter: UsersResultsAdapter
 

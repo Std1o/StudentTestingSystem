@@ -19,15 +19,9 @@ class QuestionsAdapter(var dataList: ArrayList<Question>) :
         return CourseViewHolder(binding)
     }
 
-    @JvmName("setDataList1")
-    fun setDataList(dataList: ArrayList<Question>) {
+    fun submitData(dataList: ArrayList<Question>) {
         this.dataList = dataList
         notifyDataSetChanged()
-    }
-
-    fun addItem(item: Question) {
-        dataList += item
-        notifyItemChanged(itemCount)
     }
 
     override fun getItemCount() = dataList.size

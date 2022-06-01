@@ -41,7 +41,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
         if (position == test.questions.count() - 1) {
             binding.btnNext.setText(R.string.send)
         }
-        adapter = AnswersAdapter(test.questions[position].answers as ArrayList<Answer>, false, null)
+        adapter = AnswersAdapter(test.questions[position].answers as ArrayList<Answer>, false)
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
 

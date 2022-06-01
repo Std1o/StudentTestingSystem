@@ -10,7 +10,7 @@ import student.testing.system.models.Answer
 class AnswersAdapter(
     val dataList: ArrayList<Answer>,
     private val forCreating: Boolean,
-    private val listener: LongClickListener?
+    private val listener: (Int) -> Unit = {}
 ) :
     RecyclerView.Adapter<AnswersAdapter.CourseViewHolder>() {
 
@@ -46,7 +46,7 @@ class AnswersAdapter(
             }
             if (!forCreating) return
             binding.checkBox.setOnLongClickListener {
-                listener?.onLongClick(position)
+                listener.invoke(position)
                 true
             }
         }
@@ -54,8 +54,4 @@ class AnswersAdapter(
 
     inner class CourseViewHolder(val binding: ItemMultiAnswerBinding) :
         RecyclerView.ViewHolder(binding.root)
-
-    interface LongClickListener {
-        fun onLongClick(position: Int)
-    }
 }

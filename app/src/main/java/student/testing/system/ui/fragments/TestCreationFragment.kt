@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
@@ -44,17 +45,13 @@ class TestCreationFragment : Fragment(R.layout.test_creation_fragment) {
         binding.btnAdd.setOnClickListener() {
             findNavController().navigate(R.id.action_testCreationFragment_to_questionCreationFragment)
         }
-        lifecycleScope.launch {
-            viewModel.questionsFlow.distinctUntilChanged().collect {
-                adapter.setDataList(it)
-            }
-        }
+        viewModel.questionsFlow.distinctUntilChanged().onEach {
+            adapter.submitData(it)
+        }.launchWhenStartedCollect(lifecycleScope)
         binding.btnPublish.setOnClickListener {
-            lifecycleScope.launch {
-                sharedViewModel.courseFlow.distinctUntilChanged().collect {
-                    createTest(it.id)
-                }
-            }
+            sharedViewModel.courseFlow.distinctUntilChanged().onEach {
+                createTest(it.id)
+            }.launchWhenStartedCollect(lifecycleScope)
         }
     }
 

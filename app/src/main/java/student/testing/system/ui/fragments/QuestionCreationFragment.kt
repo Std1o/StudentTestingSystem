@@ -31,13 +31,11 @@ class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = AnswersAdapter(arrayListOf(), true, object : AnswersAdapter.LongClickListener {
-            override fun onLongClick(position: Int) {
-                confirmAction(R.string.delete_request) { _, _ ->
-                    adapter.deleteItem(position)
-                }
+        adapter = AnswersAdapter(arrayListOf(), true) {
+            confirmAction(R.string.delete_request) { _, _ ->
+                adapter.deleteItem(it)
             }
-        })
+        }
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
         binding.btnAdd.setOnClickListener() {
@@ -68,5 +66,4 @@ class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
         builder.setNegativeButton(R.string.cancel, null)
         builder.show()
     }
-
 }

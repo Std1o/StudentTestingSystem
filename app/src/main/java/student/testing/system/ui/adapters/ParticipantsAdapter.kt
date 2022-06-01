@@ -21,7 +21,9 @@ class ParticipantsAdapter(private var dataList: List<Participant>,
                           private val courseOwnerId: Int) :
     RecyclerView.Adapter<ParticipantsAdapter.CourseViewHolder>() {
 
-    var listener: MenuClickListener? = null
+    var listener: (View, Participant) -> Unit = { _, _ ->
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val binding = ItemParticipantBinding
@@ -51,7 +53,7 @@ class ParticipantsAdapter(private var dataList: List<Participant>,
                 binding.tvMail.text = participant.email
                 binding.btnMenu.showIf(true)
                 binding.btnMenu.setOnClickListener {
-                    listener?.onMenuClick(binding.btnMenu, participant)
+                    listener.invoke(binding.btnMenu, participant)
                 }
             }
             binding.ivStar.showIf(participant.id == courseOwnerId || participant in moderators)

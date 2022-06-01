@@ -44,10 +44,8 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
     private fun initRV(course: CourseResponse) {
         adapter = ParticipantsAdapter(course.participants, course.moderators, course.ownerId)
         if (course.ownerId == AccountSession.instance.userId) {
-            adapter.listener = object : ParticipantsAdapter.MenuClickListener {
-                override fun onMenuClick(view: View, participant: Participant) {
-                    showPopup(view, participant, course)
-                }
+            adapter.listener = { view, participant ->
+                showPopup(view, participant, course)
             }
         }
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
