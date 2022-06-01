@@ -12,10 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
-import student.testing.system.common.AccountSession
-import student.testing.system.common.showSnackbar
-import student.testing.system.common.subscribeInUI
-import student.testing.system.common.viewBinding
+import student.testing.system.common.*
 import student.testing.system.databinding.FragmentLoginBinding
 import student.testing.system.ui.activity.MainActivity
 import student.testing.system.viewmodels.LoginViewModel
@@ -38,12 +35,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.btnLogin.setOnClickListener() {
             auth(binding.login.text.toString(), binding.password.text.toString())
         }
+        if (!viewModel.isAuthDataSaved()) {
+            binding.progressBar.showIf(true)
+            binding.main.showIf(false)
+        }
+        subscribeObserver()
     }
 
-    private fun auth(email: String, password: String) {
-        viewModel.auth(email, password).subscribeInUI(this, binding.progressBar) {
+    private fun subscribeObserver() {
+        viewModel.authStateFlow.subscribeInUI(this, binding.progressBar) {
             requireActivity().finish()
             startActivity(Intent(requireContext(), MainActivity::class.java))
         }
+    }
+
+    private fun auth(email: String, password: String) {
+        viewModel.auth(email, password)
     }
 }
