@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.databinding.ItemTestBinding
 import student.testing.system.models.Test
 
-class TestsAdapter(private val listener: ClickListener) :
+class TestsAdapter(private val isUserModerator: Boolean, private val listener: ClickListener) :
     RecyclerView.Adapter<TestsAdapter.CourseViewHolder>() {
 
     private var dataList = mutableListOf<Test>()
@@ -47,6 +47,7 @@ class TestsAdapter(private val listener: ClickListener) :
             holder.itemView.setOnClickListener() {
                 listener.onClick(test)
             }
+            if (!isUserModerator) return
             holder.itemView.setOnLongClickListener() {
                 listener.onLongClick(test.id)
                 true

@@ -48,7 +48,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         binding.tvCode.text = getString(R.string.course_code, course.courseCode)
         sharedViewModel.setCourse(course)
 
-        testsAdapter = TestsAdapter(object : TestsAdapter.ClickListener {
+        testsAdapter = TestsAdapter(isUserModerator, object : TestsAdapter.ClickListener {
             override fun onClick(test: Test) {
                 selectedTest = test
                 if (isUserModerator) {
