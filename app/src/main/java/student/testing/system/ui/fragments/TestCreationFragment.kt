@@ -56,6 +56,7 @@ class TestCreationFragment : Fragment(R.layout.test_creation_fragment) {
     }
 
     private fun createTest(courseId: Int) {
+        if (!binding.etName.isNotEmpty()) return
         testsViewModel.createTest(
             courseId,
             binding.etName.text.trimString(),

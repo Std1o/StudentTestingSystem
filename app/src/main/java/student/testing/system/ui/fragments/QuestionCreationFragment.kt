@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
-import student.testing.system.common.confirmAction
-import student.testing.system.common.showSnackbar
-import student.testing.system.common.trimString
-import student.testing.system.common.viewBinding
+import student.testing.system.common.*
 import student.testing.system.databinding.QuestionCreationFragmentBinding
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
@@ -43,6 +40,7 @@ class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
             addAnswer()
         }
         binding.btnSave.setOnClickListener {
+            if (!binding.etQuestion.isNotEmpty()) return@setOnClickListener
             for (ans in adapter.dataList) {
                 if (ans.isRight) {
                     viewModel.addQuestion(Question(binding.etQuestion.text.trimString(), adapter.dataList))
