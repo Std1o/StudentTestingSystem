@@ -49,7 +49,7 @@ fun Fragment.showSnackbar(@StringRes message: Int, duration:Int = Snackbar.LENGT
     }
 }
 
-fun DialogFragment.showSnackbar(message: String, duration:Int = Snackbar.LENGTH_SHORT){
+fun DialogFragment.showSnackbar(@StringRes message: Int, duration:Int = Snackbar.LENGTH_SHORT){
     requireDialog().window?.let {
         Snackbar.make(it.decorView, message, duration).show()
     }
@@ -146,4 +146,16 @@ fun TextInputLayout.isNotEmpty(): Boolean {
         }
     }
     return false
+}
+
+fun EditText.isNotEmpty(): Boolean {
+    val editText = this@isNotEmpty
+    val context = editText.context
+    return if (editText.text.isEmpty()) {
+        editText.error = context.getString(R.string.error_empty_field)
+        false
+    } else {
+        editText.error = null
+        true
+    }
 }

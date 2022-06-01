@@ -56,13 +56,17 @@ class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
 
     private fun addAnswer() {
         val builder = MaterialAlertDialogBuilder(requireContext())
-        builder.setTitle("Добавление ответа")
+        builder.setTitle(R.string.answer_adding)
         val input = EditText(requireContext())
-        input.hint = "Введите ответ"
+        input.hint = getString(R.string.input_answer)
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
         builder.setPositiveButton(R.string.ok) { _, _ ->
-            adapter.addItem(Answer(input.text.trimString(), false))
+            if (input.text.trimString().isEmpty()) {
+                showSnackbar(R.string.error_empty_answer)
+            } else {
+                adapter.addItem(Answer(input.text.trimString(), false))
+            }
         }
         builder.setNegativeButton(R.string.cancel, null)
         builder.show()
