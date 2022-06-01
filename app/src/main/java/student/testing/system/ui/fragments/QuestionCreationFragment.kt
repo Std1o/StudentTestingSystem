@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.confirmAction
 import student.testing.system.common.showSnackbar
+import student.testing.system.common.viewBinding
 import student.testing.system.databinding.QuestionCreationFragmentBinding
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
@@ -22,20 +23,11 @@ import student.testing.system.ui.adapters.AnswersAdapter
 import student.testing.system.viewmodels.TestCreationViewModel
 
 @AndroidEntryPoint
-class QuestionCreationFragment : Fragment() {
+class QuestionCreationFragment : Fragment(R.layout.question_creation_fragment) {
 
-    private lateinit var _binding: QuestionCreationFragmentBinding
-    private val binding get() = _binding
+    private val binding by viewBinding(QuestionCreationFragmentBinding::bind)
     private lateinit var adapter: AnswersAdapter
     private val viewModel: TestCreationViewModel by activityViewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = QuestionCreationFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -12,25 +12,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import student.testing.system.R
 import student.testing.system.common.showIf
+import student.testing.system.common.viewBinding
 import student.testing.system.models.CourseResponse
 import student.testing.system.databinding.FragmentCourseReviewBinding
 
-class CourseReviewFragment : Fragment() {
+class CourseReviewFragment : Fragment(R.layout.fragment_course_review) {
 
-    private var _binding: FragmentCourseReviewBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCourseReviewBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding by viewBinding(FragmentCourseReviewBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,10 +48,5 @@ class CourseReviewFragment : Fragment() {
             }
         }
         navView.setupWithNavController(navController)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

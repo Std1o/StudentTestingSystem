@@ -27,10 +27,9 @@ import student.testing.system.viewmodels.CourseSharedViewModel
 import student.testing.system.viewmodels.TestsViewModel
 
 @AndroidEntryPoint
-class TestsFragment : Fragment() {
+class TestsFragment : Fragment(R.layout.fragment_tests) {
 
-    private var _binding: FragmentTestsBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentTestsBinding::bind)
     private val sharedViewModel: CourseSharedViewModel by activityViewModels()
     private val viewModel by viewModels<TestsViewModel>()
     lateinit var testsAdapter: TestsAdapter
@@ -38,16 +37,6 @@ class TestsFragment : Fragment() {
 
     companion object {
         const val COURSE_CODE = "course_code"
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        _binding = FragmentTestsBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -128,10 +117,5 @@ class TestsFragment : Fragment() {
         viewModel.deleteTest(testId, courseId, courseOwnerId).subscribeInUI(this, binding.progressBar) {
             testsAdapter.deleteById(testId)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
@@ -26,31 +27,18 @@ import student.testing.system.viewmodels.ParticipantsViewModel
 
 
 @AndroidEntryPoint
-class ParticipantsFragment : Fragment() {
+class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
 
-    private var _binding: FragmentParticipantsBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentParticipantsBinding::bind)
     lateinit var adapter: ParticipantsAdapter
     private val viewModel by viewModels<ParticipantsViewModel>()
     private val sharedViewModel: CourseSharedViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentParticipantsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            sharedViewModel.courseFlow.distinctUntilChanged().collect {
-                initRV(it)
-            }
-        }
-
+        sharedViewModel.courseFlow.distinctUntilChanged().onEach {
+            initRV(it)
+        }.launchWhenStartedCollect(lifecycleScope)
     }
 
     private fun initRV(course: CourseResponse) {
@@ -118,10 +106,5 @@ class ParticipantsFragment : Fragment() {
             .subscribeInUI(this, binding.progressBar) {
                 adapter.updateModerators(it)
             }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

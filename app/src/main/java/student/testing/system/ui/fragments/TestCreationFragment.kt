@@ -15,10 +15,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.api.network.DataState
-import student.testing.system.common.formatToString
-import student.testing.system.common.showIf
-import student.testing.system.common.showSnackbar
-import student.testing.system.common.subscribeInUI
+import student.testing.system.common.*
 import student.testing.system.databinding.TestCreationFragmentBinding
 import student.testing.system.ui.adapters.QuestionsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel
@@ -27,25 +24,16 @@ import student.testing.system.viewmodels.TestsViewModel
 import java.util.*
 
 @AndroidEntryPoint
-class TestCreationFragment : Fragment() {
+class TestCreationFragment : Fragment(R.layout.test_creation_fragment) {
 
     private val sharedViewModel: CourseSharedViewModel by activityViewModels()
     private val testsViewModel by viewModels<TestsViewModel>()
     private val viewModel: TestCreationViewModel by activityViewModels()
-    private lateinit var _binding: TestCreationFragmentBinding
-    private val binding get() = _binding
+    private val binding by viewBinding(TestCreationFragmentBinding::bind)
     lateinit var adapter: QuestionsAdapter
 
     companion object {
         const val ARG_TEST = "test"
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = TestCreationFragmentBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -11,31 +11,27 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import student.testing.system.R
 import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showSnackbar
 import student.testing.system.common.subscribeInUI
+import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentSignUpBinding
 import student.testing.system.ui.activity.MainActivity
 import student.testing.system.viewmodels.SignUpViewModel
 
 @AndroidEntryPoint
-class SignUpFragment : Fragment() {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     private val viewModel by viewModels<SignUpViewModel>()
-    private lateinit var _binding: FragmentSignUpBinding
-    private val binding get() = _binding
+    private val binding by viewBinding(FragmentSignUpBinding::bind)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.btnSignUp.setOnClickListener {
             signUp(binding.email.text.toString(), binding.name.text.toString(), binding.password.text.toString())
         }
-        return binding.root
     }
 
     private fun signUp(email: String, username: String, password: String) {
