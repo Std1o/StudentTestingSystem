@@ -2,7 +2,10 @@ package student.testing.system.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
+import android.widget.EditText
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -22,18 +25,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnSignUp.setOnClickListener {
-            val bundle = Bundle()
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_loginFragment_to_signUpFragment, bundle)
-        }
-
-        binding.btnLogin.setOnClickListener() {
-            auth(binding.login.text.trimString(), binding.password.text.trimString())
-        }
-        if (!viewModel.isAuthDataSaved()) {
-            binding.progressBar.showIf(false)
-            binding.main.showIf(true)
+        with(binding) {
+            btnSignUp.setOnClickListener {
+                val bundle = Bundle()
+                Navigation.findNavController(root)
+                    .navigate(R.id.action_loginFragment_to_signUpFragment, bundle)
+            }
+            btnLogin.setOnClickListener() {
+                if (loginLayout.isValidEmail() && passwordLayout.isNotEmpty()) {
+                    auth(login.text.trimString(), password.text.trimString())
+                }
+            }
+            if (!viewModel.isAuthDataSaved()) {
+                progressBar.showIf(false)
+                main.showIf(true)
+            }
         }
         subscribeObserver()
     }

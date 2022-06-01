@@ -4,16 +4,20 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.text.Editable
+import android.util.Patterns
 import android.view.View
+import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.flow.*
 import student.testing.system.R
 import java.text.SimpleDateFormat
@@ -104,3 +108,42 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(fragment: Fragment, progressBar: P
 }
 
 fun Any?.trimString(): String = this@trimString.toString().trim()
+
+fun TextInputLayout.isValidEmail(): Boolean {
+    val inputLayout = this@isValidEmail
+    val context = inputLayout.context
+    inputLayout.editText?.doOnTextChanged { _, _, _, _ ->
+        inputLayout.error = null
+    }
+    editText?.let {
+        return if (it.text.isEmpty()) {
+            inputLayout.error = context.getString(R.string.error_empty_field)
+            false
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(it.text).matches()) {
+            inputLayout.error = context.getString(R.string.error_invalid_email)
+            false
+        } else {
+            inputLayout.error = null
+            true
+        }
+    }
+    return false
+}
+
+fun TextInputLayout.isNotEmpty(): Boolean {
+    val inputLayout = this@isNotEmpty
+    val context = inputLayout.context
+    inputLayout.editText?.doOnTextChanged { _, _, _, _ ->
+        inputLayout.error = null
+    }
+    editText?.let {
+        return if (it.text.isEmpty()) {
+            inputLayout.error = context.getString(R.string.error_empty_field)
+            false
+        } else {
+            inputLayout.error = null
+            true
+        }
+    }
+    return false
+}

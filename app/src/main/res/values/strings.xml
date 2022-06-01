@@ -31,6 +31,10 @@
     <string name="courses">Курсы</string>
     <string name="logout">Выйти</string>
     <string name="logout_request">Выйти?</string>
+    <string name="error_invalid_email">Неверный формат E-mail</string>
+    <string name="error_empty_field">Заполните поле</string>
+    <string name="registration">Регистрация</string>
+    <string name="sign_in">Войти</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
