@@ -39,6 +39,7 @@
     <string name="sign_in">Войти</string>
     <string name="answer_adding">Добавление ответа</string>
     <string name="input_answer">Введите ответ</string>
+    <string name="results">Результаты:</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
