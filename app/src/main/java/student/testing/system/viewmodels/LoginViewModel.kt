@@ -40,6 +40,8 @@ class LoginViewModel @Inject constructor(private val repository: MainRepository,
                     val privateUser = it.body()!!
                     AccountSession.instance.token = privateUser.token
                     AccountSession.instance.userId = privateUser.id
+                    AccountSession.instance.email = privateUser.email
+                    AccountSession.instance.username = privateUser.username
                     prefsUtils.setEmail(email)
                     prefsUtils.setPassword(password)
                     authStateFlow.emit(DataState.Success(privateUser))

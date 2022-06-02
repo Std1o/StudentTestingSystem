@@ -52,6 +52,10 @@
     <string name="error_select_answers">Ошибка! Выберите ответы</string>
     <string name="create">Создать</string>
     <string name="join">Присоединиться</string>
+    <string name="who_am_i">Кстати, а я кто?</string>
+    <string name="we_remind_you">Напоминаем</string>
+    <string name="user_info">Ваше имя: %s\nВаш E-mail: %s</string>
+    <string name="thanks">Спасибо</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>

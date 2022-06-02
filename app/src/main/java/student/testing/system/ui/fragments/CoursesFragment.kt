@@ -1,14 +1,17 @@
 package student.testing.system.ui.fragments
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuInflater
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.models.CourseResponse
@@ -28,6 +31,7 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
     private val viewModel by viewModels<CoursesViewModel>()
     private val binding by viewBinding(FragmentCoursesBinding::bind)
     lateinit var adapter: CoursesAdapter
+
     @Inject
     lateinit var prefUtils: PrefsUtils
 
@@ -78,9 +82,22 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
                         startActivity(Intent(requireContext(), LaunchActivity::class.java))
                     }
                 }
+                R.id.action_who_am_i -> {
+                    val account = AccountSession.instance
+                    val userInfo = getString(R.string.user_info, account.username, account.email)
+                    showInfoDialog(R.string.we_remind_you, userInfo)
+                }
             }
             true
         }
+    }
+
+    private fun showInfoDialog(@StringRes title: Int, message: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(R.string.thanks, null)
+            .show()
     }
 
     private fun setFragmentResultListener() {

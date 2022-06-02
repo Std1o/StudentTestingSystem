@@ -25,6 +25,8 @@ class SignUpViewModel @Inject constructor(val repository: MainRepository) : View
                     val privateUser = it.body()!!
                     AccountSession.instance.token = privateUser.token
                     AccountSession.instance.userId = privateUser.id
+                    AccountSession.instance.email = privateUser.email
+                    AccountSession.instance.username = privateUser.username
                     stateFlow.emit(DataState.Success(privateUser))
                 } else {
                     val errorMessage = Utils.encodeErrorCode(it.errorBody())
