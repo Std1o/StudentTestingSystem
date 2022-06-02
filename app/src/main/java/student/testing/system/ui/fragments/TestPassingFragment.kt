@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.common.showSnackbar
 import student.testing.system.common.subscribeInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentPassingTestBinding
@@ -46,6 +47,10 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
         binding.rv.adapter = adapter
 
         binding.btnNext.setOnClickListener {
+            if (!adapter.dataList.any { it.isRight }) {
+                showSnackbar(R.string.error_select_answers)
+                return@setOnClickListener
+            }
             val userAnswers = arrayListOf<UserAnswer>()
             for (ans in adapter.dataList) {
                 userAnswers += UserAnswer(ans.id!!, ans.isRight)
@@ -55,11 +60,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
                 viewModel.calculateResult(test.id, test.courseId)
                     .subscribeInUI(this, binding.progressBar) {
                         requireActivity().onBackPressed()
-                    }
-                testsViewModel.getResult(test.id, test.courseId)
-                    .subscribeInUI(this, binding.progressBar) {
-                        val action = TestPassingFragmentDirections.viewResult(it)
-                        findNavController().navigate(action)
+                        requestResult(test.id, test.courseId)
                     }
             } else {
                 val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position)
@@ -67,5 +68,13 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
             }
 
         }
+    }
+
+    private fun requestResult(testId: Int, courseId: Int) {
+        testsViewModel.getResult(testId, courseId)
+            .subscribeInUI(this, binding.progressBar) {
+                val action = TestPassingFragmentDirections.viewResult(it)
+                findNavController().navigate(action)
+            }
     }
 }

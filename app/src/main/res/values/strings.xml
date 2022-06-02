@@ -47,6 +47,7 @@
     <string name="save">Сохранить</string>
     <string name="test_name">Название теста</string>
     <string name="questions">Вопросы</string>
+    <string name="error_select_answers">Ошибка! Выберите ответы</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
