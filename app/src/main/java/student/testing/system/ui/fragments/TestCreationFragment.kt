@@ -35,7 +35,11 @@ class TestCreationFragment : Fragment(R.layout.fragment_test_creation) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = QuestionsAdapter(arrayListOf())
+        adapter = QuestionsAdapter(arrayListOf()) {
+            confirmAction(R.string.delete_request) { _, _ ->
+                adapter.deleteItem(it)
+            }
+        }
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
         binding.btnAdd.setOnClickListener() {

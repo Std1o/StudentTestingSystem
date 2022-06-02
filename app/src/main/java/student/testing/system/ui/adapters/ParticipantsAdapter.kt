@@ -65,8 +65,4 @@ class ParticipantsAdapter(private var dataList: List<Participant>,
 
     inner class CourseViewHolder(val binding: ItemParticipantBinding) :
         RecyclerView.ViewHolder(binding.root)
-
-    interface MenuClickListener {
-        fun onMenuClick(view: View, participant: Participant)
-    }
 }

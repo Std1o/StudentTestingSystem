@@ -10,7 +10,7 @@ import student.testing.system.models.Question
 import student.testing.system.models.Test
 
 
-class QuestionsAdapter(var dataList: ArrayList<Question>) :
+class QuestionsAdapter(var dataList: ArrayList<Question>, val listener: (Int) -> Unit) :
     RecyclerView.Adapter<QuestionsAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
@@ -24,6 +24,15 @@ class QuestionsAdapter(var dataList: ArrayList<Question>) :
         notifyDataSetChanged()
     }
 
+    fun deleteItem(position: Int) {
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getItemViewType(position: Int) = position
+
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
@@ -31,23 +40,10 @@ class QuestionsAdapter(var dataList: ArrayList<Question>) :
             val question = dataList[position]
             binding.tvTitle.text = question.question
             binding.cv.setOnLongClickListener {
-                confirmDeletion(position, binding.root.context)
+                listener.invoke(position)
                 true
             }
         }
-    }
-
-    private fun confirmDeletion(position: Int, context: Context) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Удалить?")
-        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            dataList.removeAt(position)
-            notifyItemRemoved(position)
-        }
-        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-            dialog.cancel()
-        }
-        builder.show()
     }
 
     inner class CourseViewHolder(val binding: ItemQuestionBinding) :
