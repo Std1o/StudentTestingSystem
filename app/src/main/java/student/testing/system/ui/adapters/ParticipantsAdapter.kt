@@ -3,22 +3,21 @@ package student.testing.system.ui.adapters
 import agency.tango.android.avatarview.IImageLoader
 import agency.tango.android.avatarview.loader.PicassoLoader
 import android.view.LayoutInflater
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.R
 import student.testing.system.models.Participant
 import student.testing.system.common.AccountSession
 import student.testing.system.common.showIf
 import student.testing.system.databinding.ItemParticipantBinding
-import student.testing.system.models.CourseResponse
 
 
-class ParticipantsAdapter(private var dataList: List<Participant>,
-                          var moderators: List<Participant>,
-                          private val courseOwnerId: Int) :
+class ParticipantsAdapter(
+    private var dataList: List<Participant>,
+    var moderators: List<Participant>,
+    private val courseOwnerId: Int
+) :
     RecyclerView.Adapter<ParticipantsAdapter.CourseViewHolder>() {
 
     var listener: (View, Participant) -> Unit = { _, _ ->

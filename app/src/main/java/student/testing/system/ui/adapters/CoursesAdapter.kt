@@ -32,7 +32,7 @@ class CoursesAdapter(private val listener: ClickListener) :
     }
 
     fun deleteById(id: Int) {
-        var position = getPositionById(id)
+        val position = getPositionById(id)
         dataList.removeAt(position)
         notifyItemRemoved(position)
     }
@@ -69,5 +69,4 @@ class CoursesAdapter(private val listener: ClickListener) :
         fun onClick(course: CourseResponse)
         fun onLongClick(courseId: Int, courseOwnerId: Int)
     }
-
 }

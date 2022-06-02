@@ -2,7 +2,6 @@ package student.testing.system.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.R
@@ -37,7 +36,8 @@ class UserResultAdapter(private val testResult: TestResult) :
             }
             tvQuestion.text = question.question
             rv.layoutManager = LinearLayoutManager(root.context)
-            val adapter = AnswersResultAdapter(testResult.questions[position].answers as ArrayList<AnswerResult>)
+            val adapter =
+                AnswersResultAdapter(testResult.questions[position].answers as ArrayList<AnswerResult>)
             rv.adapter = adapter
         }
     }

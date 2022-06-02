@@ -34,7 +34,6 @@ class AnswersAdapter(
 
     override fun getItemViewType(position: Int) = position
 
-
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {

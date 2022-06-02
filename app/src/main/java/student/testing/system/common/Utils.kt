@@ -6,11 +6,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.nio.charset.Charset
 
-
 class Utils {
-
-    companion object{
-
+    companion object {
         @Throws(JSONException::class)
         fun encodeErrorCode(errorBody: ResponseBody?): String {
             if (errorBody == null) {
@@ -24,6 +21,4 @@ class Utils {
             return detail
         }
     }
-
-
 }

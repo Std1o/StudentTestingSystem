@@ -28,7 +28,7 @@ class TestsAdapter(private val isUserModerator: Boolean, private val listener: C
     }
 
     fun deleteById(id: Int) {
-        var position = getPositionById(id)
+        val position = getPositionById(id)
         dataList.removeAt(position)
         notifyItemRemoved(position)
     }

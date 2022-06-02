@@ -1,13 +1,10 @@
 package student.testing.system.ui.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.databinding.ItemQuestionBinding
 import student.testing.system.models.Question
-import student.testing.system.models.Test
 
 
 class QuestionsAdapter(var dataList: ArrayList<Question>, val listener: (Int) -> Unit) :

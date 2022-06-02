@@ -1,7 +1,6 @@
 package student.testing.system.models
 
 import com.google.gson.annotations.SerializedName
-import student.testing.system.models.Question
 
 data class CourseCreationReq(val name: String)
 

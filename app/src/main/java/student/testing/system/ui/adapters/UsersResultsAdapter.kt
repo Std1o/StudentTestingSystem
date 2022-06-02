@@ -2,18 +2,18 @@ package student.testing.system.ui.adapters
 
 import agency.tango.android.avatarview.IImageLoader
 import agency.tango.android.avatarview.loader.PicassoLoader
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.R
-import student.testing.system.models.Participant
-import student.testing.system.common.AccountSession
 import student.testing.system.databinding.ItemParticipantBinding
 import student.testing.system.models.ParticipantResult
 
 
-class UsersResultsAdapter(private val dataList: List<ParticipantResult>, private val maxScore: Int):
+class UsersResultsAdapter(
+    private val dataList: List<ParticipantResult>,
+    private val maxScore: Int
+) :
     RecyclerView.Adapter<UsersResultsAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
@@ -38,7 +38,11 @@ class UsersResultsAdapter(private val dataList: List<ParticipantResult>, private
             } else {
                 tvScore.text = root
                     .context
-                    .getString(R.string.participant_int_result, participantResult.score.toInt(), maxScore)
+                    .getString(
+                        R.string.participant_int_result,
+                        participantResult.score.toInt(),
+                        maxScore
+                    )
             }
         }
     }

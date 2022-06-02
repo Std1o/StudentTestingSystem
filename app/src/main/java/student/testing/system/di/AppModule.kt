@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import androidx.security.crypto.MasterKeys
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +19,6 @@ import student.testing.system.api.network.OAuthInterceptor
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.sharedPreferences.PrefsUtilsImpl
-import java.security.GeneralSecurityException
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 

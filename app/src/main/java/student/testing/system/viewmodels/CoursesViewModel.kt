@@ -11,7 +11,6 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
-import student.testing.system.models.User
 import javax.inject.Inject
 
 @HiltViewModel
