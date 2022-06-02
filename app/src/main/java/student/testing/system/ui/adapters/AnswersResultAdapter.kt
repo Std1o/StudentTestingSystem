@@ -17,6 +17,10 @@ class AnswersResultAdapter(val dataList: ArrayList<AnswerResult>) :
         return CourseViewHolder(binding)
     }
 
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getItemViewType(position: Int) = position
+
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {

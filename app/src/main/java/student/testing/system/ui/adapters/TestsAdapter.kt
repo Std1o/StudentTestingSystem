@@ -37,6 +37,10 @@ class TestsAdapter(private val isUserModerator: Boolean, private val listener: C
         return dataList.indexOf(dataList.find { it.id == id })
     }
 
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getItemViewType(position: Int) = position
+
     override fun getItemCount() = dataList.size
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {

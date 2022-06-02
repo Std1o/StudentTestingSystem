@@ -19,6 +19,10 @@ class UserResultAdapter(private val testResult: TestResult) :
         return CourseViewHolder(binding)
     }
 
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getItemViewType(position: Int) = position
+
     override fun getItemCount() = testResult.questions.count()
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
