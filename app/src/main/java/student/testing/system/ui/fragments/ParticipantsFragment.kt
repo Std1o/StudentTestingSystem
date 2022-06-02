@@ -1,10 +1,8 @@
 package student.testing.system.ui.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,9 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.api.network.DataState
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentParticipantsBinding
 import student.testing.system.models.CourseResponse

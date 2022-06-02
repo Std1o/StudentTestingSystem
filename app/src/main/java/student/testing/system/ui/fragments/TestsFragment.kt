@@ -4,9 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
@@ -72,7 +69,10 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         binding.btnAdd.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable(CoursesFragment.ARG_COURSE, course)
-                findNavController().navigate(R.id.action_navigation_tests_to_testCreationFragment, bundle)
+            findNavController().navigate(
+                R.id.action_navigation_tests_to_testCreationFragment,
+                bundle
+            )
         }
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Test>(
             TestCreationFragment.ARG_TEST
@@ -110,15 +110,17 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
     }
 
     private fun getResults(testId: Int, courseId: Int, courseOwnerId: Int) {
-        viewModel.getResults(testId, courseId, courseOwnerId).subscribeInUI(this, binding.progressBar) {
-            val action = TestsFragmentDirections.viewResults(it)
-            findNavController().navigate(action)
-        }
+        viewModel.getResults(testId, courseId, courseOwnerId)
+            .subscribeInUI(this, binding.progressBar) {
+                val action = TestsFragmentDirections.viewResults(it)
+                findNavController().navigate(action)
+            }
     }
 
     private fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) {
-        viewModel.deleteTest(testId, courseId, courseOwnerId).subscribeInUI(this, binding.progressBar) {
-            testsAdapter.deleteById(testId)
-        }
+        viewModel.deleteTest(testId, courseId, courseOwnerId)
+            .subscribeInUI(this, binding.progressBar) {
+                testsAdapter.deleteById(testId)
+            }
     }
 }

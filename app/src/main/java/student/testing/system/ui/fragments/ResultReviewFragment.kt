@@ -1,18 +1,13 @@
 package student.testing.system.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.viewBinding
-import student.testing.system.databinding.FragmentPassingTestBinding
 import student.testing.system.databinding.FragmentResultReviewBinding
 import student.testing.system.ui.adapters.UserResultAdapter
 

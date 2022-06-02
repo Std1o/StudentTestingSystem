@@ -63,8 +63,7 @@ class TestCreationFragment : Fragment(R.layout.fragment_test_creation) {
             Date().formatToString("yyyy-MM-dd")!!,
             adapter.dataList
         ).subscribeInUI(this, binding.progressBar) {
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                ARG_TEST, it)
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_TEST, it)
             requireActivity().onBackPressed()
         }
     }

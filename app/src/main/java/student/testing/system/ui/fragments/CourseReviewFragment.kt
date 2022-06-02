@@ -1,10 +1,7 @@
 package student.testing.system.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavArgument
@@ -27,14 +24,15 @@ class CourseReviewFragment : Fragment(R.layout.fragment_course_review) {
 
 
         val navView: BottomNavigationView = binding.navView
-        val navController = requireActivity().findNavController(R.id.nav_host_fragment_activity_course_review)
+        val navController =
+            requireActivity().findNavController(R.id.nav_host_fragment_activity_course_review)
         val arg1 = NavArgument.Builder().setDefaultValue(course).build()
         val navInflater = navController.navInflater
         val navGraph = navInflater.inflate(R.navigation.course_review_navigation)
         navGraph.addArgument(CoursesFragment.ARG_COURSE, arg1)
         navController.graph = navGraph
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            when(destination.id) {
+            when (destination.id) {
                 R.id.navigation_users -> {
                     binding.navView.showIf(true)
                     destination.addArgument(CoursesFragment.ARG_COURSE, arg1)
