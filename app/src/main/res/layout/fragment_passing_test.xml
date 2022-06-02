@@ -33,7 +33,7 @@
         android:layout_below="@+id/tvQuestion"
         android:ems="10"
         android:inputType="textPersonName|textCapSentences|textMultiLine"
-        android:hint="Введите ответ" />
+        android:hint="@string/input_answer" />
 
     <TextView
         android:id="@+id/tvQuestionNumber"
@@ -52,7 +52,7 @@
         android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         app:cornerRadius="10dp"
-        android:text="Далее" />
+        android:text="@string/next" />
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.dialogFragments.CourseAddingDialogFragment"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+    android:paddingVertical="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,16 +16,14 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:orientation="horizontal"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp">
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Создать курс"
+                android:text="@string/create_course"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -38,16 +35,14 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:orientation="horizontal"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp">
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Присоединиться к курсу"
+                android:text="@string/join_course"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

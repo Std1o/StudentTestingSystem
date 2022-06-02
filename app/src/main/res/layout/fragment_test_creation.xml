@@ -14,7 +14,7 @@
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
         android:inputType="textPersonName|textCapSentences"
-        android:hint="Название теста" />
+        android:hint="@string/test_name" />
 
     <View
         android:id="@+id/divider"
@@ -32,7 +32,7 @@
         android:textSize="20sp"
         android:layout_below="@+id/divider"
         android:layout_marginBottom="20dp"
-        android:text="Вопросы" />
+        android:text="@string/questions" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
@@ -44,11 +44,9 @@
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
         android:layout_above="@+id/btnPublish"
-        android:onClick="onClick"
         app:backgroundTint="@color/white"
         app:srcCompat="@drawable/ic_plus" />
 
@@ -60,7 +58,6 @@
         android:layout_marginVertical="20dp"
         app:cornerRadius="10dp"
         android:layout_alignParentBottom="true"
-        android:onClick="onClick"
         android:text="@string/publish" />
 
     <ProgressBar
