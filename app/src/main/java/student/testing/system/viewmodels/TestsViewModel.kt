@@ -37,7 +37,12 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
         return stateFlow
     }
 
-    fun createTest(courseId: Int, name: String, creationTIme: String, questions: List<Question>): StateFlow<DataState<Test>> {
+    fun createTest(
+        courseId: Int,
+        name: String,
+        creationTIme: String,
+        questions: List<Question>
+    ): StateFlow<DataState<Test>> {
         val stateFlow = MutableStateFlow<DataState<Test>>(DataState.Loading)
         viewModelScope.launch {
             repository.createTest(courseId, name, creationTIme, questions).catch {
@@ -90,7 +95,11 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
         return stateFlow
     }
 
-    fun getResults(testId: Int, courseId: Int, courseOwnerId: Int): StateFlow<DataState<ParticipantsResults>> {
+    fun getResults(
+        testId: Int,
+        courseId: Int,
+        courseOwnerId: Int
+    ): StateFlow<DataState<ParticipantsResults>> {
         val stateFlow = MutableStateFlow<DataState<ParticipantsResults>>(DataState.Loading)
         viewModelScope.launch {
             repository.getResults(testId, courseId, courseOwnerId).catch {

@@ -3,8 +3,6 @@ package student.testing.system.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -12,9 +10,6 @@ import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
-import student.testing.system.models.CourseResponse
-import student.testing.system.models.Question
-import student.testing.system.models.Test
 import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 
