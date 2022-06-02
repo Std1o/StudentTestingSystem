@@ -11,6 +11,7 @@
     <string name="name">Имя</string>
     <string name="sign_up">Зарегистрироваться</string>
     <string name="course_code">Код курса: %s</string>
+    <string name="course_code_hint">Код курса</string>
     <string name="publish">Опубликовать</string>
     <string name="course_code_copied">Код курса скопирован</string>
     <string name="ok">OK</string>
@@ -39,6 +40,7 @@
     <string name="sign_in">Войти</string>
     <string name="answer_adding">Добавление ответа</string>
     <string name="input_answer">Введите ответ</string>
+    <string name="input_name">Введите название</string>
     <string name="results">Результаты:</string>
     <string name="create_course">Создать курс</string>
     <string name="join_course">Присоединиться к курсу</string>
@@ -48,6 +50,8 @@
     <string name="test_name">Название теста</string>
     <string name="questions">Вопросы</string>
     <string name="error_select_answers">Ошибка! Выберите ответы</string>
+    <string name="create">Создать</string>
+    <string name="join">Присоединиться</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>

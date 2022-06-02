@@ -11,7 +11,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
-import student.testing.system.common.TextResultClickListener
 import student.testing.system.common.showSnackbar
 import student.testing.system.common.subscribeInUI
 import student.testing.system.common.trimString
@@ -39,40 +38,34 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.create.setOnClickListener() {
-            val listener = object : TextResultClickListener {
-                override fun onClick(text: String) {
-                    createCourse(text)
-                }
+            showAlertDialog(R.string.create_course, R.string.input_name, R.string.create) {
+                createCourse(it)
             }
-            showAlertDialog("Создать курс", "Введите название", "Создать", listener)
         }
         binding.join.setOnClickListener() {
-            val listener = object : TextResultClickListener {
-                override fun onClick(text: String) {
-                    joinCourse(text)
-                }
+            showAlertDialog(R.string.join_course, R.string.course_code_hint, R.string.join) {
+                joinCourse(it)
             }
-            showAlertDialog("Присоединиться к курсу", "Код курса", "Присоединиться", listener)
         }
     }
 
     private fun showAlertDialog(
-        title: String,
-        hint: String,
-        positiveBtnText: String,
-        listener: TextResultClickListener
+        title: Int,
+        hint: Int,
+        positiveBtnText: Int,
+        listener: (String) -> Unit
     ) {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(title)
         val input = EditText(requireContext())
-        input.hint = hint
+        input.hint = getString(hint)
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
         builder.setPositiveButton(positiveBtnText) { _, _ ->
             if (input.text.trimString().isEmpty()) {
                 showSnackbar(R.string.error_empty_course_name)
             } else {
-                listener.onClick(input.text.trimString())
+                listener.invoke(input.text.trimString())
             }
         }
         builder.setNegativeButton(R.string.cancel, null)

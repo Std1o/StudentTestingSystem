@@ -6,7 +6,6 @@ import student.testing.system.models.*
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.TestResult
 import student.testing.system.models.Test
-import student.testing.system.models.User
 
 
 interface MainService {

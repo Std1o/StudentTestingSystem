@@ -2,14 +2,11 @@ package student.testing.system.common
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.content.res.Resources
-import android.text.Editable
 import android.util.Patterns
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -26,8 +23,6 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
-import student.testing.system.models.CourseResponse
-import student.testing.system.models.Test
 
 fun View.showIf(visible: Boolean) {
     visibility = if (visible) {
@@ -37,19 +32,19 @@ fun View.showIf(visible: Boolean) {
     }
 }
 
-fun Fragment.showSnackbar(message: String, duration:Int = Snackbar.LENGTH_SHORT){
+fun Fragment.showSnackbar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     requireActivity().window?.let {
         Snackbar.make(it.decorView, message, duration).show()
     }
 }
 
-fun Fragment.showSnackbar(@StringRes message: Int, duration:Int = Snackbar.LENGTH_SHORT){
+fun Fragment.showSnackbar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT) {
     requireActivity().window?.let {
         Snackbar.make(it.decorView, message, duration).show()
     }
 }
 
-fun DialogFragment.showSnackbar(@StringRes message: Int, duration:Int = Snackbar.LENGTH_SHORT){
+fun DialogFragment.showSnackbar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT) {
     requireDialog().window?.let {
         Snackbar.make(it.decorView, message, duration).show()
     }
@@ -96,7 +91,11 @@ fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope
     }
 }
 
-fun <T> StateFlow<DataState<T>>.subscribeInUI(fragment: Fragment, progressBar: ProgressBar, listener: (T) -> Unit) {
+fun <T> StateFlow<DataState<T>>.subscribeInUI(
+    fragment: Fragment,
+    progressBar: ProgressBar,
+    listener: (T) -> Unit
+) {
     this@subscribeInUI.onEach {
         progressBar.showIf(it is DataState.Loading)
         if (it is DataState.Success) {
