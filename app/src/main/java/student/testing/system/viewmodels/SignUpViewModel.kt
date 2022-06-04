@@ -10,10 +10,14 @@ import student.testing.system.api.network.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Utils
 import student.testing.system.models.PrivateUser
+import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(val repository: MainRepository) : ViewModel(){
+class SignUpViewModel @Inject constructor(
+    val repository: MainRepository,
+    val prefsUtils: PrefsUtils
+) : ViewModel(){
 
     fun signUp(email: String, username: String, password: String): StateFlow<DataState<PrivateUser>> {
         val stateFlow = MutableStateFlow<DataState<PrivateUser>>(DataState.Loading)
@@ -27,6 +31,8 @@ class SignUpViewModel @Inject constructor(val repository: MainRepository) : View
                     AccountSession.instance.userId = privateUser.id
                     AccountSession.instance.email = privateUser.email
                     AccountSession.instance.username = privateUser.username
+                    prefsUtils.setEmail(email)
+                    prefsUtils.setPassword(password)
                     stateFlow.emit(DataState.Success(privateUser))
                 } else {
                     val errorMessage = Utils.encodeErrorCode(it.errorBody())
