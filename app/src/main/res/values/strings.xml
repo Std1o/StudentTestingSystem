@@ -27,8 +27,8 @@
     <string name="participant_int_result">%d/%d</string>
     <string name="question_number">%d / %d</string>
     <string name="send">Отправить</string>
-    <string name="total_user_result">Ваш результат: %.2f</string>
-    <string name="total_user_result_int">Ваш результат: %d</string>
+    <string name="total_user_result">Ваш результат: %.2f/%d</string>
+    <string name="total_user_result_int">Ваш результат: %d/%d</string>
     <string name="courses">Курсы</string>
     <string name="logout">Выйти</string>
     <string name="logout_request">Выйти?</string>

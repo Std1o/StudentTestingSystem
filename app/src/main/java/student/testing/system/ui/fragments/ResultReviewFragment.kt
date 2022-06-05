@@ -26,9 +26,14 @@ class ResultReviewFragment : Fragment(R.layout.fragment_result_review) {
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
         if (testResult.score % 1.0 != 0.0) {
-            binding.tvResult.text = getString(R.string.total_user_result, testResult.score)
+            binding.tvResult.text =
+                getString(R.string.total_user_result, testResult.score, testResult.maxScore)
         } else {
-            binding.tvResult.text = getString(R.string.total_user_result_int, testResult.score.toInt())
+            binding.tvResult.text = getString(
+                R.string.total_user_result_int,
+                testResult.score.toInt(),
+                testResult.maxScore
+            )
         }
     }
 }
