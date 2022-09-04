@@ -52,7 +52,7 @@ class CoursesAdapter(private val listener: ClickListener) :
             val course = dataList[position]
             binding.tvName.text = course.name
             Glide.with(holder.itemView.context)
-                .load("http://ezapitest.ml/images/${course.img}")
+                .load("http://176.57.217.38/images/${course.img}")
                 .transform(CenterCrop(), RoundedCorners(16))
                 .into(binding.imageView)
             holder.itemView.setOnClickListener() {
