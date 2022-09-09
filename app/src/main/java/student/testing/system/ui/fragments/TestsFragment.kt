@@ -11,17 +11,19 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
-import student.testing.system.models.CourseResponse
 import student.testing.system.api.network.DataState
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
+import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.ui.adapters.TestsAdapter
 import student.testing.system.viewmodels.CourseSharedViewModel
 import student.testing.system.viewmodels.TestsViewModel
+
 
 @AndroidEntryPoint
 class TestsFragment : Fragment(R.layout.fragment_tests) {
@@ -51,14 +53,13 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
                 if (isUserModerator) {
                     getResults(test.id, test.courseId, course.ownerId)
                 } else {
-                    getResult(test.id, test.courseId)
+                    getResult(test.id, test.courseId, course.ownerId, isUserModerator)
                 }
             }
 
-            override fun onLongClick(testId: Int) {
-                confirmAction(R.string.delete_request) { _, _ ->
-                    deleteTest(testId, course.id, course.ownerId)
-                }
+            override fun onLongClick(test: Test) {
+                selectedTest = test
+                showOptionsDialog(course, test.id, isUserModerator)
             }
         })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
@@ -94,14 +95,15 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         }
     }
 
-    private fun getResult(testId: Int, courseId: Int) {
+    private fun getResult(testId: Int, courseId: Int, courseOwnerId: Int, isUserModerator: Boolean) {
         viewModel.getResult(testId, courseId).onEach {
             binding.progressBar.showIf(it is DataState.Loading)
             if (it is DataState.Success) {
                 val action = TestsFragmentDirections.viewResult(it.data)
                 findNavController().navigate(action)
             } else if (it is DataState.Error && it.code == 404) {
-                val action = TestsFragmentDirections.navigateToTestPassing(selectedTest, 0)
+                val action = TestsFragmentDirections
+                    .navigateToTestPassing(selectedTest, 0, courseOwnerId, isUserModerator)
                 findNavController().navigate(action)
             } else if (it is DataState.Error) {
                 showSnackbar(it.exception)
@@ -115,6 +117,29 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
                 val action = TestsFragmentDirections.viewResults(it)
                 findNavController().navigate(action)
             }
+    }
+
+    private fun showOptionsDialog(course: CourseResponse, testId: Int, isUserModerator: Boolean) {
+        val options = arrayOf("Проверить", "Удалить")
+        MaterialAlertDialogBuilder(requireContext())
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> {
+                        val action = TestsFragmentDirections.navigateToTestPassing(
+                            selectedTest,
+                            0,
+                            course.ownerId,
+                            isUserModerator
+                        )
+                        findNavController().navigate(action)
+                    }
+                    1 -> {
+                        confirmAction(R.string.delete_request) { _, _ ->
+                            deleteTest(testId, course.id, course.ownerId)
+                        }
+                    }
+                }
+            }.show()
     }
 
     private fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) {

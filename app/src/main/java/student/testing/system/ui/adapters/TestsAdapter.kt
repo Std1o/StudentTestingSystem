@@ -53,7 +53,7 @@ class TestsAdapter(private val isUserModerator: Boolean, private val listener: C
             }
             if (!isUserModerator) return
             holder.itemView.setOnLongClickListener() {
-                listener.onLongClick(test.id)
+                listener.onLongClick(test)
                 true
             }
         }
@@ -64,7 +64,7 @@ class TestsAdapter(private val isUserModerator: Boolean, private val listener: C
 
     interface ClickListener {
         fun onClick(test: Test)
-        fun onLongClick(testId: Int)
+        fun onLongClick(test: Test)
     }
 
 }

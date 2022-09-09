@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.api.network.DataState
 import student.testing.system.api.network.MainRepository
 import student.testing.system.common.Utils
+import student.testing.system.models.TestResult
 import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 
@@ -26,6 +27,23 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
             }.collect {
                 if (it.isSuccessful) {
                     stateFlow.emit(DataState.Success(0))
+                } else {
+                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
+                    stateFlow.emit(DataState.Error(errorMessage))
+                }
+            }
+        }
+        return stateFlow
+    }
+
+    fun calculateDemoResult(courseId: Int, testId: Int, courseOwnerId: Int): StateFlow<DataState<TestResult>> {
+        val stateFlow = MutableStateFlow<DataState<TestResult>>(DataState.Loading)
+        viewModelScope.launch {
+            repository.calculateDemoResult(courseId, testId, courseOwnerId, userQuestions).catch {
+                stateFlow.emit(DataState.Error(it.message ?: " "))
+            }.collect {
+                if (it.isSuccessful) {
+                    stateFlow.emit(DataState.Success(it.body()!!))
                 } else {
                     val errorMessage = Utils.encodeErrorCode(it.errorBody())
                     stateFlow.emit(DataState.Error(errorMessage))

@@ -43,6 +43,9 @@ class MainRepository @Inject constructor(private val remoteData: MainRemoteData)
     suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) =
         flow { emit(remoteData.calculateResult(testId, courseId, request)) }
 
+    suspend fun calculateDemoResult(courseId: Int, testId: Int, courseOwnerId: Int, request: List<UserQuestion>) =
+        flow { emit(remoteData.calculateDemoResult(courseId, testId, courseOwnerId, request)) }
+
     suspend fun getResult(testId: Int, courseId: Int) =
         flow { emit(remoteData.getResult(testId, courseId)) }
 

@@ -2,8 +2,10 @@ package student.testing.system.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,8 +34,11 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setOnBackPressedListener()
         val test = args.test
         var position = args.position
+        val courseOwnerId = args.courseOwnerId
+        val isUserModerator = args.isUserModerator
         val question = test.questions[position]
         binding.tvQuestion.text = question.question
         binding.tvQuestionNumber.text = getString(R.string.question_number, (position + 1), test.questions.count())
@@ -55,13 +60,22 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
             }
             viewModel.userQuestions += UserQuestion(question.id!!, userAnswers)
             if (test.questions.count() - 1 == position) {
-                viewModel.calculateResult(test.id, test.courseId)
-                    .subscribeInUI(this, binding.progressBar) {
-                        requireActivity().onBackPressed()
-                        requestResult(test.id, test.courseId)
-                    }
+                if (isUserModerator) {
+                    viewModel.calculateDemoResult(test.courseId, test.id, courseOwnerId)
+                        .subscribeInUI(this, binding.progressBar) {
+                            requireActivity().onBackPressed()
+                            val action = TestPassingFragmentDirections.viewResult(it)
+                            findNavController().navigate(action)
+                        }
+                } else {
+                    viewModel.calculateResult(test.id, test.courseId)
+                        .subscribeInUI(this, binding.progressBar) {
+                            requireActivity().onBackPressed()
+                            requestResult(test.id, test.courseId)
+                        }
+                }
             } else {
-                val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position)
+                val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position, courseOwnerId, isUserModerator)
                 findNavController().navigate(action)
             }
 
@@ -74,5 +88,20 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
                 val action = TestPassingFragmentDirections.viewResult(it)
                 findNavController().navigate(action)
             }
+    }
+
+    private fun setOnBackPressedListener() {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.userQuestions.clear()
+                    if (isEnabled) {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            }
+            )
     }
 }
