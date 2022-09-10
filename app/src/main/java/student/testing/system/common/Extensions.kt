@@ -50,6 +50,12 @@ fun DialogFragment.showSnackbar(@StringRes message: Int, duration: Int = Snackba
     }
 }
 
+fun DialogFragment.showSnackbar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+    requireDialog().window?.let {
+        Snackbar.make(it.decorView, message, duration).show()
+    }
+}
+
 fun Fragment.confirmAction(@StringRes message: Int, listener: DialogInterface.OnClickListener) {
     MaterialAlertDialogBuilder(requireContext())
         .setMessage(message)
@@ -104,6 +110,21 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(
             fragment.showSnackbar(it.exception)
         }
     }.launchWhenStartedCollect(fragment.lifecycleScope)
+}
+
+fun <T> StateFlow<DataState<T>>.subscribeInUI(
+    dialogFragment: DialogFragment,
+    progressBar: ProgressBar,
+    listener: (T) -> Unit
+) {
+    this@subscribeInUI.onEach {
+        progressBar.showIf(it is DataState.Loading)
+        if (it is DataState.Success) {
+            listener.invoke(it.data)
+        } else if (it is DataState.Error) {
+            dialogFragment.showSnackbar(it.exception)
+        }
+    }.launchWhenStartedCollect(dialogFragment.lifecycleScope)
 }
 
 fun Any?.trimString(): String = this@trimString.toString().trim()
