@@ -105,7 +105,11 @@
         android:name="student.testing.system.ui.fragments.ResultsReviewFragment"
         android:label="fragment_results_review"
         tools:layout="@layout/fragment_results_review">
-        <argument android:name="results"
-            app:argType="student.testing.system.models.ParticipantsResults"/>
+        <argument android:name="testId"
+            app:argType="integer"/>
+        <argument android:name="courseId"
+            app:argType="integer"/>
+        <argument android:name="courseOwnerId"
+            app:argType="integer"/>
     </fragment>
 </navigation>

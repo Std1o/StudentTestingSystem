@@ -51,7 +51,8 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
             override fun onClick(test: Test) {
                 selectedTest = test
                 if (isUserModerator) {
-                    getResults(test.id, test.courseId, course.ownerId)
+                    val action = TestsFragmentDirections.viewResults(test.id, test.courseId, course.ownerId)
+                    findNavController().navigate(action)
                 } else {
                     getResult(test.id, test.courseId, course.ownerId, isUserModerator)
                 }
@@ -109,14 +110,6 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
                 showSnackbar(it.exception)
             }
         }.launchWhenStartedCollect(lifecycleScope)
-    }
-
-    private fun getResults(testId: Int, courseId: Int, courseOwnerId: Int) {
-        viewModel.getResults(testId, courseId, courseOwnerId)
-            .subscribeInUI(this, binding.progressBar) {
-                val action = TestsFragmentDirections.viewResults(it)
-                findNavController().navigate(action)
-            }
     }
 
     private fun showOptionsDialog(course: CourseResponse, testId: Int, isUserModerator: Boolean) {

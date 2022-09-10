@@ -49,8 +49,8 @@ class MainRepository @Inject constructor(private val remoteData: MainRemoteData)
     suspend fun getResult(testId: Int, courseId: Int) =
         flow { emit(remoteData.getResult(testId, courseId)) }
 
-    suspend fun getResults(testId: Int, courseId: Int, courseOwnerId: Int) =
-        flow { emit(remoteData.getResults(testId, courseId, courseOwnerId)) }
+    suspend fun getResults(testId: Int, courseId: Int, courseOwnerId: Int, showOnlyMaxResults: Boolean) =
+        flow { emit(remoteData.getResults(testId, courseId, courseOwnerId, showOnlyMaxResults)) }
 
     suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
         flow { emit(remoteData.addModerator(courseId, courseOwnerId, moderatorId)) }

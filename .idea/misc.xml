@@ -43,6 +43,7 @@
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.2578125" />
         <entry key="app/src/main/res/menu/courses_context_menu.xml" value="0.2578125" />
         <entry key="app/src/main/res/menu/participant_context_menu.xml" value="0.25677083333333334" />
+        <entry key="app/src/main/res/menu/results_context_menu.xml" value="0.2578125" />
       </map>
     </option>
   </component>

@@ -70,7 +70,8 @@ interface MainService {
     suspend fun getResults(
         @Path("test_id") testId: Int,
         @Query("course_id") courseId: Int,
-        @Query("course_owner_id") courseOwnerId: Int
+        @Query("course_owner_id") courseOwnerId: Int,
+        @Query("only_max_result") showOnlyMaxResults: Boolean
     ): Response<ParticipantsResults>
 
     @POST("course/moderators/")

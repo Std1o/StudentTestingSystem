@@ -94,26 +94,4 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
         }
         return stateFlow
     }
-
-    fun getResults(
-        testId: Int,
-        courseId: Int,
-        courseOwnerId: Int
-    ): StateFlow<DataState<ParticipantsResults>> {
-        val stateFlow = MutableStateFlow<DataState<ParticipantsResults>>(DataState.Loading)
-        viewModelScope.launch {
-            repository.getResults(testId, courseId, courseOwnerId).catch {
-                stateFlow.emit(DataState.Error(it.message ?: " "))
-            }.collect {
-                if (it.isSuccessful) {
-                    stateFlow.emit(DataState.Success(it.body()!!))
-                } else {
-                    Log.d("errorCode", it.code().toString())
-                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                    stateFlow.emit(DataState.Error(errorMessage))
-                }
-            }
-        }
-        return stateFlow
-    }
 }
