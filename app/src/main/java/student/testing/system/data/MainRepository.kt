@@ -14,8 +14,8 @@ class MainRepository @Inject constructor(
     suspend fun auth(authRequest: String) =
         flow { emit(apiCall { remoteDataSource.auth(authRequest) }) }
 
-    suspend fun signUp(email: String, username: String, password: String) =
-        flow { emit(apiCall { remoteDataSource.signUp(SignUpReq(email, username, password)) }) }
+    suspend fun signUp(request: SignUpReq) =
+        flow { emit(apiCall { remoteDataSource.signUp(request) }) }
 
     suspend fun getCourses() = flow { emit(apiCall { remoteDataSource.getCourses() }) }
     suspend fun createCourse(name: String) =
@@ -27,20 +27,11 @@ class MainRepository @Inject constructor(
     suspend fun deleteCourse(courseId: Int, courseOwnerId: Int) =
         flow { emit(apiCall { remoteDataSource.deleteCourse(courseId, courseOwnerId) }) }
 
-    suspend fun getTests(courseId: Int) = flow { emit(apiCall { remoteDataSource.getTests(courseId) }) }
-    suspend fun createTest(
-        courseId: Int,
-        name: String,
-        creationTIme: String,
-        questions: List<Question>
-    ) = flow {
-        emit(
-            apiCall {
-                remoteDataSource.createTest(
-                    TestCreationReq(courseId, name, creationTIme, questions)
-                )
-            }
-        )
+    suspend fun getTests(courseId: Int) =
+        flow { emit(apiCall { remoteDataSource.getTests(courseId) }) }
+
+    suspend fun createTest(request: TestCreationReq) = flow {
+        emit(apiCall { remoteDataSource.createTest(request) })
     }
 
     suspend fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) =
@@ -87,10 +78,26 @@ class MainRepository @Inject constructor(
         }
 
     suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
-        flow { emit(apiCall { remoteDataSource.addModerator(courseId, courseOwnerId, moderatorId) }) }
+        flow {
+            emit(apiCall {
+                remoteDataSource.addModerator(
+                    courseId,
+                    courseOwnerId,
+                    moderatorId
+                )
+            })
+        }
 
     suspend fun deleteModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
-        flow { emit(apiCall { remoteDataSource.deleteModerator(courseId, courseOwnerId, moderatorId) }) }
+        flow {
+            emit(apiCall {
+                remoteDataSource.deleteModerator(
+                    courseId,
+                    courseOwnerId,
+                    moderatorId
+                )
+            })
+        }
 
     suspend fun deleteParticipant(courseId: Int, courseOwnerId: Int, participantId: Int) =
         flow {

@@ -14,6 +14,7 @@ import student.testing.system.data.MainRepository
 import student.testing.system.common.Utils
 import student.testing.system.models.Question
 import student.testing.system.models.Test
+import student.testing.system.models.TestCreationReq
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,9 +38,10 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
     ): StateFlow<DataState<Test>> {
         val stateFlow = MutableStateFlow<DataState<Test>>(DataState.Loading)
         viewModelScope.launch {
-            repository.createTest(courseId, name, creationTIme, questions).collect {
-                stateFlow.emit(it)
-            }
+            repository.createTest(TestCreationReq(courseId, name, creationTIme, questions))
+                .collect {
+                    stateFlow.emit(it)
+                }
         }
         return stateFlow
     }

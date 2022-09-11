@@ -10,6 +10,7 @@ import student.testing.system.domain.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Utils
 import student.testing.system.models.PrivateUser
+import student.testing.system.models.SignUpReq
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ class SignUpViewModel @Inject constructor(
     fun signUp(email: String, username: String, password: String): StateFlow<DataState<PrivateUser>> {
         val stateFlow = MutableStateFlow<DataState<PrivateUser>>(DataState.Loading)
         viewModelScope.launch {
-            repository.signUp(email, username, password).collect {
+            repository.signUp(SignUpReq(email, username, password)).collect {
                 if (it is DataState.Success) {
                     val privateUser = it.data
                     AccountSession.instance.token = privateUser.token
