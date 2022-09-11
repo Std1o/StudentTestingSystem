@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_tests"
-        android:name="student.testing.system.ui.fragments.TestsFragment"
+        android:name="student.testing.system.presentation.ui.fragments.TestsFragment"
         tools:layout="@layout/fragment_tests" >
         <action
             android:id="@+id/action_navigation_tests_to_testCreationFragment"
@@ -42,11 +42,11 @@
 
     <fragment
         android:id="@+id/navigation_users"
-        android:name="student.testing.system.ui.fragments.ParticipantsFragment"
+        android:name="student.testing.system.presentation.ui.fragments.ParticipantsFragment"
         tools:layout="@layout/fragment_participants" />
     <fragment
         android:id="@+id/testCreationFragment"
-        android:name="student.testing.system.ui.fragments.TestCreationFragment"
+        android:name="student.testing.system.presentation.ui.fragments.TestCreationFragment"
         android:label="test_creation_fragment"
         tools:layout="@layout/fragment_test_creation" >
         <action
@@ -59,12 +59,12 @@
     </fragment>
     <fragment
         android:id="@+id/questionCreationFragment"
-        android:name="student.testing.system.ui.fragments.QuestionCreationFragment"
+        android:name="student.testing.system.presentation.ui.fragments.QuestionCreationFragment"
         android:label="question_creation_fragment"
         tools:layout="@layout/fragment_question_creation" />
     <fragment
         android:id="@+id/testPassingFragment"
-        android:name="student.testing.system.ui.fragments.TestPassingFragment"
+        android:name="student.testing.system.presentation.ui.fragments.TestPassingFragment"
         android:label="fragment_passing_test"
         tools:layout="@layout/fragment_passing_test">
         <argument android:name="test"
@@ -94,7 +94,7 @@
     </fragment>
     <fragment
         android:id="@+id/resultReviewFragment"
-        android:name="student.testing.system.ui.fragments.ResultReviewFragment"
+        android:name="student.testing.system.presentation.ui.fragments.ResultReviewFragment"
         android:label="fragment_result_review"
         tools:layout="@layout/fragment_result_review">
         <argument android:name="testResult"
@@ -102,7 +102,7 @@
     </fragment>
     <fragment
         android:id="@+id/resultsReviewFragment2"
-        android:name="student.testing.system.ui.fragments.ResultsReviewFragment"
+        android:name="student.testing.system.presentation.ui.fragments.ResultsReviewFragment"
         android:label="fragment_results_review"
         tools:layout="@layout/fragment_results_review">
         <argument android:name="testId"

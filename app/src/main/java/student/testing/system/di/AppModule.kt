@@ -13,9 +13,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import student.testing.system.api.network.MainRemoteData
-import student.testing.system.api.network.MainService
-import student.testing.system.api.network.OAuthInterceptor
+import student.testing.system.data.MainRemoteData
+import student.testing.system.data.MainService
+import student.testing.system.data.OAuthInterceptor
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.sharedPreferences.PrefsUtilsImpl

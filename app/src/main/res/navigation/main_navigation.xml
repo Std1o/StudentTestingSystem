@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/coursesFragment"
-        android:name="student.testing.system.ui.fragments.CoursesFragment"
+        android:name="student.testing.system.presentation.ui.fragments.CoursesFragment"
         android:label="courses_fragment"
         tools:layout="@layout/fragment_courses" >
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/courseReviewFragment"
-        android:name="student.testing.system.ui.fragments.CourseReviewFragment"
+        android:name="student.testing.system.presentation.ui.fragments.CourseReviewFragment"
         android:label="CourseReview"
         tools:layout="@layout/fragment_course_review" />
 </navigation>

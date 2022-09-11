@@ -22,7 +22,7 @@ import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import kotlinx.coroutines.launch
-import student.testing.system.api.network.DataState
+import student.testing.system.domain.DataState
 
 fun View.showIf(visible: Boolean) {
     visibility = if (visible) {

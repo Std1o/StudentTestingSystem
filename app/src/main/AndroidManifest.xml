@@ -14,10 +14,10 @@
         android:theme="@style/Theme.StudentTestingSystem"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name="student.testing.system.presentation.ui.activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.LaunchActivity"
+            android:name="student.testing.system.presentation.ui.activity.LaunchActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
