@@ -3,7 +3,7 @@ package student.testing.system.data
 import student.testing.system.models.*
 import javax.inject.Inject
 
-class MainRemoteData @Inject constructor(private val mainService : MainService) {
+class RemoteDataSource @Inject constructor(private val mainService : MainService) {
     suspend fun auth(request: String) = mainService.auth(request)
     suspend fun signUp(request: SignUpReq) = mainService.signUp(request)
     suspend fun getCourses() = mainService.getCourses()

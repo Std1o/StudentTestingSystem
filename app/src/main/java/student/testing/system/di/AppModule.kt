@@ -13,7 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import student.testing.system.data.MainRemoteData
+import student.testing.system.data.RemoteDataSource
 import student.testing.system.data.MainService
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
@@ -59,7 +59,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMainRemoteData(mainService : MainService) : MainRemoteData = MainRemoteData(mainService)
+    fun provideRemoteDataSource(mainService : MainService) : RemoteDataSource = RemoteDataSource(mainService)
 
     @Provides
     @Singleton
