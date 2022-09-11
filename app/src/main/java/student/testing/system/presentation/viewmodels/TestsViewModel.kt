@@ -48,7 +48,7 @@ class TestsViewModel @Inject constructor(private val repository: MainRepository)
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {
             repository.deleteTest(testId, courseId, courseOwnerId).collect {
-                if (it is DataState.Success) {
+                if (it is DataState.Empty) {
                     stateFlow.emit(DataState.Success(testId))
                 } else {
                     stateFlow.emit(it as DataState.Error)

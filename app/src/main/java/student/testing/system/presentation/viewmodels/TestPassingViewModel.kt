@@ -19,11 +19,13 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
 
     val userQuestions: ArrayList<UserQuestion> = arrayListOf()
 
-    fun calculateResult(testId: Int, courseId: Int): StateFlow<DataState<Void>> {
-        val stateFlow = MutableStateFlow<DataState<Void>>(DataState.Loading)
+    fun calculateResult(testId: Int, courseId: Int): StateFlow<DataState<Int>> {
+        val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {
             repository.calculateResult(testId, courseId, userQuestions).collect {
-                stateFlow.emit(it)
+                if (it is DataState.Empty) {
+                    stateFlow.emit(DataState.Success(0))
+                }
             }
         }
         return stateFlow

@@ -14,6 +14,7 @@ open class BaseRepository {
                 body?.let {
                     return DataState.Success(body)
                 }
+                return DataState.Empty(response.code())
             }
             val errorMessage = Utils.encodeErrorCode(response.errorBody())
             return error(errorMessage, response.code())
