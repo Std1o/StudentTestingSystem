@@ -20,15 +20,8 @@ class CourseAddingViewModel @Inject constructor(private val repository: MainRepo
     fun createCourse(name: String): StateFlow<DataState<CourseResponse>> {
         val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
         viewModelScope.launch {
-            repository.createCourse(name).catch {
-                stateFlow.emit(DataState.Error(it.message ?: " "))
-            }.collect {
-                if (it.isSuccessful) {
-                    stateFlow.emit(DataState.Success(it.body()!!))
-                } else {
-                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                    stateFlow.emit(DataState.Error(errorMessage))
-                }
+            repository.createCourse(name).collect {
+                stateFlow.emit(it)
             }
         }
         return stateFlow
@@ -37,15 +30,8 @@ class CourseAddingViewModel @Inject constructor(private val repository: MainRepo
     fun joinCourse(courseCode: String): StateFlow<DataState<CourseResponse>> {
         val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
         viewModelScope.launch {
-            repository.joinCourse(courseCode).catch {
-                stateFlow.emit(DataState.Error(it.message ?: " "))
-            }.collect {
-                if (it.isSuccessful) {
-                    stateFlow.emit(DataState.Success(it.body()!!))
-                } else {
-                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                    stateFlow.emit(DataState.Error(errorMessage))
-                }
+            repository.joinCourse(courseCode).collect {
+                stateFlow.emit(it)
             }
         }
         return stateFlow

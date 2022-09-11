@@ -22,22 +22,17 @@ class SignUpViewModel @Inject constructor(
     fun signUp(email: String, username: String, password: String): StateFlow<DataState<PrivateUser>> {
         val stateFlow = MutableStateFlow<DataState<PrivateUser>>(DataState.Loading)
         viewModelScope.launch {
-            repository.signUp(email, username, password).catch {
-                stateFlow.emit(DataState.Error(it.message ?: " "))
-            }.collect {
-                if (it.isSuccessful) {
-                    val privateUser = it.body()!!
+            repository.signUp(email, username, password).collect {
+                if (it is DataState.Success) {
+                    val privateUser = it.data
                     AccountSession.instance.token = privateUser.token
                     AccountSession.instance.userId = privateUser.id
                     AccountSession.instance.email = privateUser.email
                     AccountSession.instance.username = privateUser.username
                     prefsUtils.setEmail(email)
                     prefsUtils.setPassword(password)
-                    stateFlow.emit(DataState.Success(privateUser))
-                } else {
-                    val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                    stateFlow.emit(DataState.Error(errorMessage))
                 }
+                stateFlow.emit(it)
             }
         }
         return stateFlow

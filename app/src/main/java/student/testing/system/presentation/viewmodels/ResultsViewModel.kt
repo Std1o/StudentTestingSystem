@@ -28,16 +28,8 @@ class ResultsViewModel @Inject constructor(
         showOnlyMaxResults: Boolean = false
     ) = viewModelScope.launch {
         stateFlow.emit(DataState.Loading)
-        repository.getResults(testId, courseId, courseOwnerId, showOnlyMaxResults).catch {
-            stateFlow.emit(DataState.Error(it.message ?: " "))
-        }.collect {
-            if (it.isSuccessful) {
-                stateFlow.emit(DataState.Success(it.body()!!))
-            } else {
-                Log.d("errorCode", it.code().toString())
-                val errorMessage = Utils.encodeErrorCode(it.errorBody())
-                stateFlow.emit(DataState.Error(errorMessage))
-            }
+        repository.getResults(testId, courseId, courseOwnerId, showOnlyMaxResults).collect {
+            stateFlow.emit(it)
         }
     }
 }
