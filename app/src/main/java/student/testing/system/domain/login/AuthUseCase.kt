@@ -1,6 +1,6 @@
 package student.testing.system.domain.login
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
@@ -20,7 +20,7 @@ class AuthUseCase @Inject constructor(
     suspend operator fun invoke(email: String, password: String): Flow<LoginState<PrivateUser>> {
         if (email.isEmpty()) {
             return flow { emit(LoginState.EmailError(R.string.error_empty_field)) }
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        } else if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()) {
             return flow { emit(LoginState.EmailError(R.string.error_invalid_email)) }
         } else if (password.isEmpty()) {
             return flow { emit(LoginState.PasswordError(R.string.error_empty_field)) }
