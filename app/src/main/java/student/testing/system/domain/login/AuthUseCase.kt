@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import student.testing.system.R
 import student.testing.system.common.AccountSession
-import student.testing.system.data.MainRepository
+import student.testing.system.domain.MainRepository
 import student.testing.system.domain.DataState
 import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils

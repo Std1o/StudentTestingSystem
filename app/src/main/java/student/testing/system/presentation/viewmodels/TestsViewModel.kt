@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import student.testing.system.models.TestResult
 import student.testing.system.domain.DataState
-import student.testing.system.data.MainRepository
+import student.testing.system.domain.MainRepository
 import student.testing.system.common.Utils
 import student.testing.system.models.Question
 import student.testing.system.models.Test

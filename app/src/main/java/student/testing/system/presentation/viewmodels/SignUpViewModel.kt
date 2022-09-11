@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import student.testing.system.data.MainRepository
+import student.testing.system.domain.MainRepository
 import student.testing.system.domain.DataState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Utils

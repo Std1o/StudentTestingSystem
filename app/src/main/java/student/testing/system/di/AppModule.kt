@@ -17,6 +17,7 @@ import student.testing.system.data.RemoteDataSource
 import student.testing.system.data.MainService
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
+import student.testing.system.data.MainRepositoryImpl
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.sharedPreferences.PrefsUtilsImpl
 import java.util.concurrent.TimeUnit
@@ -60,6 +61,11 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRemoteDataSource(mainService : MainService) : RemoteDataSource = RemoteDataSource(mainService)
+
+    @Singleton
+    @Provides
+    fun provideRepository(remoteDataSource: RemoteDataSource) =
+        MainRepositoryImpl(remoteDataSource) as student.testing.system.domain.MainRepository
 
     @Provides
     @Singleton

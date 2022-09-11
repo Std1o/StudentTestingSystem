@@ -1,46 +1,47 @@
 package student.testing.system.data
 
 import kotlinx.coroutines.flow.flow
+import student.testing.system.domain.MainRepository
 import student.testing.system.models.*
 import student.testing.system.models.Question
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MainRepository @Inject constructor(
+class MainRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
-) : BaseRepository() {
+) : BaseRepository(), MainRepository {
 
-    suspend fun auth(authRequest: String) =
-        flow { emit(apiCall { remoteDataSource.auth(authRequest) }) }
+    override suspend fun auth(request: String) =
+        flow { emit(apiCall { remoteDataSource.auth(request) }) }
 
-    suspend fun signUp(request: SignUpReq) =
+    override suspend fun signUp(request: SignUpReq) =
         flow { emit(apiCall { remoteDataSource.signUp(request) }) }
 
-    suspend fun getCourses() = flow { emit(apiCall { remoteDataSource.getCourses() }) }
-    suspend fun createCourse(name: String) =
+    override suspend fun getCourses() = flow { emit(apiCall { remoteDataSource.getCourses() }) }
+    override suspend fun createCourse(name: String) =
         flow { emit(apiCall { remoteDataSource.createCourse(CourseCreationReq(name)) }) }
 
-    suspend fun joinCourse(courseCode: String) =
+    override suspend fun joinCourse(courseCode: String) =
         flow { emit(apiCall { remoteDataSource.joinCourse(courseCode) }) }
 
-    suspend fun deleteCourse(courseId: Int, courseOwnerId: Int) =
+    override suspend fun deleteCourse(courseId: Int, courseOwnerId: Int) =
         flow { emit(apiCall { remoteDataSource.deleteCourse(courseId, courseOwnerId) }) }
 
-    suspend fun getTests(courseId: Int) =
+    override suspend fun getTests(courseId: Int) =
         flow { emit(apiCall { remoteDataSource.getTests(courseId) }) }
 
-    suspend fun createTest(request: TestCreationReq) = flow {
+    override suspend fun createTest(request: TestCreationReq) = flow {
         emit(apiCall { remoteDataSource.createTest(request) })
     }
 
-    suspend fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) =
+    override suspend fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) =
         flow { emit(apiCall { remoteDataSource.deleteTest(testId, courseId, courseOwnerId) }) }
 
-    suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) =
+    override suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) =
         flow { emit(apiCall { remoteDataSource.calculateResult(testId, courseId, request) }) }
 
-    suspend fun calculateDemoResult(
+    override suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
         courseOwnerId: Int,
@@ -57,10 +58,10 @@ class MainRepository @Inject constructor(
             })
         }
 
-    suspend fun getResult(testId: Int, courseId: Int) =
+    override suspend fun getResult(testId: Int, courseId: Int) =
         flow { emit(apiCall { remoteDataSource.getResult(testId, courseId) }) }
 
-    suspend fun getResults(
+    override suspend fun getResults(
         testId: Int,
         courseId: Int,
         courseOwnerId: Int,
@@ -77,7 +78,7 @@ class MainRepository @Inject constructor(
             })
         }
 
-    suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
+    override suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
         flow {
             emit(apiCall {
                 remoteDataSource.addModerator(
@@ -88,7 +89,7 @@ class MainRepository @Inject constructor(
             })
         }
 
-    suspend fun deleteModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
+    override suspend fun deleteModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
         flow {
             emit(apiCall {
                 remoteDataSource.deleteModerator(
@@ -99,7 +100,7 @@ class MainRepository @Inject constructor(
             })
         }
 
-    suspend fun deleteParticipant(courseId: Int, courseOwnerId: Int, participantId: Int) =
+    override suspend fun deleteParticipant(courseId: Int, courseOwnerId: Int, participantId: Int) =
         flow {
             emit(apiCall {
                 remoteDataSource.deleteParticipant(

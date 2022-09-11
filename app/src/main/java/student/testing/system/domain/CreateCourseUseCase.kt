@@ -3,7 +3,6 @@ package student.testing.system.domain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import student.testing.system.R
-import student.testing.system.data.MainRepository
 import student.testing.system.models.CourseResponse
 import javax.inject.Inject
 
