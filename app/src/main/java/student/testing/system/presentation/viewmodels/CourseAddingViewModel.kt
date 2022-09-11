@@ -11,16 +11,20 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.domain.DataState
 import student.testing.system.data.MainRepository
 import student.testing.system.common.Utils
+import student.testing.system.domain.CreateCourseUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class CourseAddingViewModel @Inject constructor(private val repository: MainRepository) :
+class CourseAddingViewModel @Inject constructor(
+    private val createCourseUseCase: CreateCourseUseCase,
+    private val repository: MainRepository
+) :
     ViewModel() {
 
     fun createCourse(name: String): StateFlow<DataState<CourseResponse>> {
         val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
         viewModelScope.launch {
-            repository.createCourse(name).collect {
+            createCourseUseCase(name).collect {
                 stateFlow.emit(it)
             }
         }

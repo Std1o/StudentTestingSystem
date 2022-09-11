@@ -106,6 +106,8 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(
         progressBar.showIf(it is DataState.Loading)
         if (it is DataState.Success) {
             listener.invoke(it.data)
+        } else if (it is DataState.ValidationError) {
+            fragment.showSnackbar(it.messageResId)
         } else if (it is DataState.Error) {
             fragment.showSnackbar(it.exception)
         }
@@ -121,6 +123,8 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(
         progressBar.showIf(it is DataState.Loading)
         if (it is DataState.Success) {
             listener.invoke(it.data)
+        } else if (it is DataState.ValidationError) {
+            dialogFragment.showSnackbar(it.messageResId)
         } else if (it is DataState.Error) {
             dialogFragment.showSnackbar(it.exception)
         }

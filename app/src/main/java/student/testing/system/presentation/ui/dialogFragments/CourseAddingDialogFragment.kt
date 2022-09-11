@@ -62,11 +62,7 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
         input.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         builder.setView(input)
         builder.setPositiveButton(positiveBtnText) { _, _ ->
-            if (input.text.trimString().isEmpty()) {
-                showSnackbar(R.string.error_empty_course_name)
-            } else {
-                listener.invoke(input.text.trimString())
-            }
+            listener.invoke(input.text.trimString())
         }
         builder.setNegativeButton(R.string.cancel, null)
         builder.show()
