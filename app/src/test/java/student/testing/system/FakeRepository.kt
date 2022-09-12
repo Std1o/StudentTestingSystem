@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import student.testing.system.domain.DataState
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.login.LoginState
 import student.testing.system.models.*
 
 class FakeRepository : MainRepository {
@@ -70,7 +69,15 @@ class FakeRepository : MainRepository {
     }
 
     override suspend fun getResult(testId: Int, courseId: Int): Flow<DataState<TestResult>> {
-        TODO("Not yet implemented")
+        if (testId == -1 || courseId == -1) {
+            return flow { emit(DataState.Error("Cringe")) }
+        }
+        val passedTests = listOf(12, 24, 13)
+        if (passedTests.contains(testId)) {
+            return flow { emit(DataState.Success(TestResult(emptyList(), 10, 8.9))) }
+        } else {
+            return flow { emit(DataState.Error("Not found", 404)) }
+        }
     }
 
     override suspend fun getResults(
