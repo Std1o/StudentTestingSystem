@@ -26,7 +26,6 @@ import student.testing.system.presentation.viewmodels.TestsViewModel
 class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
 
     private val viewModel: TestPassingViewModel by activityViewModels()
-    private val testsViewModel: TestsViewModel by activityViewModels()
     private val binding by viewBinding(FragmentPassingTestBinding::bind)
     private val args: TestPassingFragmentArgs by navArgs()
     private lateinit var adapter: AnswersAdapter
@@ -82,7 +81,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
     }
 
     private fun requestResult(testId: Int, courseId: Int) {
-        testsViewModel.getResult(testId, courseId)
+        viewModel.getResult(testId, courseId)
             .subscribeInUI(this, binding.progressBar) {
                 val action = TestPassingFragmentDirections.viewResult(it)
                 findNavController().navigate(action)

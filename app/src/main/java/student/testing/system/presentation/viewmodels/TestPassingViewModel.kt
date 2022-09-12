@@ -40,4 +40,14 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
         }
         return stateFlow
     }
+
+    fun getResult(testId: Int, courseId: Int): StateFlow<DataState<TestResult>> {
+        val stateFlow = MutableStateFlow<DataState<TestResult>>(DataState.Loading)
+        viewModelScope.launch {
+            repository.getResult(testId, courseId).collect {
+                stateFlow.emit(it)
+            }
+        }
+        return stateFlow
+    }
 }

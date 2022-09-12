@@ -1,15 +1,8 @@
 package student.testing.system.domain.addQuestion
 
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
-
 import org.junit.Test
-import student.testing.system.R
-import student.testing.system.domain.login.AuthUseCase
-import student.testing.system.domain.login.LoginState
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
 
