@@ -11,7 +11,7 @@ class AddQuestionUseCase @Inject constructor() {
         }
         for (ans in question.answers) {
             if (ans.isRight) {
-                return QuestionState.QuestionSuccess(question)
+                return QuestionState.QuestionSuccess
             }
         }
         return QuestionState.NoCorrectAnswers
