@@ -7,12 +7,17 @@ import student.testing.system.domain.MainRepository
 import student.testing.system.models.*
 
 class FakeRepository : MainRepository {
+
+    data class MockedUser(val email: String, val password: String)
+
     override suspend fun auth(request: String): Flow<DataState<PrivateUser>> {
-        if (request.contains("test@mail.ru") && request.contains("password=pass")) {
-            return  flow { emit(DataState.Success(PrivateUser(1, "Ivan", "test@mail.ru", "some_token"))) }
-        } else {
-            return flow { emit(DataState.Error("Incorrect username or password")) }
+        val existingUsers = listOf(MockedUser("test@mail.ru", "pass"))
+        for (user in existingUsers) {
+            if (request.contains(user.email) && request.contains("password=${user.password}")) {
+                return  flow { emit(DataState.Success(PrivateUser(1, "Ivan", user.email, "some_token"))) }
+            }
         }
+        return flow { emit(DataState.Error("Incorrect username or password")) }
     }
 
     override suspend fun signUp(request: SignUpReq): Flow<DataState<PrivateUser>> {
