@@ -5,6 +5,7 @@ import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.EditText
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -12,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentQuestionCreationBinding
+import student.testing.system.domain.addQuestion.QuestionState
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
 import student.testing.system.presentation.ui.adapters.AnswersAdapter
@@ -33,19 +35,22 @@ class QuestionCreationFragment : Fragment(R.layout.fragment_question_creation) {
         }
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
-        binding.btnAdd.setOnClickListener() {
+        binding.btnAdd.setOnClickListener {
             addAnswer()
         }
+        binding.etQuestion.doOnTextChanged { _, _, _, _ ->
+            binding.etQuestion.error = null
+        }
         binding.btnSave.setOnClickListener {
-            if (!binding.etQuestion.isNotEmpty()) return@setOnClickListener
-            for (ans in adapter.dataList) {
-                if (ans.isRight) {
-                    viewModel.addQuestion(Question(binding.etQuestion.text.trimString(), adapter.dataList))
-                    requireActivity().onBackPressed()
-                    return@setOnClickListener
-                }
+            val state = viewModel.addQuestion(Question(binding.etQuestion.text.trimString(), adapter.dataList))
+            if (state is QuestionState.EmptyQuestion) {
+                binding.etQuestion.error = getString(R.string.error_empty_field)
+            } else if (state is QuestionState.NoCorrectAnswers) {
+                showSnackbar(R.string.assign_correct_answers)
+            } else if (state is QuestionState.QuestionSuccess) {
+                requireActivity().onBackPressed()
+                return@setOnClickListener
             }
-            showSnackbar(R.string.assign_correct_answers)
         }
     }
 

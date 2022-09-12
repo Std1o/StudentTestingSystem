@@ -42,9 +42,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     .navigate(R.id.action_loginFragment_to_signUpFragment, bundle)
             }
             btnLogin.setOnClickListener() {
-                if (loginLayout.isValidEmail() && passwordLayout.isNotEmpty()) {
-                    auth(login.text.trimString(), password.text.trimString())
-                }
+                auth(login.text.trimString(), password.text.trimString())
             }
         }
         subscribeObserver()
