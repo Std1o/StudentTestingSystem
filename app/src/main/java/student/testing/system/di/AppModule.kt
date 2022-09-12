@@ -13,11 +13,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import student.testing.system.data.RemoteDataSource
+import student.testing.system.data.RemoteDataSourceImpl
 import student.testing.system.data.MainService
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
 import student.testing.system.data.MainRepositoryImpl
+import student.testing.system.domain.MainRepository
+import student.testing.system.data.RemoteDataSource
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.sharedPreferences.PrefsUtilsImpl
 import java.util.concurrent.TimeUnit
@@ -60,12 +62,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(mainService : MainService) : RemoteDataSource = RemoteDataSource(mainService)
+    fun provideRemoteDataSource(mainService : MainService) =
+        RemoteDataSourceImpl(mainService) as RemoteDataSource
 
     @Singleton
     @Provides
     fun provideRepository(remoteDataSource: RemoteDataSource) =
-        MainRepositoryImpl(remoteDataSource) as student.testing.system.domain.MainRepository
+        MainRepositoryImpl(remoteDataSource) as MainRepository
 
     @Provides
     @Singleton
