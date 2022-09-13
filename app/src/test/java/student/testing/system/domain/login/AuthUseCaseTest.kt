@@ -6,7 +6,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
@@ -44,9 +47,9 @@ class AuthUseCaseTest {
 
     @Test
     fun `success auth returns PrivateUser`() = runBlocking {
-        val expected = LoginState.Success(PrivateUser(1, "Ivan", "test@mail.ru", "some_token"))
         val actual = authUseCase.invoke("test@mail.ru", "pass").first()
-        assertEquals(expected, actual)
+        assertTrue(actual is LoginState.Success)
+        assertThat((actual as LoginState.Success).data, instanceOf(PrivateUser::class.java))
     }
 
     @Test

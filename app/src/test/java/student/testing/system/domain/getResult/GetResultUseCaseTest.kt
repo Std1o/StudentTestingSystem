@@ -4,9 +4,13 @@ import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
+import student.testing.system.models.TestResult
 
 
 @ExperimentalCoroutinesApi
@@ -29,8 +33,9 @@ class GetResultUseCaseTest {
     }
 
     @Test
-    fun `request may return success`() = runTest {
+    fun `success response returns TestResult`() = runTest {
         val actual = getResultUseCase(13, 1).first()
         assertTrue(actual is ResultState.Success)
+        assertThat((actual as ResultState.Success).data, instanceOf(TestResult::class.java))
     }
 }

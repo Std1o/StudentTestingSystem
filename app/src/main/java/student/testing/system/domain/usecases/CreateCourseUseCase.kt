@@ -1,8 +1,10 @@
-package student.testing.system.domain
+package student.testing.system.domain.usecases
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import student.testing.system.R
+import student.testing.system.domain.DataState
+import student.testing.system.domain.MainRepository
 import student.testing.system.models.CourseResponse
 import javax.inject.Inject
 
