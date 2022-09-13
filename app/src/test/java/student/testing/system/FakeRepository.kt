@@ -1,10 +1,12 @@
 package student.testing.system
 
+import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import student.testing.system.domain.DataState
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.*
+import student.testing.system.sharedPreferences.PrefsUtils
 
 class FakeRepository : MainRepository {
 
@@ -33,7 +35,13 @@ class FakeRepository : MainRepository {
     }
 
     override suspend fun joinCourse(courseCode: String): Flow<DataState<CourseResponse>> {
-        TODO("Not yet implemented")
+        val courses = listOf("5TYHKW", "KASTXJ", "XHYX6U")
+        if (courseCode in courses) {
+            val course = mockk<CourseResponse>(relaxed = true)
+            return flow { emit(DataState.Success(course)) }
+        } else {
+            return flow { emit(DataState.Error("Not found", 404)) }
+        }
     }
 
     override suspend fun deleteCourse(courseId: Int, courseOwnerId: Int): Flow<DataState<Void>> {
