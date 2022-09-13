@@ -83,7 +83,7 @@ class FakeRepository : MainRepository {
 
     override suspend fun getResult(testId: Int, courseId: Int): Flow<DataState<TestResult>> {
         if (testId == -1 || courseId == -1) {
-            return flow { emit(DataState.Error("Cringe")) }
+            return flow { emit(DataState.Error("Access error", 403)) }
         }
         val passedTests = listOf(12, 24, 13)
         if (passedTests.contains(testId)) {
