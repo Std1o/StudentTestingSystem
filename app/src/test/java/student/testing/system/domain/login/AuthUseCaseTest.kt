@@ -1,7 +1,6 @@
 package student.testing.system.domain.login
 
 import io.mockk.mockk
-import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
@@ -22,7 +21,7 @@ class AuthUseCaseTest {
 
     private val repository = FakeRepository()
     private val prefsUtils = mockk<PrefsUtils>(relaxed = true)
-    private val authUseCase = spyk(AuthUseCase(repository, prefsUtils))
+    private val authUseCase = AuthUseCase(repository, prefsUtils)
 
     @Test
     fun `empty email returns EmailError`() = runTest {

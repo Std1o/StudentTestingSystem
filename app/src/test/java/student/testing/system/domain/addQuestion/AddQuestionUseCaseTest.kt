@@ -1,6 +1,5 @@
 package student.testing.system.domain.addQuestion
 
-import io.mockk.spyk
 import org.junit.Assert.*
 import org.junit.Test
 import student.testing.system.models.Answer
@@ -8,7 +7,7 @@ import student.testing.system.models.Question
 
 class AddQuestionUseCaseTest {
 
-    private val addQuestionUseCase = spyk(AddQuestionUseCase())
+    private val addQuestionUseCase = AddQuestionUseCase()
 
     @Test
     fun `empty question returns EmptyQuestion state`() {

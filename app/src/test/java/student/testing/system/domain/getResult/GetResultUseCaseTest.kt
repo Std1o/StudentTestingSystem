@@ -1,6 +1,5 @@
 package student.testing.system.domain.getResult
 
-import io.mockk.spyk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -17,7 +16,7 @@ import student.testing.system.models.TestResult
 class GetResultUseCaseTest {
 
     private val repository = FakeRepository()
-    private val getResultUseCase = spyk(GetResultUseCase(repository))
+    private val getResultUseCase = GetResultUseCase(repository)
 
     @Test
     fun `when 404 returns NoResult state`() = runTest {
