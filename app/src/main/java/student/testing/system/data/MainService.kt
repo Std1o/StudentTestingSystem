@@ -29,7 +29,6 @@ interface MainService {
     @DELETE("courses/{course_id}")
     suspend fun deleteCourse(
         @Path("course_id") courseId: Int,
-        @Query("course_owner_id") courseOwnerId: Int
     ): Response<Void>
 
     @GET("tests/")
@@ -42,7 +41,6 @@ interface MainService {
     suspend fun deleteTest(
         @Path("test_id") testId: Int,
         @Query("course_id") courseId: Int,
-        @Query("course_owner_id") courseOwnerId: Int
     ): Response<Void>
 
     @POST("tests/{test_id}")
@@ -56,7 +54,6 @@ interface MainService {
     suspend fun calculateDemoResult(
         @Query("course_id") courseId: Int,
         @Query("test_id") testId: Int,
-        @Query("course_owner_id") courseOwnerId: Int,
         @Body request: List<UserQuestion>
     ): Response<TestResult>
 
@@ -70,28 +67,24 @@ interface MainService {
     suspend fun getResults(
         @Path("test_id") testId: Int,
         @Query("course_id") courseId: Int,
-        @Query("course_owner_id") courseOwnerId: Int,
         @Query("only_max_result") showOnlyMaxResults: Boolean
     ): Response<ParticipantsResults>
 
     @POST("course/moderators/")
     suspend fun addModerator(
         @Query("course_id") courseId: Int,
-        @Query("course_owner_id") courseOwnerId: Int,
         @Query("moderator_id") moderatorId: Int
     ): Response<List<Participant>>
 
     @DELETE("course/moderators/")
     suspend fun deleteModerator(
         @Query("course_id") courseId: Int,
-        @Query("course_owner_id") courseOwnerId: Int,
         @Query("moderator_id") moderatorId: Int
     ): Response<List<Participant>>
 
     @DELETE("/course/management/participants")
     suspend fun deleteParticipant(
         @Query("course_id") courseId: Int,
-        @Query("course_owner_id") courseOwnerId: Int,
         @Query("participant_id") participantId: Int
     ): Response<List<Participant>>
 }

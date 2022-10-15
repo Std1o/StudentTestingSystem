@@ -24,11 +24,10 @@ class ResultsViewModel @Inject constructor(
     fun getResults(
         testId: Int,
         courseId: Int,
-        courseOwnerId: Int,
         showOnlyMaxResults: Boolean = false
     ) = viewModelScope.launch {
         stateFlow.emit(DataState.Loading)
-        repository.getResults(testId, courseId, courseOwnerId, showOnlyMaxResults).collect {
+        repository.getResults(testId, courseId, showOnlyMaxResults).collect {
             stateFlow.emit(it)
         }
     }

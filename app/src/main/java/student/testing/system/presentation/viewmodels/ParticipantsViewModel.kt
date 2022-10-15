@@ -17,12 +17,11 @@ class ParticipantsViewModel @Inject constructor(private val repository: MainRepo
 
     fun addModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): StateFlow<DataState<List<Participant>>> {
         val stateFlow = MutableStateFlow<DataState<List<Participant>>>(DataState.Loading)
         viewModelScope.launch {
-            repository.addModerator(courseId, courseOwnerId, moderatorId).collect {
+            repository.addModerator(courseId, moderatorId).collect {
                 stateFlow.emit(it)
             }
         }
@@ -31,12 +30,11 @@ class ParticipantsViewModel @Inject constructor(private val repository: MainRepo
 
     fun deleteModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): StateFlow<DataState<List<Participant>>> {
         val stateFlow = MutableStateFlow<DataState<List<Participant>>>(DataState.Loading)
         viewModelScope.launch {
-            repository.deleteModerator(courseId, courseOwnerId, moderatorId).collect {
+            repository.deleteModerator(courseId, moderatorId).collect {
                 stateFlow.emit(it)
             }
         }
@@ -45,12 +43,11 @@ class ParticipantsViewModel @Inject constructor(private val repository: MainRepo
 
     fun deleteParticipant(
         courseId: Int,
-        courseOwnerId: Int,
         participantId: Int
     ): StateFlow<DataState<List<Participant>>> {
         val stateFlow = MutableStateFlow<DataState<List<Participant>>>(DataState.Loading)
         viewModelScope.launch {
-            repository.deleteParticipant(courseId, courseOwnerId, participantId).collect {
+            repository.deleteParticipant(courseId, participantId).collect {
                 stateFlow.emit(it)
             }
         }

@@ -58,9 +58,11 @@ class CoursesAdapter(private val listener: ClickListener) :
             holder.itemView.setOnClickListener() {
                 listener.onClick(course)
             }
-            if (course.ownerId != AccountSession.instance.userId) return
+            val currentParticipant = course.participants
+                .first { it.id == AccountSession.instance.userId }
+            if (!currentParticipant.isOwner) return
             holder.itemView.setOnLongClickListener() {
-                listener.onLongClick(course.id, course.ownerId)
+                listener.onLongClick(course.id, currentParticipant.id)
                 true
             }
         }

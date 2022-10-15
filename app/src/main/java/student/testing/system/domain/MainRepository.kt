@@ -14,13 +14,13 @@ interface MainRepository {
 
     suspend fun joinCourse(courseCode: String): Flow<DataState<CourseResponse>>
 
-    suspend fun deleteCourse(courseId: Int, courseOwnerId: Int): Flow<DataState<Void>>
+    suspend fun deleteCourse(courseId: Int): Flow<DataState<Void>>
 
     suspend fun getTests(courseId: Int): Flow<DataState<List<Test>>>
 
     suspend fun createTest(request: TestCreationReq): Flow<DataState<Test>>
 
-    suspend fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int): Flow<DataState<Void>>
+    suspend fun deleteTest(testId: Int, courseId: Int): Flow<DataState<Void>>
 
     suspend fun calculateResult(
         testId: Int,
@@ -31,7 +31,6 @@ interface MainRepository {
     suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
-        courseOwnerId: Int,
         request: List<UserQuestion>
     ): Flow<DataState<TestResult>>
 
@@ -40,25 +39,21 @@ interface MainRepository {
     suspend fun getResults(
         testId: Int,
         courseId: Int,
-        courseOwnerId: Int,
         showOnlyMaxResults: Boolean
     ): Flow<DataState<ParticipantsResults>>
 
     suspend fun addModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): Flow<DataState<List<Participant>>>
 
     suspend fun deleteModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): Flow<DataState<List<Participant>>>
 
     suspend fun deleteParticipant(
         courseId: Int,
-        courseOwnerId: Int,
         participantId: Int
     ): Flow<DataState<List<Participant>>>
 }

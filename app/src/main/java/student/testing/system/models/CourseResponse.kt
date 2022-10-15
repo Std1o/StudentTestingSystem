@@ -5,11 +5,8 @@ import java.io.Serializable
 
 data class CourseResponse(
     var name: String, var id: Int,
-    @field:SerializedName("owner_id")
-    var ownerId: Int,
     var img: String,
-    @field:SerializedName("course_code")
+    @SerializedName("course_code")
     var courseCode: String,
     var participants: List<Participant>,
-    var moderators: List<Participant>
 ) : Serializable

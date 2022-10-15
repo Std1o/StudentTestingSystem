@@ -17,13 +17,13 @@ interface RemoteDataSource {
 
     suspend fun joinCourse(courseCode: String): Response<CourseResponse>
 
-    suspend fun deleteCourse(courseId: Int, courseOwnerId: Int): Response<Void>
+    suspend fun deleteCourse(courseId: Int): Response<Void>
 
     suspend fun getTests(courseId: Int): Response<List<Test>>
 
     suspend fun createTest(request: TestCreationReq): Response<Test>
 
-    suspend fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int): Response<Void>
+    suspend fun deleteTest(testId: Int, courseId: Int): Response<Void>
 
     suspend fun calculateResult(
         testId: Int,
@@ -34,7 +34,6 @@ interface RemoteDataSource {
     suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
-        courseOwnerId: Int,
         request: List<UserQuestion>
     ): Response<TestResult>
 
@@ -43,25 +42,21 @@ interface RemoteDataSource {
     suspend fun getResults(
         testId: Int,
         courseId: Int,
-        courseOwnerId: Int,
         showOnlyMaxResults: Boolean
     ): Response<ParticipantsResults>
 
     suspend fun addModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): Response<List<Participant>>
 
     suspend fun deleteModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): Response<List<Participant>>
 
     suspend fun deleteParticipant(
         courseId: Int,
-        courseOwnerId: Int,
         participantId: Int
     ): Response<List<Participant>>
 }

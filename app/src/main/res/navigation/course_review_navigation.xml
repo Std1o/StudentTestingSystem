@@ -71,8 +71,6 @@
             app:argType="student.testing.system.models.Test"/>
         <argument android:name="position"
             app:argType="integer"/>
-        <argument android:name="courseOwnerId"
-            app:argType="integer"/>
         <argument android:name="isUserModerator"
             app:argType="boolean"/>
         <action
@@ -108,8 +106,6 @@
         <argument android:name="testId"
             app:argType="integer"/>
         <argument android:name="courseId"
-            app:argType="integer"/>
-        <argument android:name="courseOwnerId"
             app:argType="integer"/>
     </fragment>
 </navigation>

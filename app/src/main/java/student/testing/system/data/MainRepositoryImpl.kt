@@ -24,8 +24,8 @@ class MainRepositoryImpl @Inject constructor(
     override suspend fun joinCourse(courseCode: String) =
         flow { emit(apiCall { remoteDataSource.joinCourse(courseCode) }) }
 
-    override suspend fun deleteCourse(courseId: Int, courseOwnerId: Int) =
-        flow { emit(apiCall { remoteDataSource.deleteCourse(courseId, courseOwnerId) }) }
+    override suspend fun deleteCourse(courseId: Int) =
+        flow { emit(apiCall { remoteDataSource.deleteCourse(courseId) }) }
 
     override suspend fun getTests(courseId: Int) =
         flow { emit(apiCall { remoteDataSource.getTests(courseId) }) }
@@ -34,8 +34,8 @@ class MainRepositoryImpl @Inject constructor(
         emit(apiCall { remoteDataSource.createTest(request) })
     }
 
-    override suspend fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) =
-        flow { emit(apiCall { remoteDataSource.deleteTest(testId, courseId, courseOwnerId) }) }
+    override suspend fun deleteTest(testId: Int, courseId: Int) =
+        flow { emit(apiCall { remoteDataSource.deleteTest(testId, courseId) }) }
 
     override suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) =
         flow { emit(apiCall { remoteDataSource.calculateResult(testId, courseId, request) }) }
@@ -43,7 +43,6 @@ class MainRepositoryImpl @Inject constructor(
     override suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
-        courseOwnerId: Int,
         request: List<UserQuestion>
     ) =
         flow {
@@ -51,7 +50,6 @@ class MainRepositoryImpl @Inject constructor(
                 remoteDataSource.calculateDemoResult(
                     courseId,
                     testId,
-                    courseOwnerId,
                     request
                 )
             })
@@ -63,7 +61,6 @@ class MainRepositoryImpl @Inject constructor(
     override suspend fun getResults(
         testId: Int,
         courseId: Int,
-        courseOwnerId: Int,
         showOnlyMaxResults: Boolean
     ) =
         flow {
@@ -71,40 +68,36 @@ class MainRepositoryImpl @Inject constructor(
                 remoteDataSource.getResults(
                     testId,
                     courseId,
-                    courseOwnerId,
                     showOnlyMaxResults
                 )
             })
         }
 
-    override suspend fun addModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
+    override suspend fun addModerator(courseId: Int, moderatorId: Int) =
         flow {
             emit(apiCall {
                 remoteDataSource.addModerator(
                     courseId,
-                    courseOwnerId,
                     moderatorId
                 )
             })
         }
 
-    override suspend fun deleteModerator(courseId: Int, courseOwnerId: Int, moderatorId: Int) =
+    override suspend fun deleteModerator(courseId: Int, moderatorId: Int) =
         flow {
             emit(apiCall {
                 remoteDataSource.deleteModerator(
                     courseId,
-                    courseOwnerId,
                     moderatorId
                 )
             })
         }
 
-    override suspend fun deleteParticipant(courseId: Int, courseOwnerId: Int, participantId: Int) =
+    override suspend fun deleteParticipant(courseId: Int, participantId: Int) =
         flow {
             emit(apiCall {
                 remoteDataSource.deleteParticipant(
                     courseId,
-                    courseOwnerId,
                     participantId
                 )
             })

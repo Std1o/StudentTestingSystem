@@ -37,7 +37,7 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getResults(args.testId, args.courseId, args.courseOwnerId)
+        viewModel.getResults(args.testId, args.courseId)
         binding.btnMenu.setOnClickListener(this::showPopup)
         subscribeObserver()
     }
@@ -66,7 +66,7 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
             when (item.itemId) {
                 R.id.results_filter -> {
                     showOnlyMaxResults = !showOnlyMaxResults
-                    viewModel.getResults(args.testId, args.courseId, args.courseOwnerId, showOnlyMaxResults)
+                    viewModel.getResults(args.testId, args.courseId, showOnlyMaxResults)
                 }
             }
             true

@@ -14,9 +14,7 @@ import student.testing.system.databinding.ItemParticipantBinding
 
 
 class ParticipantsAdapter(
-    private var dataList: List<Participant>,
-    var moderators: List<Participant>,
-    private val courseOwnerId: Int
+    private var dataList: List<Participant>, private val currentParticipant: Participant
 ) :
     RecyclerView.Adapter<ParticipantsAdapter.CourseViewHolder>() {
 
@@ -35,11 +33,6 @@ class ParticipantsAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateModerators(moderators: List<Participant>) {
-        this.moderators = moderators
-        notifyDataSetChanged()
-    }
-
     override fun getItemId(position: Int) = position.toLong()
 
     override fun getItemViewType(position: Int) = position
@@ -53,14 +46,14 @@ class ParticipantsAdapter(
             imageLoader.loadImage(binding.avatarView, "nothing", participant.username)
             binding.tvName.text = participant.username
             binding.tvMail.text = participant.email
-            if (courseOwnerId == AccountSession.instance.userId && participant.id != courseOwnerId) {
+            if (currentParticipant.isOwner && !participant.isOwner) {
                 binding.btnMenu.showIf(true)
                 binding.btnMenu.setOnClickListener {
                     listener.invoke(binding.btnMenu, participant)
                 }
             }
-            binding.ivStar.showIf(participant.id == courseOwnerId || participant in moderators)
-            if (participant in moderators) {
+            binding.ivStar.showIf(participant.isOwner || participant.isModerator)
+            if (participant.isModerator) {
                 binding.ivStar.setColorFilter(R.color.gray)
             }
         }

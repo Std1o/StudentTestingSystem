@@ -38,8 +38,10 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
     }
 
     private fun initRV(course: CourseResponse) {
-        adapter = ParticipantsAdapter(course.participants, course.moderators, course.ownerId)
-        if (course.ownerId == AccountSession.instance.userId) {
+        val currentParticipant = course.participants
+            .first { it.id == AccountSession.instance.userId }
+        adapter = ParticipantsAdapter(course.participants, currentParticipant)
+        if (currentParticipant.isOwner) {
             adapter.listener = { view, participant ->
                 showPopup(view, participant, course)
             }
@@ -53,7 +55,7 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.participant_context_menu, popup.menu)
         val titleRes =
-            if (participant in adapter.moderators) R.string.remove_from_moderators
+            if (participant.isModerator) R.string.remove_from_moderators
             else R.string.appoint_moderator
         popup.menu.getItem(0).title = getString(titleRes)
         popup.show()
@@ -61,10 +63,10 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
             when (item.itemId) {
                 R.id.action_moderator -> {
                     val message =
-                        if (participant in adapter.moderators) R.string.remove_from_moderators_request
+                        if (participant.isModerator) R.string.remove_from_moderators_request
                         else R.string.appoint_moderator_request
                     confirmAction(message) { _, _ ->
-                        if (participant in adapter.moderators) {
+                        if (participant.isModerator) {
                             deleteModerator(course, participant.id)
                         } else {
                             addModerator(course, participant.id)
@@ -82,7 +84,7 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
     }
 
     private fun deleteParticipant(course: CourseResponse, participantId: Int) {
-        viewModel.deleteParticipant(course.id, course.ownerId, participantId)
+        viewModel.deleteParticipant(course.id, participantId)
             .subscribeInUI(this, binding.progressBar) {
                 course.participants = it
                 sharedViewModel.setCourse(course)
@@ -91,20 +93,20 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
     }
 
     private fun deleteModerator(course: CourseResponse, participantId: Int) {
-        viewModel.deleteModerator(course.id, course.ownerId, participantId)
+        viewModel.deleteModerator(course.id, participantId)
             .subscribeInUI(this, binding.progressBar) {
-                course.moderators = it
+                course.participants = it
                 sharedViewModel.setCourse(course)
-                adapter.updateModerators(it)
+                adapter.updateDataList(it)
             }
     }
 
     private fun addModerator(course: CourseResponse, participantId: Int) {
-        viewModel.addModerator(course.id, course.ownerId, participantId)
+        viewModel.addModerator(course.id, participantId)
             .subscribeInUI(this, binding.progressBar) {
-                course.moderators = it
+                course.participants = it
                 sharedViewModel.setCourse(course)
-                adapter.updateModerators(it)
+                adapter.updateDataList(it)
             }
     }
 }

@@ -35,7 +35,6 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
         setOnBackPressedListener()
         val test = args.test
         var position = args.position
-        val courseOwnerId = args.courseOwnerId
         val isUserModerator = args.isUserModerator
         val question = test.questions[position]
         binding.tvQuestion.text = question.question
@@ -59,7 +58,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
             viewModel.userQuestions += UserQuestion(question.id!!, userAnswers)
             if (test.questions.count() - 1 == position) {
                 if (isUserModerator) {
-                    viewModel.calculateDemoResult(test.courseId, test.id, courseOwnerId)
+                    viewModel.calculateDemoResult(test.courseId, test.id)
                         .subscribeInUI(this, binding.progressBar) {
                             requireActivity().onBackPressed()
                             val action = TestPassingFragmentDirections.viewResult(it)
@@ -73,7 +72,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
                         }
                 }
             } else {
-                val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position, courseOwnerId, isUserModerator)
+                val action = TestPassingFragmentDirections.actionTestPassingFragmentSelf(test, ++position, isUserModerator)
                 findNavController().navigate(action)
             }
 

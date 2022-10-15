@@ -43,8 +43,9 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments == null) return
         val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
-        val userId = AccountSession.instance.userId
-        val isUserModerator = course.moderators.any { it.id == userId } || course.ownerId == userId
+        val currentParticipant = course.participants
+            .first { it.id == AccountSession.instance.userId }
+        val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
         binding.tvCode.text = getString(R.string.course_code, course.courseCode)
         sharedViewModel.setCourse(course)
 
@@ -52,10 +53,10 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
             override fun onClick(test: Test) {
                 selectedTest = test
                 if (isUserModerator) {
-                    val action = TestsFragmentDirections.viewResults(test.id, test.courseId, course.ownerId)
+                    val action = TestsFragmentDirections.viewResults(test.id, test.courseId)
                     findNavController().navigate(action)
                 } else {
-                    getResult(test.id, test.courseId, course.ownerId, isUserModerator)
+                    getResult(test.id, test.courseId)
                 }
             }
 
@@ -97,7 +98,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         }
     }
 
-    private fun getResult(testId: Int, courseId: Int, courseOwnerId: Int, isUserModerator: Boolean) {
+    private fun getResult(testId: Int, courseId: Int) {
         viewModel.getResult(testId, courseId).onEach {
             binding.progressBar.showIf(it is ResultState.Loading)
             if (it is ResultState.Success) {
@@ -105,7 +106,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
                 findNavController().navigate(action)
             } else if (it is ResultState.NoResult) {
                 val action = TestsFragmentDirections
-                    .navigateToTestPassing(selectedTest, 0, courseOwnerId, isUserModerator)
+                    .navigateToTestPassing(selectedTest, 0, false)
                 findNavController().navigate(action)
             } else if (it is ResultState.Error) {
                 showSnackbar(it.exception)
@@ -122,22 +123,21 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
                         val action = TestsFragmentDirections.navigateToTestPassing(
                             selectedTest,
                             0,
-                            course.ownerId,
                             isUserModerator
                         )
                         findNavController().navigate(action)
                     }
                     1 -> {
                         confirmAction(R.string.delete_request) { _, _ ->
-                            deleteTest(testId, course.id, course.ownerId)
+                            deleteTest(testId, course.id)
                         }
                     }
                 }
             }.show()
     }
 
-    private fun deleteTest(testId: Int, courseId: Int, courseOwnerId: Int) {
-        viewModel.deleteTest(testId, courseId, courseOwnerId)
+    private fun deleteTest(testId: Int, courseId: Int) {
+        viewModel.deleteTest(testId, courseId)
             .subscribeInUI(this, binding.progressBar) {
                 testsAdapter.deleteById(testId)
             }
