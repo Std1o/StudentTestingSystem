@@ -44,7 +44,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         if (arguments == null) return
         val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
         val currentParticipant = course.participants
-            .first { it.id == AccountSession.instance.userId }
+            .first { it.userId == AccountSession.instance.userId }
         val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
         binding.tvCode.text = getString(R.string.course_code, course.courseCode)
         sharedViewModel.setCourse(course)

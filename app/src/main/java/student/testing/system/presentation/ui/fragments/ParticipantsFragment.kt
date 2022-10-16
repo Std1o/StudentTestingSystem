@@ -39,7 +39,7 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
 
     private fun initRV(course: CourseResponse) {
         val currentParticipant = course.participants
-            .first { it.id == AccountSession.instance.userId }
+            .first { it.userId == AccountSession.instance.userId }
         adapter = ParticipantsAdapter(course.participants, currentParticipant)
         if (currentParticipant.isOwner) {
             adapter.listener = { view, participant ->
@@ -67,15 +67,15 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
                         else R.string.appoint_moderator_request
                     confirmAction(message) { _, _ ->
                         if (participant.isModerator) {
-                            deleteModerator(course, participant.id)
+                            deleteModerator(course, participant.userId)
                         } else {
-                            addModerator(course, participant.id)
+                            addModerator(course, participant.userId)
                         }
                     }
                 }
                 R.id.action_delete -> {
                     confirmAction(R.string.delete_request) { _, _ ->
-                        deleteParticipant(course, participant.id)
+                        deleteParticipant(course, participant.userId)
                     }
                 }
             }
