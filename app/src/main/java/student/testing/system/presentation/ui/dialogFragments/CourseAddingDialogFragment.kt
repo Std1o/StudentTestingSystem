@@ -39,13 +39,23 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.create.setOnClickListener() {
             showAlertDialog(R.string.create_course, R.string.input_name, R.string.create) {
-                createCourse(it)
+                viewModel.createCourse(it)
             }
         }
         binding.join.setOnClickListener() {
             showAlertDialog(R.string.join_course, R.string.course_code_hint, R.string.join) {
-                joinCourse(it)
+                viewModel.joinCourse(it)
             }
+        }
+        subscribeObservers()
+    }
+
+    private fun subscribeObservers() {
+        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
+            val result = Bundle()
+            result.putSerializable(ARG_COURSE, it)
+            parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
+            dismiss()
         }
     }
 
@@ -66,24 +76,6 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
         }
         builder.setNegativeButton(R.string.cancel, null)
         builder.show()
-    }
-
-    private fun createCourse(name: String) {
-        viewModel.createCourse(name).subscribeInUI(this, binding.progressBar) {
-            val result = Bundle()
-            result.putSerializable(ARG_COURSE, it)
-            parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
-            dismiss()
-        }
-    }
-
-    private fun joinCourse(courseCode: String) {
-        viewModel.joinCourse(courseCode).subscribeInUI(this, binding.progressBar) {
-            val result = Bundle()
-            result.putSerializable(ARG_COURSE, it)
-            parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
-            dismiss()
-        }
     }
 
     companion object {

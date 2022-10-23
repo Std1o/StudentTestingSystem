@@ -1,14 +1,9 @@
 package student.testing.system.presentation.viewmodels
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.models.CourseResponse
-import student.testing.system.domain.DataState
-import student.testing.system.domain.MainRepository
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
 import javax.inject.Inject
@@ -17,26 +12,17 @@ import javax.inject.Inject
 class CourseAddingViewModel @Inject constructor(
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
-) :
-    ViewModel() {
+) : BaseViewModel<CourseResponse>() {
 
-    fun createCourse(name: String): StateFlow<DataState<CourseResponse>> {
-        val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
+    fun createCourse(name: String) {
         viewModelScope.launch {
-            createCourseUseCase(name).collect {
-                stateFlow.emit(it)
-            }
+            launchRequest(createCourseUseCase(name))
         }
-        return stateFlow
     }
 
-    fun joinCourse(courseCode: String): StateFlow<DataState<CourseResponse>> {
-        val stateFlow = MutableStateFlow<DataState<CourseResponse>>(DataState.Loading)
+    fun joinCourse(courseCode: String){
         viewModelScope.launch {
-            joinCourseUseCase(courseCode).collect {
-                stateFlow.emit(it)
-            }
+            launchRequest(joinCourseUseCase(courseCode))
         }
-        return stateFlow
     }
 }
