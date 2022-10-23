@@ -39,11 +39,11 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getResults(args.testId, args.courseId)
         binding.btnMenu.setOnClickListener(this::showPopup)
-        subscribeObserver()
+        subscribeObservers()
     }
 
-    private fun subscribeObserver() {
-        viewModel.stateFlow.subscribeInUI(this, binding.progressBar) {
+    private fun subscribeObservers() {
+        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
             adapter = UsersResultsAdapter(it.results, it.maxScore)
             binding.rv.layoutManager = LinearLayoutManager(requireContext())
             binding.rv.adapter = adapter
