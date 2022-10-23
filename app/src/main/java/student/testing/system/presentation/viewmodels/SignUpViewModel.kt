@@ -20,8 +20,11 @@ class SignUpViewModel @Inject constructor(
     val prefsUtils: PrefsUtils
 ) : ViewModel(){
 
-    fun signUp(email: String, username: String, password: String): StateFlow<DataState<PrivateUser>> {
-        val stateFlow = MutableStateFlow<DataState<PrivateUser>>(DataState.Loading)
+    private val _uiState = MutableStateFlow<DataState<PrivateUser>>(DataState.Initial)
+    val uiState: StateFlow<DataState<PrivateUser>> = _uiState.asStateFlow()
+
+    fun signUp(email: String, username: String, password: String) {
+        _uiState.value = DataState.Loading
         viewModelScope.launch {
             repository.signUp(SignUpReq(email, username, password)).collect {
                 if (it is DataState.Success) {
@@ -33,9 +36,8 @@ class SignUpViewModel @Inject constructor(
                     prefsUtils.setEmail(email)
                     prefsUtils.setPassword(password)
                 }
-                stateFlow.emit(it)
+                _uiState.value = it
             }
         }
-        return stateFlow
     }
 }
