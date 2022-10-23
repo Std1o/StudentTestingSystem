@@ -49,7 +49,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun subscribeObserver() {
-        viewModel.authStateFlow.onEach {
+        viewModel.uiState.onEach {
             binding.progressBar.showIf(it is LoginState.Loading)
             if (it is LoginState.Unauthorized) {
                 binding.progressBar.showIf(false)

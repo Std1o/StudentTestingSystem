@@ -31,7 +31,7 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun providesBaseUrl() : String = "http://176.57.217.38/"
+    fun providesBaseUrl() : String = "http://192.168.0.232/"
 
     @Provides
     fun getHttpLoggingInterceptor(): HttpLoggingInterceptor {
