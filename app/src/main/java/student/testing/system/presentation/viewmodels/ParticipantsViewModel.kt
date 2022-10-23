@@ -1,56 +1,31 @@
 package student.testing.system.presentation.viewmodels
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.DataState
-import student.testing.system.common.Utils
 import student.testing.system.models.Participant
 import javax.inject.Inject
 
 @HiltViewModel
 class ParticipantsViewModel @Inject constructor(private val repository: MainRepository) :
-    ViewModel() {
+    BaseViewModel<List<Participant>>() {
 
-    fun addModerator(
-        courseId: Int,
-        moderatorId: Int
-    ): StateFlow<DataState<List<Participant>>> {
-        val stateFlow = MutableStateFlow<DataState<List<Participant>>>(DataState.Loading)
+    fun addModerator(courseId: Int, moderatorId: Int){
         viewModelScope.launch {
-            repository.addModerator(courseId, moderatorId).collect {
-                stateFlow.emit(it)
-            }
+            launchRequest(repository.addModerator(courseId, moderatorId))
         }
-        return stateFlow
     }
 
-    fun deleteModerator(
-        courseId: Int,
-        moderatorId: Int
-    ): StateFlow<DataState<List<Participant>>> {
-        val stateFlow = MutableStateFlow<DataState<List<Participant>>>(DataState.Loading)
+    fun deleteModerator(courseId: Int, moderatorId: Int) {
         viewModelScope.launch {
-            repository.deleteModerator(courseId, moderatorId).collect {
-                stateFlow.emit(it)
-            }
+            launchRequest(repository.deleteModerator(courseId, moderatorId))
         }
-        return stateFlow
     }
 
-    fun deleteParticipant(
-        courseId: Int,
-        participantId: Int
-    ): StateFlow<DataState<List<Participant>>> {
-        val stateFlow = MutableStateFlow<DataState<List<Participant>>>(DataState.Loading)
+    fun deleteParticipant(courseId: Int, participantId: Int) {
         viewModelScope.launch {
-            repository.deleteParticipant(courseId, participantId).collect {
-                stateFlow.emit(it)
-            }
+            launchRequest(repository.deleteParticipant(courseId, participantId))
         }
-        return stateFlow
     }
 }

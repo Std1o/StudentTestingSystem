@@ -32,9 +32,21 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        subscribeObservers()
+    }
+
+    private fun subscribeObservers() {
+        lateinit var course: CourseResponse
         sharedViewModel.courseFlow.distinctUntilChanged().onEach {
+            course = it
             initRV(it)
         }.launchWhenStartedCollect(lifecycleScope)
+
+        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
+            course.participants = it
+            sharedViewModel.setCourse(course)
+            adapter.updateDataList(it)
+        }
     }
 
     private fun initRV(course: CourseResponse) {
@@ -67,46 +79,19 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
                         else R.string.appoint_moderator_request
                     confirmAction(message) { _, _ ->
                         if (participant.isModerator) {
-                            deleteModerator(course, participant.userId)
+                            viewModel.deleteModerator(course.id, participant.userId)
                         } else {
-                            addModerator(course, participant.userId)
+                            viewModel.addModerator(course.id, participant.userId)
                         }
                     }
                 }
                 R.id.action_delete -> {
                     confirmAction(R.string.delete_request) { _, _ ->
-                        deleteParticipant(course, participant.userId)
+                        viewModel.deleteParticipant(course.id, participant.userId)
                     }
                 }
             }
             true
         }
-    }
-
-    private fun deleteParticipant(course: CourseResponse, participantId: Int) {
-        viewModel.deleteParticipant(course.id, participantId)
-            .subscribeInUI(this, binding.progressBar) {
-                course.participants = it
-                sharedViewModel.setCourse(course)
-                adapter.updateDataList(it)
-            }
-    }
-
-    private fun deleteModerator(course: CourseResponse, participantId: Int) {
-        viewModel.deleteModerator(course.id, participantId)
-            .subscribeInUI(this, binding.progressBar) {
-                course.participants = it
-                sharedViewModel.setCourse(course)
-                adapter.updateDataList(it)
-            }
-    }
-
-    private fun addModerator(course: CourseResponse, participantId: Int) {
-        viewModel.addModerator(course.id, participantId)
-            .subscribeInUI(this, binding.progressBar) {
-                course.participants = it
-                sharedViewModel.setCourse(course)
-                adapter.updateDataList(it)
-            }
     }
 }
