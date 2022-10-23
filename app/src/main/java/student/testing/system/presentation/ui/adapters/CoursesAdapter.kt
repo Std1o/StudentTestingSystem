@@ -62,7 +62,7 @@ class CoursesAdapter(private val listener: ClickListener) :
                 .first { it.userId == AccountSession.instance.userId }
             if (!currentParticipant.isOwner) return
             holder.itemView.setOnLongClickListener() {
-                listener.onLongClick(course.id, currentParticipant.userId)
+                listener.onLongClick(course.id)
                 true
             }
         }
@@ -73,6 +73,6 @@ class CoursesAdapter(private val listener: ClickListener) :
 
     interface ClickListener {
         fun onClick(course: CourseResponse)
-        fun onLongClick(courseId: Int, courseOwnerId: Int)
+        fun onLongClick(courseId: Int)
     }
 }

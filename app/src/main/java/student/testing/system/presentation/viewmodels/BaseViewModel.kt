@@ -17,14 +17,24 @@ import student.testing.system.domain.usecases.JoinCourseUseCase
 import javax.inject.Inject
 
 open class BaseViewModel<T> : ViewModel() {
-
+    // T is main type
     private val _uiState = MutableStateFlow<DataState<T>>(DataState.Initial)
     val uiState: StateFlow<DataState<T>> = _uiState.asStateFlow()
 
-    suspend fun launchRequest(request: Flow<DataState<T>>) {
+    protected suspend fun launchRequest(request: Flow<DataState<T>>) {
         _uiState.value = DataState.Loading
         return request.collect {
             _uiState.value = it
+        }
+    }
+
+    protected suspend fun launchRequestWithOwnFlow(
+        request: Flow<DataState<T>>,
+        state: MutableStateFlow<DataState<T>>
+    ) {
+        state.value = DataState.Loading
+        return request.collect {
+            state.value = it
         }
     }
 }

@@ -49,15 +49,14 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
                     .navigate(R.id.action_coursesFragment_to_courseReviewFragment, bundle)
             }
 
-            override fun onLongClick(courseId: Int, courseOwnerId: Int) {
+            override fun onLongClick(courseId: Int) {
                 confirmAction(R.string.delete_request) { _, _ ->
-                    deleteCourse(courseId, courseOwnerId)
+                    deleteCourse(courseId)
                 }
             }
         })
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = adapter
-        getCourses()
         binding.btnAdd.setOnClickListener() {
             CourseAddingDialogFragment
                 .newInstance()
@@ -65,6 +64,13 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
         }
         setFragmentResultListener()
         binding.btnMenu.setOnClickListener(this::showPopup)
+        subscribeObservers()
+    }
+
+    private fun subscribeObservers() {
+        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
+            adapter.setDataList(it as MutableList<CourseResponse>)
+        }
     }
 
     private fun showPopup(v: View) {
@@ -108,14 +114,8 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
             }
     }
 
-    private fun getCourses() {
-        viewModel.getCourses().subscribeInUI(this, binding.progressBar) {
-            adapter.setDataList(it as MutableList<CourseResponse>)
-        }
-    }
-
-    private fun deleteCourse(courseId: Int, courseOwnerId: Int) {
-        viewModel.deleteCourse(courseId, courseOwnerId).subscribeInUI(this, binding.progressBar) {
+    private fun deleteCourse(courseId: Int) {
+        viewModel.deleteCourse(courseId).subscribeInUI(this, binding.progressBar) {
             adapter.deleteById(it)
         }
     }
