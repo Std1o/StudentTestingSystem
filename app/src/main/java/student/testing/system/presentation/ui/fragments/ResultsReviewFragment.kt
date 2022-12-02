@@ -3,6 +3,7 @@ package student.testing.system.presentation.ui.fragments
 import android.os.Bundle
 import android.view.MenuInflater
 import android.view.View
+import android.widget.SearchView
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -47,6 +48,20 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
             adapter = UsersResultsAdapter(it.results, it.maxScore)
             binding.rv.layoutManager = LinearLayoutManager(requireContext())
             binding.rv.adapter = adapter
+        }
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.search -> {
+                    val searchView = menuItem.actionView as SearchView
+                    menuItem.expandActionView()
+                    true
+                }
+                R.id.filter -> {
+                    // Handle search icon press
+                    true
+                }
+                else -> false
+            }
         }
     }
 

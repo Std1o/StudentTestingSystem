@@ -23,4 +23,9 @@
         <item name="android:shadowDy">0</item>
         <item name="android:shadowRadius">3</item>
     </style>
+
+    <style name="MaterialToolbarTheme" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <!-- color used by navigation icon and overflow icon -->
+        <item name="colorOnPrimary">@color/black</item>
+    </style>
 </resources>

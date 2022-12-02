@@ -59,6 +59,8 @@
     <string name="thanks">Спасибо</string>
     <string name="max_results">Максимальные результаты</string>
     <string name="all_results">Все результаты</string>
+    <string name="search">Поиск</string>
+    <string name="filter">Фильтр</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
