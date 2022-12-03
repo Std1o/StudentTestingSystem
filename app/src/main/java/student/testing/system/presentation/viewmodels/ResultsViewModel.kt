@@ -16,12 +16,15 @@ class ResultsViewModel @Inject constructor(
 ) : BaseViewModel<ParticipantsResults>() {
 
     var showOnlyMaxResults: Boolean = false
+    var searchPrefix: String? = null
 
     fun getResults(
         testId: Int,
         courseId: Int,
     ) {
-        val params = TestResultsRequestParams(onlyMaxResult = showOnlyMaxResults)
+        val params = TestResultsRequestParams(
+            onlyMaxResult = showOnlyMaxResults, searchPrefix = searchPrefix
+        )
         viewModelScope.launch {
             launchRequest(repository.getResults(testId, courseId, params))
         }

@@ -3,8 +3,8 @@ package student.testing.system.presentation.ui.fragments
 import android.os.Bundle
 import android.view.MenuInflater
 import android.view.View
-import android.widget.SearchView
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -26,15 +26,12 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
     private lateinit var adapter: UsersResultsAdapter
     private val viewModel by viewModels<ResultsViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getResults(args.testId, args.courseId)
         binding.btnMenu.setOnClickListener(this::showPopup)
         subscribeObservers()
+        initToolbar()
     }
 
     private fun subscribeObservers() {
@@ -43,15 +40,27 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
             binding.rv.layoutManager = LinearLayoutManager(requireContext())
             binding.rv.adapter = adapter
         }
-        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.search -> {
-                    val searchView = menuItem.actionView as SearchView
-                    menuItem.expandActionView()
-                    true
+    }
+
+    private fun initToolbar() {
+        binding.toolbar.apply {
+            val searchView = menu.findItem(R.id.search).actionView as SearchView
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
                 }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.searchPrefix = newText
+                    viewModel.getResults(args.testId, args.courseId)
+                    return false
+                }
+            })
+        }
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.filter -> {
-                    // Handle search icon press
+                    // Handle filter icon press
                     true
                 }
                 else -> false
