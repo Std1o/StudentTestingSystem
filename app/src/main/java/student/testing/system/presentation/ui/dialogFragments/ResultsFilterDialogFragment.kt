@@ -7,12 +7,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import student.testing.system.R
 import student.testing.system.common.showSnackbar
 import student.testing.system.databinding.DialogResultsFilterBinding
+import student.testing.system.models.enums.OrderingType
+import student.testing.system.models.enums.OrderingType.Companion.getOrderingTypes
 import student.testing.system.presentation.viewmodels.ResultsSharedViewModel
 
 @AndroidEntryPoint
@@ -43,12 +48,12 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             nameLayout.editText?.doOnTextChanged { _, _, _, _ ->
                 nameLayout.error = null
             }
-            phoneLayout.editText?.doOnTextChanged { _, _, _, _ ->
-                phoneLayout.error = null
-            }
             rangeSlider.valueFrom = 0f
             rangeSlider.valueTo = viewModel.maxScore.toFloat()
             rangeSlider.values = listOf(rangeSlider.valueFrom, rangeSlider.valueTo)
+
+            val adapter = ArrayAdapter(requireContext(), R.layout.list_item, getOrderingTypes())
+            (orderingType.editText as? AutoCompleteTextView)?.setAdapter(adapter)
         }
     }
 

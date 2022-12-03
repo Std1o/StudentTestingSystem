@@ -62,9 +62,10 @@
     <string name="search">Поиск</string>
     <string name="filter">Фильтр</string>
     <string name="only_max_results">Только максимальные результаты</string>
-    <string name="ratings_range">Диапазон оценок</string>
+    <string name="ratings_range">Диапазон баллов</string>
     <string name="score_equals">Точное соответствие баллу</string>
     <string name="score_value">Значение балла</string>
+    <string name="select_ordering_type">Выберите тип сортировки</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
