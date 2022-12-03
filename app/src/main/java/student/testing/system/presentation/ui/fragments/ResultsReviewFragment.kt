@@ -15,7 +15,8 @@ import student.testing.system.common.subscribeInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentResultsReviewBinding
 import student.testing.system.presentation.ui.adapters.UsersResultsAdapter
-import student.testing.system.presentation.viewmodels.ResultsViewModel
+import student.testing.system.presentation.ui.dialogFragments.ResultsFilterDialogFragment
+import student.testing.system.presentation.viewmodels.ResultsSharedViewModel
 
 
 @AndroidEntryPoint
@@ -24,7 +25,13 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
     private val binding by viewBinding(FragmentResultsReviewBinding::bind)
     private val args: ResultsReviewFragmentArgs by navArgs()
     private lateinit var adapter: UsersResultsAdapter
-    private val viewModel by viewModels<ResultsViewModel>()
+    val viewModel: ResultsSharedViewModel by viewModels(
+        ownerProducer = { this }
+    )
+
+    companion object {
+        const val KEY_RESULTS_FILTER = "resultsFilter"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +67,9 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.filter -> {
-                    // Handle filter icon press
+                    ResultsFilterDialogFragment
+                        .newInstance()
+                        .show(childFragmentManager, KEY_RESULTS_FILTER);
                     true
                 }
                 else -> false

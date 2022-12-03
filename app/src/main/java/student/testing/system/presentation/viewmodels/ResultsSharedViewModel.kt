@@ -10,7 +10,7 @@ import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
 @HiltViewModel
-class ResultsViewModel @Inject constructor(
+class ResultsSharedViewModel @Inject constructor(
     private val repository: MainRepository,
     val prefsUtils: PrefsUtils
 ) : BaseViewModel<ParticipantsResults>() {
