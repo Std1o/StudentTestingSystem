@@ -70,17 +70,21 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
                 viewModel.showOnlyMaxResults = isChecked
             }
 
-            cbScoreEquals.isChecked = viewModel.scoreEquals
+            cbScoreEquals.isChecked = viewModel.scoreEqualsEnabled
             cbScoreEquals.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.scoreEquals = isChecked
+                viewModel.scoreEqualsEnabled = isChecked
                 scoreInputLayout.isEnabled = isChecked
                 scoreInputLayout.editText?.isEnabled = isChecked
+
+                viewModel.ratingRangeEnabled = !isChecked
+                rangeSlider.isEnabled = viewModel.ratingRangeEnabled
             }
         }
     }
 
     private fun initRangeSlider() {
         with(binding) {
+            rangeSlider.isEnabled = viewModel.ratingRangeEnabled
             rangeSlider.valueFrom = 0f
             rangeSlider.valueTo = viewModel.maxScore.toFloat()
             rangeSlider.values = listOf(viewModel.lowerBound, viewModel.upperBound)
@@ -96,8 +100,8 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             if (viewModel.scoreEqualsValue != null) {
                 scoreInputLayout.editText?.setText(viewModel.scoreEqualsValue.toString())
             }
-            scoreInputLayout.isEnabled = viewModel.scoreEquals
-            scoreInputLayout.editText?.isEnabled = viewModel.scoreEquals
+            scoreInputLayout.isEnabled = viewModel.scoreEqualsEnabled
+            scoreInputLayout.editText?.isEnabled = viewModel.scoreEqualsEnabled
 
             scoreInputLayout.editText?.doOnTextChanged { text, _, _, _ ->
                 if (text.toString().isEmpty()) return@doOnTextChanged

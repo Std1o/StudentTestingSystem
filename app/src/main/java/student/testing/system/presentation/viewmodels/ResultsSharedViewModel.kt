@@ -23,9 +23,10 @@ class ResultsSharedViewModel @Inject constructor(
     }
     var showOnlyMaxResults: Boolean = false
     var searchPrefix: String? = null
+    var ratingRangeEnabled = true
     var lowerBound: Float = 0f
     var upperBound: Float? = null
-    var scoreEquals: Boolean = false
+    var scoreEqualsEnabled: Boolean = false
     var scoreEqualsValue: Float? = null
     var orderingType: OrderingType? = null
 
@@ -35,8 +36,9 @@ class ResultsSharedViewModel @Inject constructor(
     ) {
         val params = TestResultsRequestParams(
             onlyMaxResult = showOnlyMaxResults, searchPrefix = searchPrefix,
-            scoreEquals = if (scoreEquals) scoreEqualsValue else null, ordering = orderingType,
-            upperBound = upperBound, lowerBound = lowerBound
+            scoreEquals = if (scoreEqualsEnabled) scoreEqualsValue else null, ordering = orderingType,
+            upperBound = if (ratingRangeEnabled) upperBound else null,
+            lowerBound = if (ratingRangeEnabled) lowerBound else null
         )
         viewModelScope.launch {
             launchRequest(repository.getResults(testId, courseId, params))
