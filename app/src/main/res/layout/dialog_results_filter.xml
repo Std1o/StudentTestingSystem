@@ -88,7 +88,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_add"
+        android:id="@+id/btnSave"
         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
         android:layout_width="250dp"
         android:layout_height="55dp"

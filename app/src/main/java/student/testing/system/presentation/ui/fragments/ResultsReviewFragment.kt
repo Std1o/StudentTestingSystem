@@ -69,7 +69,7 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
             when (menuItem.itemId) {
                 R.id.filter -> {
                     ResultsFilterDialogFragment
-                        .newInstance()
+                        .newInstance(args.testId, args.courseId)
                         .show(childFragmentManager, KEY_RESULTS_FILTER);
                     true
                 }

@@ -7,8 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -52,13 +56,34 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             rangeSlider.valueTo = viewModel.maxScore.toFloat()
             rangeSlider.values = listOf(rangeSlider.valueFrom, rangeSlider.valueTo)
 
-            val adapter = ArrayAdapter(requireContext(), R.layout.list_item, getOrderingTypes())
+            val items = getOrderingTypes()
+            val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
+            (orderingType.editText as? AutoCompleteTextView)?.onItemClickListener = object : OnItemClickListener {
+                override fun onItemClick(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
+                    viewModel.orderingType = items[position]
+                }
+            }
             (orderingType.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
+            btnSave.setOnClickListener {
+                viewModel.getResults(
+                    requireArguments().getInt(ARG_TEST_ID),
+                    requireArguments().getInt(ARG_COURSE_ID)
+                )
+                dismiss()
+            }
         }
     }
 
     companion object {
-        fun newInstance(): ResultsFilterDialogFragment = ResultsFilterDialogFragment()
+        private const val ARG_TEST_ID = "testId"
+        private const val ARG_COURSE_ID = "courseId"
+
+        fun newInstance(testId: Int, courseId: Int,): ResultsFilterDialogFragment {
+            return ResultsFilterDialogFragment().apply {
+                arguments = bundleOf(ARG_TEST_ID to testId, ARG_COURSE_ID to courseId)
+            }
+        }
     }
 
     override fun onDestroyView() {
