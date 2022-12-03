@@ -49,8 +49,9 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
         bottomSheet.setBackgroundColor(Color.TRANSPARENT)
 
         with(binding) {
-            nameLayout.editText?.doOnTextChanged { _, _, _, _ ->
-                nameLayout.error = null
+            initCheckBoxes()
+            scoreLayout.editText?.doOnTextChanged { text, _, _, _ ->
+                viewModel.scoreEqualsValue = text.toString().toFloat()
             }
             initRangeSlider()
             initOrderingTypeSelector()
@@ -60,6 +61,24 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
                     requireArguments().getInt(ARG_COURSE_ID)
                 )
                 dismiss()
+            }
+        }
+    }
+
+    private fun initCheckBoxes() {
+        with(binding) {
+            cbOnlyMaxResults.isChecked = viewModel.showOnlyMaxResults
+            cbOnlyMaxResults.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.showOnlyMaxResults = isChecked
+            }
+
+            cbScoreEquals.isChecked = viewModel.scoreEquals
+            scoreLayout.isEnabled = viewModel.scoreEquals
+            scoreLayout.editText?.isEnabled = viewModel.scoreEquals
+            cbScoreEquals.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.scoreEquals = isChecked
+                scoreLayout.isEnabled = isChecked
+                scoreLayout.editText?.isEnabled = isChecked
             }
         }
     }

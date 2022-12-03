@@ -43,7 +43,7 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
 
     private fun subscribeObservers() {
         viewModel.uiState.subscribeInUI(this, binding.progressBar) {
-            viewModel.maxScore = it.maxScore
+            if (viewModel.maxScore == 0) viewModel.maxScore = it.maxScore
             adapter = UsersResultsAdapter(it.results, it.maxScore)
             binding.rv.layoutManager = LinearLayoutManager(requireContext())
             binding.rv.adapter = adapter
