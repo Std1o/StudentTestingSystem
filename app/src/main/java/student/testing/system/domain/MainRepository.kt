@@ -39,7 +39,7 @@ interface MainRepository {
     suspend fun getResults(
         testId: Int,
         courseId: Int,
-        showOnlyMaxResults: Boolean
+        params: TestResultsRequestParams
     ): Flow<DataState<ParticipantsResults>>
 
     suspend fun addModerator(

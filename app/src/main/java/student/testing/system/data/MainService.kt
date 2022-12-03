@@ -63,11 +63,11 @@ interface MainService {
         @Query("course_id") courseId: Int
     ): Response<TestResult>
 
-    @GET("tests/results/{test_id}")
+    @POST("tests/results/{test_id}")
     suspend fun getResults(
         @Path("test_id") testId: Int,
         @Query("course_id") courseId: Int,
-        @Query("only_max_result") showOnlyMaxResults: Boolean
+        @Body params: TestResultsRequestParams
     ): Response<ParticipantsResults>
 
     @POST("course/moderators/")

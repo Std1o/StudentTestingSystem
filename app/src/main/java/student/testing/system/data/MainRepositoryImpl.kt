@@ -61,14 +61,14 @@ class MainRepositoryImpl @Inject constructor(
     override suspend fun getResults(
         testId: Int,
         courseId: Int,
-        showOnlyMaxResults: Boolean
+        params: TestResultsRequestParams
     ) =
         flow {
             emit(apiCall {
                 remoteDataSource.getResults(
                     testId,
                     courseId,
-                    showOnlyMaxResults
+                    params
                 )
             })
         }

@@ -42,7 +42,7 @@ interface RemoteDataSource {
     suspend fun getResults(
         testId: Int,
         courseId: Int,
-        showOnlyMaxResults: Boolean
+        params: TestResultsRequestParams
     ): Response<ParticipantsResults>
 
     suspend fun addModerator(

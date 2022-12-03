@@ -5,6 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.ParticipantsResults
+import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
@@ -19,8 +20,9 @@ class ResultsViewModel @Inject constructor(
         courseId: Int,
         showOnlyMaxResults: Boolean = false
     ) {
+        val params = TestResultsRequestParams(onlyMaxResult = showOnlyMaxResults)
         viewModelScope.launch {
-            launchRequest(repository.getResults(testId, courseId, showOnlyMaxResults))
+            launchRequest(repository.getResults(testId, courseId, params))
         }
     }
 }

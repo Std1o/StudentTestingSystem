@@ -17,7 +17,7 @@ class RemoteDataSourceImpl @Inject constructor(private val mainService : MainSer
     override suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) = mainService.calculateResult(testId, courseId, request)
     override suspend fun calculateDemoResult(courseId: Int, testId: Int, request: List<UserQuestion>) = mainService.calculateDemoResult(courseId, testId, request)
     override suspend fun getResult(testId: Int, courseId: Int) = mainService.getResult(testId, courseId)
-    override suspend fun getResults(testId: Int, courseId: Int, showOnlyMaxResults: Boolean) = mainService.getResults(testId, courseId, showOnlyMaxResults)
+    override suspend fun getResults(testId: Int, courseId: Int, params: TestResultsRequestParams) = mainService.getResults(testId, courseId, params)
     override suspend fun addModerator(courseId: Int, moderatorId: Int) = mainService.addModerator(courseId, moderatorId)
     override suspend fun deleteModerator(courseId: Int, moderatorId: Int) = mainService.deleteModerator(courseId, moderatorId)
     override suspend fun deleteParticipant(courseId: Int, participantId: Int) = mainService.deleteParticipant(courseId, participantId)
