@@ -83,7 +83,11 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
         with(binding) {
             rangeSlider.valueFrom = 0f
             rangeSlider.valueTo = viewModel.maxScore.toFloat()
-            rangeSlider.values = listOf(rangeSlider.valueFrom, rangeSlider.valueTo)
+            rangeSlider.values = listOf(viewModel.lowerBound, viewModel.upperBound)
+            rangeSlider.addOnChangeListener { rangeSlider, _, _ ->
+                viewModel.lowerBound = rangeSlider.values[0]
+                viewModel.upperBound = rangeSlider.values[1]
+            }
         }
     }
 
