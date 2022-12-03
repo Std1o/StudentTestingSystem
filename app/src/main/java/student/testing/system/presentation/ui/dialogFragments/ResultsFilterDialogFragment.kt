@@ -50,9 +50,7 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
 
         with(binding) {
             initCheckBoxes()
-            scoreLayout.editText?.doOnTextChanged { text, _, _, _ ->
-                viewModel.scoreEqualsValue = text.toString().toFloat()
-            }
+            initScoreInputLayout()
             initRangeSlider()
             initOrderingTypeSelector()
             btnSave.setOnClickListener {
@@ -73,12 +71,10 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             }
 
             cbScoreEquals.isChecked = viewModel.scoreEquals
-            scoreLayout.isEnabled = viewModel.scoreEquals
-            scoreLayout.editText?.isEnabled = viewModel.scoreEquals
             cbScoreEquals.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.scoreEquals = isChecked
-                scoreLayout.isEnabled = isChecked
-                scoreLayout.editText?.isEnabled = isChecked
+                scoreInputLayout.isEnabled = isChecked
+                scoreInputLayout.editText?.isEnabled = isChecked
             }
         }
     }
@@ -88,6 +84,21 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             rangeSlider.valueFrom = 0f
             rangeSlider.valueTo = viewModel.maxScore.toFloat()
             rangeSlider.values = listOf(rangeSlider.valueFrom, rangeSlider.valueTo)
+        }
+    }
+
+    private fun initScoreInputLayout() {
+        with(binding) {
+            if (viewModel.scoreEqualsValue != null) {
+                scoreInputLayout.editText?.setText(viewModel.scoreEqualsValue.toString())
+            }
+            scoreInputLayout.isEnabled = viewModel.scoreEquals
+            scoreInputLayout.editText?.isEnabled = viewModel.scoreEquals
+
+            scoreInputLayout.editText?.doOnTextChanged { text, _, _, _ ->
+                if (text.toString().isEmpty()) return@doOnTextChanged
+                viewModel.scoreEqualsValue = text.toString().toFloat()
+            }
         }
     }
 
