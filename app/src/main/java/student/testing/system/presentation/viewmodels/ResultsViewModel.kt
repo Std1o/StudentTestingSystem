@@ -15,10 +15,11 @@ class ResultsViewModel @Inject constructor(
     val prefsUtils: PrefsUtils
 ) : BaseViewModel<ParticipantsResults>() {
 
+    var showOnlyMaxResults: Boolean = false
+
     fun getResults(
         testId: Int,
         courseId: Int,
-        showOnlyMaxResults: Boolean = false
     ) {
         val params = TestResultsRequestParams(onlyMaxResult = showOnlyMaxResults)
         viewModelScope.launch {

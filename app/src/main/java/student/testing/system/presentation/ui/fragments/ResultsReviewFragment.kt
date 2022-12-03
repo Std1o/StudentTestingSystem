@@ -24,16 +24,10 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
     private val binding by viewBinding(FragmentResultsReviewBinding::bind)
     private val args: ResultsReviewFragmentArgs by navArgs()
     private lateinit var adapter: UsersResultsAdapter
-    private var showOnlyMaxResults = false
     private val viewModel by viewModels<ResultsViewModel>()
-
-    companion object {
-        const val KEY_SHOW_ONLY_MAX_RESULTS = "showOnlyMaxResults"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showOnlyMaxResults = savedInstanceState?.getBoolean(KEY_SHOW_ONLY_MAX_RESULTS) ?: false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,23 +59,18 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean(KEY_SHOW_ONLY_MAX_RESULTS, showOnlyMaxResults)
-    }
-
     private fun showPopup(v: View) {
         val popup = PopupMenu(requireActivity(), v)
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.results_context_menu, popup.menu)
         popup.show()
         popup.menu.getItem(0)
-            .setTitle(if (showOnlyMaxResults) R.string.all_results else R.string.max_results)
+            .setTitle(if (viewModel.showOnlyMaxResults) R.string.all_results else R.string.max_results)
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.results_filter -> {
-                    showOnlyMaxResults = !showOnlyMaxResults
-                    viewModel.getResults(args.testId, args.courseId, showOnlyMaxResults)
+                    viewModel.showOnlyMaxResults = !viewModel.showOnlyMaxResults
+                    viewModel.getResults(args.testId, args.courseId)
                 }
             }
             true
