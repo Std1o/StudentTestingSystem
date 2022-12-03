@@ -113,9 +113,13 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
     private fun initOrderingTypeSelector() {
         val items = getOrderingTypes()
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
-        (binding.orderingType.editText as? AutoCompleteTextView)?.onItemClickListener =
+        val orderingTypeSelector = (binding.orderingType.editText as? AutoCompleteTextView)
+        if (viewModel.orderingType != null) {
+            orderingTypeSelector?.setText(viewModel.orderingType.toString())
+        }
+        orderingTypeSelector?.onItemClickListener =
             OnItemClickListener { _, _, position, _ -> viewModel.orderingType = items[position] }
-        (binding.orderingType.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        orderingTypeSelector?.setAdapter(adapter)
     }
 
     companion object {
