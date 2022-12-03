@@ -52,19 +52,8 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             nameLayout.editText?.doOnTextChanged { _, _, _, _ ->
                 nameLayout.error = null
             }
-            rangeSlider.valueFrom = 0f
-            rangeSlider.valueTo = viewModel.maxScore.toFloat()
-            rangeSlider.values = listOf(rangeSlider.valueFrom, rangeSlider.valueTo)
-
-            val items = getOrderingTypes()
-            val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
-            (orderingType.editText as? AutoCompleteTextView)?.onItemClickListener = object : OnItemClickListener {
-                override fun onItemClick(parent: AdapterView<*>?, v: View?, position: Int, id: Long) {
-                    viewModel.orderingType = items[position]
-                }
-            }
-            (orderingType.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-
+            initRangeSlider()
+            initOrderingTypeSelector()
             btnSave.setOnClickListener {
                 viewModel.getResults(
                     requireArguments().getInt(ARG_TEST_ID),
@@ -73,6 +62,22 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
                 dismiss()
             }
         }
+    }
+
+    private fun initRangeSlider() {
+        with(binding) {
+            rangeSlider.valueFrom = 0f
+            rangeSlider.valueTo = viewModel.maxScore.toFloat()
+            rangeSlider.values = listOf(rangeSlider.valueFrom, rangeSlider.valueTo)
+        }
+    }
+
+    private fun initOrderingTypeSelector() {
+        val items = getOrderingTypes()
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
+        (binding.orderingType.editText as? AutoCompleteTextView)?.onItemClickListener =
+            OnItemClickListener { _, _, position, _ -> viewModel.orderingType = items[position] }
+        (binding.orderingType.editText as? AutoCompleteTextView)?.setAdapter(adapter)
     }
 
     companion object {
