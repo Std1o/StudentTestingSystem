@@ -15,6 +15,7 @@ class ResultsSharedViewModel @Inject constructor(
     val prefsUtils: PrefsUtils
 ) : BaseViewModel<ParticipantsResults>() {
 
+    var maxScore: Int = 0
     var showOnlyMaxResults: Boolean = false
     var searchPrefix: String? = null
 

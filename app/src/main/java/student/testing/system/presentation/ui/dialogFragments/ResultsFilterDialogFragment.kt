@@ -34,7 +34,6 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        showSnackbar(viewModel.searchPrefix ?: "AAA")
         val bottomSheet = view.parent as View
         bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR
         bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
@@ -47,6 +46,9 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             phoneLayout.editText?.doOnTextChanged { _, _, _, _ ->
                 phoneLayout.error = null
             }
+            rangeSlider.valueFrom = 0f
+            rangeSlider.valueTo = viewModel.maxScore.toFloat()
+            rangeSlider.values = listOf(rangeSlider.valueFrom, rangeSlider.valueTo)
         }
     }
 
