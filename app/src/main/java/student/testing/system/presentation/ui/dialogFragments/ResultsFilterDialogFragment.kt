@@ -4,8 +4,10 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
@@ -16,13 +18,16 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
+import student.testing.system.common.formatToString
 import student.testing.system.common.showSnackbar
 import student.testing.system.databinding.DialogResultsFilterBinding
 import student.testing.system.models.enums.OrderingType
 import student.testing.system.models.enums.OrderingType.Companion.getOrderingTypes
 import student.testing.system.presentation.viewmodels.ResultsSharedViewModel
+import java.util.*
 
 @AndroidEntryPoint
 class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
@@ -52,6 +57,22 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             initCheckBoxes()
             initScoreInputLayout()
             initRangeSlider()
+            dateFromInputLayout.editText?.keyListener = null
+            dateToInputLayout.editText?.keyListener = null
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Выберите дату")
+                    .build()
+            val onClickListener = OnClickListener() {
+                datePicker.show(parentFragmentManager, "datePicker")
+            }
+            dateFromInputLayout.setOnClickListener(onClickListener)
+            dateFromInputLayout.editText?.setOnClickListener(onClickListener)
+            datePicker.addOnPositiveButtonClickListener {
+                datePicker.selection?.let { date ->
+                    dateFromInputLayout.editText?.setText(Date(date).formatToString("yyyy-MM-dd"))
+                }
+            }
             initOrderingTypeSelector()
             btnSave.setOnClickListener {
                 viewModel.getResults(
