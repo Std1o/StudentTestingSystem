@@ -104,6 +104,18 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun initDateInputLayout(textInputLayout: TextInputLayout) {
+        when(textInputLayout.id) {
+            R.id.dateFromInputLayout -> {
+                if (viewModel.dateFrom != null) {
+                    textInputLayout.editText?.setText(viewModel.dateFrom)
+                }
+            }
+            R.id.dateToInputLayout -> {
+                if (viewModel.dateTo != null) {
+                    textInputLayout.editText?.setText(viewModel.dateTo)
+                }
+            }
+        }
         textInputLayout.editText?.keyListener = null
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Выберите дату")
@@ -115,7 +127,12 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
         textInputLayout.editText?.setOnClickListener(onClickListener)
         datePicker.addOnPositiveButtonClickListener {
             datePicker.selection?.let { date ->
-                textInputLayout.editText?.setText(Date(date).formatToString("yyyy-MM-dd"))
+                val dateStr = Date(date).formatToString("yyyy-MM-dd")
+                textInputLayout.editText?.setText(dateStr)
+                when(textInputLayout.id) {
+                    R.id.dateFromInputLayout -> viewModel.dateFrom = dateStr
+                    R.id.dateToInputLayout -> viewModel.dateTo = dateStr
+                }
             }
         }
     }
