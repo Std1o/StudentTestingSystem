@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.R
 import student.testing.system.databinding.ItemParticipantBinding
+import student.testing.system.databinding.ItemParticipantResultBinding
 import student.testing.system.models.ParticipantResult
 
 
@@ -17,7 +18,7 @@ class UsersResultsAdapter(
     RecyclerView.Adapter<UsersResultsAdapter.CourseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
-        val binding = ItemParticipantBinding
+        val binding = ItemParticipantResultBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CourseViewHolder(binding)
     }
@@ -51,6 +52,6 @@ class UsersResultsAdapter(
         }
     }
 
-    inner class CourseViewHolder(val binding: ItemParticipantBinding) :
+    inner class CourseViewHolder(val binding: ItemParticipantResultBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

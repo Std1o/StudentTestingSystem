@@ -9,5 +9,6 @@ data class ParticipantResult(
     @SerializedName("user_id") val userId: Int,
     val username: String,
     val email: String,
-    val score: Double
+    val score: Double,
+    @SerializedName("passing_time") val passingTime: String
 ): Parcelable
