@@ -49,6 +49,9 @@ class UsersResultsAdapter(
                         maxScore
                     )
             }
+            tvPassingTime.text = root
+                .context
+                .getString(R.string.passing_time, participantResult.passingTime)
         }
     }
 

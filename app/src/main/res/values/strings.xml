@@ -66,6 +66,7 @@
     <string name="score_equals">Точное соответствие баллу</string>
     <string name="score_value">Значение балла</string>
     <string name="select_ordering_type">Выберите тип сортировки</string>
+    <string name="passing_time">Дата прохождения: %s</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>
