@@ -19,6 +19,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.formatToString
@@ -57,22 +58,8 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
             initCheckBoxes()
             initScoreInputLayout()
             initRangeSlider()
-            dateFromInputLayout.editText?.keyListener = null
-            dateToInputLayout.editText?.keyListener = null
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Выберите дату")
-                    .build()
-            val onClickListener = OnClickListener() {
-                datePicker.show(parentFragmentManager, "datePicker")
-            }
-            dateFromInputLayout.setOnClickListener(onClickListener)
-            dateFromInputLayout.editText?.setOnClickListener(onClickListener)
-            datePicker.addOnPositiveButtonClickListener {
-                datePicker.selection?.let { date ->
-                    dateFromInputLayout.editText?.setText(Date(date).formatToString("yyyy-MM-dd"))
-                }
-            }
+            initDateInputLayout(dateFromInputLayout)
+            initDateInputLayout(dateToInputLayout)
             initOrderingTypeSelector()
             btnSave.setOnClickListener {
                 viewModel.getResults(
@@ -116,6 +103,23 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun initDateInputLayout(textInputLayout: TextInputLayout) {
+        textInputLayout.editText?.keyListener = null
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Выберите дату")
+            .build()
+        val onClickListener = OnClickListener() {
+            datePicker.show(parentFragmentManager, "datePicker")
+        }
+        textInputLayout.setOnClickListener(onClickListener)
+        textInputLayout.editText?.setOnClickListener(onClickListener)
+        datePicker.addOnPositiveButtonClickListener {
+            datePicker.selection?.let { date ->
+                textInputLayout.editText?.setText(Date(date).formatToString("yyyy-MM-dd"))
+            }
+        }
+    }
+
     private fun initScoreInputLayout() {
         with(binding) {
             if (viewModel.scoreEqualsValue != null) {
@@ -147,7 +151,7 @@ class ResultsFilterDialogFragment : BottomSheetDialogFragment() {
         private const val ARG_TEST_ID = "testId"
         private const val ARG_COURSE_ID = "courseId"
 
-        fun newInstance(testId: Int, courseId: Int,): ResultsFilterDialogFragment {
+        fun newInstance(testId: Int, courseId: Int): ResultsFilterDialogFragment {
             return ResultsFilterDialogFragment().apply {
                 arguments = bundleOf(ARG_TEST_ID to testId, ARG_COURSE_ID to courseId)
             }
