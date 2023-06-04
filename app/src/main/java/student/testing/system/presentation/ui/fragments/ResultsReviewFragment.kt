@@ -1,6 +1,7 @@
 package student.testing.system.presentation.ui.fragments
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
@@ -53,6 +54,7 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
     private fun initToolbar() {
         binding.toolbar.apply {
             val searchView = menu.findItem(R.id.search).actionView as SearchView
+            searchView.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
