@@ -64,7 +64,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -72,7 +72,8 @@
         android:orientation="horizontal">
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dateFromInputLayout"
-            android:layout_width="180dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:clickable="true"
             app:startIconDrawable="@drawable/ic_calendar"
@@ -86,9 +87,13 @@
                 android:clickable="true"
                 android:focusable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
+        <Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"/>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dateToInputLayout"
-            android:layout_width="180dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:clickable="true"
@@ -103,7 +108,7 @@
                 android:clickable="true"
                 android:focusable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/orderingType"
