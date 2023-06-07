@@ -20,10 +20,11 @@ open class BaseViewModel<T> : ViewModel() {
     private val _uiState = MutableStateFlow<DataState<T>>(DataState.Initial)
     val uiState: StateFlow<DataState<T>> = _uiState.asStateFlow()
 
-    protected suspend fun launchRequest(request: Flow<DataState<T>>) {
+    protected suspend fun launchRequest(request: Flow<DataState<T>>, optionalCallback: (DataState<T>) -> Unit = {}) {
         _uiState.value = DataState.Loading
         return request.collect {
             _uiState.value = it
+            optionalCallback.invoke(it)
         }
     }
 }

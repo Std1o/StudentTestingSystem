@@ -3,6 +3,7 @@ package student.testing.system.presentation.viewmodels
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import student.testing.system.domain.DataState
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.ParticipantsResults
 import student.testing.system.models.TestResultsRequestParams
@@ -44,7 +45,12 @@ class ResultsSharedViewModel @Inject constructor(
             dateFrom = dateFrom, dateTo = dateTo, ordering = orderingType
         )
         viewModelScope.launch {
-            launchRequest(repository.getResults(testId, courseId, params))
+            launchRequest(repository.getResults(testId, courseId, params)) {
+                if (it is DataState.Success && maxScore == 0) {
+                    maxScore = it.data.maxScore
+                    if (maxScore == 0) maxScore = 100 // this can happen if there are no results
+                }
+            }
         }
     }
 }
