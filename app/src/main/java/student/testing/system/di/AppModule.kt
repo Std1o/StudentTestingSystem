@@ -31,38 +31,37 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun providesBaseUrl() : String = "https://testingsystem.ru/"
+    fun providesBaseUrl(): String = "https://testingsystem.ru/"
 
     @Provides
-    fun getHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor()
-            .setLevel(HttpLoggingInterceptor.Level.BODY)
-    }
+    fun getHttpLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     @Provides
-    fun getHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient.Builder {
-        return OkHttpClient.Builder()
+    fun getHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient.Builder =
+        OkHttpClient.Builder()
             .callTimeout(1, TimeUnit.MINUTES)
             .retryOnConnectionFailure(true)
             .addInterceptor(OAuthInterceptor())
             .addInterceptor(httpLoggingInterceptor)
-    }
 
     @Provides
     @Singleton
-    fun provideRetrofit(BASE_URL : String, httpBuilder: OkHttpClient.Builder) : Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .client(httpBuilder.build())
-        .build()
+    fun provideRetrofit(BASE_URL: String, httpBuilder: OkHttpClient.Builder): Retrofit =
+        Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .client(httpBuilder.build())
+            .build()
 
     @Provides
     @Singleton
-    fun provideMainService(retrofit : Retrofit) : MainService = retrofit.create(MainService::class.java)
+    fun provideMainService(retrofit: Retrofit): MainService =
+        retrofit.create(MainService::class.java)
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(mainService : MainService) =
+    fun provideRemoteDataSource(mainService: MainService) =
         RemoteDataSourceImpl(mainService) as RemoteDataSource
 
     @Singleton
