@@ -23,8 +23,8 @@ open class BaseViewModel<T> : ViewModel() {
     protected suspend fun launchRequest(request: Flow<DataState<T>>, optionalCallback: (DataState<T>) -> Unit = {}) {
         _uiState.value = DataState.Loading
         return request.collect {
-            _uiState.value = it
             optionalCallback.invoke(it)
+            _uiState.value = it
         }
     }
 }

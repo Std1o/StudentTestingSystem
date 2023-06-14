@@ -13,13 +13,10 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @HiltViewModel
-class ResultsSharedViewModel @Inject constructor(
-    private val repository: MainRepository,
-    val prefsUtils: PrefsUtils
-) : BaseViewModel<ParticipantsResults>() {
+class ResultsSharedViewModel @Inject constructor(private val repository: MainRepository) :
+    BaseViewModel<ParticipantsResults>() {
 
-    var maxScore: Int by Delegates.observable(0) {
-            _, _, new ->
+    var maxScore: Int by Delegates.observable(0) { _, _, new ->
         upperBound = new.toFloat()
     }
     var showOnlyMaxResults: Boolean = false
