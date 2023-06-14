@@ -2,27 +2,35 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import student.testing.system.models.CourseResponse
 import student.testing.system.domain.DataState
-import student.testing.system.domain.MainRepository
-import student.testing.system.domain.usecases.CreateCourseUseCase
-import student.testing.system.domain.usecases.JoinCourseUseCase
-import javax.inject.Inject
 
+/**
+ * BaseViewModel is an abstract class that provides a base implementation for ViewModels in the app.
+ * It contains a StateFlow that represents the current state of the UI, and a method for launching
+ * requests and updating the UI state based on the response.
+ *
+ * @param T The type of data that the ViewModel will handle.
+ */
 open class BaseViewModel<T> : ViewModel() {
+
     private val _uiState = MutableStateFlow<DataState<T>>(DataState.Initial)
     val uiState: StateFlow<DataState<T>> = _uiState.asStateFlow()
 
-    protected suspend fun launchRequest(request: Flow<DataState<T>>, optionalCallback: (DataState<T>) -> Unit = {}) {
+    /**
+     * Launches a request and updates the UI state based on the response.
+     *
+     * @param requestResult A Flow representing the result of the request
+     * @param optionalCallback An optional callback function that will be called with each DataState emitted by the request result.
+     */
+    protected suspend fun launchRequest(requestResult: Flow<DataState<T>>, optionalCallback: (DataState<T>) -> Unit = {}) {
         _uiState.value = DataState.Loading
-        return request.collect {
+        return requestResult.collect {
             optionalCallback.invoke(it)
             _uiState.value = it
         }
