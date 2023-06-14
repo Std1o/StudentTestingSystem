@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import student.testing.system.common.Constants.BASE_URL
 import student.testing.system.data.RemoteDataSourceImpl
 import student.testing.system.data.MainService
 import student.testing.system.data.OAuthInterceptor
@@ -31,9 +32,6 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun providesBaseUrl(): String = "https://testingsystem.ru/"
-
-    @Provides
     fun getHttpLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
@@ -47,7 +45,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(BASE_URL: String, httpBuilder: OkHttpClient.Builder): Retrofit =
+    fun provideRetrofit(httpBuilder: OkHttpClient.Builder): Retrofit =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)

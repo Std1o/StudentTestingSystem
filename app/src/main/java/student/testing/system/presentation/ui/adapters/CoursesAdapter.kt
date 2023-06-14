@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import student.testing.system.common.AccountSession
+import student.testing.system.common.Constants.BASE_URL
 import student.testing.system.models.CourseResponse
 import student.testing.system.databinding.ItemCourseBinding
 
@@ -52,7 +53,7 @@ class CoursesAdapter(private val listener: ClickListener) :
             val course = dataList[position]
             binding.tvName.text = course.name
             Glide.with(holder.itemView.context)
-                .load("http://176.57.217.38/images/${course.img}")
+                .load("${BASE_URL}images/${course.img}")
                 .transform(CenterCrop(), RoundedCorners(16))
                 .into(binding.imageView)
             holder.itemView.setOnClickListener() {
