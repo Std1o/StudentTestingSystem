@@ -44,7 +44,7 @@ class FakeRepository : MainRepository {
         }
     }
 
-    override suspend fun deleteCourse(courseId: Int, courseOwnerId: Int): Flow<DataState<Void>> {
+    override suspend fun deleteCourse(courseId: Int): Flow<DataState<Void>> {
         TODO("Not yet implemented")
     }
 
@@ -56,11 +56,7 @@ class FakeRepository : MainRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteTest(
-        testId: Int,
-        courseId: Int,
-        courseOwnerId: Int
-    ): Flow<DataState<Void>> {
+    override suspend fun deleteTest(testId: Int, courseId: Int): Flow<DataState<Void>> {
         TODO("Not yet implemented")
     }
 
@@ -75,7 +71,6 @@ class FakeRepository : MainRepository {
     override suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
-        courseOwnerId: Int,
         request: List<UserQuestion>
     ): Flow<DataState<TestResult>> {
         TODO("Not yet implemented")
@@ -96,15 +91,13 @@ class FakeRepository : MainRepository {
     override suspend fun getResults(
         testId: Int,
         courseId: Int,
-        courseOwnerId: Int,
-        showOnlyMaxResults: Boolean
+        params: TestResultsRequestParams
     ): Flow<DataState<ParticipantsResults>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun addModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): Flow<DataState<List<Participant>>> {
         TODO("Not yet implemented")
@@ -112,7 +105,6 @@ class FakeRepository : MainRepository {
 
     override suspend fun deleteModerator(
         courseId: Int,
-        courseOwnerId: Int,
         moderatorId: Int
     ): Flow<DataState<List<Participant>>> {
         TODO("Not yet implemented")
@@ -120,7 +112,6 @@ class FakeRepository : MainRepository {
 
     override suspend fun deleteParticipant(
         courseId: Int,
-        courseOwnerId: Int,
         participantId: Int
     ): Flow<DataState<List<Participant>>> {
         TODO("Not yet implemented")
