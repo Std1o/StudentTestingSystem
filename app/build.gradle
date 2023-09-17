@@ -38,6 +38,11 @@ android {
         jvmTarget = '17'
     }
     namespace 'student.testing.system'
+
+    lint {
+        // TODO make custom avatar view without agency.tango.android:avatar-view
+        lintConfig = file("$rootDir/avatar_picasso_lint.xml")
+    }
 }
 
 dependencies {
