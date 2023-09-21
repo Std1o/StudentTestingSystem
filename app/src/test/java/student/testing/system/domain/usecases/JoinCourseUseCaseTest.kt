@@ -19,19 +19,19 @@ class JoinCourseUseCaseTest {
 
     @Test
     fun `empty courseCode returns ValidationError`() = runTest {
-        val actual = joinCourseUseCase("").first()
+        val actual = joinCourseUseCase("")
         assertTrue(actual is DataState.ValidationError)
     }
 
     @Test
     fun `failed response returns Error`() = runTest {
-        val actual = joinCourseUseCase("QQQQQQ").first()
+        val actual = joinCourseUseCase("QQQQQQ")
         assertTrue(actual is DataState.Error)
     }
 
     @Test
     fun `success response returns CourseResponse`() = runTest {
-        val actual = joinCourseUseCase("5TYHKW").first()
+        val actual = joinCourseUseCase("5TYHKW")
         assertTrue(actual is DataState.Success)
         assertThat((actual as DataState.Success).data, instanceOf(CourseResponse::class.java))
     }

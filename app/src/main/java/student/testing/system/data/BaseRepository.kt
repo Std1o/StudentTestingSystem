@@ -1,5 +1,7 @@
 package student.testing.system.data
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import student.testing.system.common.Utils
 import student.testing.system.domain.DataState
@@ -8,7 +10,7 @@ open class BaseRepository {
 
     suspend fun <T> apiCall(call: suspend () -> Response<T>): DataState<T> {
         try {
-            val response = call()
+            val response = withContext(Dispatchers.IO) { call() }
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let {

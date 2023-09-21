@@ -21,19 +21,19 @@ class GetResultUseCaseTest {
     @Test
     fun `when 404 returns NoResult state`() = runTest {
         val expected = ResultState.NoResult
-        val actual = getResultUseCase(1, 1).first()
+        val actual = getResultUseCase(1, 1)
         assertEquals(expected, actual)
     }
 
     @Test
     fun `all errors except 404 returns Error state`() = runTest {
-        val actual = getResultUseCase(-1, 1).first()
+        val actual = getResultUseCase(-1, 1)
         assertTrue(actual is ResultState.Error)
     }
 
     @Test
     fun `success response returns TestResult`() = runTest {
-        val actual = getResultUseCase(13, 1).first()
+        val actual = getResultUseCase(13, 1)
         assertTrue(actual is ResultState.Success)
         assertThat((actual as ResultState.Success).data, instanceOf(TestResult::class.java))
     }
