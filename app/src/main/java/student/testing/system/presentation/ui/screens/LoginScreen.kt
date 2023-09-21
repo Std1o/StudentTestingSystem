@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.login.LoginState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
+import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
@@ -54,11 +55,7 @@ fun LoginScreen() {
                 SnackbarHost(hostState = snackbarHostState)
             },
         ) { contentPadding ->
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
-            ) {
+            CenteredColumn(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
                 Text(
                     text = stringResource(R.string.app_name),
                     color = LoginTextColor,
