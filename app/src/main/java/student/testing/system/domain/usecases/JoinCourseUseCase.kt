@@ -10,9 +10,9 @@ import javax.inject.Inject
 
 class JoinCourseUseCase @Inject constructor(private val repository: MainRepository) {
 
-    suspend operator fun invoke(courseCode: String): Flow<DataState<CourseResponse>> {
+    suspend operator fun invoke(courseCode: String): DataState<CourseResponse> {
         return if (courseCode.isEmpty()) {
-            flow { emit(DataState.ValidationError(R.string.error_empty_course_code)) }
+            DataState.ValidationError(R.string.error_empty_course_code)
         } else {
             repository.joinCourse(courseCode)
         }

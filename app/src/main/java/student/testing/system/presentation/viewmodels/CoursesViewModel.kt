@@ -11,6 +11,7 @@ import student.testing.system.domain.DataState
 import student.testing.system.domain.MainRepository
 import javax.inject.Inject
 
+// TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class CoursesViewModel @Inject constructor(private val repository: MainRepository) :
     BaseViewModel<List<CourseResponse>>() {
@@ -28,12 +29,11 @@ class CoursesViewModel @Inject constructor(private val repository: MainRepositor
     fun deleteCourse(courseId: Int): StateFlow<DataState<Int>> {
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {
-            repository.deleteCourse(courseId).collect {
-                if (it is DataState.Empty) {
-                    stateFlow.emit(DataState.Success(courseId))
-                } else {
-                    stateFlow.emit(it as DataState.Error)
-                }
+            val requestResult = repository.deleteCourse(courseId)
+            if (requestResult is DataState.Empty) {
+                stateFlow.emit(DataState.Success(courseId))
+            } else {
+                stateFlow.emit(requestResult as DataState.Error)
             }
         }
         return stateFlow

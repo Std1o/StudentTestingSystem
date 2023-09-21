@@ -1,13 +1,9 @@
 package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import student.testing.system.domain.DataState
 
 /**
@@ -28,11 +24,12 @@ open class BaseViewModel<T> : ViewModel() {
      * @param requestResult A Flow representing the result of the request
      * @param optionalCallback An optional callback function that will be called with each DataState emitted by the request result.
      */
-    protected suspend fun launchRequest(requestResult: Flow<DataState<T>>, optionalCallback: (DataState<T>) -> Unit = {}) {
+    protected fun launchRequest(
+        requestResult: DataState<T>,
+        optionalCallback: (DataState<T>) -> Unit = {}
+    ) {
         _uiState.value = DataState.Loading
-        return requestResult.collect {
-            optionalCallback.invoke(it)
-            _uiState.value = it
-        }
+        optionalCallback.invoke(requestResult)
+        _uiState.value = requestResult
     }
 }

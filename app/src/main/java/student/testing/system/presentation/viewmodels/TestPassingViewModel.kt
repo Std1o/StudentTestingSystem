@@ -14,6 +14,7 @@ import student.testing.system.models.TestResult
 import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 
+// TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestPassingViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
@@ -22,10 +23,9 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
     fun calculateResult(testId: Int, courseId: Int): StateFlow<DataState<Int>> {
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {
-            repository.calculateResult(testId, courseId, userQuestions).collect {
-                if (it is DataState.Empty) {
-                    stateFlow.emit(DataState.Success(0))
-                }
+            val requestResult = repository.calculateResult(testId, courseId, userQuestions)
+            if (requestResult is DataState.Empty) {
+                stateFlow.emit(DataState.Success(0))
             }
         }
         return stateFlow
@@ -34,9 +34,8 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
     fun calculateDemoResult(courseId: Int, testId: Int): StateFlow<DataState<TestResult>> {
         val stateFlow = MutableStateFlow<DataState<TestResult>>(DataState.Loading)
         viewModelScope.launch {
-            repository.calculateDemoResult(courseId, testId, userQuestions).collect {
-                stateFlow.emit(it)
-            }
+            val requestResult = repository.calculateDemoResult(courseId, testId, userQuestions)
+            stateFlow.emit(requestResult)
         }
         return stateFlow
     }
@@ -44,9 +43,8 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
     fun getResult(testId: Int, courseId: Int): StateFlow<DataState<TestResult>> {
         val stateFlow = MutableStateFlow<DataState<TestResult>>(DataState.Loading)
         viewModelScope.launch {
-            repository.getResult(testId, courseId).collect {
-                stateFlow.emit(it)
-            }
+            val requestResult = repository.getResult(testId, courseId)
+            stateFlow.emit(requestResult)
         }
         return stateFlow
     }
