@@ -12,3 +12,4 @@ val Pink40 = Color(0xFF7D5260)
 
 val SurfaceColor = Color(0xFFFAFAFA)
 val LoginTextColor = Color(0xFF000080)
+val Teal200 = Color(0xFF03DAC5)

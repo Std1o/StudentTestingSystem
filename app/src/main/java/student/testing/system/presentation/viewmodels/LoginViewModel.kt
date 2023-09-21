@@ -32,4 +32,8 @@ class LoginViewModel @Inject constructor(
             _uiState.value = authUseCase(email, password)
         }
     }
+
+    fun resetState() {
+        _uiState.value = LoginState.Initial
+    }
 }
