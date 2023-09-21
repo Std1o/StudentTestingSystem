@@ -64,16 +64,12 @@ fun LoginScreen() {
                 val password = PasswordTextField(uiState = uiState, viewModel = viewModel)
                 Button(
                     onClick = {
-                        scope.launch {
-                            viewModel.auth(email = email, password = password)
-                        }
+                        scope.launch { viewModel.auth(email = email, password = password) }
                     }, modifier = Modifier
                         .padding(top = 30.dp)
                         .height(45.dp)
                         .width(250.dp)
-                ) {
-                    Text(stringResource(R.string.sign_in))
-                }
+                ) { Text(stringResource(R.string.sign_in)) }
                 Text(
                     text = stringResource(R.string.registration),
                     color = LoginTextColor,
@@ -82,7 +78,6 @@ fun LoginScreen() {
                 )
             }
         }
-        println(uiState)
         if (uiState is LoginState.Loading) {
             LoadingIndicator()
         } else if (uiState is LoginState.Error) {
