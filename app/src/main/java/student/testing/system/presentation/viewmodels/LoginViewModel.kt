@@ -22,18 +22,14 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            authIfPossibleUseCase().collect {
-                _uiState.value = it
-            }
+            _uiState.value = authIfPossibleUseCase()
         }
     }
 
     fun auth(email: String, password: String) {
         viewModelScope.launch {
             _uiState.value = LoginState.Loading
-            authUseCase(email, password).collect {
-                _uiState.value = it
-            }
+            _uiState.value = authUseCase(email, password)
         }
     }
 }

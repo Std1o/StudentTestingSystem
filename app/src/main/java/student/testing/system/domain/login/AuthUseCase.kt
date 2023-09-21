@@ -1,9 +1,6 @@
 package student.testing.system.domain.login
 
 import androidx.core.util.PatternsCompat
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import student.testing.system.R
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.DataState
@@ -17,35 +14,34 @@ class AuthUseCase @Inject constructor(
     private val prefsUtils: PrefsUtils
 ) {
 
-    suspend operator fun invoke(email: String, password: String): Flow<LoginState<PrivateUser>> {
+    suspend operator fun invoke(email: String, password: String): LoginState<PrivateUser> {
         if (email.isEmpty()) {
-            return flow { emit(LoginState.EmailError(R.string.error_empty_field)) }
+            return LoginState.EmailError(R.string.error_empty_field)
         } else if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()) {
-            return flow { emit(LoginState.EmailError(R.string.error_invalid_email)) }
+            return LoginState.EmailError(R.string.error_invalid_email)
         } else if (password.isEmpty()) {
-            return flow { emit(LoginState.PasswordError(R.string.error_empty_field)) }
+            return LoginState.PasswordError(R.string.error_empty_field)
         } else {
             return auth(email, password)
         }
     }
 
-    private suspend fun auth(email: String, password: String): Flow<LoginState<PrivateUser>> {
-        val stateFlow = MutableStateFlow<LoginState<PrivateUser>>(LoginState.Loading)
+    private suspend fun auth(email: String, password: String): LoginState<PrivateUser> {
         val authRequest =
             "grant_type=&username=$email&password=$password&scope=&client_id=&client_secret="
         val requestResult = repository.auth(authRequest)
         if (requestResult is DataState.Initial) {
-            stateFlow.emit(LoginState.Initial)
+            return LoginState.Initial
         } else if (requestResult is DataState.Loading) {
-            stateFlow.emit(LoginState.Loading)
+            return LoginState.Loading
         } else if (requestResult is DataState.Success) {
             saveAuthData(email, password)
             createSession(requestResult.data)
-            stateFlow.emit(LoginState.Success(requestResult.data))
+            return LoginState.Success(requestResult.data)
         } else if (requestResult is DataState.Error) {
-            stateFlow.emit(LoginState.Error(requestResult.exception, requestResult.code))
+            return LoginState.Error(requestResult.exception, requestResult.code)
         }
-        return stateFlow
+        return LoginState.Loading
     }
 
     private fun createSession(privateUser: PrivateUser) {

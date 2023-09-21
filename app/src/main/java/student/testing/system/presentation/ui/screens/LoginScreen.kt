@@ -37,7 +37,8 @@ import student.testing.system.presentation.ui.activity.ui.theme.StudentTestingSy
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
+fun LoginScreen() {
+    val viewModel: LoginViewModel = viewModel()
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -84,18 +85,16 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
                 }, modifier = Modifier
                     .padding(top = 30.dp)
                     .height(45.dp)
-                    .width(150.dp)
+                    .width(250.dp)
             ) {
                 Text(stringResource(R.string.sign_in))
             }
+            Text(
+                text = stringResource(R.string.registration),
+                color = LoginTextColor,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(top = 10.dp)
+            )
         }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun GreetingPreview() {
-    StudentTestingSystemTheme {
-        LoginScreen()
     }
 }

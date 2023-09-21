@@ -1,7 +1,5 @@
 package student.testing.system.domain.login
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
@@ -11,19 +9,18 @@ class AuthIfPossibleUseCase @Inject constructor(
     private val prefsUtils: PrefsUtils
 ) {
 
-    suspend operator fun invoke(): Flow<LoginState<PrivateUser>> {
-        val stateFlow = MutableStateFlow<LoginState<PrivateUser>>(LoginState.Loading)
+    suspend operator fun invoke(): LoginState<PrivateUser> {
         if (isAuthDataSaved()) {
             return authWithSavedData()
         } else {
-            stateFlow.emit(LoginState.Unauthorized)
+            return LoginState.Unauthorized
         }
-        return stateFlow
+        return LoginState.Loading
     }
 
     private fun isAuthDataSaved() = prefsUtils.getEmail().isNotEmpty()
 
-    private suspend fun authWithSavedData(): Flow<LoginState<PrivateUser>> {
+    private suspend fun authWithSavedData(): LoginState<PrivateUser> {
         return authUseCase(prefsUtils.getEmail(), prefsUtils.getPassword())
     }
 }

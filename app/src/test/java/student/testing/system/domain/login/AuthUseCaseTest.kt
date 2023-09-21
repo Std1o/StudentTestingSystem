@@ -26,27 +26,27 @@ class AuthUseCaseTest {
     @Test
     fun `empty email returns EmailError`() = runTest {
         val expected = LoginState.EmailError(R.string.error_empty_field)
-        val actual = authUseCase.invoke("", "").first()
+        val actual = authUseCase.invoke("", "")
         assertEquals(expected, actual)
     }
 
     @Test
     fun `invalid E-mail format returns EmailError`() = runTest {
         val expected = LoginState.EmailError(R.string.error_invalid_email)
-        val actual = authUseCase.invoke("someEmail", "").first()
+        val actual = authUseCase.invoke("someEmail", "")
         assertEquals(expected, actual)
     }
 
     @Test
     fun `empty password returns PasswordError`() = runTest {
         val expected = LoginState.PasswordError(R.string.error_empty_field)
-        val actual = authUseCase.invoke("test@mail.ru", "").first()
+        val actual = authUseCase.invoke("test@mail.ru", "")
         assertEquals(expected, actual)
     }
 
     @Test
     fun `success auth returns PrivateUser`() = runBlocking {
-        val actual = authUseCase.invoke("test@mail.ru", "pass").first()
+        val actual = authUseCase.invoke("test@mail.ru", "pass")
         assertTrue(actual is LoginState.Success)
         assertThat((actual as LoginState.Success).data, instanceOf(PrivateUser::class.java))
     }
@@ -54,7 +54,7 @@ class AuthUseCaseTest {
     @Test
     fun `failed auth returns Error`() = runBlocking {
         val expected = LoginState.Error("Incorrect username or password")
-        val actual = authUseCase.invoke("other@mail.ru", "pass").first()
+        val actual = authUseCase.invoke("other@mail.ru", "pass")
         assertEquals(expected, actual)
     }
 }
