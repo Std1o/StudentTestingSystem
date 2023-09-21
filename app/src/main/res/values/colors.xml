@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#0000ff</color>
     <color name="gray">#808080</color>
+    <color name="maybe_future_main_color">#470027</color>
+    <!--470736-->
+    <!--320b35-->
 </resources>
