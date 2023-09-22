@@ -14,13 +14,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import student.testing.system.common.Constants.BASE_URL
-import student.testing.system.data.RemoteDataSourceImpl
+import student.testing.system.data.dataSource.RemoteDataSourceImpl
 import student.testing.system.data.MainService
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
-import student.testing.system.data.MainRepositoryImpl
+import student.testing.system.data.repository.MainRepositoryImpl
 import student.testing.system.domain.MainRepository
-import student.testing.system.data.RemoteDataSource
+import student.testing.system.data.dataSource.RemoteDataSource
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.AppNavigatorImpl
 import student.testing.system.sharedPreferences.PrefsUtils

@@ -9,5 +9,6 @@ sealed class LoginState<out R> {
     data class Error(val exception: String, val code: Int = -1) : LoginState<Nothing>()
     data class EmailError(@StringRes val messageResId: Int) : LoginState<Nothing>()
     data class PasswordError(@StringRes val messageResId: Int) : LoginState<Nothing>()
+    object ValidationSuccesses : LoginState<Nothing>()
     object Loading : LoginState<Nothing>()
 }

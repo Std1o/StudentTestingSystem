@@ -21,7 +21,8 @@ class AuthUseCaseTest {
 
     private val repository = FakeRepository()
     private val prefsUtils = mockk<PrefsUtils>(relaxed = true)
-    private val authUseCase = AuthUseCase(repository, prefsUtils)
+    private val validateAuthDataUseCase = ValidateAuthDataUseCase()
+    private val authUseCase = AuthUseCase(repository, prefsUtils, validateAuthDataUseCase)
 
     @Test
     fun `empty email returns EmailError`() = runTest {
