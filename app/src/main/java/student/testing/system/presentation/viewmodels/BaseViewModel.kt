@@ -13,7 +13,7 @@ import student.testing.system.domain.DataState
  *
  * @param T The type of data that the ViewModel will handle.
  */
-open class BaseViewModel<T> : ViewModel() {
+open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
 
     private val _uiState = MutableStateFlow<DataState<T>>(DataState.Initial)
     val uiState: StateFlow<DataState<T>> = _uiState.asStateFlow()
@@ -31,5 +31,9 @@ open class BaseViewModel<T> : ViewModel() {
         _uiState.value = DataState.Loading
         optionalCallback.invoke(requestResult)
         _uiState.value = requestResult
+    }
+
+    override fun resetState() {
+        _uiState.value = DataState.Initial
     }
 }

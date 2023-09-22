@@ -4,29 +4,15 @@ package student.testing.system.presentation.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,142 +21,66 @@ import student.testing.system.R
 import student.testing.system.domain.login.LoginState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
+import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LoadingIndicator
+import student.testing.system.presentation.ui.components.PasswordTextField
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen() {
     val viewModel = hiltViewModel<LoginViewModel>()
-    val uiState by viewModel.uiState.collectAsState(LoginState.Initial)
+    val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    Surface {
-        Scaffold(
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            },
-        ) { contentPadding ->
-            CenteredColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
-            ) {
-                Text(
-                    text = stringResource(R.string.app_name),
-                    color = LoginTextColor,
-                    fontSize = 24.sp,
-                    modifier = Modifier.padding(bottom = 100.dp)
-                )
-                val email = EmailTextField(uiState = uiState, viewModel = viewModel)
-                val password = PasswordTextField(uiState = uiState, viewModel = viewModel)
-                Button(
-                    onClick = {
-                        scope.launch { viewModel.auth(email = email, password = password) }
-                    }, modifier = Modifier
-                        .padding(top = 30.dp)
-                        .height(45.dp)
-                        .width(250.dp)
-                ) { Text(stringResource(R.string.sign_in)) }
-                Text(
-                    text = stringResource(R.string.registration),
-                    color = LoginTextColor,
-                    fontSize = 16.sp,
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .clickable { viewModel.onNavigateToSignUp() }
-                )
-            }
-        }
-        if (uiState is LoginState.Loading) {
-            LoadingIndicator()
-        } else if (uiState is LoginState.Error) {
-            LaunchedEffect(Unit) { // the key define when the block is relaunched
-                scope.launch {
-                    snackbarHostState.showSnackbar((uiState as LoginState.Error).exception)
-                }
-            }
-
-        }
-    }
-}
-
-@Composable
-fun <T> EmailTextField(uiState: LoginState<T>, viewModel: LoginViewModel): String {
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var isEmailError by remember { mutableStateOf(false) }
-    OutlinedTextField(value = email,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        label = { Text(stringResource(R.string.e_mail)) },
-        isError = isEmailError,
-        supportingText = {
-            if (isEmailError) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource((uiState as LoginState.EmailError).messageResId),
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         },
-        onValueChange = {
-            email = it
-            isEmailError = false
-            viewModel.resetState()
-        },
-        trailingIcon = {
-            if (isEmailError) Icon(
-                Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error
+    ) { contentPadding ->
+        CenteredColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+        ) {
+            Text(
+                text = stringResource(R.string.app_name),
+                color = LoginTextColor,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(bottom = 100.dp)
             )
-        })
-    if (uiState is LoginState.EmailError) {
-        isEmailError = true
+            val isEmailError = uiState is LoginState.EmailError
+            val email = EmailTextField(
+                viewModel = viewModel,
+                isEmailError = isEmailError,
+                errorText = if (isEmailError) (uiState as LoginState.EmailError).messageResId else 0
+            )
+            val password = PasswordTextField(uiState = uiState, viewModel = viewModel)
+            Button(
+                onClick = {
+                    scope.launch { viewModel.auth(email = email, password = password) }
+                }, modifier = Modifier
+                    .padding(top = 30.dp)
+                    .height(45.dp)
+                    .width(250.dp)
+            ) { Text(stringResource(R.string.sign_in)) }
+            Text(
+                text = stringResource(R.string.registration),
+                color = LoginTextColor,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .clickable { viewModel.onNavigateToSignUp() }
+            )
+        }
     }
-    return email.text
-}
-
-@Composable
-fun <T> PasswordTextField(uiState: LoginState<T>, viewModel: LoginViewModel): String {
-    var password by remember { mutableStateOf(TextFieldValue("")) }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var isPasswordError by remember { mutableStateOf(false) }
-    OutlinedTextField(value = password,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        label = { Text(stringResource(R.string.password)) },
-        isError = isPasswordError,
-        supportingText = {
-            if (isPasswordError) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource((uiState as LoginState.PasswordError).messageResId),
-                    color = MaterialTheme.colorScheme.error
-                )
+    if (uiState is LoginState.Loading) {
+        LoadingIndicator()
+    } else if (uiState is LoginState.Error) {
+        LaunchedEffect(Unit) { // the key define when the block is relaunched
+            scope.launch {
+                snackbarHostState.showSnackbar((uiState as LoginState.Error).exception)
             }
-        },
-        onValueChange = {
-            password = it
-            isPasswordError = false
-            viewModel.resetState()
-        },
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = {
-            if (isPasswordError) {
-                Icon(
-                    Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error
-                )
-                return@OutlinedTextField
-            }
-            val image = if (passwordVisible) Icons.Filled.Visibility
-            else Icons.Filled.VisibilityOff
+        }
 
-            // Localized description for accessibility services
-            val description = if (passwordVisible) "Hide password" else "Show password"
-
-            // Toggle button to hide or display password
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(imageVector = image, description)
-            }
-        })
-    if (uiState is LoginState.PasswordError) {
-        isPasswordError = true
     }
-    return password.text
 }

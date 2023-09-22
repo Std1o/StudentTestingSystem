@@ -18,7 +18,7 @@ class LoginViewModel @Inject constructor(
     private val authUseCase: AuthUseCase,
     private val authIfPossibleUseCase: AuthIfPossibleUseCase,
     private val appNavigator: AppNavigator
-) : ViewModel() {
+) : ViewModel(), ResettableViewModel {
 
     private val _uiState = MutableStateFlow<LoginState<PrivateUser>>(LoginState.Loading)
     val uiState: StateFlow<LoginState<PrivateUser>> = _uiState.asStateFlow()
@@ -40,7 +40,7 @@ class LoginViewModel @Inject constructor(
         appNavigator.tryNavigateTo(Destination.SignUpScreen())
     }
 
-    fun resetState() {
+    override fun resetState() {
         _uiState.value = LoginState.Initial
     }
 }
