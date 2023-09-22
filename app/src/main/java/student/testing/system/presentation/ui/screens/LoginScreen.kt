@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.domain.login.LoginState
+import student.testing.system.domain.auth.AuthState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
@@ -48,11 +48,11 @@ fun LoginScreen() {
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 100.dp)
             )
-            val isEmailError = uiState is LoginState.EmailError
+            val isEmailError = uiState is AuthState.EmailError
             val email = EmailTextField(
                 viewModel = viewModel,
                 isEmailError = isEmailError,
-                errorText = if (isEmailError) (uiState as LoginState.EmailError).messageResId else 0
+                errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(uiState = uiState, viewModel = viewModel)
             Button(
@@ -73,12 +73,12 @@ fun LoginScreen() {
             )
         }
     }
-    if (uiState is LoginState.Loading) {
+    if (uiState is AuthState.Loading) {
         LoadingIndicator()
-    } else if (uiState is LoginState.Error) {
+    } else if (uiState is AuthState.Error) {
         LaunchedEffect(Unit) { // the key define when the block is relaunched
             scope.launch {
-                snackbarHostState.showSnackbar((uiState as LoginState.Error).exception)
+                snackbarHostState.showSnackbar((uiState as AuthState.Error).exception)
             }
         }
 

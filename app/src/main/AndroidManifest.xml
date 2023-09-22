@@ -14,7 +14,7 @@
         <activity
             android:name=".presentation.ui.activity.LaunchActivityNew"
             android:exported="true"
-            android:theme="@style/Theme.StudentTestingSystem">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

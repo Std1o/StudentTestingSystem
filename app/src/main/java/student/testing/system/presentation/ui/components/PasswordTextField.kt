@@ -24,12 +24,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
-import student.testing.system.domain.login.LoginState
+import student.testing.system.domain.auth.AuthState
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> PasswordTextField(uiState: LoginState<T>, viewModel: LoginViewModel): String {
+fun <T> PasswordTextField(uiState: AuthState<T>, viewModel: LoginViewModel): String {
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var passwordVisible by remember { mutableStateOf(false) }
     var isPasswordError by remember { mutableStateOf(false) }
@@ -41,7 +41,7 @@ fun <T> PasswordTextField(uiState: LoginState<T>, viewModel: LoginViewModel): St
             if (isPasswordError) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource((uiState as LoginState.PasswordError).messageResId),
+                    text = stringResource((uiState as AuthState.PasswordError).messageResId),
                     color = MaterialTheme.colorScheme.error
                 )
             }
@@ -70,7 +70,7 @@ fun <T> PasswordTextField(uiState: LoginState<T>, viewModel: LoginViewModel): St
                 Icon(imageVector = image, description)
             }
         })
-    if (uiState is LoginState.PasswordError) {
+    if (uiState is AuthState.PasswordError) {
         isPasswordError = true
     }
     return password.text

@@ -1,33 +1,33 @@
 package student.testing.system.data.mapper
 
 import student.testing.system.domain.DataState
-import student.testing.system.domain.login.LoginState
+import student.testing.system.domain.auth.AuthState
 
 class DataStateToLoadingStateMapper<T>(
     private val onSuccess: (data: T) -> Unit
 ) :
-    Mapper<DataState<T>, LoginState<T>> {
+    Mapper<DataState<T>, AuthState<T>> {
 
-    override fun map(input: DataState<T>): LoginState<T> {
+    override fun map(input: DataState<T>): AuthState<T> {
         return when (input) {
             is DataState.Initial -> {
-                return LoginState.Initial
+                return AuthState.Initial
             }
 
             is DataState.Loading -> {
-                return LoginState.Loading
+                return AuthState.Loading
             }
 
             is DataState.Success -> {
                 onSuccess.invoke(input.data)
-                return LoginState.Success(input.data)
+                return AuthState.Success(input.data)
             }
 
             is DataState.Error -> {
-                return LoginState.Error(input.exception, input.code)
+                return AuthState.Error(input.exception, input.code)
             }
 
-            else -> return LoginState.Loading
+            else -> return AuthState.Loading
         }
     }
 }
