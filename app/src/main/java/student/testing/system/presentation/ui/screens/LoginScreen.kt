@@ -2,6 +2,7 @@
 
 package student.testing.system.presentation.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -28,7 +29,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.login.LoginState
@@ -39,7 +40,7 @@ import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen() {
-    val viewModel: LoginViewModel = viewModel()
+    val viewModel = hiltViewModel<LoginViewModel>()
     val uiState by viewModel.uiState.collectAsState(LoginState.Initial)
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -74,7 +75,9 @@ fun LoginScreen() {
                     text = stringResource(R.string.registration),
                     color = LoginTextColor,
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(top = 10.dp)
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .clickable { viewModel.onNavigateToSignUp() }
                 )
             }
         }

@@ -21,6 +21,8 @@ import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
 import student.testing.system.data.MainRepositoryImpl
 import student.testing.system.domain.MainRepository
 import student.testing.system.data.RemoteDataSource
+import student.testing.system.presentation.navigation.AppNavigator
+import student.testing.system.presentation.navigation.AppNavigatorImpl
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.sharedPreferences.PrefsUtilsImpl
 import java.util.concurrent.TimeUnit
@@ -87,4 +89,8 @@ object AppModule {
     fun providePrefsUtils(
         sharedPreferences: SharedPreferences
     ) = PrefsUtilsImpl(sharedPreferences) as PrefsUtils
+
+    @Singleton
+    @Provides
+    fun provideLaunchNavigation() = AppNavigatorImpl() as AppNavigator
 }
