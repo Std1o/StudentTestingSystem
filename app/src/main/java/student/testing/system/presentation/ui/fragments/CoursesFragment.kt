@@ -13,14 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
-import student.testing.system.models.CourseResponse
-import student.testing.system.common.*
+import student.testing.system.common.AccountSession
+import student.testing.system.common.confirmAction
+import student.testing.system.common.subscribeInUI
+import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentCoursesBinding
-import student.testing.system.sharedPreferences.PrefsUtils
-import student.testing.system.presentation.ui.activity.LaunchActivity
+import student.testing.system.models.CourseResponse
+import student.testing.system.presentation.ui.activity.LaunchActivityNew
 import student.testing.system.presentation.ui.adapters.CoursesAdapter
 import student.testing.system.presentation.ui.dialogFragments.CourseAddingDialogFragment
 import student.testing.system.presentation.viewmodels.CoursesViewModel
+import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
 
@@ -84,9 +87,10 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
                     confirmAction(R.string.logout_request) { _, _ ->
                         prefUtils.clearData()
                         requireActivity().finish()
-                        startActivity(Intent(requireContext(), LaunchActivity::class.java))
+                        startActivity(Intent(requireContext(), LaunchActivityNew::class.java))
                     }
                 }
+
                 R.id.action_who_am_i -> {
                     val account = AccountSession.instance
                     val userInfo = getString(R.string.user_info, account.username, account.email)

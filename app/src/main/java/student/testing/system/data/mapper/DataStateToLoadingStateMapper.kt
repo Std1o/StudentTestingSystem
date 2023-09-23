@@ -11,7 +11,7 @@ class DataStateToLoadingStateMapper<T>(
     override fun map(input: DataState<T>): AuthState<T> {
         return when (input) {
             is DataState.Initial -> {
-                return AuthState.Initial
+                return AuthState.NoState
             }
 
             is DataState.Loading -> {

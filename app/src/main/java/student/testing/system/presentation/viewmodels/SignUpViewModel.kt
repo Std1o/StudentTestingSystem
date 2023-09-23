@@ -17,7 +17,7 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase
 ) : ViewModel(), ResettableViewModel {
 
-    private val _uiState = MutableStateFlow<AuthState<PrivateUser>>(AuthState.Initial)
+    private val _uiState = MutableStateFlow<AuthState<PrivateUser>>(AuthState.NoState)
     val uiState: StateFlow<AuthState<PrivateUser>> = _uiState.asStateFlow()
 
     fun signUp(email: String, username: String, password: String) {
@@ -28,6 +28,6 @@ class SignUpViewModel @Inject constructor(
     }
 
     override fun resetState() {
-        _uiState.value = AuthState.Initial
+        _uiState.value = AuthState.NoState
     }
 }

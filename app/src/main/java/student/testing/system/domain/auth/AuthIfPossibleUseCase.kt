@@ -13,7 +13,7 @@ class AuthIfPossibleUseCase @Inject constructor(
         return if (isAuthDataSaved()) {
             authWithSavedData()
         } else {
-            LoginState.Unauthorized
+            AuthState.NoState
         }
     }
 

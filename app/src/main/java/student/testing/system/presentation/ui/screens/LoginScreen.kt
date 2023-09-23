@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.auth.AuthState
+import student.testing.system.domain.auth.LoginState
 import student.testing.system.presentation.ui.activity.MainActivity
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
@@ -41,6 +42,10 @@ fun LoginScreen() {
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { contentPadding ->
+        if (needToHideUI(uiState)) {
+            LoadingIndicator()
+            return@Scaffold
+        }
         CenteredColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,6 +99,8 @@ fun LoginScreen() {
                 snackbarHostState.showSnackbar((uiState as AuthState.Error).exception)
             }
         }
-
     }
 }
+
+fun <T> needToHideUI(uiState: AuthState<T>) =
+    uiState is LoginState.AuthStateChecking || uiState is AuthState.Success
