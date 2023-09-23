@@ -16,28 +16,4 @@ sealed class Destination(protected val route: String, vararg params: String) {
     object SignUpScreen : NoArgumentsDestination("sign_up")
 
     object CoursesScreen : NoArgumentsDestination("courses")
-
-    object DetailsScreen : NoArgumentsDestination("details")
-
-    object UserDetailsScreen : Destination("user_details", "firstName", "lastName") {
-        const val FIST_NAME_KEY = "firstName"
-        const val LAST_NAME_KEY = "lastName"
-
-        operator fun invoke(fistName: String, lastName: String): String = route.appendParams(
-            FIST_NAME_KEY to fistName,
-            LAST_NAME_KEY to lastName
-        )
-    }
-}
-
-internal fun String.appendParams(vararg params: Pair<String, Any?>): String {
-    val builder = StringBuilder(this)
-
-    params.forEach {
-        it.second?.toString()?.let { arg ->
-            builder.append("/$arg")
-        }
-    }
-
-    return builder.toString()
 }

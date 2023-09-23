@@ -15,9 +15,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 @Composable
-fun NavHost(
+fun NavHostMain(
     navController: NavHostController,
-    startDestination: Destination,
+    startDestination: DestinationMain,
     modifier: Modifier = Modifier,
     route: String? = null,
     builder: NavGraphBuilder.() -> Unit
@@ -42,7 +42,7 @@ private val exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.(
     }
 
 fun NavGraphBuilder.composable(
-    destination: Destination,
+    destination: DestinationMain,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
