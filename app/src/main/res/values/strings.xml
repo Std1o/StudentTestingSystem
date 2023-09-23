@@ -72,5 +72,4 @@
         <item>Один из списка</item>
         <item>Несколько из списка</item>
     </array>
-    <string name="title_activity_launch_new">LaunchActivityNew</string>
 </resources>

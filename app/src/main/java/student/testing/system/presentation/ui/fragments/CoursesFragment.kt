@@ -19,7 +19,7 @@ import student.testing.system.common.subscribeInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentCoursesBinding
 import student.testing.system.models.CourseResponse
-import student.testing.system.presentation.ui.activity.LaunchActivityNew
+import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.adapters.CoursesAdapter
 import student.testing.system.presentation.ui.dialogFragments.CourseAddingDialogFragment
 import student.testing.system.presentation.viewmodels.CoursesViewModel
@@ -87,7 +87,7 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
                     confirmAction(R.string.logout_request) { _, _ ->
                         prefUtils.clearData()
                         requireActivity().finish()
-                        startActivity(Intent(requireContext(), LaunchActivityNew::class.java))
+                        startActivity(Intent(requireContext(), LaunchActivity::class.java))
                     }
                 }
 
