@@ -2,6 +2,8 @@
 
 package student.testing.system.presentation.ui.screens
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -12,6 +14,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.auth.AuthState
+import student.testing.system.presentation.ui.activity.MainActivity
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
@@ -80,6 +84,10 @@ fun LoginScreen() {
     }
     if (uiState is AuthState.Loading) {
         LoadingIndicator()
+    } else if (uiState is AuthState.Success) {
+        val activity = (LocalContext.current as? Activity)
+        activity?.finish()
+        activity?.startActivity(Intent(activity, MainActivity::class.java))
     } else if (uiState is AuthState.Error) {
         LaunchedEffect(Unit) { // the key define when the block is relaunched
             scope.launch {

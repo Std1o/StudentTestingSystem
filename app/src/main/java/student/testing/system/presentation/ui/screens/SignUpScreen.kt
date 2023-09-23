@@ -3,6 +3,7 @@
 package student.testing.system.presentation.ui.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,9 +16,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +40,7 @@ import student.testing.system.domain.auth.AuthState
 import student.testing.system.domain.auth.SignUpState
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
+import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.PasswordTextField
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 import student.testing.system.presentation.viewmodels.SignUpViewModel
@@ -46,35 +51,55 @@ fun SignUpScreen() {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    CenteredColumn {
-        val isEmailError = uiState is AuthState.EmailError
-        val isPasswordError = uiState is AuthState.PasswordError
-        val isUsernameError = uiState is SignUpState.NameError
-        val username = UsernameTextField(
-            viewModel = viewModel,
-            isUsernameError = isUsernameError,
-            errorText = if (isUsernameError) (uiState as SignUpState.NameError).messageResId else 0
-        )
-        val email = EmailTextField(
-            viewModel = viewModel,
-            isEmailError = isEmailError,
-            errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
-        )
-        val password = PasswordTextField(
-            viewModel = viewModel,
-            isPasswordError = isPasswordError,
-            errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
-        )
-        Button(
-            onClick = {
-                scope.launch {
-                    viewModel.signUp(email = email, username = username, password = password)
-                }
-            }, modifier = Modifier
-                .padding(top = 30.dp)
-                .height(45.dp)
-                .width(250.dp)
-        ) { Text(stringResource(R.string.sign_up)) }
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+    ) { contentPadding ->
+        CenteredColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+        ) {
+            val isEmailError = uiState is AuthState.EmailError
+            val isPasswordError = uiState is AuthState.PasswordError
+            val isUsernameError = uiState is SignUpState.NameError
+            val username = UsernameTextField(
+                viewModel = viewModel,
+                isUsernameError = isUsernameError,
+                errorText = if (isUsernameError) (uiState as SignUpState.NameError).messageResId else 0
+            )
+            val email = EmailTextField(
+                viewModel = viewModel,
+                isEmailError = isEmailError,
+                errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
+            )
+            val password = PasswordTextField(
+                viewModel = viewModel,
+                isPasswordError = isPasswordError,
+                errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
+            )
+            Button(
+                onClick = {
+                    scope.launch {
+                        viewModel.signUp(email = email, username = username, password = password)
+                    }
+                }, modifier = Modifier
+                    .padding(top = 30.dp)
+                    .height(45.dp)
+                    .width(250.dp)
+            ) { Text(stringResource(R.string.sign_up)) }
+        }
+    }
+    if (uiState is AuthState.Loading) {
+        LoadingIndicator()
+    } else if (uiState is AuthState.Error) {
+        LaunchedEffect(Unit) { // the key define when the block is relaunched
+            scope.launch {
+                snackbarHostState.showSnackbar((uiState as AuthState.Error).exception)
+            }
+        }
+
     }
 }
 
