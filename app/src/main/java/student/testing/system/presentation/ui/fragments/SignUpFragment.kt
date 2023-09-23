@@ -2,14 +2,21 @@ package student.testing.system.presentation.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
-import student.testing.system.common.*
+import student.testing.system.common.launchWhenStartedCollect
+import student.testing.system.common.showIf
+import student.testing.system.common.showSnackbar
+import student.testing.system.common.trimString
+import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentSignUpBinding
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.auth.AuthState
 import student.testing.system.presentation.ui.activity.MainActivity
 import student.testing.system.presentation.viewmodels.SignUpViewModel
 
@@ -22,10 +29,13 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
+            loginLayout.editText?.doOnTextChanged { _, _, _, _ ->
+                loginLayout.error = null
+            }
+            passwordLayout.editText?.doOnTextChanged { _, _, _, _ ->
+                passwordLayout.error = null
+            }
             btnSignUp.setOnClickListener {
-                if (!(nameLayout.isNotEmpty() && loginLayout.isValidEmail() && passwordLayout.isNotEmpty())) {
-                    return@setOnClickListener
-                }
                 viewModel.signUp(
                     email.text.trimString(),
                     name.text.trimString(),
@@ -37,9 +47,20 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     }
 
     private fun subscribeObservers() {
-        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
-            requireActivity().finish()
-            startActivity(Intent(requireContext(), MainActivity::class.java))
-        }
+        viewModel.uiState.onEach {
+            binding.progressBar.showIf(it is AuthState.Loading)
+            if (it is AuthState.Unauthorized) {
+                binding.progressBar.showIf(false)
+            } else if (it is AuthState.Success) {
+                requireActivity().finish()
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+            } else if (it is AuthState.Error) {
+                showSnackbar(it.exception)
+            } else if (it is AuthState.EmailError) {
+                binding.loginLayout.error = getString(it.messageResId)
+            } else if (it is AuthState.PasswordError) {
+                binding.passwordLayout.error = getString(it.messageResId)
+            }
+        }.launchWhenStartedCollect(lifecycleScope)
     }
 }
