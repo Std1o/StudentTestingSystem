@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.auth.AuthState
 import student.testing.system.domain.auth.SignUpState
+import student.testing.system.presentation.ui.components.AuthStateHandler
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LoadingIndicator
@@ -91,16 +92,7 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    if (uiState is AuthState.Loading) {
-        LoadingIndicator()
-    } else if (uiState is AuthState.Error) {
-        LaunchedEffect(Unit) { // the key define when the block is relaunched
-            scope.launch {
-                snackbarHostState.showSnackbar((uiState as AuthState.Error).exception)
-            }
-        }
-
-    }
+    AuthStateHandler(uiState = uiState, scope = scope, snackbarHostState = snackbarHostState)
 }
 
 @Composable
