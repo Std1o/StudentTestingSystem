@@ -14,6 +14,7 @@ import student.testing.system.R
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentLoginBinding
 import student.testing.system.domain.auth.AuthState
+import student.testing.system.domain.auth.LoginState
 import student.testing.system.presentation.ui.activity.MainActivity
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
@@ -48,8 +49,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun subscribeObserver() {
         viewModel.uiState.onEach {
             binding.progressBar.showIf(it is AuthState.Loading)
-            if (it is AuthState.Unauthorized) {
-                binding.progressBar.showIf(false)
+            if (it is LoginState.Unauthorized) {
                 binding.main.showIf(true)
             } else if (it is AuthState.Success) {
                 requireActivity().finish()

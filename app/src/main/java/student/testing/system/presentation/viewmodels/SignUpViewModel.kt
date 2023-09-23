@@ -17,7 +17,7 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase
 ) : ViewModel(), ResettableViewModel {
 
-    private val _uiState = MutableStateFlow<AuthState<PrivateUser>>(AuthState.Unauthorized)
+    private val _uiState = MutableStateFlow<AuthState<PrivateUser>>(AuthState.Initial)
     val uiState: StateFlow<AuthState<PrivateUser>> = _uiState.asStateFlow()
 
     fun signUp(email: String, username: String, password: String) {

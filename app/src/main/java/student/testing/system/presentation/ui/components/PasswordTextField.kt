@@ -25,8 +25,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
-import student.testing.system.domain.auth.AuthState
-import student.testing.system.presentation.viewmodels.LoginViewModel
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +37,8 @@ fun PasswordTextField(
     var isPasswordError = isPasswordError
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var passwordVisible by remember { mutableStateOf(false) }
-    OutlinedTextField(value = password,
+    OutlinedTextField(
+        value = password,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         label = { Text(stringResource(R.string.password)) },
         isError = isPasswordError,

@@ -1,5 +1,6 @@
 package student.testing.system.domain.auth
 
+import student.testing.system.R
 import student.testing.system.common.AccountSession
 import student.testing.system.data.mapper.DataStateToLoadingStateMapper
 import student.testing.system.domain.MainRepository
@@ -19,6 +20,7 @@ class SignUpUseCase @Inject constructor(
         username: String,
         password: String
     ): AuthState<PrivateUser> {
+        if (username.isEmpty()) return SignUpState.NameError(R.string.error_empty_field)
         val validationResult = validateAuthDataUseCase(email = email, password = password)
         return if (validationResult is AuthState.ValidationSuccesses) {
             signUp(email = email, username = username, password = password)

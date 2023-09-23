@@ -31,7 +31,8 @@ fun EmailTextField(
 ): String {
     var isEmailError = isEmailError
     var email by remember { mutableStateOf(TextFieldValue("")) }
-    OutlinedTextField(value = email,
+    OutlinedTextField(
+        value = email,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         label = { Text(stringResource(R.string.e_mail)) },
         isError = isEmailError,

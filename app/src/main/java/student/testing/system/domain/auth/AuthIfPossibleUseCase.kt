@@ -10,12 +10,11 @@ class AuthIfPossibleUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(): AuthState<PrivateUser> {
-        if (isAuthDataSaved()) {
-            return authWithSavedData()
+        return if (isAuthDataSaved()) {
+            authWithSavedData()
         } else {
-            return AuthState.Unauthorized
+            LoginState.Unauthorized
         }
-        return AuthState.Loading
     }
 
     private fun isAuthDataSaved() = prefsUtils.getEmail().isNotEmpty()

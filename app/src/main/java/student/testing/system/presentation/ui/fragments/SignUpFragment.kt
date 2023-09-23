@@ -49,9 +49,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private fun subscribeObservers() {
         viewModel.uiState.onEach {
             binding.progressBar.showIf(it is AuthState.Loading)
-            if (it is AuthState.Unauthorized) {
-                binding.progressBar.showIf(false)
-            } else if (it is AuthState.Success) {
+            if (it is AuthState.Success) {
                 requireActivity().finish()
                 startActivity(Intent(requireContext(), MainActivity::class.java))
             } else if (it is AuthState.Error) {
