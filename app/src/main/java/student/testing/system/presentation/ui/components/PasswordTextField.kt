@@ -1,5 +1,6 @@
 package student.testing.system.presentation.ui.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -26,13 +27,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
 import student.testing.system.domain.auth.AuthState
 import student.testing.system.presentation.viewmodels.LoginViewModel
+import student.testing.system.presentation.viewmodels.ResettableViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> PasswordTextField(uiState: AuthState<T>, viewModel: LoginViewModel): String {
+fun PasswordTextField(
+    viewModel: ResettableViewModel,
+    isPasswordError: Boolean,
+    @StringRes errorText: Int
+): String {
+    var isPasswordError = isPasswordError
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var passwordVisible by remember { mutableStateOf(false) }
-    var isPasswordError by remember { mutableStateOf(false) }
     OutlinedTextField(value = password,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         label = { Text(stringResource(R.string.password)) },
@@ -41,7 +47,7 @@ fun <T> PasswordTextField(uiState: AuthState<T>, viewModel: LoginViewModel): Str
             if (isPasswordError) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource((uiState as AuthState.PasswordError).messageResId),
+                    text = stringResource(errorText),
                     color = MaterialTheme.colorScheme.error
                 )
             }
@@ -70,8 +76,5 @@ fun <T> PasswordTextField(uiState: AuthState<T>, viewModel: LoginViewModel): Str
                 Icon(imageVector = image, description)
             }
         })
-    if (uiState is AuthState.PasswordError) {
-        isPasswordError = true
-    }
     return password.text
 }

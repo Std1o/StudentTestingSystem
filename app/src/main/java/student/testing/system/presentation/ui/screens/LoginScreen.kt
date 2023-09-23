@@ -49,12 +49,17 @@ fun LoginScreen() {
                 modifier = Modifier.padding(bottom = 100.dp)
             )
             val isEmailError = uiState is AuthState.EmailError
+            val isPasswordError = uiState is AuthState.PasswordError
             val email = EmailTextField(
                 viewModel = viewModel,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
             )
-            val password = PasswordTextField(uiState = uiState, viewModel = viewModel)
+            val password = PasswordTextField(
+                viewModel = viewModel,
+                isPasswordError = isPasswordError,
+                errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
+            )
             Button(
                 onClick = {
                     scope.launch { viewModel.auth(email = email, password = password) }
