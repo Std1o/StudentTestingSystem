@@ -19,14 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.auth.AuthState
 import student.testing.system.domain.auth.LoginState
-import student.testing.system.presentation.ui.activity.MainActivity
+import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
-import student.testing.system.presentation.ui.components.AuthStateHandler
+import student.testing.system.presentation.ui.components.SimpleUIStateHandler
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LoadingIndicator
@@ -89,7 +88,11 @@ fun LoginScreen() {
             )
         }
     }
-    AuthStateHandler(uiState = uiState, scope = scope, snackbarHostState = snackbarHostState)
+    SimpleUIStateHandler(uiState = uiState, scope = scope, snackbarHostState = snackbarHostState) {
+        val activity = (LocalContext.current as? Activity)
+        activity?.finish()
+        activity?.startActivity(Intent(activity, MainActivityNew::class.java))
+    }
 }
 
 fun <T> needToHideUI(uiState: AuthState<T>) =

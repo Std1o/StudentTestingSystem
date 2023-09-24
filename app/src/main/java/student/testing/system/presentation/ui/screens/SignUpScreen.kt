@@ -2,6 +2,8 @@
 
 package student.testing.system.presentation.ui.screens
 
+import android.app.Activity
+import android.content.Intent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +23,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -38,10 +40,10 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.auth.AuthState
 import student.testing.system.domain.auth.SignUpState
-import student.testing.system.presentation.ui.components.AuthStateHandler
+import student.testing.system.presentation.ui.activity.MainActivityNew
+import student.testing.system.presentation.ui.components.SimpleUIStateHandler
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
-import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.PasswordTextField
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 import student.testing.system.presentation.viewmodels.SignUpViewModel
@@ -92,7 +94,11 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    AuthStateHandler(uiState = uiState, scope = scope, snackbarHostState = snackbarHostState)
+    SimpleUIStateHandler(uiState = uiState, scope = scope, snackbarHostState = snackbarHostState) {
+        val activity = (LocalContext.current as? Activity)
+        activity?.finish()
+        activity?.startActivity(Intent(activity, MainActivityNew::class.java))
+    }
 }
 
 @Composable
