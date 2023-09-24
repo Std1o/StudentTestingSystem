@@ -2,9 +2,9 @@ name: Unit Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "android_views" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "android_views" ]
 
 jobs:
   test:
