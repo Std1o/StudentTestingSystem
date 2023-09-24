@@ -1,8 +1,9 @@
 package student.testing.system.domain.auth
 
 import student.testing.system.common.AccountSession
-import student.testing.system.data.mapper.DataStateToLoadingStateMapper
 import student.testing.system.domain.MainRepository
+import student.testing.system.domain.states.AuthState
+import student.testing.system.domain.states.DataState
 import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
@@ -26,10 +27,11 @@ class LoginUseCase @Inject constructor(
         val authRequest =
             "grant_type=&username=$email&password=$password&scope=&client_id=&client_secret="
         val requestResult = repository.auth(authRequest)
-        return DataStateToLoadingStateMapper<PrivateUser> {
+        if (requestResult is DataState.Success) {
             saveAuthData(email, password)
-            createSession(it)
-        }.map(requestResult)
+            createSession(requestResult.data)
+        }
+        return requestResult
     }
 
     private fun createSession(privateUser: PrivateUser) {

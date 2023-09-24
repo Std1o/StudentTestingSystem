@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
-import student.testing.system.domain.auth.AuthState
-import student.testing.system.domain.auth.LoginState
+import student.testing.system.domain.states.AuthState
+import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.LoginState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
@@ -32,7 +33,7 @@ class LoginViewModel @Inject constructor(
 
     fun auth(email: String, password: String) {
         viewModelScope.launch {
-            _uiState.value = AuthState.Loading
+            _uiState.value = DataState.Loading
             _uiState.value = loginUseCase(email, password)
         }
     }
@@ -42,6 +43,6 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun resetState() {
-        _uiState.value = AuthState.NoState
+        _uiState.value = DataState.NoState
     }
 }

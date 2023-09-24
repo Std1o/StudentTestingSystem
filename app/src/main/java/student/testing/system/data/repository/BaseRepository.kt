@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import student.testing.system.common.Utils
-import student.testing.system.domain.DataState
+import student.testing.system.domain.states.DataState
 
 open class BaseRepository {
 

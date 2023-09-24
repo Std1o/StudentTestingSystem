@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import student.testing.system.domain.DataState
+import student.testing.system.domain.states.DataState
 
 /**
  * BaseViewModel is an abstract class that provides a base implementation for ViewModels in the app.
@@ -15,7 +15,7 @@ import student.testing.system.domain.DataState
  */
 open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
 
-    private val _uiState = MutableStateFlow<DataState<T>>(DataState.Initial)
+    private val _uiState = MutableStateFlow<DataState<T>>(DataState.NoState)
     val uiState: StateFlow<DataState<T>> = _uiState.asStateFlow()
 
     /**
@@ -34,6 +34,6 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
     }
 
     override fun resetState() {
-        _uiState.value = DataState.Initial
+        _uiState.value = DataState.NoState
     }
 }

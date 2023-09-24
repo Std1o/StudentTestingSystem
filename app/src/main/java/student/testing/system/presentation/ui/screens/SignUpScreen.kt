@@ -38,8 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.domain.auth.AuthState
-import student.testing.system.domain.auth.SignUpState
+import student.testing.system.data.mapper.ToDataStateMapper
+import student.testing.system.domain.states.AuthState
+import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.SignUpState
+import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.components.SimpleUIStateHandler
 import student.testing.system.presentation.ui.components.CenteredColumn
@@ -94,7 +97,8 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    SimpleUIStateHandler(uiState = uiState, scope = scope, snackbarHostState = snackbarHostState) {
+    val dataState = ToDataStateMapper<AuthState<PrivateUser>, PrivateUser>().map(uiState)
+    SimpleUIStateHandler(uiState = dataState, snackbarHostState = snackbarHostState) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivityNew::class.java))

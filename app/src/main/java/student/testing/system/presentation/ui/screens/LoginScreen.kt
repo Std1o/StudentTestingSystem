@@ -21,15 +21,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.domain.auth.AuthState
-import student.testing.system.domain.auth.LoginState
+import student.testing.system.data.mapper.ToDataStateMapper
+import student.testing.system.domain.states.AuthState
+import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.LoginState
+import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
-import student.testing.system.presentation.ui.components.SimpleUIStateHandler
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.PasswordTextField
+import student.testing.system.presentation.ui.components.SimpleUIStateHandler
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
@@ -88,7 +91,8 @@ fun LoginScreen() {
             )
         }
     }
-    SimpleUIStateHandler(uiState = uiState, scope = scope, snackbarHostState = snackbarHostState) {
+    val dataState = ToDataStateMapper<AuthState<PrivateUser>, PrivateUser>().map(uiState)
+    SimpleUIStateHandler(uiState = dataState, snackbarHostState = snackbarHostState) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivityNew::class.java))
@@ -96,4 +100,4 @@ fun LoginScreen() {
 }
 
 fun <T> needToHideUI(uiState: AuthState<T>) =
-    uiState is LoginState.AuthStateChecking || uiState is AuthState.Success
+    uiState is LoginState.AuthStateChecking || uiState is DataState.Success

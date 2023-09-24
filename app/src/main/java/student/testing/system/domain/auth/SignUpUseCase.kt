@@ -2,8 +2,10 @@ package student.testing.system.domain.auth
 
 import student.testing.system.R
 import student.testing.system.common.AccountSession
-import student.testing.system.data.mapper.DataStateToLoadingStateMapper
 import student.testing.system.domain.MainRepository
+import student.testing.system.domain.states.AuthState
+import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.models.SignUpReq
 import student.testing.system.sharedPreferences.PrefsUtils
@@ -35,10 +37,11 @@ class SignUpUseCase @Inject constructor(
         password: String
     ): AuthState<PrivateUser> {
         val requestResult = repository.signUp(SignUpReq(email, username, password))
-        return DataStateToLoadingStateMapper<PrivateUser> {
+        if (requestResult is DataState.Success) {
             saveAuthData(email, password)
-            createSession(it)
-        }.map(requestResult)
+            createSession(requestResult.data)
+        }
+        return requestResult
     }
 
     private fun createSession(privateUser: PrivateUser) {

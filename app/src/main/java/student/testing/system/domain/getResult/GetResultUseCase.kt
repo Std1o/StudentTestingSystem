@@ -1,6 +1,6 @@
 package student.testing.system.domain.getResult
 
-import student.testing.system.domain.DataState
+import student.testing.system.domain.states.DataState
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.TestResult
 import javax.inject.Inject

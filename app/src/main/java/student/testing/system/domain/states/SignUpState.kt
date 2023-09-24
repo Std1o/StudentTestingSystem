@@ -1,4 +1,4 @@
-package student.testing.system.domain.auth
+package student.testing.system.domain.states
 
 import androidx.annotation.StringRes
 

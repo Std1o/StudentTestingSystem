@@ -1,6 +1,6 @@
 package student.testing.system.domain
 
-import kotlinx.coroutines.flow.Flow
+import student.testing.system.domain.states.DataState
 import student.testing.system.models.*
 
 interface MainRepository {

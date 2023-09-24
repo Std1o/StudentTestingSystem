@@ -1,7 +1,7 @@
 package student.testing.system
 
 import io.mockk.mockk
-import student.testing.system.domain.DataState
+import student.testing.system.domain.states.DataState
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant

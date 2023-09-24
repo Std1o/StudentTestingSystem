@@ -15,7 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
-import student.testing.system.domain.DataState
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.domain.getResult.ResultState

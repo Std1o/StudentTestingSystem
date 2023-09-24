@@ -1,14 +1,13 @@
 package student.testing.system.domain.usecases
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
-import student.testing.system.domain.DataState
+import student.testing.system.domain.states.DataState
 import student.testing.system.models.CourseResponse
 
 @ExperimentalCoroutinesApi

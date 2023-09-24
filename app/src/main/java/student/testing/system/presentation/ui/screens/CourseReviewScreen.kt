@@ -26,7 +26,7 @@ import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
 
 @Composable
-fun CoursesScreen() {
+fun CourseReviewScreen() {
     val navController = rememberNavController()
     val items = listOf(
         DestinationMain.TestsScreen,
