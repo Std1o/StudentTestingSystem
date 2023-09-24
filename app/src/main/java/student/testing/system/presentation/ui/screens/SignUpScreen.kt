@@ -57,6 +57,7 @@ fun SignUpScreen() {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val contentState = viewModel.contentState
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -77,11 +78,13 @@ fun SignUpScreen() {
             )
             val email = EmailTextField(
                 viewModel = viewModel,
+                contentState = contentState.EmailContentState(),
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
                 viewModel = viewModel,
+                contentState = contentState.PasswordContentState(),
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
             )
@@ -98,7 +101,7 @@ fun SignUpScreen() {
         }
     }
     val dataState = ToDataStateMapper<AuthState<PrivateUser>, PrivateUser>().map(uiState)
-    SimpleUIStateHandler(uiState = dataState, snackbarHostState = snackbarHostState) {
+    SimpleUIStateHandler(dataState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivityNew::class.java))

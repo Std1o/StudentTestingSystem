@@ -20,17 +20,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import student.testing.system.R
+import student.testing.system.presentation.ui.screens.login.LoginContentState
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailTextField(
     viewModel: ResettableViewModel,
+    contentState: LoginContentState.EmailContentState,
     isEmailError: Boolean,
     @StringRes errorText: Int
 ): String {
     var isEmailError = isEmailError
-    var email by remember { mutableStateOf(TextFieldValue("")) }
+    var email by remember { mutableStateOf(TextFieldValue(contentState.getEmail())) }
     OutlinedTextField(
         value = email,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -47,6 +49,7 @@ fun EmailTextField(
         },
         onValueChange = {
             email = it
+            contentState.setEmail(it.text)
             isEmailError = false
             viewModel.resetState()
         },

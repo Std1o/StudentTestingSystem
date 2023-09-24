@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +42,7 @@ fun LoginScreen() {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val contentState = viewModel.contentState
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -65,11 +67,13 @@ fun LoginScreen() {
             val isPasswordError = uiState is AuthState.PasswordError
             val email = EmailTextField(
                 viewModel = viewModel,
+                contentState = contentState.EmailContentState(),
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
                 viewModel = viewModel,
+                contentState.PasswordContentState(),
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
             )
@@ -92,7 +96,7 @@ fun LoginScreen() {
         }
     }
     val dataState = ToDataStateMapper<AuthState<PrivateUser>, PrivateUser>().map(uiState)
-    SimpleUIStateHandler(uiState = dataState, snackbarHostState = snackbarHostState) {
+    SimpleUIStateHandler(dataState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivityNew::class.java))

@@ -1,5 +1,8 @@
 package student.testing.system.presentation.viewmodels
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +16,7 @@ import student.testing.system.domain.states.LoginState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
+import student.testing.system.presentation.ui.screens.login.LoginContentState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +28,10 @@ class LoginViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<AuthState<PrivateUser>>(LoginState.AuthStateChecking)
     val uiState: StateFlow<AuthState<PrivateUser>> = _uiState.asStateFlow()
+
+    var contentState by mutableStateOf(
+        LoginContentState()
+    )
 
     init {
         viewModelScope.launch {
