@@ -8,15 +8,19 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
-import student.testing.system.domain.DataState
-import student.testing.system.common.*
+import student.testing.system.common.AccountSession
+import student.testing.system.common.confirmAction
+import student.testing.system.common.launchWhenStartedCollect
+import student.testing.system.common.showIf
+import student.testing.system.common.showSnackbar
+import student.testing.system.common.subscribeInUI
+import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.domain.getResult.ResultState
 import student.testing.system.models.CourseResponse
@@ -111,7 +115,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
             } else if (it is ResultState.Error) {
                 showSnackbar(it.exception)
             }
-        }.launchWhenStartedCollect(lifecycleScope)
+        }.launchWhenStartedCollect(viewLifecycleOwner)
     }
 
     private fun showOptionsDialog(course: CourseResponse, testId: Int, isUserModerator: Boolean) {
@@ -127,6 +131,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
                         )
                         findNavController().navigate(action)
                     }
+
                     1 -> {
                         confirmAction(R.string.delete_request) { _, _ ->
                             deleteTest(testId, course.id)

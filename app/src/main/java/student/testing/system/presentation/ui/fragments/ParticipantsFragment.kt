@@ -40,7 +40,7 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
         sharedViewModel.courseFlow.distinctUntilChanged().onEach {
             course = it
             initRV(it)
-        }.launchWhenStartedCollect(lifecycleScope)
+        }.launchWhenStartedCollect(viewLifecycleOwner)
 
         viewModel.uiState.subscribeInUI(this, binding.progressBar) {
             course.participants = it

@@ -16,13 +16,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.domain.DataState
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
-import kotlinx.coroutines.launch
-import student.testing.system.domain.DataState
 
 fun View.showIf(visible: Boolean) {
     visibility = if (visible) {
@@ -91,9 +91,14 @@ fun <T : ViewBinding> Fragment.viewBinding(factory: (View) -> T): ReadOnlyProper
         }
     }
 
-fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope) {
-    lifecycleScope.launch {
-        this@launchWhenStartedCollect.collect()
+fun <T> Flow<T>.launchWhenStartedCollect(viewLifecycleOwner: LifecycleOwner) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        // Runs the block of code in a coroutine when the lifecycle is at least STARTED.
+        // The coroutine will be cancelled when the ON_STOP event happens and will
+        // restart executing if the lifecycle receives the ON_START event again.
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            this@launchWhenStartedCollect.collect()
+        }
     }
 }
 
@@ -111,7 +116,7 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(
         } else if (it is DataState.Error) {
             fragment.showSnackbar(it.exception)
         }
-    }.launchWhenStartedCollect(fragment.lifecycleScope)
+    }.launchWhenStartedCollect(fragment.viewLifecycleOwner)
 }
 
 fun <T> StateFlow<DataState<T>>.subscribeInUI(
@@ -128,7 +133,7 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(
         } else if (it is DataState.Error) {
             dialogFragment.showSnackbar(it.exception)
         }
-    }.launchWhenStartedCollect(dialogFragment.lifecycleScope)
+    }.launchWhenStartedCollect(dialogFragment.viewLifecycleOwner)
 }
 
 fun Any?.trimString(): String = this@trimString.toString().trim()

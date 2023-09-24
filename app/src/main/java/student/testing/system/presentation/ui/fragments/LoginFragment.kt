@@ -64,7 +64,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             } else if (it is LoginState.PasswordError) {
                 binding.passwordLayout.error = getString(it.messageResId)
             }
-        }.launchWhenStartedCollect(lifecycleScope)
+        }.launchWhenStartedCollect(viewLifecycleOwner)
     }
 
     private fun auth(email: String, password: String) {
