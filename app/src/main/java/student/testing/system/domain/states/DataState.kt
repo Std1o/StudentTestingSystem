@@ -12,21 +12,19 @@ import student.testing.system.annotations.NotScreenState
   that could be substituted under the guise of a DataState into absolutely any generic or method
  */
 sealed interface DataState<out R> : AuthState<R> {
-    object NoState : DataState<Nothing>, AuthState<Nothing>
+    object NoState : DataState<Nothing>
 
     @NotScreenState
-    data class Success<out T>(val data: T) : DataState<T>, AuthState<T>
+    data class Success<out T>(val data: T) : DataState<T>
 
     /**
      * Must be converted to Success with own local value in ViewModel
      */
-    data class Empty(val code: Int) : DataState<Nothing>, AuthState<Nothing>
-    data class Error(val exception: String, val code: Int = -1) : DataState<Nothing>,
-        AuthState<Nothing>
+    data class Empty(val code: Int) : DataState<Nothing>
+    data class Error(val exception: String, val code: Int = -1) : DataState<Nothing>
 
     @Deprecated("Make it a special case")
-    data class ValidationError(@StringRes val messageResId: Int) : DataState<Nothing>,
-        AuthState<Nothing>
+    data class ValidationError(@StringRes val messageResId: Int) : DataState<Nothing>
 
-    object Loading : DataState<Nothing>, AuthState<Nothing>
+    object Loading : DataState<Nothing>
 }
