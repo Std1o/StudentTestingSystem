@@ -4,12 +4,12 @@ import androidx.annotation.StringRes
 import student.testing.system.annotations.NotScreenState
 
 /*
-  If 50 interfaces are inherited from DataState,
-  then 50 types of states can be substituted into method that accepts DataState,
-  49 of which will be harmful on the LoginScreen for example.
+  In order to have a limited hierarchy of states, the general interface is inherited from the special ones.
 
-  If DataState is inherited from 50 interfaces, then into 50 methods accepting any interface,
-  it will always be possible to substitute DataState.
+  So, for each state we have a limited hierarchy: the state itself (parent) and DataState (child).
+
+  Otherwise, there would be a DataState with a many children
+  that could be substituted under the guise of a DataState into absolutely any generic or method
  */
 sealed interface DataState<out R> : AuthState<R> {
     object NoState : DataState<Nothing>, AuthState<Nothing>
@@ -17,7 +17,9 @@ sealed interface DataState<out R> : AuthState<R> {
     @NotScreenState
     data class Success<out T>(val data: T) : DataState<T>, AuthState<T>
 
-    @Deprecated("Make it a special case")
+    /**
+     * Must be converted to Success with own local value in ViewModel
+     */
     data class Empty(val code: Int) : DataState<Nothing>, AuthState<Nothing>
     data class Error(val exception: String, val code: Int = -1) : DataState<Nothing>,
         AuthState<Nothing>
