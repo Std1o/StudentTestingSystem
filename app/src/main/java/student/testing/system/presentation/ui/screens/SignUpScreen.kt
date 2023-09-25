@@ -78,13 +78,13 @@ fun SignUpScreen() {
             )
             val email = EmailTextField(
                 viewModel = viewModel,
-                contentState = contentState.EmailContentState(),
+                contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
                 viewModel = viewModel,
-                contentState = contentState.PasswordContentState(),
+                contentState = contentState.passwordContentState,
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
             )

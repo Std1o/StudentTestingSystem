@@ -69,13 +69,13 @@ fun LoginScreen() {
             val isPasswordError = uiState is AuthState.PasswordError
             val email = EmailTextField(
                 viewModel = viewModel,
-                contentState = contentState.EmailContentState(),
+                contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
                 viewModel = viewModel,
-                contentState.PasswordContentState(),
+                contentState.passwordContentState,
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
             )

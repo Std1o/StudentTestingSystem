@@ -25,20 +25,20 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
-import student.testing.system.presentation.ui.screens.login.LoginContentState
+import student.testing.system.presentation.ui.screens.login.PasswordContentState
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextField(
     viewModel: ResettableViewModel,
-    contentState: LoginContentState.PasswordContentState,
+    contentState: PasswordContentState,
     isPasswordError: Boolean,
     @StringRes errorText: Int
 ): String {
     var isPasswordError = isPasswordError
-    var password by remember { mutableStateOf(TextFieldValue(contentState.getPassword())) }
-    var passwordVisible by remember { mutableStateOf(false) }
+    var password by remember { mutableStateOf(TextFieldValue(contentState.password)) }
+    var passwordVisible by remember { mutableStateOf(contentState.isVisible) }
     OutlinedTextField(
         value = password,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -55,7 +55,7 @@ fun PasswordTextField(
         },
         onValueChange = {
             password = it
-            contentState.setPassword(it.text)
+            contentState.password = it.text
             isPasswordError = false
             viewModel.resetState()
         },
@@ -74,7 +74,10 @@ fun PasswordTextField(
             val description = if (passwordVisible) "Hide password" else "Show password"
 
             // Toggle button to hide or display password
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            IconButton(onClick = {
+                passwordVisible = !passwordVisible
+                contentState.isVisible = passwordVisible
+            }) {
                 Icon(imageVector = image, description)
             }
         })
