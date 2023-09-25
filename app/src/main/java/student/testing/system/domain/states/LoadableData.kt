@@ -1,5 +1,7 @@
 package student.testing.system.domain.states
 
+import student.testing.system.annotations.FunctionalityState
+
 /**
  * LoadableData is used for loading UI content from any data source,
  * such as list, images, text information.
@@ -28,4 +30,5 @@ package student.testing.system.domain.states
  * )
  * ```
  */
+@FunctionalityState
 sealed interface LoadableData<out R>
