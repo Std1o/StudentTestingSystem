@@ -16,10 +16,13 @@ sealed interface DataState<out R> : AuthState<R> {
 
     @NotScreenState
     data class Success<out T>(val data: T) : DataState<T>, AuthState<T>
+
+    @Deprecated("Make it a special case")
     data class Empty(val code: Int) : DataState<Nothing>, AuthState<Nothing>
     data class Error(val exception: String, val code: Int = -1) : DataState<Nothing>,
         AuthState<Nothing>
 
+    @Deprecated("Make it a special case")
     data class ValidationError(@StringRes val messageResId: Int) : DataState<Nothing>,
         AuthState<Nothing>
 

@@ -35,21 +35,6 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
         _uiState.value = requestResult
     }
 
-    /**
-     * Use if you sure that request when success returns 204
-     */
-    @OptIn(NotScreenState::class)
-    protected fun <E> launchRequest(
-        requestResult: DataState<Void>,
-        successData: E,
-    ): DataState<E> {
-        return if (requestResult is DataState.Empty) {
-            DataState.Success(successData)
-        } else {
-            DataState.Error("")
-        }
-    }
-
     override fun resetState() {
         _uiState.value = DataState.NoState
     }

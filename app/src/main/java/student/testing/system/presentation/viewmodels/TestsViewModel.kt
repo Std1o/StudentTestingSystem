@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.common.makeOperation
 import student.testing.system.domain.states.DataState
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
@@ -48,16 +49,11 @@ class TestsViewModel @Inject constructor(
         return stateFlow
     }
 
-    @OptIn(NotScreenState::class)
     fun deleteTest(testId: Int, courseId: Int): StateFlow<DataState<Int>> {
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {
-            val requestResult = repository.deleteTest(testId, courseId)
-            if (requestResult is DataState.Empty) {
-                stateFlow.emit(DataState.Success(testId))
-            } else {
-                stateFlow.emit(requestResult as DataState.Error)
-            }
+            val requestResult = makeOperation(repository.deleteTest(testId, courseId), testId)
+            stateFlow.emit(requestResult)
         }
         return stateFlow
     }

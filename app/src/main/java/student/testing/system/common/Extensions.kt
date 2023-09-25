@@ -15,15 +15,16 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.annotations.NotScreenState
+import student.testing.system.domain.states.DataState
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
-import kotlinx.coroutines.launch
-import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.states.DataState
 
 fun View.showIf(visible: Boolean) {
     visibility = if (visible) {
@@ -136,43 +137,22 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(
 
 fun Any?.trimString(): String = this@trimString.toString().trim()
 
-fun TextInputLayout.isValidEmail(): Boolean {
-    val inputLayout = this@isValidEmail
-    val context = inputLayout.context
-    inputLayout.editText?.doOnTextChanged { _, _, _, _ ->
-        inputLayout.error = null
+/**
+ * Use if you sure that request when success returns 204
+ */
+@OptIn(NotScreenState::class)
+fun <E> ViewModel.makeOperation(
+    requestResult: DataState<Void>,
+    successData: E,
+): DataState<E> {
+    return when (requestResult) {
+        is DataState.Empty -> DataState.Success(successData)
+        is DataState.Error -> DataState.Error(requestResult.exception)
+        DataState.Loading -> DataState.Loading
+        DataState.NoState -> DataState.NoState
+        is DataState.Success -> DataState.Success(successData)
+        is DataState.ValidationError -> DataState.ValidationError(requestResult.messageResId)
     }
-    editText?.let {
-        return if (it.text.isEmpty()) {
-            inputLayout.error = context.getString(R.string.error_empty_field)
-            false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(it.text).matches()) {
-            inputLayout.error = context.getString(R.string.error_invalid_email)
-            false
-        } else {
-            inputLayout.error = null
-            true
-        }
-    }
-    return false
-}
-
-fun TextInputLayout.isNotEmpty(): Boolean {
-    val inputLayout = this@isNotEmpty
-    val context = inputLayout.context
-    inputLayout.editText?.doOnTextChanged { _, _, _, _ ->
-        inputLayout.error = null
-    }
-    editText?.let {
-        return if (it.text.isEmpty()) {
-            inputLayout.error = context.getString(R.string.error_empty_field)
-            false
-        } else {
-            inputLayout.error = null
-            true
-        }
-    }
-    return false
 }
 
 fun EditText.isNotEmpty(): Boolean {
