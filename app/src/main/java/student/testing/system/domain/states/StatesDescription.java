@@ -10,7 +10,7 @@ import java.lang.annotation.Retention;
  * <p>
  * Subtype polymorphism: program elements (typically subroutines or functions),
  * written to operate on elements of the supertype, can also operate on elements of the subtype
- *
+ * <p>
  * Example:
  * <p>
  * <img width="741" height="427" src="https://i.ibb.co/DLgpbpr/states-hierarchy.png" alt="">

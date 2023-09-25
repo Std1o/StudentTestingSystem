@@ -3,20 +3,14 @@ package student.testing.system.domain.states
 import androidx.annotation.StringRes
 import student.testing.system.annotations.NotScreenState
 
-/*
-  In order to have a limited hierarchy of states, the general interface is inherited from the special ones.
-
-  So, for each state we have a limited hierarchy: the state itself (parent) and DataState (child).
-
-  Otherwise, there would be a DataState with a many children
-  that could be substituted under the guise of a DataState into absolutely any generic or method
- */
-
 /**
- * DataState contains the result of request and is not intended for long-term storage of the screen state.
+ * Don't use RequestState in the presentation layer
+ * <p>
  *
- * Its value must either be passed to the UI state,
- * or used for some quick actions (show the loader, show the snackbar with an error, navigate to a new screen)
+ * This can be used starting from data source and ending with ViewModel (exclusively).
+ * <p>
+ *
+ * Starting with the ViewModel, you must select either LoadableData or OperationState, or their derivatives.
  */
 sealed interface RequestState<out R> : OperationState<R>, LoadableData<R> {
     object NoState : RequestState<Nothing>

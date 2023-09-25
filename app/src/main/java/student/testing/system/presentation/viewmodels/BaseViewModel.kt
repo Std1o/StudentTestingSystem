@@ -23,7 +23,7 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
      * Launches a request and updates the UI state based on the response.
      *
      * @param requestResult A Flow representing the result of the request
-     * @param optionalCallback An optional callback function that will be called with each DataState emitted by the request result.
+     * @param onSuccess An optional callback function that will be called with each DataState emitted by the request result.
      */
     @OptIn(NotScreenState::class)
     protected fun launchRequest(
