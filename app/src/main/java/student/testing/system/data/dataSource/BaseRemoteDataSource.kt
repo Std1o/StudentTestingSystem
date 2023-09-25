@@ -1,4 +1,4 @@
-package student.testing.system.data.repository
+package student.testing.system.data.dataSource
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -7,8 +7,20 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Utils
 import student.testing.system.domain.states.RequestState
 
-open class BaseRepository {
+open class BaseRemoteDataSource {
 
+    /**
+     * Generates a RequestState that contains a limited set of states for any request.
+     * <p>
+     *
+     * ```
+     * ```
+     *
+     * In its turn, use cases generate special states some any functionality
+     * <p>
+     *
+     * (For example: authorization with validation, registration with validation).
+     */
     @OptIn(NotScreenState::class)
     suspend fun <T> apiCall(call: suspend () -> Response<T>): RequestState<T> {
         try {

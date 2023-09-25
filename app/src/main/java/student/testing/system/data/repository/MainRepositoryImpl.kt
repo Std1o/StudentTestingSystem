@@ -13,61 +13,61 @@ import javax.inject.Singleton
 @Singleton
 class MainRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
-) : BaseRepository(), MainRepository {
+) : MainRepository {
 
-    override suspend fun auth(request: String) = apiCall { remoteDataSource.auth(request) }
+    override suspend fun auth(request: String) = remoteDataSource.auth(request)
 
-    override suspend fun signUp(request: SignUpReq) = apiCall { remoteDataSource.signUp(request) }
+    override suspend fun signUp(request: SignUpReq) = remoteDataSource.signUp(request)
 
-    override suspend fun getCourses() = apiCall { remoteDataSource.getCourses() }
+    override suspend fun getCourses() = remoteDataSource.getCourses()
     override suspend fun createCourse(name: String) =
-        apiCall { remoteDataSource.createCourse(CourseCreationReq(name)) }
+        remoteDataSource.createCourse(CourseCreationReq(name))
 
     override suspend fun joinCourse(courseCode: String) =
-        apiCall { remoteDataSource.joinCourse(courseCode) }
+        remoteDataSource.joinCourse(courseCode)
 
     override suspend fun deleteCourse(courseId: Int) =
-        apiCall { remoteDataSource.deleteCourse(courseId) }
+        remoteDataSource.deleteCourse(courseId)
 
-    override suspend fun getTests(courseId: Int) = apiCall { remoteDataSource.getTests(courseId) }
+    override suspend fun getTests(courseId: Int) = remoteDataSource.getTests(courseId)
 
     override suspend fun createTest(request: TestCreationReq) =
-        apiCall { remoteDataSource.createTest(request) }
+        remoteDataSource.createTest(request)
 
     override suspend fun deleteTest(testId: Int, courseId: Int) =
-        apiCall { remoteDataSource.deleteTest(testId, courseId) }
+        remoteDataSource.deleteTest(testId, courseId)
 
     override suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) =
-        apiCall { remoteDataSource.calculateResult(testId, courseId, request) }
+        remoteDataSource.calculateResult(testId, courseId, request)
 
     override suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
         request: List<UserQuestion>
-    ) = apiCall {
+    ) =
         remoteDataSource.calculateDemoResult(courseId, testId, request)
-    }
+
 
     override suspend fun getResult(testId: Int, courseId: Int) =
-        apiCall { remoteDataSource.getResult(testId, courseId) }
+        remoteDataSource.getResult(testId, courseId)
 
     override suspend fun getResults(
         testId: Int,
         courseId: Int,
         params: TestResultsRequestParams
-    ) = apiCall {
+    ) =
         remoteDataSource.getResults(testId, courseId, params)
-    }
 
-    override suspend fun addModerator(courseId: Int, moderatorId: Int) = apiCall {
+
+    override suspend fun addModerator(courseId: Int, moderatorId: Int) =
         remoteDataSource.addModerator(courseId, moderatorId)
-    }
 
-    override suspend fun deleteModerator(courseId: Int, moderatorId: Int) = apiCall {
+
+    override suspend fun deleteModerator(courseId: Int, moderatorId: Int) =
         remoteDataSource.deleteModerator(courseId, moderatorId)
-    }
 
-    override suspend fun deleteParticipant(courseId: Int, participantId: Int) = apiCall {
+
+    override suspend fun deleteParticipant(courseId: Int, participantId: Int) =
         remoteDataSource.deleteParticipant(courseId, participantId)
-    }
+
 }

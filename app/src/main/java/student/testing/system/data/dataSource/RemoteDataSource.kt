@@ -1,62 +1,60 @@
 package student.testing.system.data.dataSource
 
-import retrofit2.Response
-import retrofit2.http.*
+import student.testing.system.domain.states.RequestState
 import student.testing.system.models.*
-import javax.inject.Inject
 
 interface RemoteDataSource {
 
-    suspend fun auth(request: String): Response<PrivateUser>
+    suspend fun auth(request: String): RequestState<PrivateUser>
 
-    suspend fun signUp(request: SignUpReq): Response<PrivateUser>
+    suspend fun signUp(request: SignUpReq): RequestState<PrivateUser>
 
-    suspend fun getCourses(): Response<List<CourseResponse>>
+    suspend fun getCourses(): RequestState<List<CourseResponse>>
 
-    suspend fun createCourse(request: CourseCreationReq): Response<CourseResponse>
+    suspend fun createCourse(request: CourseCreationReq): RequestState<CourseResponse>
 
-    suspend fun joinCourse(courseCode: String): Response<CourseResponse>
+    suspend fun joinCourse(courseCode: String): RequestState<CourseResponse>
 
-    suspend fun deleteCourse(courseId: Int): Response<Void>
+    suspend fun deleteCourse(courseId: Int): RequestState<Void>
 
-    suspend fun getTests(courseId: Int): Response<List<Test>>
+    suspend fun getTests(courseId: Int): RequestState<List<Test>>
 
-    suspend fun createTest(request: TestCreationReq): Response<Test>
+    suspend fun createTest(request: TestCreationReq): RequestState<Test>
 
-    suspend fun deleteTest(testId: Int, courseId: Int): Response<Void>
+    suspend fun deleteTest(testId: Int, courseId: Int): RequestState<Void>
 
     suspend fun calculateResult(
         testId: Int,
         courseId: Int,
         request: List<UserQuestion>
-    ): Response<Void>
+    ): RequestState<Void>
 
     suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
         request: List<UserQuestion>
-    ): Response<TestResult>
+    ): RequestState<TestResult>
 
-    suspend fun getResult(testId: Int, courseId: Int): Response<TestResult>
+    suspend fun getResult(testId: Int, courseId: Int): RequestState<TestResult>
 
     suspend fun getResults(
         testId: Int,
         courseId: Int,
         params: TestResultsRequestParams
-    ): Response<ParticipantsResults>
+    ): RequestState<ParticipantsResults>
 
     suspend fun addModerator(
         courseId: Int,
         moderatorId: Int
-    ): Response<List<Participant>>
+    ): RequestState<List<Participant>>
 
     suspend fun deleteModerator(
         courseId: Int,
         moderatorId: Int
-    ): Response<List<Participant>>
+    ): RequestState<List<Participant>>
 
     suspend fun deleteParticipant(
         courseId: Int,
         participantId: Int
-    ): Response<List<Participant>>
+    ): RequestState<List<Participant>>
 }
