@@ -11,6 +11,13 @@ import student.testing.system.annotations.NotScreenState
   Otherwise, there would be a DataState with a many children
   that could be substituted under the guise of a DataState into absolutely any generic or method
  */
+
+/**
+ * DataState contains the result of request and is not intended for long-term storage of the screen state.
+ *
+ * Its value must either be passed to the UI state,
+ * or used for some quick actions (show the loader, show the snackbar with an error, navigate to a new screen)
+ */
 sealed interface DataState<out R> : AuthState<R> {
     object NoState : DataState<Nothing>
 
