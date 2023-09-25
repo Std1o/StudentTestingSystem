@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.makeOperation
 import student.testing.system.models.CourseResponse
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.MainRepository
 import javax.inject.Inject
 
@@ -26,8 +26,8 @@ class CoursesViewModel @Inject constructor(private val repository: MainRepositor
         }
     }
 
-    fun deleteCourse(courseId: Int): StateFlow<DataState<Int>> {
-        val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
+    fun deleteCourse(courseId: Int): StateFlow<RequestState<Int>> {
+        val stateFlow = MutableStateFlow<RequestState<Int>>(RequestState.Loading)
         viewModelScope.launch {
             val state = makeOperation(repository.deleteCourse(courseId), courseId)
             stateFlow.emit(state)

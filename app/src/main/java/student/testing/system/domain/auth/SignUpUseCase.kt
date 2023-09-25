@@ -5,7 +5,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.models.SignUpReq
@@ -22,7 +22,7 @@ class SignUpUseCase @Inject constructor(
         email: String,
         username: String,
         password: String
-    ): AuthState<PrivateUser> {
+    ): SignUpState<PrivateUser> {
         if (username.isEmpty()) return SignUpState.NameError(R.string.error_empty_field)
         val validationResult = validateAuthDataUseCase(email = email, password = password)
         return if (validationResult is AuthState.ValidationSuccesses) {
@@ -39,7 +39,7 @@ class SignUpUseCase @Inject constructor(
         password: String
     ): AuthState<PrivateUser> {
         val requestResult = repository.signUp(SignUpReq(email, username, password))
-        if (requestResult is DataState.Success) {
+        if (requestResult is RequestState.Success) {
             saveAuthData(email, password)
             createSession(requestResult.data)
         }

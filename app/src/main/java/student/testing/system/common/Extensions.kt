@@ -2,25 +2,21 @@ package student.testing.system.common
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.util.Patterns
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.RequestState
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
@@ -100,36 +96,36 @@ fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope
 }
 
 @OptIn(NotScreenState::class)
-fun <T> StateFlow<DataState<T>>.subscribeInUI(
+fun <T> StateFlow<RequestState<T>>.subscribeInUI(
     fragment: Fragment,
     progressBar: ProgressBar,
     listener: (T) -> Unit
 ) {
     this@subscribeInUI.onEach {
-        progressBar.showIf(it is DataState.Loading)
-        if (it is DataState.Success) {
+        progressBar.showIf(it is RequestState.Loading)
+        if (it is RequestState.Success) {
             listener.invoke(it.data)
-        } else if (it is DataState.ValidationError) {
+        } else if (it is RequestState.ValidationError) {
             fragment.showSnackbar(it.messageResId)
-        } else if (it is DataState.Error) {
+        } else if (it is RequestState.Error) {
             fragment.showSnackbar(it.exception)
         }
     }.launchWhenStartedCollect(fragment.lifecycleScope)
 }
 
 @OptIn(NotScreenState::class)
-fun <T> StateFlow<DataState<T>>.subscribeInUI(
+fun <T> StateFlow<RequestState<T>>.subscribeInUI(
     dialogFragment: DialogFragment,
     progressBar: ProgressBar,
     listener: (T) -> Unit
 ) {
     this@subscribeInUI.onEach {
-        progressBar.showIf(it is DataState.Loading)
-        if (it is DataState.Success) {
+        progressBar.showIf(it is RequestState.Loading)
+        if (it is RequestState.Success) {
             listener.invoke(it.data)
-        } else if (it is DataState.ValidationError) {
+        } else if (it is RequestState.ValidationError) {
             dialogFragment.showSnackbar(it.messageResId)
-        } else if (it is DataState.Error) {
+        } else if (it is RequestState.Error) {
             dialogFragment.showSnackbar(it.exception)
         }
     }.launchWhenStartedCollect(dialogFragment.lifecycleScope)
@@ -142,16 +138,16 @@ fun Any?.trimString(): String = this@trimString.toString().trim()
  */
 @OptIn(NotScreenState::class)
 fun <E> ViewModel.makeOperation(
-    requestResult: DataState<Void>,
+    requestResult: RequestState<Void>,
     successData: E,
-): DataState<E> {
+): RequestState<E> {
     return when (requestResult) {
-        is DataState.Empty -> DataState.Success(successData)
-        is DataState.Error -> DataState.Error(requestResult.exception)
-        DataState.Loading -> DataState.Loading
-        DataState.NoState -> DataState.NoState
-        is DataState.Success -> DataState.Success(successData)
-        is DataState.ValidationError -> DataState.ValidationError(requestResult.messageResId)
+        is RequestState.Empty -> RequestState.Success(successData)
+        is RequestState.Error -> RequestState.Error(requestResult.exception)
+        RequestState.Loading -> RequestState.Loading
+        RequestState.NoState -> RequestState.NoState
+        is RequestState.Success -> RequestState.Success(successData)
+        is RequestState.ValidationError -> RequestState.ValidationError(requestResult.messageResId)
     }
 }
 

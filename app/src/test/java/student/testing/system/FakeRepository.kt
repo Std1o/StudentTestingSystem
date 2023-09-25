@@ -4,7 +4,7 @@ package student.testing.system
 
 import io.mockk.mockk
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant
@@ -21,52 +21,52 @@ class FakeRepository : MainRepository {
 
     data class MockedUser(val email: String, val password: String)
 
-    override suspend fun auth(request: String): DataState<PrivateUser> {
+    override suspend fun auth(request: String): RequestState<PrivateUser> {
         val existingUsers = listOf(MockedUser("test@mail.ru", "pass"))
         for (user in existingUsers) {
             if (request.contains(user.email) && request.contains("password=${user.password}")) {
-                return DataState.Success(PrivateUser(1, "Ivan", user.email, "some_token"))
+                return RequestState.Success(PrivateUser(1, "Ivan", user.email, "some_token"))
             }
         }
-        return DataState.Error("Incorrect username or password")
+        return RequestState.Error("Incorrect username or password")
     }
 
-    override suspend fun signUp(request: SignUpReq): DataState<PrivateUser> {
+    override suspend fun signUp(request: SignUpReq): RequestState<PrivateUser> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getCourses(): DataState<List<CourseResponse>> {
+    override suspend fun getCourses(): RequestState<List<CourseResponse>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun createCourse(name: String): DataState<CourseResponse> {
+    override suspend fun createCourse(name: String): RequestState<CourseResponse> {
         TODO("Not yet implemented")
     }
 
 
-    override suspend fun joinCourse(courseCode: String): DataState<CourseResponse> {
+    override suspend fun joinCourse(courseCode: String): RequestState<CourseResponse> {
         val courses = listOf("5TYHKW", "KASTXJ", "XHYX6U")
         if (courseCode in courses) {
             val course = mockk<CourseResponse>(relaxed = true)
-            return DataState.Success(course)
+            return RequestState.Success(course)
         } else {
-            return DataState.Error("Not found", 404)
+            return RequestState.Error("Not found", 404)
         }
     }
 
-    override suspend fun deleteCourse(courseId: Int): DataState<Void> {
+    override suspend fun deleteCourse(courseId: Int): RequestState<Void> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getTests(courseId: Int): DataState<List<Test>> {
+    override suspend fun getTests(courseId: Int): RequestState<List<Test>> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun createTest(request: TestCreationReq): DataState<Test> {
+    override suspend fun createTest(request: TestCreationReq): RequestState<Test> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteTest(testId: Int, courseId: Int): DataState<Void> {
+    override suspend fun deleteTest(testId: Int, courseId: Int): RequestState<Void> {
         TODO("Not yet implemented")
     }
 
@@ -74,7 +74,7 @@ class FakeRepository : MainRepository {
         testId: Int,
         courseId: Int,
         request: List<UserQuestion>
-    ): DataState<Void> {
+    ): RequestState<Void> {
         TODO("Not yet implemented")
     }
 
@@ -82,19 +82,19 @@ class FakeRepository : MainRepository {
         courseId: Int,
         testId: Int,
         request: List<UserQuestion>
-    ): DataState<TestResult> {
+    ): RequestState<TestResult> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getResult(testId: Int, courseId: Int): DataState<TestResult> {
+    override suspend fun getResult(testId: Int, courseId: Int): RequestState<TestResult> {
         if (testId == -1 || courseId == -1) {
-            return DataState.Error("Access error", 403)
+            return RequestState.Error("Access error", 403)
         }
         val passedTests = listOf(12, 24, 13)
         if (passedTests.contains(testId)) {
-            return DataState.Success(TestResult(emptyList(), 10, 8.9))
+            return RequestState.Success(TestResult(emptyList(), 10, 8.9))
         } else {
-            return DataState.Error("Not found", 404)
+            return RequestState.Error("Not found", 404)
         }
     }
 
@@ -102,28 +102,28 @@ class FakeRepository : MainRepository {
         testId: Int,
         courseId: Int,
         params: TestResultsRequestParams
-    ): DataState<ParticipantsResults> {
+    ): RequestState<ParticipantsResults> {
         TODO("Not yet implemented")
     }
 
     override suspend fun addModerator(
         courseId: Int,
         moderatorId: Int
-    ): DataState<List<Participant>> {
+    ): RequestState<List<Participant>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun deleteModerator(
         courseId: Int,
         moderatorId: Int
-    ): DataState<List<Participant>> {
+    ): RequestState<List<Participant>> {
         TODO("Not yet implemented")
     }
 
     override suspend fun deleteParticipant(
         courseId: Int,
         participantId: Int
-    ): DataState<List<Participant>> {
+    ): RequestState<List<Participant>> {
         TODO("Not yet implemented")
     }
 

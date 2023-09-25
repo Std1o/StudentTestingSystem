@@ -10,7 +10,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.models.CourseResponse
 
 @ExperimentalCoroutinesApi
@@ -22,19 +22,19 @@ class JoinCourseUseCaseTest {
     @Test
     fun `empty courseCode returns ValidationError`() = runTest {
         val actual = joinCourseUseCase("")
-        assertTrue(actual is DataState.ValidationError)
+        assertTrue(actual is RequestState.ValidationError)
     }
 
     @Test
     fun `failed response returns Error`() = runTest {
         val actual = joinCourseUseCase("QQQQQQ")
-        assertTrue(actual is DataState.Error)
+        assertTrue(actual is RequestState.Error)
     }
 
     @Test
     fun `success response returns CourseResponse`() = runTest {
         val actual = joinCourseUseCase("5TYHKW")
-        assertTrue(actual is DataState.Success)
-        assertThat((actual as DataState.Success).data, instanceOf(CourseResponse::class.java))
+        assertTrue(actual is RequestState.Success)
+        assertThat((actual as RequestState.Success).data, instanceOf(CourseResponse::class.java))
     }
 }

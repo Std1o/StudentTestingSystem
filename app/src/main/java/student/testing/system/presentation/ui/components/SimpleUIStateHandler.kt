@@ -4,35 +4,36 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
 @OptIn(NotScreenState::class)
 @Composable
 fun <T> SimpleUIStateHandler(
-    uiState: DataState<T>,
+    uiState: OperationState<T>,
     snackbarHostState: SnackbarHostState,
     viewModel: ResettableViewModel,
     onSuccess: @Composable (T) -> Unit,
 ) {
     when (uiState) {
-        is DataState.Loading -> LoadingIndicator()
+        is RequestState.Loading -> LoadingIndicator()
 
-        is DataState.Success -> {
+        is RequestState.Success -> {
             onSuccess.invoke(uiState.data)
             viewModel.resetState()
         }
 
-        is DataState.Error -> {
+        is RequestState.Error -> {
             LaunchedEffect(Unit) { // the key define when the block is relaunched
                 snackbarHostState.showSnackbar(uiState.exception)
                 viewModel.resetState()
             }
         }
 
-        is DataState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
-        is DataState.NoState,
-        is DataState.ValidationError -> { // will be moved to individual state
+        is RequestState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
+        is RequestState.NoState,
+        is RequestState.ValidationError -> { // will be moved to individual state
             // do nothing
         }
     }

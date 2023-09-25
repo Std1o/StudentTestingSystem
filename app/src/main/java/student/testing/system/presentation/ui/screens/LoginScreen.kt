@@ -16,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,11 +24,10 @@ import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.data.mapper.ToDataStateMapper
 import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.states.LoginState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.activity.MainActivity
-import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
@@ -97,7 +95,7 @@ fun LoginScreen() {
             )
         }
     }
-    val dataState = ToDataStateMapper<AuthState<PrivateUser>, PrivateUser>().map(uiState)
+    val dataState = ToDataStateMapper<LoginState<PrivateUser>, PrivateUser>().map(uiState)
     SimpleUIStateHandler(dataState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
@@ -106,5 +104,5 @@ fun LoginScreen() {
 }
 
 @OptIn(NotScreenState::class)
-fun <T> needToHideUI(uiState: AuthState<T>) =
-    uiState is LoginState.AuthStateChecking || uiState is DataState.Success
+fun <T> needToHideUI(uiState: LoginState<T>) =
+    uiState is LoginState.AuthStateChecking || uiState is RequestState.Success

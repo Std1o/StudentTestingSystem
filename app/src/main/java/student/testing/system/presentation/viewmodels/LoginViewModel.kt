@@ -10,8 +10,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
-import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.DataState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.states.LoginState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
@@ -26,8 +25,8 @@ class LoginViewModel @Inject constructor(
     private val appNavigator: AppNavigator
 ) : ViewModel(), ResettableViewModel {
 
-    private val _uiState = MutableStateFlow<AuthState<PrivateUser>>(LoginState.AuthStateChecking)
-    val uiState: StateFlow<AuthState<PrivateUser>> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<LoginState<PrivateUser>>(LoginState.AuthStateChecking)
+    val uiState: StateFlow<LoginState<PrivateUser>> = _uiState.asStateFlow()
 
     var contentState by mutableStateOf(
         LoginContentState()
@@ -41,7 +40,7 @@ class LoginViewModel @Inject constructor(
 
     fun auth(email: String, password: String) {
         viewModelScope.launch {
-            _uiState.value = DataState.Loading
+            _uiState.value = RequestState.Loading
             _uiState.value = loginUseCase(email, password)
         }
     }
@@ -51,6 +50,6 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun resetState() {
-        _uiState.value = DataState.NoState
+        _uiState.value = RequestState.NoState
     }
 }

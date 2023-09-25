@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.data.mapper.ToDataStateMapper
 import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.DataState
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.activity.MainActivityNew
@@ -100,7 +99,7 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    val dataState = ToDataStateMapper<AuthState<PrivateUser>, PrivateUser>().map(uiState)
+    val dataState = ToDataStateMapper<SignUpState<PrivateUser>, PrivateUser>().map(uiState)
     SimpleUIStateHandler(dataState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()

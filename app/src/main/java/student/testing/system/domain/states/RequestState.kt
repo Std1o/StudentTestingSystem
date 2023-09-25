@@ -18,20 +18,20 @@ import student.testing.system.annotations.NotScreenState
  * Its value must either be passed to the UI state,
  * or used for some quick actions (show the loader, show the snackbar with an error, navigate to a new screen)
  */
-sealed interface DataState<out R> : AuthState<R> {
-    object NoState : DataState<Nothing>
+sealed interface RequestState<out R> : OperationState<R>, LoadableData<R> {
+    object NoState : RequestState<Nothing>
 
     @NotScreenState
-    data class Success<out T>(val data: T) : DataState<T>
+    data class Success<out T>(val data: T) : RequestState<T>
 
     /**
      * Must be converted to Success with own local value in ViewModel
      */
-    data class Empty(val code: Int) : DataState<Nothing>
-    data class Error(val exception: String, val code: Int = -1) : DataState<Nothing>
+    data class Empty(val code: Int) : RequestState<Nothing>
+    data class Error(val exception: String, val code: Int = -1) : RequestState<Nothing>
 
     @Deprecated("Make it a special case")
-    data class ValidationError(@StringRes val messageResId: Int) : DataState<Nothing>
+    data class ValidationError(@StringRes val messageResId: Int) : RequestState<Nothing>
 
-    object Loading : DataState<Nothing>
+    object Loading : RequestState<Nothing>
 }
