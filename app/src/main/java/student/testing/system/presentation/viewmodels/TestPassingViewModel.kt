@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.DataState
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.TestResult
@@ -18,6 +19,7 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
 
     val userQuestions: ArrayList<UserQuestion> = arrayListOf()
 
+    @OptIn(NotScreenState::class)
     fun calculateResult(testId: Int, courseId: Int): StateFlow<DataState<Int>> {
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {

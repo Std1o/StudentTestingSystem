@@ -1,3 +1,5 @@
+@file:OptIn(NotScreenState::class)
+
 package student.testing.system.domain.auth
 
 import io.mockk.mockk
@@ -14,6 +16,7 @@ import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.R
 import student.testing.system.FakeRepository
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.DataState
 

@@ -4,9 +4,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.CoroutineScope
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.DataState
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
+@OptIn(NotScreenState::class)
 @Composable
 fun <T> SimpleUIStateHandler(
     uiState: DataState<T>,

@@ -1,6 +1,9 @@
+@file:OptIn(NotScreenState::class)
+
 package student.testing.system
 
 import io.mockk.mockk
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.DataState
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.CourseResponse

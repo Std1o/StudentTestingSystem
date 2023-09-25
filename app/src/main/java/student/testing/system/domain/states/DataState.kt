@@ -1,6 +1,7 @@
 package student.testing.system.domain.states
 
 import androidx.annotation.StringRes
+import student.testing.system.annotations.NotScreenState
 
 /*
   If 50 interfaces are inherited from DataState,
@@ -12,6 +13,8 @@ import androidx.annotation.StringRes
  */
 sealed interface DataState<out R> : AuthState<R> {
     object NoState : DataState<Nothing>, AuthState<Nothing>
+
+    @NotScreenState
     data class Success<out T>(val data: T) : DataState<T>, AuthState<T>
     data class Empty(val code: Int) : DataState<Nothing>, AuthState<Nothing>
     data class Error(val exception: String, val code: Int = -1) : DataState<Nothing>,

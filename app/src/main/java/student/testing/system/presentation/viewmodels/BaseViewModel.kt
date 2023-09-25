@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.DataState
 
 /**
@@ -24,13 +25,29 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
      * @param requestResult A Flow representing the result of the request
      * @param optionalCallback An optional callback function that will be called with each DataState emitted by the request result.
      */
+    @OptIn(NotScreenState::class)
     protected fun launchRequest(
         requestResult: DataState<T>,
-        optionalCallback: (DataState<T>) -> Unit = {}
+        onSuccess: (T) -> Unit = {},
     ) {
         _uiState.value = DataState.Loading
-        optionalCallback.invoke(requestResult)
+        if (requestResult is DataState.Success) onSuccess.invoke(requestResult.data)
         _uiState.value = requestResult
+    }
+
+    /**
+     * Use if you sure that request when success returns 204
+     */
+    @OptIn(NotScreenState::class)
+    protected fun <E> launchRequest(
+        requestResult: DataState<Void>,
+        successData: E,
+    ): DataState<E> {
+        return if (requestResult is DataState.Empty) {
+            DataState.Success(successData)
+        } else {
+            DataState.Error("")
+        }
     }
 
     override fun resetState() {

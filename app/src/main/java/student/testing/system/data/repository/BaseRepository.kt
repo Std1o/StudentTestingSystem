@@ -3,11 +3,13 @@ package student.testing.system.data.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Utils
 import student.testing.system.domain.states.DataState
 
 open class BaseRepository {
 
+    @OptIn(NotScreenState::class)
     suspend fun <T> apiCall(call: suspend () -> Response<T>): DataState<T> {
         try {
             val response = withContext(Dispatchers.IO) { call() }

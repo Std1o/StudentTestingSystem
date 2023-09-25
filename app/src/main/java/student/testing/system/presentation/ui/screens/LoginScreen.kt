@@ -22,11 +22,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.data.mapper.ToDataStateMapper
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.DataState
 import student.testing.system.domain.states.LoginState
 import student.testing.system.models.PrivateUser
+import student.testing.system.presentation.ui.activity.MainActivity
 import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
@@ -99,9 +101,10 @@ fun LoginScreen() {
     SimpleUIStateHandler(dataState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
-        activity?.startActivity(Intent(activity, MainActivityNew::class.java))
+        activity?.startActivity(Intent(activity, MainActivity::class.java))
     }
 }
 
+@OptIn(NotScreenState::class)
 fun <T> needToHideUI(uiState: AuthState<T>) =
     uiState is LoginState.AuthStateChecking || uiState is DataState.Success

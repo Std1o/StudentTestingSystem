@@ -28,12 +28,8 @@ class CoursesViewModel @Inject constructor(private val repository: MainRepositor
     fun deleteCourse(courseId: Int): StateFlow<DataState<Int>> {
         val stateFlow = MutableStateFlow<DataState<Int>>(DataState.Loading)
         viewModelScope.launch {
-            val requestResult = repository.deleteCourse(courseId)
-            if (requestResult is DataState.Empty) {
-                stateFlow.emit(DataState.Success(courseId))
-            } else {
-                stateFlow.emit(requestResult as DataState.Error)
-            }
+            val state = launchRequest(repository.deleteCourse(courseId), courseId)
+            stateFlow.emit(state)
         }
         return stateFlow
     }

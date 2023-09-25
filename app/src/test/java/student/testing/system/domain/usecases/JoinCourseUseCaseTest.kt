@@ -1,3 +1,5 @@
+@file:OptIn(NotScreenState::class)
+
 package student.testing.system.domain.usecases
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -7,6 +9,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.DataState
 import student.testing.system.models.CourseResponse
 

@@ -22,6 +22,7 @@ import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 import kotlinx.coroutines.launch
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.DataState
 
 fun View.showIf(visible: Boolean) {
@@ -97,6 +98,7 @@ fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope
     }
 }
 
+@OptIn(NotScreenState::class)
 fun <T> StateFlow<DataState<T>>.subscribeInUI(
     fragment: Fragment,
     progressBar: ProgressBar,
@@ -114,6 +116,7 @@ fun <T> StateFlow<DataState<T>>.subscribeInUI(
     }.launchWhenStartedCollect(fragment.lifecycleScope)
 }
 
+@OptIn(NotScreenState::class)
 fun <T> StateFlow<DataState<T>>.subscribeInUI(
     dialogFragment: DialogFragment,
     progressBar: ProgressBar,
