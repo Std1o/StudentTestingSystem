@@ -7,6 +7,7 @@ package student.testing.system.annotations
             "the ViewModel state can be reset if necessary, or a successful data download, " +
             "which MUST BE SAVED in ContentState."
 )
+@MustBeDocumented
 annotation class NotScreenState
 
 /**
@@ -16,9 +17,11 @@ annotation class NotScreenState
  * As a rule, it is formed in UseCase.
  * Or it is LoadableData or OperationState, which are identical in structure, but different in semantics.
  */
+@MustBeDocumented
 annotation class FunctionalityState
 
 /**
  * It is the presentation-level state. It must be formed and must be used only in presentation layer.
  */
+@MustBeDocumented
 annotation class ContentState
