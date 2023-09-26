@@ -17,6 +17,7 @@ annotation class NotScreenState
  * As a rule, it is formed in UseCase.
  * Or it is LoadableData or OperationState, which are identical in structure, but different in semantics.
  */
+@Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE_PARAMETER)
 @MustBeDocumented
 annotation class FunctionalityState
 

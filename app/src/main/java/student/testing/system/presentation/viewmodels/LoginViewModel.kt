@@ -22,7 +22,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val authIfPossibleUseCase: AuthIfPossibleUseCase,
     private val appNavigator: AppNavigator
-) : BaseViewModelNew<LoginState<PrivateUser>, PrivateUser>() {
+) : OperationViewModel<LoginState<PrivateUser>, PrivateUser>() {
 
     private val _uiState = MutableStateFlow<LoginState<PrivateUser>>(LoginState.AuthStateChecking)
     val uiState: StateFlow<LoginState<PrivateUser>> = _uiState.asStateFlow()

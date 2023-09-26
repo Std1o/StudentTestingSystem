@@ -6,23 +6,21 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import student.testing.system.annotations.FunctionalityState
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 
 /**
- * BaseViewModel is an abstract class that provides a base implementation for ViewModels in the app.
- * It contains a StateFlow that represents the current state of the UI, and a method for launching
- * requests and updating the UI state based on the response.
+ * OperationViewModel contains a StateFlow that broadcasts last operation state,
+ * and a method that launching operations and updating last operation state based on the response.
  *
- * @param T The type of data that the ViewModel will handle.
+ * @param State State that is used for this functionality
+ * @param T Type of data that comes from the server when performing the operation
  */
 
-
-//гипотетически от этого могут наследоваться: CourseAddingViewModel,
-// CoursesViewModel (deleteCourse), ParticipantsViewModel, TestPassingViewModel, TestsViewModel
-open class BaseViewModelNew<State, T> : ViewModel(), ResettableViewModel {
+open class OperationViewModel<@FunctionalityState State, T> : ViewModel(), ResettableViewModel {
 
     private val _lastOperationState = MutableStateFlow<OperationState<T>>(RequestState.NoState)
     val lastOperationState: StateFlow<OperationState<T>> = _lastOperationState.asStateFlow()
@@ -31,11 +29,10 @@ open class BaseViewModelNew<State, T> : ViewModel(), ResettableViewModel {
         ToOperationStateMapper<State, T>()
 
     /**
-     * Launches a request and updates the UI state based on the response.
+     * Launches operations and updating last operation state based on the response.
      *
-     * @param requestResult A Flow representing the result of the request
-     * @param onSuccess An optional callback function that will be called with each DataState emitted by the request result.
-     * @param holdSuccess uses together with onSuccess. As it used if operation updates ContentState
+     * @param call Suspend fun that will be called here
+     * @param onSuccess An optional callback function that may be called for some ViewModel businesses
      */
     @OptIn(NotScreenState::class)
     protected suspend fun executeOperation(
