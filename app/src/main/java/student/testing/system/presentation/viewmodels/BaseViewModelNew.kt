@@ -1,10 +1,13 @@
 package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 
@@ -19,10 +22,13 @@ import student.testing.system.domain.states.RequestState
 
 //гипотетически от этого могут наследоваться: CourseAddingViewModel,
 // CoursesViewModel (deleteCourse), ParticipantsViewModel, TestPassingViewModel, TestsViewModel
-open class BaseViewModelNew<T> : ViewModel(), ResettableViewModel {
+open class BaseViewModelNew<State, T> : ViewModel(), ResettableViewModel {
 
     private val _lastOperationState = MutableStateFlow<OperationState<T>>(RequestState.NoState)
     val lastOperationState: StateFlow<OperationState<T>> = _lastOperationState.asStateFlow()
+
+    private val toOperationStateMapper =
+        ToOperationStateMapper<State, T>()
 
     /**
      * Launches a request and updates the UI state based on the response.
@@ -32,18 +38,20 @@ open class BaseViewModelNew<T> : ViewModel(), ResettableViewModel {
      * @param holdSuccess uses together with onSuccess. As it used if operation updates ContentState
      */
     @OptIn(NotScreenState::class)
-    protected fun launchRequest(
-        requestResult: OperationState<T>,
+    protected suspend fun launchRequest(
+        call: suspend () -> State,
         onSuccess: (T) -> Unit = {},
-        holdSuccess: Boolean = false
-    ) {
-        _lastOperationState.value = RequestState.Loading
-        if (requestResult is RequestState.Success) {
-            onSuccess.invoke(requestResult.data)
-            if (!holdSuccess) _lastOperationState.value = requestResult
-        } else {
-            _lastOperationState.value = requestResult
+    ): State {
+        var requestResult: State
+        val request = viewModelScope.async {
+            _lastOperationState.value = RequestState.Loading
+            requestResult = call()
+            val operationState = toOperationStateMapper.map(requestResult)
+            if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
+            _lastOperationState.value = operationState
+            requestResult
         }
+        return request.await()
     }
 
     override fun resetState() {
