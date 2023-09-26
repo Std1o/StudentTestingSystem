@@ -1,20 +1,26 @@
 package student.testing.system.presentation.viewmodels
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import student.testing.system.common.launchRequest
 import student.testing.system.common.makeOperation
-import student.testing.system.models.CourseResponse
-import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.MainRepository
+import student.testing.system.domain.states.RequestState
+import student.testing.system.presentation.ui.fragments.CoursesContentState
 import javax.inject.Inject
 
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
-class CoursesViewModel @Inject constructor(private val repository: MainRepository) :
-    BaseViewModel<List<CourseResponse>>() {
+class CoursesViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(CoursesContentState())
+    val uiState: StateFlow<CoursesContentState> = _uiState.asStateFlow()
 
     init {
         getCourses()
@@ -22,7 +28,11 @@ class CoursesViewModel @Inject constructor(private val repository: MainRepositor
 
     private fun getCourses() {
         viewModelScope.launch {
-            launchRequest(repository.getCourses())
+            // List<CourseResponse>
+            _uiState.value = _uiState.value.copy(
+                courses = launchRequest({ repository.getCourses() },
+                    onLoading = { _uiState.value = _uiState.value.copy(courses = it) })
+            )
         }
     }
 

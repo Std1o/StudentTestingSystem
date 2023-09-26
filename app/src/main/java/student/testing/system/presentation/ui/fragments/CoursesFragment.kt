@@ -6,18 +6,24 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.confirmAction
+import student.testing.system.common.showSnackbar
 import student.testing.system.common.subscribeInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentCoursesBinding
+import student.testing.system.domain.states.RequestState
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.adapters.CoursesAdapter
@@ -70,9 +76,23 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
         subscribeObservers()
     }
 
+    @OptIn(NotScreenState::class)
     private fun subscribeObservers() {
-        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
-            adapter.setDataList(it as MutableList<CourseResponse>)
+        lifecycleScope.launch {
+            viewModel.uiState.collect {
+                binding.progressBar.isVisible = false
+                when (it.courses) {
+                    is RequestState.Empty -> {}
+                    is RequestState.Error -> showSnackbar(it.courses.exception)
+                    RequestState.Loading -> binding.progressBar.isVisible = true
+                    RequestState.NoState -> {}
+                    is RequestState.Success -> {
+                        adapter.setDataList(it.courses.data as MutableList<CourseResponse>)
+                    }
+
+                    is RequestState.ValidationError -> {}
+                }
+            }
         }
     }
 
