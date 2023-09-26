@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
-import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.LoginState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.models.PrivateUser
@@ -34,14 +33,14 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val requestResult = launchRequest({ authIfPossibleUseCase() })
+            val requestResult = executeOperation({ authIfPossibleUseCase() })
             _uiState.value = requestResult
         }
     }
 
     fun auth(email: String, password: String) {
         viewModelScope.launch {
-            val requestResult = launchRequest({ loginUseCase(email, password) })
+            val requestResult = executeOperation({ loginUseCase(email, password) })
             _uiState.value = requestResult
         }
     }

@@ -38,7 +38,7 @@ open class BaseViewModelNew<State, T> : ViewModel(), ResettableViewModel {
      * @param holdSuccess uses together with onSuccess. As it used if operation updates ContentState
      */
     @OptIn(NotScreenState::class)
-    protected suspend fun launchRequest(
+    protected suspend fun executeOperation(
         call: suspend () -> State,
         onSuccess: (T) -> Unit = {},
     ): State {
