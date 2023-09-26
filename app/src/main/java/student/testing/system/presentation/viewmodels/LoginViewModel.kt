@@ -8,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
 import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.states.LoginState
+import student.testing.system.domain.states.OperationState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
@@ -27,6 +29,10 @@ class LoginViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<LoginState<PrivateUser>>(LoginState.AuthStateChecking)
     val uiState: StateFlow<LoginState<PrivateUser>> = _uiState.asStateFlow()
+
+    val lastOperationState: StateFlow<OperationState<PrivateUser>> =
+        uiState.map { ToOperationStateMapper<LoginState<PrivateUser>, PrivateUser>().map(uiState.value) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), RequestState.NoState)
 
     var contentState by mutableStateOf(
         LoginContentState()

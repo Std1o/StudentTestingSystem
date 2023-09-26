@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.data.mapper.ToDataStateMapper
+import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
@@ -54,6 +54,7 @@ import student.testing.system.presentation.viewmodels.SignUpViewModel
 fun SignUpScreen() {
     val viewModel = hiltViewModel<SignUpViewModel>()
     val uiState by viewModel.uiState.collectAsState()
+    val lastOperationState by viewModel.lastOperationState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val contentState = viewModel.contentState
@@ -99,8 +100,7 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    val dataState = ToDataStateMapper<SignUpState<PrivateUser>, PrivateUser>().map(uiState)
-    LastOperationStateUIHandler(dataState, snackbarHostState, viewModel) {
+    LastOperationStateUIHandler(lastOperationState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivityNew::class.java))

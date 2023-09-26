@@ -22,7 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.data.mapper.ToDataStateMapper
+import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.states.LoginState
@@ -40,15 +40,17 @@ import student.testing.system.presentation.viewmodels.LoginViewModel
 fun LoginScreen() {
     val viewModel = hiltViewModel<LoginViewModel>()
     val uiState by viewModel.uiState.collectAsState()
+    val lastOperationState by viewModel.lastOperationState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val contentState = viewModel.contentState
+    var needToHideUI by remember { mutableStateOf(uiState is LoginState.AuthStateChecking) }
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { contentPadding ->
-        if (needToHideUI(uiState)) {
+        if (needToHideUI) {
             LoadingIndicator()
             return@Scaffold
         }
@@ -95,14 +97,10 @@ fun LoginScreen() {
             )
         }
     }
-    val dataState = ToDataStateMapper<LoginState<PrivateUser>, PrivateUser>().map(uiState)
-    LastOperationStateUIHandler(dataState, snackbarHostState, viewModel) {
+    LastOperationStateUIHandler(lastOperationState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivity::class.java))
+        needToHideUI = true
     }
 }
-
-@OptIn(NotScreenState::class)
-fun <T> needToHideUI(uiState: LoginState<T>) =
-    uiState is LoginState.AuthStateChecking || uiState is RequestState.Success
