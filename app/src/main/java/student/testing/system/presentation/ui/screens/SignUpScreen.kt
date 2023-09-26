@@ -43,7 +43,7 @@ import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.activity.MainActivityNew
-import student.testing.system.presentation.ui.components.SimpleUIStateHandler
+import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.PasswordTextField
@@ -100,7 +100,7 @@ fun SignUpScreen() {
         }
     }
     val dataState = ToDataStateMapper<SignUpState<PrivateUser>, PrivateUser>().map(uiState)
-    SimpleUIStateHandler(dataState, snackbarHostState, viewModel) {
+    LastOperationStateUIHandler(dataState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivityNew::class.java))

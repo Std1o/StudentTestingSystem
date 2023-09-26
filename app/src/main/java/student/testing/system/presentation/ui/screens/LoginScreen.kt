@@ -33,7 +33,7 @@ import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.PasswordTextField
-import student.testing.system.presentation.ui.components.SimpleUIStateHandler
+import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
@@ -96,7 +96,7 @@ fun LoginScreen() {
         }
     }
     val dataState = ToDataStateMapper<LoginState<PrivateUser>, PrivateUser>().map(uiState)
-    SimpleUIStateHandler(dataState, snackbarHostState, viewModel) {
+    LastOperationStateUIHandler(dataState, snackbarHostState, viewModel) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivity::class.java))

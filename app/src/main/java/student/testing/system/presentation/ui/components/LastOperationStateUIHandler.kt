@@ -8,9 +8,12 @@ import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
+/**
+ * Used for temporary and short-lived states caused by the last operation
+ */
 @OptIn(NotScreenState::class)
 @Composable
-fun <T> SimpleUIStateHandler(
+fun <T> LastOperationStateUIHandler(
     uiState: OperationState<T>,
     snackbarHostState: SnackbarHostState,
     viewModel: ResettableViewModel,
