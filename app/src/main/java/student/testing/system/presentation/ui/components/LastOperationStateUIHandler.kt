@@ -7,7 +7,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
-import student.testing.system.presentation.viewmodels.ResettableViewModel
+import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
 
 /**
  * Used for temporary and short-lived states caused by the last operation
@@ -15,30 +15,31 @@ import student.testing.system.presentation.viewmodels.ResettableViewModel
 @OptIn(NotScreenState::class)
 @Composable
 fun <T> LastOperationStateUIHandler(
-    uiState: OperationState<T>,
+    stateWrapper: UIStateWrapper<OperationState<T>, T>,
     snackbarHostState: SnackbarHostState,
-    viewModel: ResettableViewModel,
     onSuccess: @Composable (T, OperationType) -> Unit,
 ) {
-    when (uiState) {
-        is RequestState.Loading -> LoadingIndicator()
+    with(stateWrapper.uiState) {
+        when (this) {
+            is RequestState.Loading -> LoadingIndicator()
 
-        is RequestState.Success -> {
-            onSuccess.invoke(uiState.data, uiState.operationType)
-            viewModel.resetState()
-        }
-
-        is RequestState.Error -> {
-            LaunchedEffect(Unit) { // the key define when the block is relaunched
-                snackbarHostState.showSnackbar(uiState.exception)
-                viewModel.resetState()
+            is RequestState.Success -> {
+                onSuccess.invoke(data, operationType)
+                stateWrapper.onReceive()
             }
-        }
 
-        is RequestState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
-        is RequestState.NoState,
-        is RequestState.ValidationError -> { // will be moved to individual state
-            // do nothing
+            is RequestState.Error -> {
+                LaunchedEffect(Unit) { // the key define when the block is relaunched
+                    snackbarHostState.showSnackbar(exception)
+                    stateWrapper.onReceive()
+                }
+            }
+
+            is RequestState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
+            is RequestState.NoState,
+            is RequestState.ValidationError -> { // will be moved to individual state
+                // do nothing
+            }
         }
     }
 }

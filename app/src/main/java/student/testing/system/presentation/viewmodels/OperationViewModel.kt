@@ -11,6 +11,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
+import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
 
 /**
  * OperationViewModel contains a StateFlow that broadcasts last operation state,
@@ -20,10 +21,12 @@ import student.testing.system.domain.states.RequestState
  * @param T Type of data that comes from the server when performing the operation
  */
 
-open class OperationViewModel<@FunctionalityState State, T> : ViewModel(), ResettableViewModel {
+open class OperationViewModel<@FunctionalityState State, T> : ViewModel() {
 
-    private val _lastOperationState = MutableStateFlow<OperationState<T>>(RequestState.NoState)
-    val lastOperationState: StateFlow<OperationState<T>> = _lastOperationState.asStateFlow()
+    private val _lastOperationStateWrapper =
+        MutableStateFlow<UIStateWrapper<OperationState<T>, T>>(UIStateWrapper())
+    val lastOperationStateWrapper: StateFlow<UIStateWrapper<OperationState<T>, T>> =
+        _lastOperationStateWrapper.asStateFlow()
 
     private val toOperationStateMapper =
         ToOperationStateMapper<State, T>()
@@ -41,17 +44,13 @@ open class OperationViewModel<@FunctionalityState State, T> : ViewModel(), Reset
     ): State {
         var requestResult: State
         val request = viewModelScope.async {
-            _lastOperationState.value = RequestState.Loading
+            _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading)
             requestResult = call()
             val operationState = toOperationStateMapper.map(requestResult)
             if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
-            _lastOperationState.value = operationState
+            _lastOperationStateWrapper.value = UIStateWrapper(operationState)
             requestResult
         }
         return request.await()
-    }
-
-    override fun resetState() {
-        _lastOperationState.value = RequestState.NoState
     }
 }

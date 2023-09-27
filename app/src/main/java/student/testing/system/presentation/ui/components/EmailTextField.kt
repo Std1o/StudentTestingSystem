@@ -20,13 +20,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import student.testing.system.R
+import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.screens.login.EmailContentState
+import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailTextField(
-    viewModel: ResettableViewModel,
+fun <State, T> EmailTextField(
+    stateWrapper: UIStateWrapper<State, T>,
     contentState: EmailContentState,
     isEmailError: Boolean,
     @StringRes errorText: Int
@@ -51,7 +53,7 @@ fun EmailTextField(
             email = it
             contentState.email = it.text
             isEmailError = false
-            viewModel.resetState()
+            stateWrapper.onReceive()
         },
         trailingIcon = {
             if (isEmailError) Icon(

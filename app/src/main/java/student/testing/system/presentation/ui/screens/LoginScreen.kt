@@ -21,12 +21,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.annotations.NotScreenState
-import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.states.LoginState
-import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.activity.MainActivity
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
@@ -39,12 +35,12 @@ import student.testing.system.presentation.viewmodels.LoginViewModel
 @Composable
 fun LoginScreen() {
     val viewModel = hiltViewModel<LoginViewModel>()
-    val uiState by viewModel.uiState.collectAsState()
-    val lastOperationState by viewModel.lastOperationState.collectAsState()
+    val uiStateWrapper by viewModel.uiStateWrapper.collectAsState()
+    val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val contentState = viewModel.contentState
-    var needToHideUI by remember { mutableStateOf(uiState is LoginState.AuthStateChecking) }
+    var needToHideUI by remember { mutableStateOf(uiStateWrapper.uiState is LoginState.AuthStateChecking) }
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -65,19 +61,19 @@ fun LoginScreen() {
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 100.dp)
             )
-            val isEmailError = uiState is AuthState.EmailError
-            val isPasswordError = uiState is AuthState.PasswordError
+            val isEmailError = uiStateWrapper.uiState is AuthState.EmailError
+            val isPasswordError = uiStateWrapper.uiState is AuthState.PasswordError
             val email = EmailTextField(
-                viewModel = viewModel,
+                stateWrapper = uiStateWrapper,
                 contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
-                errorText = if (isEmailError) (uiState as AuthState.EmailError).messageResId else 0
+                errorText = if (isEmailError) (uiStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
-                viewModel = viewModel,
+                stateWrapper = uiStateWrapper,
                 contentState.passwordContentState,
                 isPasswordError = isPasswordError,
-                errorText = if (isPasswordError) (uiState as AuthState.PasswordError).messageResId else 0
+                errorText = if (isPasswordError) (uiStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
             )
             Button(
                 onClick = {
@@ -97,7 +93,7 @@ fun LoginScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationState, snackbarHostState, viewModel) { _, _ ->
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ ->
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivity::class.java))
