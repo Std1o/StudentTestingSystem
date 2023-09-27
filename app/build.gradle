@@ -63,6 +63,7 @@ dependencies {
     implementation 'agency.tango.android:avatar-view-picasso:0.0.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
     implementation "androidx.security:security-crypto:1.1.0-alpha06"
     // Hilt
     implementation 'com.google.dagger:hilt-android:2.46.1'

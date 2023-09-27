@@ -12,6 +12,9 @@ import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
+import java.util.LinkedList
+import kotlin.reflect.jvm.reflect
+
 
 /**
  * OperationViewModel contains a StateFlow that broadcasts last operation state,
@@ -31,6 +34,8 @@ open class OperationViewModel<@FunctionalityState State, T> : ViewModel() {
     private val toOperationStateMapper =
         ToOperationStateMapper<State, T>()
 
+    private val requestsQueue = LinkedList<String>()
+
     /**
      * Launches operations and updating last operation state based on the response.
      *
@@ -42,6 +47,14 @@ open class OperationViewModel<@FunctionalityState State, T> : ViewModel() {
         call: suspend () -> State,
         onSuccess: (T) -> Unit = {},
     ): State {
+        if (_lastOperationStateWrapper.value.uiState is RequestState.Loading) {
+            // actually you can stuff anything to queue, nothing will break
+            // but return type is used for simplified debugging
+
+            // ideally, get the name of the function that is called in call,
+            // but it is not yet clear how to do this
+            requestsQueue.offer(call.reflect()?.returnType.toString())
+        }
         var requestResult: State
         val request = viewModelScope.async {
             _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading)
@@ -51,6 +64,11 @@ open class OperationViewModel<@FunctionalityState State, T> : ViewModel() {
             _lastOperationStateWrapper.value = UIStateWrapper(operationState)
             requestResult
         }
-        return request.await()
+        return request.await().also {
+            requestsQueue.poll()
+            if (requestsQueue.isNotEmpty()) {
+                _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading)
+            }
+        }
     }
 }
