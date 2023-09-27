@@ -15,7 +15,7 @@ class MainActivityNew : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StudentTestingSystemTheme {
-                CourseReviewScreen()
+                CoursesScreen()
             }
         }
     }
