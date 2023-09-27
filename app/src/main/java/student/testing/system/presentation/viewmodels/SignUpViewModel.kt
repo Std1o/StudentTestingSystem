@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.domain.auth.SignUpUseCase
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
-import student.testing.system.presentation.ui.screens.login.LoginContentState
+import student.testing.system.presentation.ui.models.SignUpContentState
 import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
 import javax.inject.Inject
 
@@ -26,10 +26,7 @@ class SignUpViewModel @Inject constructor(
     val uiStateWrapper: StateFlow<UIStateWrapper<SignUpState<PrivateUser>, PrivateUser>> =
         _uiStateWrapper.asStateFlow()
 
-    // TODO replace to SignUpContentState which will contains name field
-    var contentState by mutableStateOf(
-        LoginContentState()
-    )
+    var contentState by mutableStateOf(SignUpContentState())
 
     fun signUp(email: String, username: String, password: String) {
         viewModelScope.launch {

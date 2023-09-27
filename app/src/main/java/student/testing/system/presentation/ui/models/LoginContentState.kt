@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens.login
+package student.testing.system.presentation.ui.models
 
 import student.testing.system.annotations.ContentState
 

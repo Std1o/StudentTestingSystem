@@ -15,7 +15,7 @@ import student.testing.system.domain.states.LoginState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
-import student.testing.system.presentation.ui.screens.login.LoginContentState
+import student.testing.system.presentation.ui.models.LoginContentState
 import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
 import javax.inject.Inject
 
@@ -33,9 +33,7 @@ class LoginViewModel @Inject constructor(
     val uiStateWrapper: StateFlow<UIStateWrapper<LoginState<PrivateUser>, PrivateUser>> =
         _uiStateWrapper.asStateFlow()
 
-    var contentState by mutableStateOf(
-        LoginContentState()
-    )
+    val contentState by mutableStateOf(LoginContentState())
 
     init {
         viewModelScope.launch {

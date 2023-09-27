@@ -46,6 +46,7 @@ import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.PasswordTextField
+import student.testing.system.presentation.ui.models.NameContentState
 import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 import student.testing.system.presentation.viewmodels.SignUpViewModel
@@ -73,6 +74,7 @@ fun SignUpScreen() {
             val isUsernameError = uiStateWrapper.uiState is SignUpState.NameError
             val username = UsernameTextField(
                 stateWrapper = uiStateWrapper,
+                contentState = contentState.nameContentState,
                 isUsernameError = isUsernameError,
                 errorText = if (isUsernameError) (uiStateWrapper.uiState as SignUpState.NameError).messageResId else 0
             )
@@ -110,11 +112,12 @@ fun SignUpScreen() {
 @Composable
 fun UsernameTextField(
     stateWrapper: UIStateWrapper<SignUpState<PrivateUser>, PrivateUser>,
+    contentState: NameContentState,
     isUsernameError: Boolean,
     @StringRes errorText: Int
 ): String {
     var isUsernameError = isUsernameError
-    var username by remember { mutableStateOf(TextFieldValue("")) }
+    var username by remember { mutableStateOf(TextFieldValue(contentState.name)) }
     OutlinedTextField(value = username,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         label = { Text(stringResource(R.string.name)) },
@@ -130,6 +133,7 @@ fun UsernameTextField(
         },
         onValueChange = {
             username = it
+            contentState.name = it.text
             isUsernameError = false
             stateWrapper.onReceive()
         },
