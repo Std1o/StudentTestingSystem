@@ -5,6 +5,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Utils
+import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.RequestState
 
 open class BaseRemoteDataSource {
@@ -22,15 +23,18 @@ open class BaseRemoteDataSource {
      * (For example: authorization with validation, registration with validation).
      */
     @OptIn(NotScreenState::class)
-    suspend fun <T> apiCall(call: suspend () -> Response<T>): RequestState<T> {
+    suspend fun <T> apiCall(
+        operationType: OperationType = OperationType.DefaultOperation,
+        call: suspend () -> Response<T>
+    ): RequestState<T> {
         try {
             val response = withContext(Dispatchers.IO) { call() }
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let {
-                    return RequestState.Success(body)
+                    return RequestState.Success(body, operationType)
                 }
-                return RequestState.Empty(response.code())
+                return RequestState.Empty(response.code(), operationType)
             }
             val errorMessage = Utils.encodeErrorCode(response.errorBody())
             return error(errorMessage, response.code())

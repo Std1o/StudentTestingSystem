@@ -145,7 +145,7 @@ fun <E> ViewModel.makeOperation(
     successData: E,
 ): RequestState<E> {
     return when (requestResult) {
-        is RequestState.Empty -> RequestState.Success(successData)
+        is RequestState.Empty -> RequestState.Success(successData, requestResult.operationType)
         is RequestState.Error -> RequestState.Error(requestResult.exception)
         RequestState.Loading -> RequestState.Loading
         RequestState.NoState -> RequestState.NoState

@@ -97,7 +97,7 @@ fun LoginScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationState, snackbarHostState, viewModel) {
+    LastOperationStateUIHandler(lastOperationState, snackbarHostState, viewModel) { _, _ ->
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivity::class.java))

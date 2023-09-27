@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,9 +16,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.domain.getResult.ResultState
+import student.testing.system.domain.states.RequestState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.adapters.TestsAdapter
@@ -126,6 +129,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
                         )
                         findNavController().navigate(action)
                     }
+
                     1 -> {
                         confirmAction(R.string.delete_request) { _, _ ->
                             deleteTest(testId, course.id)
@@ -135,10 +139,17 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
             }.show()
     }
 
+    // Testing of OperationTypes
+    @OptIn(NotScreenState::class)
     private fun deleteTest(testId: Int, courseId: Int) {
-        viewModel.deleteTest(testId, courseId)
-            .subscribeInUI(this, binding.progressBar) {
+        viewModel.deleteTest(testId, courseId).onEach {
+            binding.progressBar.isVisible = it is RequestState.Loading
+            if (it is RequestState.Success) {
+                println(it.operationType)
                 testsAdapter.deleteById(testId)
+            } else if (it is RequestState.Error) {
+                showSnackbar(it.exception)
             }
+        }.launchWhenStartedCollect(lifecycleScope)
     }
 }

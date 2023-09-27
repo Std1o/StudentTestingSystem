@@ -4,6 +4,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.viewmodels.ResettableViewModel
@@ -17,13 +18,13 @@ fun <T> LastOperationStateUIHandler(
     uiState: OperationState<T>,
     snackbarHostState: SnackbarHostState,
     viewModel: ResettableViewModel,
-    onSuccess: @Composable (T) -> Unit,
+    onSuccess: @Composable (T, OperationType) -> Unit,
 ) {
     when (uiState) {
         is RequestState.Loading -> LoadingIndicator()
 
         is RequestState.Success -> {
-            onSuccess.invoke(uiState.data)
+            onSuccess.invoke(uiState.data, uiState.operationType)
             viewModel.resetState()
         }
 

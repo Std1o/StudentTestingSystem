@@ -100,7 +100,7 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    LastOperationStateUIHandler(lastOperationState, snackbarHostState, viewModel) {
+    LastOperationStateUIHandler(lastOperationState, snackbarHostState, viewModel) { _, _ ->
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, MainActivityNew::class.java))

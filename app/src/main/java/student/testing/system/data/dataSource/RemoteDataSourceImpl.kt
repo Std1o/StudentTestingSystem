@@ -1,6 +1,7 @@
 package student.testing.system.data.dataSource
 
 import student.testing.system.data.MainService
+import student.testing.system.domain.operationTypes.TestsOperations
 import student.testing.system.models.CourseCreationReq
 import student.testing.system.models.SignUpReq
 import student.testing.system.models.TestCreationReq
@@ -24,10 +25,10 @@ class RemoteDataSourceImpl @Inject constructor(private val mainService: MainServ
 
     override suspend fun getTests(courseId: Int) = apiCall { mainService.getTests(courseId) }
     override suspend fun createTest(request: TestCreationReq) =
-        apiCall { mainService.createTest(request) }
+        apiCall(TestsOperations.CREATE_TEST) { mainService.createTest(request) }
 
     override suspend fun deleteTest(testId: Int, courseId: Int) =
-        apiCall { mainService.deleteTest(testId, courseId) }
+        apiCall(TestsOperations.DELETE_TEST) { mainService.deleteTest(testId, courseId) }
 
     override suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) =
         apiCall { mainService.calculateResult(testId, courseId, request) }
@@ -39,7 +40,7 @@ class RemoteDataSourceImpl @Inject constructor(private val mainService: MainServ
     ) = apiCall { mainService.calculateDemoResult(courseId, testId, request) }
 
     override suspend fun getResult(testId: Int, courseId: Int) =
-        apiCall { mainService.getResult(testId, courseId) }
+        apiCall(TestsOperations.GET_RESULT) { mainService.getResult(testId, courseId) }
 
     override suspend fun getResults(testId: Int, courseId: Int, params: TestResultsRequestParams) =
         apiCall { mainService.getResults(testId, courseId, params) }

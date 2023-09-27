@@ -32,7 +32,7 @@ class TestsViewModel @Inject constructor(
         return stateFlow
     }
 
-    // TODO переместить в TestCreationViewModel
+    // TODO мб переместить в TestCreationViewModel
     fun createTest(
         courseId: Int,
         name: String,
