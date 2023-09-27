@@ -64,13 +64,13 @@ fun LoginScreen() {
             val isEmailError = uiStateWrapper.uiState is AuthState.EmailError
             val isPasswordError = uiStateWrapper.uiState is AuthState.PasswordError
             val email = EmailTextField(
-                stateWrapper = uiStateWrapper,
+                onReceiveListener = uiStateWrapper,
                 contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (uiStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
-                stateWrapper = uiStateWrapper,
+                onReceiveListener = uiStateWrapper,
                 contentState.passwordContentState,
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (uiStateWrapper.uiState as AuthState.PasswordError).messageResId else 0

@@ -77,13 +77,13 @@ fun SignUpScreen() {
                 errorText = if (isUsernameError) (uiStateWrapper.uiState as SignUpState.NameError).messageResId else 0
             )
             val email = EmailTextField(
-                stateWrapper = uiStateWrapper,
+                onReceiveListener = uiStateWrapper,
                 contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (uiStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
-                stateWrapper = uiStateWrapper,
+                onReceiveListener = uiStateWrapper,
                 contentState = contentState.passwordContentState,
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (uiStateWrapper.uiState as AuthState.PasswordError).messageResId else 0

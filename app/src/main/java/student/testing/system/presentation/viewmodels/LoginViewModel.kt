@@ -27,7 +27,9 @@ class LoginViewModel @Inject constructor(
 ) : OperationViewModel<LoginState<PrivateUser>, PrivateUser>() {
 
     private val _uiStateWrapper =
-        MutableStateFlow<UIStateWrapper<LoginState<PrivateUser>, PrivateUser>>(UIStateWrapper())
+        MutableStateFlow<UIStateWrapper<LoginState<PrivateUser>, PrivateUser>>(
+            UIStateWrapper(LoginState.AuthStateChecking)
+        )
     val uiStateWrapper: StateFlow<UIStateWrapper<LoginState<PrivateUser>, PrivateUser>> =
         _uiStateWrapper.asStateFlow()
 

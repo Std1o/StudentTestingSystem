@@ -26,13 +26,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
 import student.testing.system.presentation.ui.screens.login.PasswordContentState
+import student.testing.system.presentation.ui.stateWrappers.OnReceiveListener
 import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
 import student.testing.system.presentation.viewmodels.ResettableViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <State, T> PasswordTextField(
-    stateWrapper: UIStateWrapper<State, T>,
+fun PasswordTextField(
+    onReceiveListener: OnReceiveListener,
     contentState: PasswordContentState,
     isPasswordError: Boolean,
     @StringRes errorText: Int
@@ -58,7 +59,7 @@ fun <State, T> PasswordTextField(
             password = it
             contentState.password = it.text
             isPasswordError = false
-            stateWrapper.onReceive()
+            onReceiveListener.onReceive()
         },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
