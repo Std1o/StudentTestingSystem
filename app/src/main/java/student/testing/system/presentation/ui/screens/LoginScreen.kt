@@ -24,6 +24,7 @@ import student.testing.system.R
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.LoginState
 import student.testing.system.presentation.ui.activity.MainActivity
+import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
@@ -96,7 +97,7 @@ fun LoginScreen() {
     LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ ->
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
-        activity?.startActivity(Intent(activity, MainActivity::class.java))
+        activity?.startActivity(Intent(activity, MainActivityNew::class.java))
         needToHideUI = true
     }
 }
