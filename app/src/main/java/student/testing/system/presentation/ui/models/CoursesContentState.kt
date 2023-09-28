@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.fragments
+package student.testing.system.presentation.ui.models
 
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.RequestState

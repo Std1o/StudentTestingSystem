@@ -6,13 +6,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import student.testing.system.common.launchRequest
 import student.testing.system.common.makeOperation
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.RequestState
-import student.testing.system.presentation.ui.fragments.CoursesContentState
+import student.testing.system.presentation.ui.models.CoursesContentState
 import javax.inject.Inject
 
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя

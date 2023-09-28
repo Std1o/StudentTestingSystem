@@ -12,11 +12,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.viewmodels.CoursesViewModel
@@ -47,6 +50,8 @@ import student.testing.system.presentation.viewmodels.CoursesViewModel
 fun CoursesScreen() {
     val viewModel = hiltViewModel<CoursesViewModel>()
     val uiState by viewModel.uiState.collectAsState()
+    var showUserInfoDialog by remember { mutableStateOf(false) }
+    var showConfirmationDialog by remember { mutableStateOf(false) }
     Surface {
         Column {
             Box(
@@ -80,7 +85,10 @@ fun CoursesScreen() {
                         Text(
                             stringResource(R.string.who_am_i), modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable(onClick = {})
+                                .clickable(onClick = {
+                                    expanded = false
+                                    showUserInfoDialog = true
+                                })
                                 .padding(vertical = 10.dp, horizontal = 20.dp)
                         )
                         Text(
@@ -132,5 +140,36 @@ fun CoursesScreen() {
                 is RequestState.ValidationError -> {}
             }
         }
+        if (showUserInfoDialog) {
+            AlertDialogExample { showUserInfoDialog = false }
+        }
     }
+}
+
+@Composable
+fun AlertDialogExample(onDismissRequest: () -> Unit) {
+    AlertDialog(
+        title = {
+            Text(text = stringResource(R.string.we_remind_you))
+        },
+        text = {
+            val account = AccountSession.instance
+            Text(
+                text = stringResource(
+                    R.string.user_info,
+                    account.username ?: "",
+                    account.email ?: ""
+                )
+            )
+        },
+        onDismissRequest = { onDismissRequest() },
+        confirmButton = {
+            TextButton(
+                onClick = { onDismissRequest() }
+            ) {
+                Text("Confirm")
+            }
+        },
+        containerColor = Color.White
+    )
 }
