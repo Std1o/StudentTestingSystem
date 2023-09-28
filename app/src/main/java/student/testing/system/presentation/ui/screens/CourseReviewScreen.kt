@@ -15,13 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import student.testing.system.presentation.navigation.DestinationMain
-import student.testing.system.presentation.navigation.NavHostMain
+import student.testing.system.presentation.navigation.Destination
+import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
 
@@ -29,8 +28,8 @@ import student.testing.system.presentation.ui.activity.ui.theme.Purple500
 fun CourseReviewScreen() {
     val navController = rememberNavController()
     val items = listOf(
-        DestinationMain.TestsScreen,
-        DestinationMain.ParticipantsScreen,
+        Destination.TestsScreen,
+        Destination.ParticipantsScreen,
     )
     Scaffold(
         bottomBar = {
@@ -75,13 +74,13 @@ fun CourseReviewScreen() {
             }
         }
     ) { innerPadding ->
-        NavHostMain(
+        NavHost(
             navController,
-            startDestination = DestinationMain.TestsScreen,
+            startDestination = Destination.TestsScreen,
             Modifier.padding(innerPadding)
         ) {
-            composable(DestinationMain.TestsScreen) { TestsScreen() }
-            composable(DestinationMain.ParticipantsScreen) { ParticipantsScreen() }
+            composable(Destination.TestsScreen) { TestsScreen() }
+            composable(Destination.ParticipantsScreen) { ParticipantsScreen() }
         }
     }
 }
