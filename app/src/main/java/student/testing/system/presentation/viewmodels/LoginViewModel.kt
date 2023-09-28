@@ -2,7 +2,6 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +15,7 @@ import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.LoginContentState
-import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import javax.inject.Inject
 
 @HiltViewModel

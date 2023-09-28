@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.stateWrappers
+package student.testing.system.presentation.ui.stateWrapper
 
 import student.testing.system.domain.states.RequestState
 

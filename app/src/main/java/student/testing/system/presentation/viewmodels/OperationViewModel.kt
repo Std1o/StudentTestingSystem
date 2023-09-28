@@ -11,7 +11,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
-import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import java.util.LinkedList
 import kotlin.reflect.jvm.reflect
 

@@ -13,7 +13,7 @@ import student.testing.system.domain.auth.SignUpUseCase
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.models.SignUpContentState
-import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import javax.inject.Inject
 
 @HiltViewModel

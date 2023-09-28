@@ -47,8 +47,7 @@ import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.PasswordTextField
 import student.testing.system.presentation.ui.models.NameContentState
-import student.testing.system.presentation.ui.stateWrappers.UIStateWrapper
-import student.testing.system.presentation.viewmodels.ResettableViewModel
+import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import student.testing.system.presentation.viewmodels.SignUpViewModel
 
 @Composable

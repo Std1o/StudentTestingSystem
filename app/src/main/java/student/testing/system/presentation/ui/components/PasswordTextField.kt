@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
 import student.testing.system.presentation.ui.models.PasswordContentState
-import student.testing.system.presentation.ui.stateWrappers.OnReceiveListener
+import student.testing.system.presentation.ui.stateWrapper.OnReceiveListener
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
