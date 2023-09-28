@@ -1,5 +1,7 @@
 package student.testing.system.presentation.ui.screens
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,6 +34,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -43,6 +46,9 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants
 import student.testing.system.domain.states.RequestState
+import student.testing.system.presentation.ui.activity.LaunchActivity
+import student.testing.system.presentation.ui.activity.MainActivityNew
+import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
 @OptIn(NotScreenState::class)
@@ -52,6 +58,11 @@ fun CoursesScreen() {
     val uiState by viewModel.uiState.collectAsState()
     var showUserInfoDialog by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
+    if (uiState.isLoggedOut) {
+        val activity = (LocalContext.current as? Activity)
+        activity?.finish()
+        activity?.startActivity(Intent(activity, LaunchActivity::class.java))
+    }
     Surface {
         Column {
             Box(
@@ -94,7 +105,10 @@ fun CoursesScreen() {
                         Text(
                             stringResource(R.string.logout), modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable(onClick = {})
+                                .clickable(onClick = {
+                                    expanded = false
+                                    showConfirmationDialog = true
+                                })
                                 .padding(vertical = 10.dp, horizontal = 20.dp)
                         )
                     }
@@ -143,6 +157,16 @@ fun CoursesScreen() {
         if (showUserInfoDialog) {
             AlertDialogExample { showUserInfoDialog = false }
         }
+        if (showConfirmationDialog) {
+            ConfirmationDialog(
+                onDismissRequest = { showConfirmationDialog = false },
+                onConfirmation = {
+                    showConfirmationDialog = false
+                    viewModel.logout()
+                },
+                dialogText = stringResource(id = R.string.logout_request)
+            )
+        }
     }
 }
 
@@ -167,7 +191,7 @@ fun AlertDialogExample(onDismissRequest: () -> Unit) {
             TextButton(
                 onClick = { onDismissRequest() }
             ) {
-                Text("Confirm")
+                Text(stringResource(id = R.string.thanks))
             }
         },
         containerColor = Color.White
