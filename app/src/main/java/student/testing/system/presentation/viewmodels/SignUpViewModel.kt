@@ -12,13 +12,15 @@ import kotlinx.coroutines.launch
 import student.testing.system.domain.auth.SignUpUseCase
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
+import student.testing.system.presentation.navigation.AppNavigator
+import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.SignUpContentState
 import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase, private val appNavigator: AppNavigator
 ) : OperationViewModel<SignUpState<PrivateUser>, PrivateUser>() {
 
     private val _uiStateWrapper =
@@ -32,8 +34,18 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch {
             val requestResult = executeOperation({
                 signUpUseCase(email = email, username = username, password = password)
-            })
+            }) {
+                navigateToCourses()
+            }
             _uiStateWrapper.value = UIStateWrapper(requestResult)
         }
+    }
+
+    private fun navigateToCourses() {
+        appNavigator.tryNavigateTo(
+            popUpToRoute = Destination.LoginScreen(),
+            inclusive = true,
+            route = Destination.CoursesScreen()
+        )
     }
 }

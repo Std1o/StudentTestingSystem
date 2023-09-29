@@ -16,8 +16,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -47,13 +51,14 @@ import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.ui.activity.LaunchActivity
-import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.components.ConfirmationDialog
+import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
-@OptIn(NotScreenState::class)
+@OptIn(NotScreenState::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CoursesScreen() {
+    val snackbarHostState = remember { SnackbarHostState() }
     val viewModel = hiltViewModel<CoursesViewModel>()
     val uiState by viewModel.uiState.collectAsState()
     var showUserInfoDialog by remember { mutableStateOf(false) }
@@ -64,94 +69,102 @@ fun CoursesScreen() {
         activity?.startActivity(Intent(activity, LaunchActivity::class.java))
     }
     Surface {
-        Column {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.courses),
-                    fontSize = 18.sp,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                )
-                var expanded by remember { mutableStateOf(false) }
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
+        ) { contentPadding ->
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 20.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
                 ) {
-                    IconButton(
-                        onClick = { expanded = true },
+                    Text(
+                        text = stringResource(R.string.courses),
+                        fontSize = 18.sp,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                    var expanded by remember { mutableStateOf(false) }
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 20.dp)
                     ) {
-                        Icon(Icons.Default.MoreVert, contentDescription = "Показать меню")
-                    }
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        modifier = Modifier.background(Color.White),
-                    ) {
-                        Text(
-                            stringResource(R.string.who_am_i), modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(onClick = {
-                                    expanded = false
-                                    showUserInfoDialog = true
-                                })
-                                .padding(vertical = 10.dp, horizontal = 20.dp)
-                        )
-                        Text(
-                            stringResource(R.string.logout), modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(onClick = {
-                                    expanded = false
-                                    showConfirmationDialog = true
-                                })
-                                .padding(vertical = 10.dp, horizontal = 20.dp)
-                        )
+                        IconButton(
+                            onClick = { expanded = true },
+                        ) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "Показать меню")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.background(Color.White),
+                        ) {
+                            Text(
+                                stringResource(R.string.who_am_i), modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(onClick = {
+                                        expanded = false
+                                        showUserInfoDialog = true
+                                    })
+                                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                            )
+                            Text(
+                                stringResource(R.string.logout), modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(onClick = {
+                                        expanded = false
+                                        showConfirmationDialog = true
+                                    })
+                                    .padding(vertical = 10.dp, horizontal = 20.dp)
+                            )
+                        }
                     }
                 }
-            }
-            when (val courses = uiState.courses) {
-                is RequestState.Empty -> {}
-                is RequestState.Error -> {}
-                RequestState.Loading -> {}
-                RequestState.NoState -> {}
-                is RequestState.Success -> {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        courses.data.forEach { course ->
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .padding(vertical = 10.dp, horizontal = 16.dp)
-                                        .height(150.dp)
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(10.dp))
-                                ) {
-                                    AsyncImage(
-                                        model = "${Constants.BASE_URL}images/${course.img}",
-                                        contentDescription = "Translated description of what the image contains",
-                                        modifier = Modifier.fillMaxWidth(),
-                                        contentScale = ContentScale.FillWidth
-                                    )
-                                    Text(
-                                        text = course.name,
-                                        modifier = Modifier.padding(16.dp),
-                                        fontSize = 20.sp,
-                                        color = Color.White,
-                                        style = TextStyle(
-                                            shadow = Shadow(Color.Black, Offset(3.0f, 4.95f), 1.0f)
+                when (val courses = uiState.courses) {
+                    is RequestState.Empty -> {}
+                    is RequestState.Error -> {}
+                    RequestState.Loading -> LoadingIndicator()
+                    RequestState.NoState -> {}
+                    is RequestState.Success -> {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            courses.data.forEach { course ->
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(vertical = 10.dp, horizontal = 16.dp)
+                                            .height(150.dp)
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(10.dp))
+                                    ) {
+                                        AsyncImage(
+                                            model = "${Constants.BASE_URL}images/${course.img}",
+                                            contentDescription = "Translated description of what the image contains",
+                                            modifier = Modifier.fillMaxWidth(),
+                                            contentScale = ContentScale.FillWidth
                                         )
-                                    )
+                                        Text(
+                                            text = course.name,
+                                            modifier = Modifier.padding(16.dp),
+                                            fontSize = 20.sp,
+                                            color = Color.White,
+                                            style = TextStyle(
+                                                shadow = Shadow(Color.Black, Offset(3.0f, 4.95f), 1.0f)
+                                            )
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                is RequestState.ValidationError -> {}
+                    is RequestState.ValidationError -> {}
+                }
             }
         }
         if (showUserInfoDialog) {

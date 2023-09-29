@@ -41,7 +41,6 @@ import student.testing.system.R
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
-import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
@@ -101,11 +100,7 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    LastOperationStateUIHandler(lastOperationState, snackbarHostState) { _, _ ->
-        val activity = (LocalContext.current as? Activity)
-        activity?.finish()
-        activity?.startActivity(Intent(activity, MainActivityNew::class.java))
-    }
+    LastOperationStateUIHandler(lastOperationState, snackbarHostState) { _, _ -> }
 }
 
 @Composable

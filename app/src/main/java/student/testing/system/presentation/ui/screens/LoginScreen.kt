@@ -2,8 +2,6 @@
 
 package student.testing.system.presentation.ui.screens
 
-import android.app.Activity
-import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -14,7 +12,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,8 +20,6 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.LoginState
-import student.testing.system.presentation.ui.activity.MainActivity
-import student.testing.system.presentation.ui.activity.MainActivityNew
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
@@ -90,14 +85,11 @@ fun LoginScreen() {
                 fontSize = 16.sp,
                 modifier = Modifier
                     .padding(top = 10.dp)
-                    .clickable { viewModel.onNavigateToSignUp() }
+                    .clickable { viewModel.navigateToSignUp() }
             )
         }
     }
     LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ ->
-        val activity = (LocalContext.current as? Activity)
-        activity?.finish()
-        activity?.startActivity(Intent(activity, MainActivityNew::class.java))
-        needToHideUI = true
+        viewModel.navigateToCourses()
     }
 }

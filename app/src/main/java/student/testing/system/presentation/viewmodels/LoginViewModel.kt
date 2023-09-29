@@ -43,12 +43,22 @@ class LoginViewModel @Inject constructor(
 
     fun auth(email: String, password: String) {
         viewModelScope.launch {
-            val requestResult = executeOperation({ loginUseCase(email, password) })
+            val requestResult = executeOperation({ loginUseCase(email, password) }) {
+                navigateToCourses()
+            }
             _uiStateWrapper.value = UIStateWrapper(requestResult)
         }
     }
 
-    fun onNavigateToSignUp() {
+    fun navigateToSignUp() {
         appNavigator.tryNavigateTo(Destination.SignUpScreen())
+    }
+
+    fun navigateToCourses() {
+        appNavigator.tryNavigateTo(
+            popUpToRoute = Destination.LoginScreen(),
+            inclusive = true,
+            route = Destination.CoursesScreen()
+        )
     }
 }

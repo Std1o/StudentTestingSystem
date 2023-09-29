@@ -34,12 +34,9 @@ fun LaunchScreen() {
             navController = navController,
             startDestination = Destination.LoginScreen
         ) {
-            composable(destination = Destination.LoginScreen) {
-                LoginScreen()
-            }
-            composable(destination = Destination.SignUpScreen) {
-                SignUpScreen()
-            }
+            composable(destination = Destination.CoursesScreen) { CoursesScreen() }
+            composable(destination = Destination.LoginScreen) { LoginScreen() }
+            composable(destination = Destination.SignUpScreen) { SignUpScreen() }
         }
     }
 }
