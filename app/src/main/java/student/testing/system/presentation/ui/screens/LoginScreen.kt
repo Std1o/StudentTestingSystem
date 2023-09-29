@@ -89,7 +89,5 @@ fun LoginScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ ->
-        viewModel.navigateToCourses()
-    }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ -> }
 }
