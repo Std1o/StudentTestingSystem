@@ -15,8 +15,8 @@ class CourseReviewViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
-        val course =
-            savedStateHandle.get<CourseResponse>(Destination.CourseReviewScreen.COURSE_KEY)
+        val course: CourseResponse =
+            checkNotNull(savedStateHandle[Destination.CourseReviewScreen.COURSE_KEY])
         println("course: $course")
     }
 }
