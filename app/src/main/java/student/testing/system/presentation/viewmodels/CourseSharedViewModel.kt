@@ -9,8 +9,7 @@ import student.testing.system.models.CourseResponse
 
 class CourseSharedViewModel : ViewModel() {
 
-    val courseFlow =
-        MutableSharedFlow<CourseResponse>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
 
     fun setCourse(course: CourseResponse) {
         viewModelScope.launch {

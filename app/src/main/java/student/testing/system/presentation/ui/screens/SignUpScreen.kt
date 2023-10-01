@@ -90,9 +90,7 @@ fun SignUpScreen() {
             )
             Button(
                 onClick = {
-                    scope.launch {
-                        viewModel.signUp(email = email, username = username, password = password)
-                    }
+                    viewModel.signUp(email = email, username = username, password = password)
                 }, modifier = Modifier
                     .padding(top = 30.dp)
                     .height(45.dp)

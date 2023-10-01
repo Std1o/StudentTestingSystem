@@ -37,7 +37,7 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
 
     private fun subscribeObservers() {
         lateinit var course: CourseResponse
-        sharedViewModel.courseFlow.distinctUntilChanged().onEach {
+        sharedViewModel.courseFlow.onEach {
             course = it
             initRV(it)
         }.launchWhenStartedCollect(lifecycleScope)

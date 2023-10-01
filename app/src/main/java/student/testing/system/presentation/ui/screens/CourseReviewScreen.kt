@@ -20,11 +20,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import student.testing.system.common.NullSharedViewModelException
+import student.testing.system.common.viewModelScopedTo
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
 import student.testing.system.presentation.viewmodels.CourseReviewViewModel
+import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 
 @Composable
 fun CourseReviewScreen() {
@@ -34,11 +37,14 @@ fun CourseReviewScreen() {
         Destination.TestsScreen,
         Destination.ParticipantsScreen,
     )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    val sharedViewModel = navBackStackEntry
+        ?.viewModelScopedTo<CourseSharedViewModel>(navController, Destination.TestsScreen.fullRoute)
+    sharedViewModel?.setCourse(viewModel.course)
     Scaffold(
         bottomBar = {
             BottomNavigation(backgroundColor = Color.White) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
                 items.forEach { screen ->
                     val selected = currentDestination?.route == screen.fullRoute
                     BottomNavigationItem(
@@ -82,8 +88,12 @@ fun CourseReviewScreen() {
             startDestination = Destination.TestsScreen,
             Modifier.padding(innerPadding)
         ) {
-            composable(Destination.TestsScreen) { TestsScreen() }
-            composable(Destination.ParticipantsScreen) { ParticipantsScreen() }
+            composable(Destination.TestsScreen) {
+                TestsScreen(sharedViewModel ?: throw NullSharedViewModelException())
+            }
+            composable(Destination.ParticipantsScreen) {
+                ParticipantsScreen(sharedViewModel ?: throw NullSharedViewModelException())
+            }
         }
     }
 }

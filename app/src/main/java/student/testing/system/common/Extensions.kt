@@ -6,9 +6,14 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.*
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -183,4 +188,13 @@ suspend fun <State, T> CoroutineScope.launchRequest(
         requestResult
     }
     return request.await()
+}
+
+@Composable
+inline fun <reified T : ViewModel> NavBackStackEntry.viewModelScopedTo(
+    navController: NavController,
+    route: String
+): T {
+    val parentEntry = remember(this) { navController.getBackStackEntry(route) }
+    return hiltViewModel(parentEntry)
 }

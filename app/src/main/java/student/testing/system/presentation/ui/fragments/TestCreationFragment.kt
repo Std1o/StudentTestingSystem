@@ -49,7 +49,7 @@ class TestCreationFragment : Fragment(R.layout.fragment_test_creation) {
             adapter.submitData(it)
         }.launchWhenStartedCollect(lifecycleScope)
         binding.btnPublish.setOnClickListener {
-            sharedViewModel.courseFlow.distinctUntilChanged().onEach {
+            sharedViewModel.courseFlow.onEach {
                 createTest(it.id)
             }.launchWhenStartedCollect(lifecycleScope)
         }
