@@ -12,24 +12,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
@@ -63,6 +70,12 @@ fun CoursesScreen() {
     val uiState by viewModel.uiState.collectAsState()
     var showUserInfoDialog by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
+
+    val sheetState: SheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+
     if (uiState.isLoggedOut) {
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
@@ -73,10 +86,21 @@ fun CoursesScreen() {
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState)
             },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    text = { Text("Show bottom sheet") },
+                    icon = { Icon(Icons.Filled.Add, contentDescription = "") },
+                    onClick = {
+                        showBottomSheet = true
+                    }
+                )
+            }
         ) { contentPadding ->
-            Column(modifier = Modifier
+            Column(
+                modifier = Modifier
                     .fillMaxSize()
-                    .padding(contentPadding)) {
+                    .padding(contentPadding)
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -172,6 +196,36 @@ fun CoursesScreen() {
                 }
             }
         }
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState
+            ) {
+                val onClick = {
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) showBottomSheet = false
+                    }
+                }
+                Text(
+                    stringResource(R.string.create_course),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onClick() }
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                )
+                Text(stringResource(R.string.join_course),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 32.dp)
+                        .clickable { onClick() }
+                        .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+                )
+            }
+        }
+
         if (showUserInfoDialog) {
             AlertDialogExample { showUserInfoDialog = false }
         }
