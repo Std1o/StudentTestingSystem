@@ -2,7 +2,9 @@ package student.testing.system.presentation.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.google.gson.Gson
 import student.testing.system.R
+import student.testing.system.models.CourseResponse
 
 sealed class Destination(
     protected val route: String,
@@ -37,6 +39,16 @@ sealed class Destination(
 
     // Course Review
 
+    object CourseReviewScreen :
+        Destination("course_review", params = arrayOf("course")) {
+        const val COURSE_KEY = "course"
+
+        operator fun invoke(course: CourseResponse): String {
+            val courseJson = Gson().toJson(course)
+            return route.appendParams(COURSE_KEY to courseJson)
+        }
+    }
+
     object TestsScreen : BottomNavigationDestination("tests", R.string.tests, R.drawable.ic_tests)
 
     object ParticipantsScreen : BottomNavigationDestination(
@@ -44,4 +56,16 @@ sealed class Destination(
         R.string.participants,
         R.drawable.ic_users
     )
+}
+
+internal fun String.appendParams(vararg params: Pair<String, Any?>): String {
+    val builder = StringBuilder(this)
+
+    params.forEach {
+        it.second?.toString()?.let { arg ->
+            builder.append("/$arg")
+        }
+    }
+
+    return builder.toString()
 }

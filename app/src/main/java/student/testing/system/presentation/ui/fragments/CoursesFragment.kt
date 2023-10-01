@@ -53,7 +53,7 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
         adapter = CoursesAdapter(object : CoursesAdapter.ClickListener {
             override fun onClick(course: CourseResponse) {
                 val bundle = Bundle()
-                bundle.putSerializable(ARG_COURSE, course)
+                bundle.putParcelable(ARG_COURSE, course)
                 Navigation.findNavController(binding.root)
                     .navigate(R.id.action_coursesFragment_to_courseReviewFragment, bundle)
             }
@@ -133,7 +133,7 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
         requireActivity()
             .supportFragmentManager
             .setFragmentResultListener(KEY_COURSE_ADDING, this) { requestKey, bundle ->
-                val result = bundle.getSerializable(ARG_COURSE)
+                val result = bundle.getParcelable<CourseResponse>(ARG_COURSE)
                 adapter.addItem(result as CourseResponse)
             }
     }

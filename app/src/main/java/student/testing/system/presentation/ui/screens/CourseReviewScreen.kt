@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -23,9 +24,11 @@ import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
+import student.testing.system.presentation.viewmodels.CourseReviewViewModel
 
 @Composable
 fun CourseReviewScreen() {
+    val viewModel = hiltViewModel<CourseReviewViewModel>()
     val navController = rememberNavController()
     val items = listOf(
         Destination.TestsScreen,

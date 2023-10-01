@@ -44,7 +44,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments == null) return
-        val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
+        val course = arguments?.getParcelable<CourseResponse>(CoursesFragment.ARG_COURSE) as CourseResponse
         val currentParticipant = course.participants
             .first { it.userId == AccountSession.instance.userId }
         val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
@@ -74,7 +74,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         binding.btnAdd.showIf(isUserModerator)
         binding.btnAdd.setOnClickListener {
             val bundle = Bundle()
-            bundle.putSerializable(CoursesFragment.ARG_COURSE, course)
+            bundle.putParcelable(CoursesFragment.ARG_COURSE, course)
             findNavController().navigate(
                 R.id.action_navigation_tests_to_testCreationFragment,
                 bundle

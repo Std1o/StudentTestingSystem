@@ -1,12 +1,14 @@
 package student.testing.system.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class CourseResponse(
-    var name: String, var id: Int,
-    var img: String,
-    @SerializedName("course_code")
-    var courseCode: String,
-    var participants: List<Participant>,
-) : Serializable
+    @SerializedName("name") var name: String,
+    @SerializedName("id") var id: Int,
+    @SerializedName("img") var img: String,
+    @SerializedName("course_code") var courseCode: String,
+    @SerializedName("participants") var participants: List<Participant>,
+) : Parcelable

@@ -20,7 +20,7 @@ class CourseReviewFragment : Fragment(R.layout.fragment_course_review) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments == null) return
-        val course = arguments?.getSerializable(CoursesFragment.ARG_COURSE) as CourseResponse
+        val course = arguments?.getParcelable<CourseResponse>(CoursesFragment.ARG_COURSE)
 
 
         val navView: BottomNavigationView = binding.navView

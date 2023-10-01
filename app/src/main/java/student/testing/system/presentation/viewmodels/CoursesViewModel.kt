@@ -12,6 +12,9 @@ import student.testing.system.common.launchRequest
 import student.testing.system.common.makeOperation
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.RequestState
+import student.testing.system.models.CourseResponse
+import student.testing.system.presentation.navigation.AppNavigator
+import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.CoursesContentState
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
@@ -20,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CoursesViewModel @Inject constructor(
     private val repository: MainRepository,
-    private val prefUtils: PrefsUtils
+    private val prefUtils: PrefsUtils,
+    private val appNavigator: AppNavigator
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CoursesContentState())
@@ -32,7 +36,6 @@ class CoursesViewModel @Inject constructor(
 
     private fun getCourses() {
         viewModelScope.launch {
-            // List<CourseResponse>
             _uiState.value = _uiState.value.copy(
                 courses = launchRequest(
                     call = { repository.getCourses() },
@@ -54,5 +57,9 @@ class CoursesViewModel @Inject constructor(
     fun logout() {
         prefUtils.clearData()
         _uiState.update { it.copy(isLoggedOut = true) }
+    }
+
+    fun onCourseClicked(course: CourseResponse) {
+        appNavigator.tryNavigateTo(Destination.CourseReviewScreen(course = course))
     }
 }

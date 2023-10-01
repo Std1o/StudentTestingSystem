@@ -75,8 +75,8 @@ fun CoursesScreen() {
             },
         ) { contentPadding ->
             Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)) {
+                    .fillMaxSize()
+                    .padding(contentPadding)) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -141,6 +141,7 @@ fun CoursesScreen() {
                                             .height(150.dp)
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(10.dp))
+                                            .clickable { viewModel.onCourseClicked(course) }
                                     ) {
                                         AsyncImage(
                                             model = "${Constants.BASE_URL}images/${course.img}",
@@ -154,7 +155,11 @@ fun CoursesScreen() {
                                             fontSize = 20.sp,
                                             color = Color.White,
                                             style = TextStyle(
-                                                shadow = Shadow(Color.Black, Offset(3.0f, 4.95f), 1.0f)
+                                                shadow = Shadow(
+                                                    Color.Black,
+                                                    Offset(3.0f, 4.95f),
+                                                    1.0f
+                                                )
                                             )
                                         )
                                     }

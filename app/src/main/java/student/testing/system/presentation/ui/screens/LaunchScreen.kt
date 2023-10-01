@@ -1,19 +1,18 @@
 package student.testing.system.presentation.ui.screens
 
 import android.app.Activity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import student.testing.system.models.CourseResponse
+import student.testing.system.presentation.navigation.CustomType
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.NavigationIntent
@@ -34,9 +33,15 @@ fun LaunchScreen() {
             navController = navController,
             startDestination = Destination.LoginScreen
         ) {
-            composable(destination = Destination.CoursesScreen) { CoursesScreen() }
             composable(destination = Destination.LoginScreen) { LoginScreen() }
             composable(destination = Destination.SignUpScreen) { SignUpScreen() }
+            composable(destination = Destination.CoursesScreen) { CoursesScreen() }
+            composable(
+                destination = Destination.CourseReviewScreen,
+                arguments = listOf(navArgument("course") {
+                    type = CustomType(CourseResponse::class)
+                })
+            ) { CourseReviewScreen() }
         }
     }
 }

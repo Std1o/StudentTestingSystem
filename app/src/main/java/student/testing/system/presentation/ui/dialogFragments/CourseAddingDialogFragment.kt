@@ -53,7 +53,7 @@ class CourseAddingDialogFragment : BottomSheetDialogFragment() {
     private fun subscribeObservers() {
         viewModel.uiState.subscribeInUI(this, binding.progressBar) {
             val result = Bundle()
-            result.putSerializable(ARG_COURSE, it)
+            result.putParcelable(ARG_COURSE, it)
             parentFragmentManager.setFragmentResult(KEY_COURSE_ADDING, result)
             dismiss()
         }
