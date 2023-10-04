@@ -79,7 +79,7 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
     @OptIn(NotScreenState::class)
     private fun subscribeObservers() {
         lifecycleScope.launch {
-            viewModel.uiState.collect {
+            viewModel.contentState.collect {
                 binding.progressBar.isVisible = false
                 when (it.courses) {
                     is RequestState.Empty -> {}

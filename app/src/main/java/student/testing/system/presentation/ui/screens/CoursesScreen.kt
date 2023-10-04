@@ -61,6 +61,7 @@ import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.InputDialog
+import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
@@ -69,7 +70,8 @@ import student.testing.system.presentation.viewmodels.CoursesViewModel
 fun CoursesScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     val viewModel = hiltViewModel<CoursesViewModel>()
-    val uiState by viewModel.uiState.collectAsState()
+    val contentState by viewModel.contentState.collectAsState()
+    val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
     var showUserInfoDialog by remember { mutableStateOf(false) }
     var showConfirmationDialog by remember { mutableStateOf(false) }
 
@@ -77,9 +79,10 @@ fun CoursesScreen() {
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     var showCourseJoiningDialog by remember { mutableStateOf(false) }
+    var showCourseCreatingDialog by remember { mutableStateOf(false) }
 
 
-    if (uiState.isLoggedOut) {
+    if (contentState.isLoggedOut) { // TODO check comment in CoursesContentState
         val activity = (LocalContext.current as? Activity)
         activity?.finish()
         activity?.startActivity(Intent(activity, LaunchActivity::class.java))
@@ -154,7 +157,7 @@ fun CoursesScreen() {
                         }
                     }
                 }
-                when (val courses = uiState.courses) {
+                when (val courses = contentState.courses) {
                     is RequestState.Empty -> {}
                     is RequestState.Error -> {}
                     RequestState.Loading -> LoadingIndicator()
@@ -217,7 +220,10 @@ fun CoursesScreen() {
                     stringResource(R.string.create_course),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onClick() }
+                        .clickable {
+                            showCourseCreatingDialog = true
+                            onClick()
+                        }
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                 )
                 Text(stringResource(R.string.join_course),
@@ -244,6 +250,17 @@ fun CoursesScreen() {
             }
         }
 
+        if (showCourseCreatingDialog) {
+            InputDialog(
+                titleResId = R.string.create_course,
+                hintResId = R.string.input_name,
+                positiveButtonResId = R.string.create,
+                onDismiss = { showCourseCreatingDialog = false }
+            ) {
+                viewModel.createCourse(it)
+            }
+        }
+
         if (showUserInfoDialog) {
             AlertDialogExample { showUserInfoDialog = false }
         }
@@ -258,6 +275,7 @@ fun CoursesScreen() {
             )
         }
     }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ -> }
 }
 
 @Composable
