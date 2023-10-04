@@ -246,7 +246,7 @@ fun CoursesScreen() {
                 positiveButtonResId = R.string.btn_continue,
                 onDismiss = { showCourseJoiningDialog = false }
             ) {
-                scope.launch { snackbarHostState.showSnackbar(it) }
+                viewModel.joinCourse(it)
             }
         }
 

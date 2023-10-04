@@ -19,7 +19,6 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.CoursesContentState
-import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
@@ -35,6 +34,11 @@ class CoursesViewModel @Inject constructor(
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState: StateFlow<CoursesContentState> = _contentState.asStateFlow()
+    private var contentStateVar
+        get() = _contentState.value
+        set(value) {
+            _contentState.value = value
+        }
 
     init {
         getCourses()
@@ -42,10 +46,10 @@ class CoursesViewModel @Inject constructor(
 
     private fun getCourses() {
         viewModelScope.launch {
-            _contentState.value = _contentState.value.copy(
+            contentStateVar = contentStateVar.copy(
                 courses = launchRequest(
                     call = { repository.getCourses() },
-                    onLoading = { _contentState.value = _contentState.value.copy(courses = it) }
+                    onLoading = { contentStateVar = contentStateVar.copy(courses = it) }
                 )
             )
         }
@@ -69,39 +73,31 @@ class CoursesViewModel @Inject constructor(
         appNavigator.tryNavigateTo(Destination.CourseReviewScreen(course = course))
     }
 
-    @OptIn(NotScreenState::class)
     fun createCourse(name: String) {
         viewModelScope.launch {
             executeOperation({ createCourseUseCase(name) }) { courseResponse ->
-                _contentState.update {
-                    it.copy(
-                        courses = RequestState.Success(
-                            listOf(
-                                *(it.courses as RequestState.Success).data.toTypedArray(),
-                                courseResponse
-                            )
-                        )
-                    )
-                }
+                addCourseToContent(courseResponse)
+            }
+        }
+    }
+
+    fun joinCourse(courseCode: String) {
+        viewModelScope.launch {
+            executeOperation({ joinCourseUseCase(courseCode) }) { courseResponse ->
+                addCourseToContent(courseResponse)
             }
         }
     }
 
     @OptIn(NotScreenState::class)
-    fun joinCourse(courseCode: String) {
-        viewModelScope.launch {
-            executeOperation({ joinCourseUseCase(courseCode) }) { courseResponse ->
-                _contentState.update {
-                    it.copy(
-                        courses = RequestState.Success(
-                            listOf(
-                                *(it.courses as RequestState.Success).data.toTypedArray(),
-                                courseResponse
-                            )
-                        )
-                    )
-                }
-            }
-        }
+    private fun addCourseToContent(course: CourseResponse) {
+        contentStateVar = contentStateVar.copy(
+            courses = RequestState.Success(
+                listOf(
+                    *(contentStateVar.courses as RequestState.Success).data.toTypedArray(),
+                    course
+                )
+            )
+        )
     }
 }
