@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -23,7 +22,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -62,6 +60,7 @@ import student.testing.system.common.Constants
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
+import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
@@ -77,6 +76,7 @@ fun CoursesScreen() {
     val sheetState: SheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+    var showCourseJoiningDialog by remember { mutableStateOf(false) }
 
 
     if (uiState.isLoggedOut) {
@@ -224,9 +224,23 @@ fun CoursesScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 32.dp)
-                        .clickable { onClick() }
+                        .clickable {
+                            showCourseJoiningDialog = true
+                            onClick()
+                        }
                         .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
                 )
+            }
+        }
+
+        if (showCourseJoiningDialog) {
+            InputDialog(
+                titleResId = R.string.join_course,
+                hintResId = R.string.course_code_hint,
+                positiveButtonResId = R.string.btn_continue,
+                onDismiss = { showCourseJoiningDialog = false }
+            ) {
+                scope.launch { snackbarHostState.showSnackbar(it) }
             }
         }
 
