@@ -56,7 +56,7 @@ class CoursesViewModel @Inject constructor(
     @OptIn(NotScreenState::class)
     fun deleteCourse(courseId: Int) {
         viewModelScope.launch {
-            executeOperation<RequestState<Void>>(
+            executeOperation(
                 call = { repository.deleteCourse(courseId) },
                 onEmpty = {
                     val newCourses = (contentStateVar.courses as RequestState.Success)
@@ -64,7 +64,7 @@ class CoursesViewModel @Inject constructor(
                     contentStateVar =
                         contentStateVar.copy(courses = RequestState.Success(newCourses))
                 }
-            )
+            ).protect()
         }
     }
 
@@ -81,7 +81,7 @@ class CoursesViewModel @Inject constructor(
         viewModelScope.launch {
             executeOperation({ createCourseUseCase(name) }) { courseResponse ->
                 addCourseToContent(courseResponse)
-            }
+            }.protect()
         }
     }
 
@@ -89,7 +89,7 @@ class CoursesViewModel @Inject constructor(
         viewModelScope.launch {
             executeOperation({ joinCourseUseCase(courseCode) }) { courseResponse ->
                 addCourseToContent(courseResponse)
-            }
+            }.protect()
         }
     }
 

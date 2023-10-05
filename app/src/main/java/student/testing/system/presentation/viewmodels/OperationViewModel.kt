@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import student.testing.system.annotations.FunctionalityState
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.common.GenericsAutoCastIsWrong
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
@@ -63,6 +64,7 @@ open class OperationViewModel<T> : ViewModel() {
         val request = viewModelScope.async {
             _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading)
             requestResult = call()
+            if (requestResult is Unit) throw GenericsAutoCastIsWrong()
             val operationState = toOperationStateMapper.map(requestResult as Any)
             if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
             if (operationState is RequestState.Empty) onEmpty.invoke()
@@ -77,3 +79,5 @@ open class OperationViewModel<T> : ViewModel() {
         }
     }
 }
+
+fun <State> State.protect() {}
