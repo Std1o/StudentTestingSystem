@@ -66,6 +66,7 @@ import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
+import androidx.compose.foundation.lazy.items
 
 @OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -167,39 +168,38 @@ fun CoursesScreen() {
                     RequestState.NoState -> {}
                     is RequestState.Success -> {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            courses.data.forEach { course ->
-                                item {
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(vertical = 10.dp, horizontal = 16.dp)
-                                            .height(150.dp)
-                                            .fillMaxWidth()
-                                            .clip(RoundedCornerShape(10.dp))
-                                            .combinedClickable(
-                                                onClick = { viewModel.onCourseClicked(course) },
-                                                onLongClick = { deletingCourseId = course.id },
-                                            )
-                                    ) {
-                                        AsyncImage(
-                                            model = "${Constants.BASE_URL}images/${course.img}",
-                                            contentDescription = "Translated description of what the image contains",
-                                            modifier = Modifier.fillMaxWidth(),
-                                            contentScale = ContentScale.FillWidth
+                            items(courses.data, key = { it }) { course ->
+                                Box(
+                                    modifier = Modifier
+                                        .animateItemPlacement()
+                                        .padding(vertical = 10.dp, horizontal = 16.dp)
+                                        .height(150.dp)
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .combinedClickable(
+                                            onClick = { viewModel.onCourseClicked(course) },
+                                            onLongClick = { deletingCourseId = course.id },
                                         )
-                                        Text(
-                                            text = course.name,
-                                            modifier = Modifier.padding(16.dp),
-                                            fontSize = 20.sp,
-                                            color = Color.White,
-                                            style = TextStyle(
-                                                shadow = Shadow(
-                                                    Color.Black,
-                                                    Offset(3.0f, 4.95f),
-                                                    1.0f
-                                                )
+                                ) {
+                                    AsyncImage(
+                                        model = "${Constants.BASE_URL}images/${course.img}",
+                                        contentDescription = "Translated description of what the image contains",
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentScale = ContentScale.FillWidth
+                                    )
+                                    Text(
+                                        text = course.name,
+                                        modifier = Modifier.padding(16.dp),
+                                        fontSize = 20.sp,
+                                        color = Color.White,
+                                        style = TextStyle(
+                                            shadow = Shadow(
+                                                Color.Black,
+                                                Offset(3.0f, 4.95f),
+                                                1.0f
                                             )
                                         )
-                                    }
+                                    )
                                 }
                             }
                         }
