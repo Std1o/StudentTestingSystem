@@ -67,6 +67,7 @@ import student.testing.system.presentation.ui.components.LastOperationStateUIHan
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.input.KeyboardCapitalization
 
 @OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -250,6 +251,7 @@ fun CoursesScreen() {
                 titleResId = R.string.join_course,
                 hintResId = R.string.course_code_hint,
                 positiveButtonResId = R.string.btn_continue,
+                capitalization = KeyboardCapitalization.Characters,
                 onDismiss = { showCourseJoiningDialog = false }
             ) {
                 viewModel.joinCourse(it)

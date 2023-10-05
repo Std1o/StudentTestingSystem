@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -22,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -32,6 +35,7 @@ fun InputDialog(
     @StringRes titleResId: Int,
     @StringRes hintResId: Int,
     @StringRes positiveButtonResId: Int = R.string.ok,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     onDismiss: () -> Unit,
     onPositiveClick: (String) -> Unit
 ) {
@@ -62,7 +66,11 @@ fun InputDialog(
                 OutlinedTextField(
                     value = inputtedText,
                     onValueChange = { inputtedText = it }, modifier = Modifier.padding(8.dp),
-                    label = { Text(stringResource(id = hintResId)) }
+                    label = { Text(stringResource(id = hintResId)) },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = capitalization,
+                        imeAction = ImeAction.Done
+                    ),
                 )
 
                 Row {
