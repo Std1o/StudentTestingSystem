@@ -30,7 +30,7 @@ class CoursesViewModel @Inject constructor(
     private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
-) : OperationViewModel<OperationState<CourseResponse>, CourseResponse>() {
+) : OperationViewModel<CourseResponse>() {
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState: StateFlow<CoursesContentState> = _contentState.asStateFlow()

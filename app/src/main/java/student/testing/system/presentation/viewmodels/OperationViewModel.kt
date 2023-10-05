@@ -24,7 +24,7 @@ import kotlin.reflect.jvm.reflect
  * @param T Type of data that comes from the server when performing the operation
  */
 
-open class OperationViewModel<@FunctionalityState State, T> : ViewModel() {
+open class OperationViewModel<T> : ViewModel() {
 
     private val _lastOperationStateWrapper =
         MutableStateFlow<UIStateWrapper<OperationState<T>, T>>(UIStateWrapper())
@@ -32,18 +32,21 @@ open class OperationViewModel<@FunctionalityState State, T> : ViewModel() {
         _lastOperationStateWrapper.asStateFlow()
 
     private val toOperationStateMapper =
-        ToOperationStateMapper<State, T>()
+        ToOperationStateMapper<T>()
 
     private val requestsQueue = LinkedList<String>()
 
     /**
      * Launches operations and updating last operation state based on the response.
      *
+     * Your coroutine must contain at least one val/var or you must specify explicit generics for this method!
+     *  [Watch issue](https://github.com/Kotlin/kotlinx.coroutines/issues/3904)
+     *
      * @param call Suspend fun that will be called here
      * @param onSuccess An optional callback function that may be called for some ViewModel businesses
      */
     @OptIn(NotScreenState::class)
-    protected suspend fun executeOperation(
+    protected suspend fun <@FunctionalityState State> executeOperation(
         call: suspend () -> State,
         onSuccess: (T) -> Unit = {},
     ): State {
@@ -59,7 +62,7 @@ open class OperationViewModel<@FunctionalityState State, T> : ViewModel() {
         val request = viewModelScope.async {
             _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading)
             requestResult = call()
-            val operationState = toOperationStateMapper.map(requestResult)
+            val operationState = toOperationStateMapper.map(requestResult as Any)
             if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
             _lastOperationStateWrapper.value = UIStateWrapper(operationState)
             requestResult
