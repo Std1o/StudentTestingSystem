@@ -48,6 +48,7 @@ open class OperationViewModel<T> : ViewModel() {
     @OptIn(NotScreenState::class)
     protected suspend fun <@FunctionalityState State> executeOperation(
         call: suspend () -> State,
+        onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): State {
         if (_lastOperationStateWrapper.value.uiState is RequestState.Loading) {
@@ -64,6 +65,7 @@ open class OperationViewModel<T> : ViewModel() {
             requestResult = call()
             val operationState = toOperationStateMapper.map(requestResult as Any)
             if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
+            if (operationState is RequestState.Empty) onEmpty.invoke()
             _lastOperationStateWrapper.value = UIStateWrapper(operationState)
             requestResult
         }

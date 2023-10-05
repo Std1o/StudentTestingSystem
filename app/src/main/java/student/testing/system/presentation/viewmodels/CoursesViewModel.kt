@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.launchRequest
-import student.testing.system.common.makeOperation
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
@@ -55,13 +53,19 @@ class CoursesViewModel @Inject constructor(
         }
     }
 
-    fun deleteCourse(courseId: Int): StateFlow<RequestState<Int>> {
-        val stateFlow = MutableStateFlow<RequestState<Int>>(RequestState.Loading)
+    @OptIn(NotScreenState::class)
+    fun deleteCourse(courseId: Int) {
         viewModelScope.launch {
-            val state = makeOperation(repository.deleteCourse(courseId), courseId)
-            stateFlow.emit(state)
+            executeOperation<RequestState<Void>>(
+                call = { repository.deleteCourse(courseId) },
+                onEmpty = {
+                    val newCourses = (contentStateVar.courses as RequestState.Success)
+                        .data.filter { it.id != courseId }
+                    contentStateVar =
+                        contentStateVar.copy(courses = RequestState.Success(newCourses))
+                }
+            )
         }
-        return stateFlow
     }
 
     fun logout() {

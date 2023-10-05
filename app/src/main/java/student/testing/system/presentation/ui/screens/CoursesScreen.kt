@@ -2,8 +2,10 @@ package student.testing.system.presentation.ui.screens
 
 import android.app.Activity
 import android.content.Intent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -65,7 +67,7 @@ import student.testing.system.presentation.ui.components.LastOperationStateUIHan
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
-@OptIn(NotScreenState::class, ExperimentalMaterial3Api::class)
+@OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CoursesScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -73,7 +75,8 @@ fun CoursesScreen() {
     val contentState by viewModel.contentState.collectAsState()
     val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
     var showUserInfoDialog by remember { mutableStateOf(false) }
-    var showConfirmationDialog by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    var deletingCourseId by remember { mutableStateOf<Int?>(null) }
 
     val sheetState: SheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -150,7 +153,7 @@ fun CoursesScreen() {
                                     .fillMaxWidth()
                                     .clickable(onClick = {
                                         expanded = false
-                                        showConfirmationDialog = true
+                                        showLogoutDialog = true
                                     })
                                     .padding(vertical = 10.dp, horizontal = 20.dp)
                             )
@@ -172,7 +175,10 @@ fun CoursesScreen() {
                                             .height(150.dp)
                                             .fillMaxWidth()
                                             .clip(RoundedCornerShape(10.dp))
-                                            .clickable { viewModel.onCourseClicked(course) }
+                                            .combinedClickable(
+                                                onClick = { viewModel.onCourseClicked(course) },
+                                                onLongClick = { deletingCourseId = course.id },
+                                            )
                                     ) {
                                         AsyncImage(
                                             model = "${Constants.BASE_URL}images/${course.img}",
@@ -264,14 +270,24 @@ fun CoursesScreen() {
         if (showUserInfoDialog) {
             AlertDialogExample { showUserInfoDialog = false }
         }
-        if (showConfirmationDialog) {
+        if (showLogoutDialog) {
             ConfirmationDialog(
-                onDismissRequest = { showConfirmationDialog = false },
+                onDismissRequest = { showLogoutDialog = false },
                 onConfirmation = {
-                    showConfirmationDialog = false
+                    showLogoutDialog = false
                     viewModel.logout()
                 },
                 dialogText = stringResource(id = R.string.logout_request)
+            )
+        }
+        deletingCourseId?.let {
+            ConfirmationDialog(
+                onDismissRequest = { deletingCourseId = null },
+                onConfirmation = {
+                    viewModel.deleteCourse(it)
+                    deletingCourseId = null
+                },
+                dialogText = stringResource(id = R.string.delete_request)
             )
         }
     }

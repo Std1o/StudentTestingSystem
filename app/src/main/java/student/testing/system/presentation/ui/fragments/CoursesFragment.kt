@@ -139,8 +139,8 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
     }
 
     private fun deleteCourse(courseId: Int) {
-        viewModel.deleteCourse(courseId).subscribeInUI(this, binding.progressBar) {
-            adapter.deleteById(it)
-        }
+//        viewModel.deleteCourse(courseId).subscribeInUI(this, binding.progressBar) {
+//            adapter.deleteById(it)
+//        }
     }
 }
