@@ -113,8 +113,6 @@ fun <T> StateFlow<RequestState<T>>.subscribeInUI(
         progressBar.showIf(it is RequestState.Loading)
         if (it is RequestState.Success) {
             listener.invoke(it.data)
-        } else if (it is RequestState.ValidationError) {
-            fragment.showSnackbar(it.messageResId)
         } else if (it is RequestState.Error) {
             fragment.showSnackbar(it.exception)
         }
@@ -131,8 +129,6 @@ fun <T> StateFlow<RequestState<T>>.subscribeInUI(
         progressBar.showIf(it is RequestState.Loading)
         if (it is RequestState.Success) {
             listener.invoke(it.data)
-        } else if (it is RequestState.ValidationError) {
-            dialogFragment.showSnackbar(it.messageResId)
         } else if (it is RequestState.Error) {
             dialogFragment.showSnackbar(it.exception)
         }
@@ -152,10 +148,9 @@ fun <E> ViewModel.makeOperation(
     return when (requestResult) {
         is RequestState.Empty -> RequestState.Success(successData, requestResult.operationType)
         is RequestState.Error -> RequestState.Error(requestResult.exception)
-        RequestState.Loading -> RequestState.Loading
+        is RequestState.Loading -> RequestState.Loading()
         RequestState.NoState -> RequestState.NoState
         is RequestState.Success -> RequestState.Success(successData)
-        is RequestState.ValidationError -> RequestState.ValidationError(requestResult.messageResId)
     }
 }
 
@@ -182,7 +177,7 @@ suspend fun <State, T> CoroutineScope.launchRequest(
 ): State {
     var requestResult: State
     val request = async {
-        onLoading.invoke(RequestState.Loading)
+        onLoading.invoke(RequestState.Loading())
         requestResult = call()
         if (requestResult is RequestState.Success<*>) onSuccess.invoke((requestResult as RequestState.Success<T>).data)
         requestResult

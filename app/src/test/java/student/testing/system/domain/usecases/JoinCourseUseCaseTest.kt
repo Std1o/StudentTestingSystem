@@ -11,6 +11,7 @@ import org.junit.Test
 import student.testing.system.FakeRepository
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.models.CourseResponse
 
 @ExperimentalCoroutinesApi
@@ -22,7 +23,7 @@ class JoinCourseUseCaseTest {
     @Test
     fun `empty courseCode returns ValidationError`() = runTest {
         val actual = joinCourseUseCase("")
-        assertTrue(actual is RequestState.ValidationError)
+        assertTrue(actual is ValidatableOperationState.ValidationError)
     }
 
     @Test

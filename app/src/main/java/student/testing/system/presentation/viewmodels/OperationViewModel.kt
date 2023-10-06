@@ -10,6 +10,7 @@ import student.testing.system.annotations.FunctionalityState
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.GenericsAutoCastIsWrong
 import student.testing.system.data.mapper.ToOperationStateMapper
+import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
@@ -49,6 +50,7 @@ open class OperationViewModel<T> : ViewModel() {
     @OptIn(NotScreenState::class)
     protected suspend fun <@FunctionalityState State> executeOperation(
         call: suspend () -> State,
+        operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): State {
@@ -62,7 +64,8 @@ open class OperationViewModel<T> : ViewModel() {
         }
         var requestResult: State
         val request = viewModelScope.async {
-            _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading)
+            _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading(operationType))
+            println(operationType)
             requestResult = call()
             if (requestResult is Unit) throw GenericsAutoCastIsWrong()
             val operationState = toOperationStateMapper.map(requestResult as Any)
@@ -74,7 +77,9 @@ open class OperationViewModel<T> : ViewModel() {
         return request.await().also {
             requestsQueue.poll()
             if (requestsQueue.isNotEmpty()) {
-                _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading)
+                // TODO мб складывать в requestsQueue как раз таки operationType,
+                //  но с другой стороны не у всех он указан
+                _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading())
             }
         }
     }

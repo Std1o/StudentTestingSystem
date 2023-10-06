@@ -6,5 +6,5 @@ package student.testing.system.domain.operationTypes
  * на success которых ui должно реагировать по-разному
  */
 sealed interface OperationType {
-    object DefaultOperation : OperationType
+    data object DefaultOperation : OperationType
 }

@@ -25,6 +25,7 @@ class LoginViewModel @Inject constructor(
     private val appNavigator: AppNavigator
 ) : OperationViewModel<PrivateUser>() {
 
+    // TODO rename to _LoginStateWrapper
     private val _uiStateWrapper =
         MutableStateFlow<UIStateWrapper<LoginState<PrivateUser>, PrivateUser>>(
             UIStateWrapper(LoginState.AuthStateChecking)

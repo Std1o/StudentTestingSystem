@@ -8,6 +8,7 @@ import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
 import javax.inject.Inject
 
+// TODO remove this class
 @HiltViewModel
 class CourseAddingViewModel @Inject constructor(
     private val createCourseUseCase: CreateCourseUseCase,
@@ -16,13 +17,13 @@ class CourseAddingViewModel @Inject constructor(
 
     fun createCourse(name: String) {
         viewModelScope.launch {
-            launchRequest(createCourseUseCase(name))
+            //launchRequest(createCourseUseCase(name))
         }
     }
 
     fun joinCourse(courseCode: String){
         viewModelScope.launch {
-            launchRequest(joinCourseUseCase(courseCode))
+           // launchRequest(joinCourseUseCase(courseCode))
         }
     }
 }

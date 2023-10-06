@@ -1,6 +1,5 @@
 package student.testing.system.domain.states
 
-import androidx.annotation.StringRes
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.operationTypes.OperationType
 
@@ -32,8 +31,6 @@ sealed interface RequestState<out R> : OperationState<R>, LoadableData<R> {
 
     data class Error(val exception: String, val code: Int = -1) : RequestState<Nothing>
 
-    @Deprecated("Make it a special case")
-    data class ValidationError(@StringRes val messageResId: Int) : RequestState<Nothing>
-
-    object Loading : RequestState<Nothing>
+    data class Loading(val operationType: OperationType = OperationType.DefaultOperation) :
+        RequestState<Nothing>
 }

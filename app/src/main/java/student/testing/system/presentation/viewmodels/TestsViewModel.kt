@@ -25,7 +25,7 @@ class TestsViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun getTests(courseId: Int): StateFlow<RequestState<List<Test>>> {
-        val stateFlow = MutableStateFlow<RequestState<List<Test>>>(RequestState.Loading)
+        val stateFlow = MutableStateFlow<RequestState<List<Test>>>(RequestState.Loading())
         viewModelScope.launch {
             stateFlow.emit(repository.getTests(courseId))
         }
@@ -39,7 +39,7 @@ class TestsViewModel @Inject constructor(
         creationTIme: String,
         questions: List<Question>
     ): StateFlow<RequestState<Test>> {
-        val stateFlow = MutableStateFlow<RequestState<Test>>(RequestState.Loading)
+        val stateFlow = MutableStateFlow<RequestState<Test>>(RequestState.Loading())
         viewModelScope.launch {
             val requestResult = repository
                 .createTest(TestCreationReq(courseId, name, creationTIme, questions))
@@ -49,7 +49,7 @@ class TestsViewModel @Inject constructor(
     }
 
     fun deleteTest(testId: Int, courseId: Int): StateFlow<RequestState<Int>> {
-        val stateFlow = MutableStateFlow<RequestState<Int>>(RequestState.Loading)
+        val stateFlow = MutableStateFlow<RequestState<Int>>(RequestState.Loading())
         viewModelScope.launch {
             val requestResult = makeOperation(repository.deleteTest(testId, courseId), testId)
             stateFlow.emit(requestResult)

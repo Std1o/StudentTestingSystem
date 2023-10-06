@@ -21,7 +21,7 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
     val userQuestions: ArrayList<UserQuestion> = arrayListOf()
 
     fun calculateResult(testId: Int, courseId: Int): StateFlow<RequestState<Int>> {
-        val stateFlow = MutableStateFlow<RequestState<Int>>(RequestState.Loading)
+        val stateFlow = MutableStateFlow<RequestState<Int>>(RequestState.Loading())
         viewModelScope.launch {
             val requestResult =
                 makeOperation(repository.calculateResult(testId, courseId, userQuestions), 0)
@@ -31,7 +31,7 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
     }
 
     fun calculateDemoResult(courseId: Int, testId: Int): StateFlow<RequestState<TestResult>> {
-        val stateFlow = MutableStateFlow<RequestState<TestResult>>(RequestState.Loading)
+        val stateFlow = MutableStateFlow<RequestState<TestResult>>(RequestState.Loading())
         viewModelScope.launch {
             val requestResult = repository.calculateDemoResult(courseId, testId, userQuestions)
             stateFlow.emit(requestResult)
@@ -40,7 +40,7 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
     }
 
     fun getResult(testId: Int, courseId: Int): StateFlow<RequestState<TestResult>> {
-        val stateFlow = MutableStateFlow<RequestState<TestResult>>(RequestState.Loading)
+        val stateFlow = MutableStateFlow<RequestState<TestResult>>(RequestState.Loading())
         viewModelScope.launch {
             val requestResult = repository.getResult(testId, courseId)
             stateFlow.emit(requestResult)

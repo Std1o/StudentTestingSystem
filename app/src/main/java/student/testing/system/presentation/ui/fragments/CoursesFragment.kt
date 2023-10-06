@@ -84,13 +84,11 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
                 when (it.courses) {
                     is RequestState.Empty -> {}
                     is RequestState.Error -> showSnackbar(it.courses.exception)
-                    RequestState.Loading -> binding.progressBar.isVisible = true
+                    is RequestState.Loading -> binding.progressBar.isVisible = true
                     RequestState.NoState -> {}
                     is RequestState.Success -> {
                         adapter.setDataList(it.courses.data as MutableList<CourseResponse>)
                     }
-
-                    is RequestState.ValidationError -> {}
                 }
             }
         }

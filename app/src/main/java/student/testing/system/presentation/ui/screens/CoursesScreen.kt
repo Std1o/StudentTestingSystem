@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
@@ -50,6 +51,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,15 +61,15 @@ import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants
+import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.text.input.KeyboardCapitalization
 
 @OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -76,6 +78,7 @@ fun CoursesScreen() {
     val viewModel = hiltViewModel<CoursesViewModel>()
     val contentState by viewModel.contentState.collectAsState()
     val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
+    val lastValidationStateWrapper by viewModel.lastValidationStateWrapper.collectAsState()
     var showUserInfoDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
     var deletingCourseId by remember { mutableStateOf<Int?>(null) }
@@ -165,7 +168,7 @@ fun CoursesScreen() {
                 when (val courses = contentState.courses) {
                     is RequestState.Empty -> {}
                     is RequestState.Error -> {}
-                    RequestState.Loading -> LoadingIndicator()
+                    is RequestState.Loading -> LoadingIndicator()
                     RequestState.NoState -> {}
                     is RequestState.Success -> {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -205,8 +208,6 @@ fun CoursesScreen() {
                             }
                         }
                     }
-
-                    is RequestState.ValidationError -> {}
                 }
             }
         }
@@ -247,22 +248,55 @@ fun CoursesScreen() {
         }
 
         if (showCourseJoiningDialog) {
+            val error = lastValidationStateWrapper.run {
+                (uiState as? ValidatableOperationState.ValidationError)
+                    ?.let {
+                        if (it.operationType == CourseAddingOperations.JOIN_COURSE) it.messageResId else 0
+                    } ?: 0
+            }
             InputDialog(
                 titleResId = R.string.join_course,
                 hintResId = R.string.course_code_hint,
                 positiveButtonResId = R.string.btn_continue,
                 capitalization = KeyboardCapitalization.Characters,
-                onDismiss = { showCourseJoiningDialog = false }
+                isError = error != 0,
+                errorText = error,
+                onReceiveListener = lastValidationStateWrapper,
+                // TODO it's big cringe. When flow in data and domain will be added,
+                //  we can hide dialog by SuccessValidation state.
+                //  This means that we can use default Loader
+                isLoading = (lastOperationStateWrapper.uiState as? RequestState.Loading)?.let { it.operationType == CourseAddingOperations.CREATE_COURSE } == true,
+                onDismiss = { showCourseJoiningDialog = false },
             ) {
                 viewModel.joinCourse(it)
+            }
+            with(lastOperationStateWrapper) {
+                (uiState as? RequestState.Loading)?.let {
+                    if (it.operationType == CourseAddingOperations.JOIN_COURSE) {
+                        LoadingIndicator()
+                    }
+                }
             }
         }
 
         if (showCourseCreatingDialog) {
+            val error = lastValidationStateWrapper.run {
+                (uiState as? ValidatableOperationState.ValidationError)
+                    ?.let {
+                        if (it.operationType == CourseAddingOperations.CREATE_COURSE) it.messageResId else 0
+                    } ?: 0
+            }
             InputDialog(
                 titleResId = R.string.create_course,
                 hintResId = R.string.input_name,
                 positiveButtonResId = R.string.create,
+                isError = error != 0,
+                errorText = error,
+                onReceiveListener = lastValidationStateWrapper,
+                // TODO it's big cringe. When flow in data and domain will be added,
+                //  we can hide dialog by SuccessValidation state.
+                //  This means that we can use default Loader
+                isLoading = (lastOperationStateWrapper.uiState as? RequestState.Loading)?.let { it.operationType == CourseAddingOperations.CREATE_COURSE } == true,
                 onDismiss = { showCourseCreatingDialog = false }
             ) {
                 viewModel.createCourse(it)
@@ -293,7 +327,14 @@ fun CoursesScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ -> }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, operationType ->
+        if (operationType == CourseAddingOperations.CREATE_COURSE) {
+            showCourseCreatingDialog = false
+        }
+        if (operationType == CourseAddingOperations.JOIN_COURSE) {
+            showCourseJoiningDialog = false
+        }
+    }
 }
 
 @Composable

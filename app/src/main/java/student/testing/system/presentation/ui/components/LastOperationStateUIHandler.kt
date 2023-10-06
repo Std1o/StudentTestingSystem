@@ -36,8 +36,7 @@ fun <T> LastOperationStateUIHandler(
             }
 
             is RequestState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
-            is RequestState.NoState,
-            is RequestState.ValidationError -> { // will be moved to individual state
+            is RequestState.NoState -> {
                 // do nothing
             }
         }

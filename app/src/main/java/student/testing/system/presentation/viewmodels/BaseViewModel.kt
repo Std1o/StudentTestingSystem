@@ -30,7 +30,7 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
         requestResult: RequestState<T>,
         onSuccess: (T) -> Unit = {},
     ) {
-        _uiState.value = RequestState.Loading
+        _uiState.value = RequestState.Loading()
         if (requestResult is RequestState.Success) onSuccess.invoke(requestResult.data)
         _uiState.value = requestResult
     }

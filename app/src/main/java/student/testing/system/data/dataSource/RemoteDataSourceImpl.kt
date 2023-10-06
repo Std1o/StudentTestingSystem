@@ -1,6 +1,7 @@
 package student.testing.system.data.dataSource
 
 import student.testing.system.data.MainService
+import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.operationTypes.TestsOperations
 import student.testing.system.models.CourseCreationReq
 import student.testing.system.models.SignUpReq
@@ -15,10 +16,10 @@ class RemoteDataSourceImpl @Inject constructor(private val mainService: MainServ
     override suspend fun signUp(request: SignUpReq) = apiCall { mainService.signUp(request) }
     override suspend fun getCourses() = apiCall { mainService.getCourses() }
     override suspend fun createCourse(request: CourseCreationReq) =
-        apiCall { mainService.createCourse(request) }
+        apiCall(CourseAddingOperations.CREATE_COURSE) { mainService.createCourse(request) }
 
     override suspend fun joinCourse(courseCode: String) =
-        apiCall { mainService.joinCourse(courseCode) }
+        apiCall(CourseAddingOperations.JOIN_COURSE) { mainService.joinCourse(courseCode) }
 
     override suspend fun deleteCourse(courseId: Int) =
         apiCall { mainService.deleteCourse(courseId) }

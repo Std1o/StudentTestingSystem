@@ -10,13 +10,16 @@ import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.launchRequest
 import student.testing.system.domain.MainRepository
+import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.CoursesContentState
+import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
@@ -29,6 +32,13 @@ class CoursesViewModel @Inject constructor(
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
 ) : OperationViewModel<CourseResponse>() {
+
+    private val _lastValidationStateWrapper =
+        MutableStateFlow<UIStateWrapper<ValidatableOperationState<CourseResponse>, CourseResponse>>(
+            UIStateWrapper(RequestState.NoState)
+        )
+    val lastValidationStateWrapper: StateFlow<UIStateWrapper<ValidatableOperationState<CourseResponse>, CourseResponse>> =
+        _lastValidationStateWrapper.asStateFlow()
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState: StateFlow<CoursesContentState> = _contentState.asStateFlow()
@@ -79,17 +89,26 @@ class CoursesViewModel @Inject constructor(
 
     fun createCourse(name: String) {
         viewModelScope.launch {
-            executeOperation({ createCourseUseCase(name) }) { courseResponse ->
+            val requestResult = executeOperation(
+                call = { createCourseUseCase(name) },
+                operationType = CourseAddingOperations.CREATE_COURSE
+            ) { courseResponse ->
                 addCourseToContent(courseResponse)
-            }.protect()
+            }
+            _lastValidationStateWrapper.value = UIStateWrapper(requestResult)
         }
     }
 
     fun joinCourse(courseCode: String) {
         viewModelScope.launch {
-            executeOperation({ joinCourseUseCase(courseCode) }) { courseResponse ->
-                addCourseToContent(courseResponse)
-            }.protect()
+            val requestResult =
+                executeOperation(
+                    call = { joinCourseUseCase(courseCode) },
+                    operationType = CourseAddingOperations.JOIN_COURSE
+                ) { courseResponse ->
+                    addCourseToContent(courseResponse)
+                }
+            _lastValidationStateWrapper.value = UIStateWrapper(requestResult)
         }
     }
 
