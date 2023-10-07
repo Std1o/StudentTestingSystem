@@ -15,7 +15,7 @@ import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 @OptIn(NotScreenState::class)
 @Composable
 fun <T> LastOperationStateUIHandler(
-    stateWrapper: UIStateWrapper<OperationState<T>, T>,
+    stateWrapper: UIStateWrapper<OperationState<T>>,
     snackbarHostState: SnackbarHostState,
     onSuccess: @Composable (T, OperationType) -> Unit,
 ) {

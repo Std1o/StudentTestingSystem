@@ -24,8 +24,8 @@ class SignUpViewModel @Inject constructor(
 ) : OperationViewModel<PrivateUser>() {
 
     private val _uiStateWrapper =
-        MutableStateFlow<UIStateWrapper<SignUpState<PrivateUser>, PrivateUser>>(UIStateWrapper())
-    val uiStateWrapper: StateFlow<UIStateWrapper<SignUpState<PrivateUser>, PrivateUser>> =
+        MutableStateFlow<UIStateWrapper<SignUpState<PrivateUser>>>(UIStateWrapper())
+    val uiStateWrapper: StateFlow<UIStateWrapper<SignUpState<PrivateUser>>> =
         _uiStateWrapper.asStateFlow()
 
     var contentState by mutableStateOf(SignUpContentState())

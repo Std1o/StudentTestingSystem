@@ -27,10 +27,10 @@ class LoginViewModel @Inject constructor(
 
     // TODO rename to _LoginStateWrapper
     private val _uiStateWrapper =
-        MutableStateFlow<UIStateWrapper<LoginState<PrivateUser>, PrivateUser>>(
+        MutableStateFlow<UIStateWrapper<LoginState<PrivateUser>>>(
             UIStateWrapper(LoginState.AuthStateChecking)
         )
-    val uiStateWrapper: StateFlow<UIStateWrapper<LoginState<PrivateUser>, PrivateUser>> =
+    val uiStateWrapper: StateFlow<UIStateWrapper<LoginState<PrivateUser>>> =
         _uiStateWrapper.asStateFlow()
 
     val contentState by mutableStateOf(LoginContentState())

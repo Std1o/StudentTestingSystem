@@ -103,7 +103,7 @@ fun SignUpScreen() {
 
 @Composable
 fun UsernameTextField(
-    stateWrapper: UIStateWrapper<SignUpState<PrivateUser>, PrivateUser>,
+    stateWrapper: UIStateWrapper<SignUpState<PrivateUser>>,
     contentState: NameContentState,
     isUsernameError: Boolean,
     @StringRes errorText: Int

@@ -35,8 +35,8 @@ import kotlin.reflect.jvm.reflect
 open class OperationViewModel<T> : ViewModel() {
 
     private val _lastOperationStateWrapper =
-        MutableStateFlow<UIStateWrapper<OperationState<T>, T>>(UIStateWrapper())
-    val lastOperationStateWrapper: StateFlow<UIStateWrapper<OperationState<T>, T>> =
+        MutableStateFlow<UIStateWrapper<OperationState<T>>>(UIStateWrapper())
+    val lastOperationStateWrapper: StateFlow<UIStateWrapper<OperationState<T>>> =
         _lastOperationStateWrapper.asStateFlow()
 
     private val toOperationStateMapper =

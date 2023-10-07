@@ -34,11 +34,10 @@ class CoursesViewModel @Inject constructor(
 ) : OperationViewModel<CourseResponse>() {
 
     private val _lastValidationStateWrapper =
-        MutableStateFlow<UIStateWrapper<ValidatableOperationState<CourseResponse>, CourseResponse>>(
+        MutableStateFlow<UIStateWrapper<ValidatableOperationState<CourseResponse>>>(
             UIStateWrapper(RequestState.NoState)
         )
-    val lastValidationStateWrapper: StateFlow<UIStateWrapper<ValidatableOperationState<CourseResponse>, CourseResponse>> =
-        _lastValidationStateWrapper.asStateFlow()
+    val lastValidationStateWrapper = _lastValidationStateWrapper.asStateFlow()
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState: StateFlow<CoursesContentState> = _contentState.asStateFlow()
