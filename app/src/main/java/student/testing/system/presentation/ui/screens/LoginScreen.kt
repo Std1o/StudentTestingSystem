@@ -23,9 +23,9 @@ import student.testing.system.domain.states.LoginState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
+import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.PasswordTextField
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
@@ -89,5 +89,7 @@ fun LoginScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ -> }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { it, _ ->
+        println("data: ${lastOperationStateWrapper.getData(it as Any)}")
+    }
 }

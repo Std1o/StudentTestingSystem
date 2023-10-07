@@ -28,6 +28,7 @@ import student.testing.system.domain.states.RequestState
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 fun View.showIf(visible: Boolean) {
@@ -193,3 +194,6 @@ inline fun <reified T : ViewModel> NavBackStackEntry.viewModelScopedTo(
     val parentEntry = remember(this) { navController.getBackStackEntry(route) }
     return hiltViewModel(parentEntry)
 }
+
+
+inline fun <reified T : Any> KClass<T>.asAny(): KClass<Any>? = T::class as KClass<Any>

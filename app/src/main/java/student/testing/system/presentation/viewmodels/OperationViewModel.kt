@@ -20,6 +20,7 @@ import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 import java.util.LinkedList
+import kotlin.reflect.KClass
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.jvm.reflect
 
@@ -57,6 +58,7 @@ open class OperationViewModel<T> : ViewModel() {
     protected suspend fun <@FunctionalityState State> executeOperation(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
+        type: KClass<Any>? = null,
         onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): State {
@@ -77,7 +79,9 @@ open class OperationViewModel<T> : ViewModel() {
             val operationState = toOperationStateMapper.map(requestResult as Any)
             if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
             if (operationState is RequestState.Empty) onEmpty.invoke()
-            _lastOperationStateWrapper.value = UIStateWrapper(operationState)
+            val wrapper = UIStateWrapper(operationState)
+            wrapper.type = type
+            _lastOperationStateWrapper.value = wrapper as UIStateWrapper<OperationState<T>>
             requestResult
         }
         return request.await().also {

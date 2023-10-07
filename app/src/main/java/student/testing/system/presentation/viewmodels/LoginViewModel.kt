@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import student.testing.system.common.asAny
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
 import student.testing.system.domain.states.LoginState
@@ -37,9 +38,13 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val requestResult = executeOperation({ authIfPossibleUseCase() }) {
-                navigateToCourses()
-            }
+            val requestResult =
+                executeOperation(
+                    call = { authIfPossibleUseCase() },
+                    type = PrivateUser::class.asAny()
+                ) {
+                    navigateToCourses()
+                }
             _uiStateWrapper.value = UIStateWrapper(requestResult)
         }
     }
