@@ -1,5 +1,6 @@
 package student.testing.system.domain.usecases
 
+import kotlinx.coroutines.flow.flow
 import student.testing.system.R
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
@@ -9,14 +10,17 @@ import javax.inject.Inject
 
 class CreateCourseUseCase @Inject constructor(private val repository: MainRepository) {
 
-    suspend operator fun invoke(name: String): ValidatableOperationState<CourseResponse> {
-        return if (name.isEmpty()) {
-            ValidatableOperationState.ValidationError(
-                R.string.error_empty_course_name,
-                CourseAddingOperations.CREATE_COURSE
+    suspend operator fun invoke(name: String) = flow {
+        if (name.isEmpty()) {
+            emit(
+                ValidatableOperationState.ValidationError(
+                    messageResId = R.string.error_empty_course_name,
+                    operationType = CourseAddingOperations.CREATE_COURSE
+                )
             )
         } else {
-            repository.createCourse(name)
+            emit(ValidatableOperationState.SuccessfulValidation(CourseAddingOperations.CREATE_COURSE))
+            emit(repository.createCourse(name))
         }
     }
 }

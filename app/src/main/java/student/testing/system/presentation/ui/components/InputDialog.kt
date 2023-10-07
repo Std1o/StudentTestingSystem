@@ -47,7 +47,6 @@ fun InputDialog(
     isError: Boolean = false,
     @StringRes errorText: Int = 0,
     onReceiveListener: OnReceiveListener? = null,
-    isLoading: Boolean = false,
     onDismiss: () -> Unit,
     onPositiveClick: (String) -> Unit
 ) {
@@ -126,6 +125,7 @@ fun InputDialog(
                         Button(
                             onClick = {
                                 onPositiveClick(inputtedText)
+                                onDismiss()
                             },
                             Modifier
                                 .fillMaxWidth()
@@ -138,7 +138,6 @@ fun InputDialog(
 
 
                 }
-                if (isLoading) LoadingIndicatorNotCentered()
             }
         }
     }

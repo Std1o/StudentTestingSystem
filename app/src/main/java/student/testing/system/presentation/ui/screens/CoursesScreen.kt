@@ -262,10 +262,6 @@ fun CoursesScreen() {
                 isError = error != 0,
                 errorText = error,
                 onReceiveListener = lastValidationStateWrapper,
-                // TODO it's big cringe. When flow in data and domain will be added,
-                //  we can hide dialog by SuccessValidation state.
-                //  This means that we can use default Loader
-                isLoading = (lastOperationStateWrapper.uiState as? RequestState.Loading)?.let { it.operationType == CourseAddingOperations.CREATE_COURSE } == true,
                 onDismiss = { showCourseJoiningDialog = false },
             ) {
                 viewModel.joinCourse(it)
@@ -293,13 +289,20 @@ fun CoursesScreen() {
                 isError = error != 0,
                 errorText = error,
                 onReceiveListener = lastValidationStateWrapper,
-                // TODO it's big cringe. When flow in data and domain will be added,
-                //  we can hide dialog by SuccessValidation state.
-                //  This means that we can use default Loader
-                isLoading = (lastOperationStateWrapper.uiState as? RequestState.Loading)?.let { it.operationType == CourseAddingOperations.CREATE_COURSE } == true,
                 onDismiss = { showCourseCreatingDialog = false }
             ) {
                 viewModel.createCourse(it)
+            }
+        }
+
+        with(lastValidationStateWrapper) {
+            (uiState as? ValidatableOperationState.SuccessfulValidation)?.let {
+                if (it.operationType == CourseAddingOperations.CREATE_COURSE) {
+                    showCourseCreatingDialog = false
+                }
+                if (it.operationType == CourseAddingOperations.JOIN_COURSE) {
+                    showCourseJoiningDialog = false
+                }
             }
         }
 
@@ -327,14 +330,7 @@ fun CoursesScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, operationType ->
-        if (operationType == CourseAddingOperations.CREATE_COURSE) {
-            showCourseCreatingDialog = false
-        }
-        if (operationType == CourseAddingOperations.JOIN_COURSE) {
-            showCourseJoiningDialog = false
-        }
-    }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ ->}
 }
 
 @Composable

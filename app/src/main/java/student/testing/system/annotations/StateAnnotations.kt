@@ -26,3 +26,10 @@ annotation class FunctionalityState
  */
 @MustBeDocumented
 annotation class ContentState
+
+// TODO написать норм Kdoc
+/**
+ * Для стейтов из юзккейса, помечается если при этом стейте должен крутиться лоадер.
+ */
+@MustBeDocumented
+annotation class IntermediateState

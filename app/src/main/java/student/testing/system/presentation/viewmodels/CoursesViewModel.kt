@@ -89,26 +89,27 @@ class CoursesViewModel @Inject constructor(
 
     fun createCourse(name: String) {
         viewModelScope.launch {
-            val requestResult = executeOperation(
-                call = { createCourseUseCase(name) },
+            executeFlowOperation(
+                requestFlow = createCourseUseCase(name),
                 operationType = CourseAddingOperations.CREATE_COURSE
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
+            }.collect {
+                _lastValidationStateWrapper.value = UIStateWrapper(it)
             }
-            _lastValidationStateWrapper.value = UIStateWrapper(requestResult)
         }
     }
 
     fun joinCourse(courseCode: String) {
         viewModelScope.launch {
-            val requestResult =
-                executeOperation(
-                    call = { joinCourseUseCase(courseCode) },
-                    operationType = CourseAddingOperations.JOIN_COURSE
-                ) { courseResponse ->
-                    addCourseToContent(courseResponse)
-                }
-            _lastValidationStateWrapper.value = UIStateWrapper(requestResult)
+            executeFlowOperation(
+                requestFlow = joinCourseUseCase(courseCode),
+                operationType = CourseAddingOperations.JOIN_COURSE
+            ) { courseResponse ->
+                addCourseToContent(courseResponse)
+            }.collect {
+                _lastValidationStateWrapper.value = UIStateWrapper(it)
+            }
         }
     }
 
