@@ -3,10 +3,13 @@ package student.testing.system.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
 import student.testing.system.annotations.IntermediateState
 import student.testing.system.annotations.NotScreenState
@@ -91,7 +94,7 @@ open class OperationViewModel<T> : ViewModel() {
      * Если use case отправляет какие-то промежуточные результаты
      */
     @OptIn(NotScreenState::class)
-    protected suspend fun <@FunctionalityState State> executeFlowOperation(
+    protected fun <@FunctionalityState State> executeFlowOperation(
         requestFlow: Flow<State>,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
@@ -106,24 +109,29 @@ open class OperationViewModel<T> : ViewModel() {
             requestsQueue.offer("todo: put normal object")
         }
         _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading(operationType))
-        requestFlow.collect { requestResult ->
-            if (requestResult is Unit) throw GenericsAutoCastIsWrong()
-            val operationState = toOperationStateMapper.map(requestResult as Any)
-            if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
-            if (operationState is RequestState.Empty) onEmpty.invoke()
-            _lastOperationStateWrapper.value = UIStateWrapper(operationState)
-            // значит что конечный резульатат получен и можно очистить очередь
-            if (operationState !is RequestState.Loading && operationState !is RequestState.NoState) {
-                requestsQueue.poll()
-            }
-            if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
-                _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading(operationType))
-            }
+        // иначе код выполняется синхронно
+        // и флоу вернется только когда весь этот участок будет пройден
+        viewModelScope.launch {
+            requestFlow.collect { requestResult ->
+                if (requestResult is Unit) throw GenericsAutoCastIsWrong()
+                val operationState = toOperationStateMapper.map(requestResult as Any)
+                if (operationState is RequestState.Success) onSuccess.invoke(operationState.data)
+                if (operationState is RequestState.Empty) onEmpty.invoke()
+                _lastOperationStateWrapper.value = UIStateWrapper(operationState)
+                // значит что конечный резульатат получен и можно очистить очередь
+                if (operationState !is RequestState.Loading && operationState !is RequestState.NoState) {
+                    requestsQueue.poll()
+                }
+                if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
+                    _lastOperationStateWrapper.value =
+                        UIStateWrapper(RequestState.Loading(operationType))
+                }
 
-            if (requestsQueue.isNotEmpty()) {
-                // TODO мб складывать в requestsQueue как раз таки operationType,
-                //  но с другой стороны не у всех он указан
-                _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading())
+                if (requestsQueue.isNotEmpty()) {
+                    // TODO мб складывать в requestsQueue как раз таки operationType,
+                    //  но с другой стороны не у всех он указан
+                    _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading())
+                }
             }
         }
         return requestFlow

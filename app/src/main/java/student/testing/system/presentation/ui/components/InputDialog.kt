@@ -125,7 +125,6 @@ fun InputDialog(
                         Button(
                             onClick = {
                                 onPositiveClick(inputtedText)
-                                onDismiss()
                             },
                             Modifier
                                 .fillMaxWidth()
