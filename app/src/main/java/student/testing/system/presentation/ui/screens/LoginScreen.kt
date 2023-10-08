@@ -89,5 +89,5 @@ fun LoginScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState) { _, _ -> }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
 }

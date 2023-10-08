@@ -98,7 +98,7 @@ fun SignUpScreen() {
             ) { Text(stringResource(R.string.sign_up)) }
         }
     }
-    LastOperationStateUIHandler(lastOperationState, snackbarHostState) { _, _ -> }
+    LastOperationStateUIHandler(lastOperationState, snackbarHostState)
 }
 
 @Composable

@@ -17,7 +17,34 @@ import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 fun <T> LastOperationStateUIHandler(
     stateWrapper: UIStateWrapper<OperationState<T>>,
     snackbarHostState: SnackbarHostState,
-    onSuccess: @Composable (T, OperationType) -> Unit,
+) {
+    with(stateWrapper.uiState) {
+        when (this) {
+            is RequestState.Loading -> LoadingIndicator()
+            is RequestState.Error -> {
+                LaunchedEffect(Unit) { // the key define when the block is relaunched
+                    snackbarHostState.showSnackbar(exception)
+                    stateWrapper.onReceive()
+                }
+            }
+
+            is RequestState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
+            is RequestState.Success,// for this use method below
+            is RequestState.NoState -> {
+                // do nothing
+            }
+        }
+    }
+}
+
+// TODO написать что succes надо бы по-хорошему ловить в VM
+//  и потом уже кидать через свои FunctionallityState сделать
+@OptIn(NotScreenState::class)
+@Composable
+fun <T> LastOperationStateUIHandler(
+    stateWrapper: UIStateWrapper<OperationState<T>>,
+    snackbarHostState: SnackbarHostState,
+    onSuccess: @Composable (T, OperationType) -> Pair<AllOperationTypesWasHandled, AllCastsWasChecked>,
 ) {
     with(stateWrapper.uiState) {
         when (this) {
@@ -42,3 +69,6 @@ fun <T> LastOperationStateUIHandler(
         }
     }
 }
+
+object AllOperationTypesWasHandled
+object AllCastsWasChecked
