@@ -15,7 +15,7 @@ import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.LoginContentState
-import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,13 +25,12 @@ class LoginViewModel @Inject constructor(
     private val appNavigator: AppNavigator
 ) : OperationViewModel() {
 
-    // TODO rename to _LoginStateWrapper
-    private val _uiStateWrapper =
-        MutableStateFlow<UIStateWrapper<LoginState<PrivateUser>>>(
-            UIStateWrapper(LoginState.AuthStateChecking)
+    private val _loginStateWrapper =
+        MutableStateFlow<StateWrapper<LoginState<PrivateUser>>>(
+            StateWrapper(LoginState.AuthStateChecking)
         )
-    val uiStateWrapper: StateFlow<UIStateWrapper<LoginState<PrivateUser>>> =
-        _uiStateWrapper.asStateFlow()
+    val loginStateWrapper: StateFlow<StateWrapper<LoginState<PrivateUser>>> =
+        _loginStateWrapper.asStateFlow()
 
     val contentState by mutableStateOf(LoginContentState())
 
@@ -40,7 +39,7 @@ class LoginViewModel @Inject constructor(
             val requestResult = executeNotTypedOperation({ authIfPossibleUseCase() }) {
                 navigateToCourses()
             }
-            _uiStateWrapper.value = UIStateWrapper(requestResult)
+            _loginStateWrapper.value = StateWrapper(requestResult)
         }
     }
 
@@ -49,7 +48,7 @@ class LoginViewModel @Inject constructor(
             val requestResult = executeNotTypedOperation({ loginUseCase(email, password) }) {
                 navigateToCourses()
             }
-            _uiStateWrapper.value = UIStateWrapper(requestResult)
+            _loginStateWrapper.value = StateWrapper(requestResult)
         }
     }
 

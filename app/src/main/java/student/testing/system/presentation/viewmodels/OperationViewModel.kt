@@ -4,13 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -22,7 +19,7 @@ import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
-import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
 import kotlin.reflect.full.hasAnnotation
@@ -39,8 +36,8 @@ import kotlin.reflect.full.hasAnnotation
 open class OperationViewModel : ViewModel() {
 
     private val _lastOperationStateWrapper =
-        MutableStateFlow<UIStateWrapper<OperationState<Any>>>(UIStateWrapper())
-    val lastOperationStateWrapper: StateFlow<UIStateWrapper<OperationState<Any>>> =
+        MutableStateFlow<StateWrapper<OperationState<Any>>>(StateWrapper())
+    val lastOperationStateWrapper: StateFlow<StateWrapper<OperationState<Any>>> =
         _lastOperationStateWrapper.asStateFlow()
 
     private val requestsQueue = LinkedList<String>()
@@ -77,14 +74,14 @@ open class OperationViewModel : ViewModel() {
         var requestResult: State
         val request = viewModelScope.async {
             // Call launching
-            _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading(operationType))
+            _lastOperationStateWrapper.value = StateWrapper(RequestState.Loading(operationType))
             requestResult = call()
             if (requestResult is Unit) throw GenericsAutoCastIsWrong()
 
             // Working with OperationState
             val operationState = ToOperationStateMapper<State, T>().map(requestResult)
             if (operationState is RequestState.Success<T>) onSuccess.invoke(operationState.data)
-            _lastOperationStateWrapper.value = UIStateWrapper(operationState)
+            _lastOperationStateWrapper.value = StateWrapper(operationState)
 
             requestResult
         }
@@ -131,7 +128,7 @@ open class OperationViewModel : ViewModel() {
         var requestResult: State
         val request = viewModelScope.async {
             // Call launching
-            _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading(operationType))
+            _lastOperationStateWrapper.value = StateWrapper(RequestState.Loading(operationType))
             requestResult = call()
             if (requestResult is Unit) throw GenericsAutoCastIsWrong()
 
@@ -139,7 +136,7 @@ open class OperationViewModel : ViewModel() {
             val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
             if (operationState is RequestState.Success<*>) onSuccess.invoke()
             if (operationState is RequestState.Empty) onEmpty.invoke()
-            _lastOperationStateWrapper.value = UIStateWrapper(operationState)
+            _lastOperationStateWrapper.value = StateWrapper(operationState)
 
             requestResult
         }
@@ -149,7 +146,7 @@ open class OperationViewModel : ViewModel() {
     private suspend fun <State> getAwaitedResult(request: Deferred<State>) = request.await().also {
         requestsQueue.poll()
         if (requestsQueue.isNotEmpty()) {
-            _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading())
+            _lastOperationStateWrapper.value = StateWrapper(RequestState.Loading())
         }
     }
 
@@ -176,7 +173,7 @@ open class OperationViewModel : ViewModel() {
             // but it is not yet clear how to do this
             requestsQueue.offer("todo: put normal object")
         }
-        _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading(operationType))
+        _lastOperationStateWrapper.value = StateWrapper(RequestState.Loading(operationType))
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
@@ -185,20 +182,20 @@ open class OperationViewModel : ViewModel() {
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is RequestState.Success) onSuccess.invoke(operationState.data as T)
                 if (operationState is RequestState.Empty) onEmpty.invoke()
-                _lastOperationStateWrapper.value = UIStateWrapper(operationState)
+                _lastOperationStateWrapper.value = StateWrapper(operationState)
                 // значит что конечный резульатат получен и можно очистить очередь
                 if (operationState !is RequestState.Loading && operationState !is RequestState.NoState) {
                     requestsQueue.poll()
                 }
                 if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
                     _lastOperationStateWrapper.value =
-                        UIStateWrapper(RequestState.Loading(operationType))
+                        StateWrapper(RequestState.Loading(operationType))
                 }
 
                 if (requestsQueue.isNotEmpty()) {
                     // TODO мб складывать в requestsQueue как раз таки operationType,
                     //  но с другой стороны не у всех он указан
-                    _lastOperationStateWrapper.value = UIStateWrapper(RequestState.Loading())
+                    _lastOperationStateWrapper.value = StateWrapper(RequestState.Loading())
                 }
             }
         }

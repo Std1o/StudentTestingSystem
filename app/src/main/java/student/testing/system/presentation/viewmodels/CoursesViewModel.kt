@@ -19,7 +19,7 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.CoursesContentState
-import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
@@ -34,8 +34,8 @@ class CoursesViewModel @Inject constructor(
 ) : OperationViewModel() {
 
     private val _lastValidationStateWrapper =
-        MutableStateFlow<UIStateWrapper<ValidatableOperationState<CourseResponse>>>(
-            UIStateWrapper(RequestState.NoState)
+        MutableStateFlow<StateWrapper<ValidatableOperationState<CourseResponse>>>(
+            StateWrapper(RequestState.NoState)
         )
     val lastValidationStateWrapper = _lastValidationStateWrapper.asStateFlow()
 
@@ -97,7 +97,7 @@ class CoursesViewModel @Inject constructor(
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {
-                _lastValidationStateWrapper.value = UIStateWrapper(it)
+                _lastValidationStateWrapper.value = StateWrapper(it)
             }
         }
     }
@@ -111,7 +111,7 @@ class CoursesViewModel @Inject constructor(
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {
-                _lastValidationStateWrapper.value = UIStateWrapper(it)
+                _lastValidationStateWrapper.value = StateWrapper(it)
             }
         }
     }

@@ -7,7 +7,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.RequestState
-import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 
 /**
  * Used for temporary and short-lived states caused by the last operation
@@ -16,7 +16,7 @@ import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 @OptIn(NotScreenState::class)
 @Composable
 fun <T> LastOperationStateUIHandler(
-    stateWrapper: UIStateWrapper<OperationState<T>>,
+    stateWrapper: StateWrapper<OperationState<T>>,
     snackbarHostState: SnackbarHostState,
     onLoading: ((OperationType) -> Unit)? = null,
     onError: ((OperationType) -> Unit)? = null
@@ -45,7 +45,7 @@ fun <T> LastOperationStateUIHandler(
 @OptIn(NotScreenState::class)
 @Composable
 fun <T> LastOperationStateUIHandler(
-    stateWrapper: UIStateWrapper<OperationState<T>>,
+    stateWrapper: StateWrapper<OperationState<T>>,
     snackbarHostState: SnackbarHostState,
     onLoading: ((OperationType) -> Unit)? = null,
     onError: ((OperationType) -> Unit)? = null,

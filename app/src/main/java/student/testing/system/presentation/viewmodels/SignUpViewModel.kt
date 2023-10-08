@@ -15,7 +15,7 @@ import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.SignUpContentState
-import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,10 +23,10 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase, private val appNavigator: AppNavigator
 ) : OperationViewModel() {
 
-    private val _uiStateWrapper =
-        MutableStateFlow<UIStateWrapper<SignUpState<PrivateUser>>>(UIStateWrapper())
-    val uiStateWrapper: StateFlow<UIStateWrapper<SignUpState<PrivateUser>>> =
-        _uiStateWrapper.asStateFlow()
+    private val _signUpStateWrapper =
+        MutableStateFlow<StateWrapper<SignUpState<PrivateUser>>>(StateWrapper())
+    val signUpStateWrapper: StateFlow<StateWrapper<SignUpState<PrivateUser>>> =
+        _signUpStateWrapper.asStateFlow()
 
     var contentState by mutableStateOf(SignUpContentState())
 
@@ -37,7 +37,7 @@ class SignUpViewModel @Inject constructor(
             }) {
                 navigateToCourses()
             }
-            _uiStateWrapper.value = UIStateWrapper(requestResult)
+            _signUpStateWrapper.value = StateWrapper(requestResult)
         }
     }
 

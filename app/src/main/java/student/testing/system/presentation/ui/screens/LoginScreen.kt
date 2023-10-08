@@ -31,12 +31,12 @@ import student.testing.system.presentation.viewmodels.LoginViewModel
 @Composable
 fun LoginScreen() {
     val viewModel = hiltViewModel<LoginViewModel>()
-    val uiStateWrapper by viewModel.uiStateWrapper.collectAsState()
+    val loginStateWrapper by viewModel.loginStateWrapper.collectAsState()
     val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val contentState = viewModel.contentState
-    var needToHideUI by remember { mutableStateOf(uiStateWrapper.uiState is LoginState.AuthStateChecking) }
+    var needToHideUI by remember { mutableStateOf(loginStateWrapper.uiState is LoginState.AuthStateChecking) }
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -57,19 +57,19 @@ fun LoginScreen() {
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 100.dp)
             )
-            val isEmailError = uiStateWrapper.uiState is AuthState.EmailError
-            val isPasswordError = uiStateWrapper.uiState is AuthState.PasswordError
+            val isEmailError = loginStateWrapper.uiState is AuthState.EmailError
+            val isPasswordError = loginStateWrapper.uiState is AuthState.PasswordError
             val email = EmailTextField(
-                onReceiveListener = uiStateWrapper,
+                onReceiveListener = loginStateWrapper,
                 contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
-                errorText = if (isEmailError) (uiStateWrapper.uiState as AuthState.EmailError).messageResId else 0
+                errorText = if (isEmailError) (loginStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
-                onReceiveListener = uiStateWrapper,
+                onReceiveListener = loginStateWrapper,
                 contentState.passwordContentState,
                 isPasswordError = isPasswordError,
-                errorText = if (isPasswordError) (uiStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
+                errorText = if (isPasswordError) (loginStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
             )
             Button(
                 onClick = {

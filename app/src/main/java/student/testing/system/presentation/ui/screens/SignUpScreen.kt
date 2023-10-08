@@ -2,8 +2,6 @@
 
 package student.testing.system.presentation.ui.screens
 
-import android.app.Activity
-import android.content.Intent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,13 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.SignUpState
@@ -46,16 +42,15 @@ import student.testing.system.presentation.ui.components.EmailTextField
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.PasswordTextField
 import student.testing.system.presentation.ui.models.NameContentState
-import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
+import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import student.testing.system.presentation.viewmodels.SignUpViewModel
 
 @Composable
 fun SignUpScreen() {
     val viewModel = hiltViewModel<SignUpViewModel>()
-    val uiStateWrapper by viewModel.uiStateWrapper.collectAsState()
+    val signUpStateWrapper by viewModel.signUpStateWrapper.collectAsState()
     val lastOperationState by viewModel.lastOperationStateWrapper.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val contentState = viewModel.contentState
     Scaffold(
         snackbarHost = {
@@ -67,26 +62,26 @@ fun SignUpScreen() {
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            val isEmailError = uiStateWrapper.uiState is AuthState.EmailError
-            val isPasswordError = uiStateWrapper.uiState is AuthState.PasswordError
-            val isUsernameError = uiStateWrapper.uiState is SignUpState.NameError
+            val isEmailError = signUpStateWrapper.uiState is AuthState.EmailError
+            val isPasswordError = signUpStateWrapper.uiState is AuthState.PasswordError
+            val isUsernameError = signUpStateWrapper.uiState is SignUpState.NameError
             val username = UsernameTextField(
-                stateWrapper = uiStateWrapper,
+                stateWrapper = signUpStateWrapper,
                 contentState = contentState.nameContentState,
                 isUsernameError = isUsernameError,
-                errorText = if (isUsernameError) (uiStateWrapper.uiState as SignUpState.NameError).messageResId else 0
+                errorText = if (isUsernameError) (signUpStateWrapper.uiState as SignUpState.NameError).messageResId else 0
             )
             val email = EmailTextField(
-                onReceiveListener = uiStateWrapper,
+                onReceiveListener = signUpStateWrapper,
                 contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
-                errorText = if (isEmailError) (uiStateWrapper.uiState as AuthState.EmailError).messageResId else 0
+                errorText = if (isEmailError) (signUpStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
             val password = PasswordTextField(
-                onReceiveListener = uiStateWrapper,
+                onReceiveListener = signUpStateWrapper,
                 contentState = contentState.passwordContentState,
                 isPasswordError = isPasswordError,
-                errorText = if (isPasswordError) (uiStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
+                errorText = if (isPasswordError) (signUpStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
             )
             Button(
                 onClick = {
@@ -103,7 +98,7 @@ fun SignUpScreen() {
 
 @Composable
 fun UsernameTextField(
-    stateWrapper: UIStateWrapper<SignUpState<PrivateUser>>,
+    stateWrapper: StateWrapper<SignUpState<PrivateUser>>,
     contentState: NameContentState,
     isUsernameError: Boolean,
     @StringRes errorText: Int
