@@ -11,19 +11,22 @@ import student.testing.system.presentation.ui.stateWrapper.UIStateWrapper
 
 /**
  * Used for temporary and short-lived states caused by the last operation
+ * @param onLoading if you want override default loading
  */
 @OptIn(NotScreenState::class)
 @Composable
 fun <T> LastOperationStateUIHandler(
     stateWrapper: UIStateWrapper<OperationState<T>>,
     snackbarHostState: SnackbarHostState,
+    onLoading: ((OperationType) -> Unit)? = null,
+    onError: ((OperationType) -> Unit)? = null
 ) {
     with(stateWrapper.uiState) {
         when (this) {
-            is RequestState.Loading -> LoadingIndicator()
+            is RequestState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
             is RequestState.Error -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
-                    snackbarHostState.showSnackbar(exception)
+                    onError?.invoke(operationType) ?: snackbarHostState.showSnackbar(exception)
                     stateWrapper.onReceive()
                 }
             }
@@ -44,11 +47,13 @@ fun <T> LastOperationStateUIHandler(
 fun <T> LastOperationStateUIHandler(
     stateWrapper: UIStateWrapper<OperationState<T>>,
     snackbarHostState: SnackbarHostState,
+    onLoading: ((OperationType) -> Unit)? = null,
+    onError: ((OperationType) -> Unit)? = null,
     onSuccess: @Composable (T, OperationType) -> Pair<AllOperationTypesWasHandled, AllCastsWasChecked>,
 ) {
     with(stateWrapper.uiState) {
         when (this) {
-            is RequestState.Loading -> LoadingIndicator()
+            is RequestState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
 
             is RequestState.Success -> {
                 onSuccess.invoke(data, operationType)
@@ -57,7 +62,7 @@ fun <T> LastOperationStateUIHandler(
 
             is RequestState.Error -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
-                    snackbarHostState.showSnackbar(exception)
+                    onError?.invoke(operationType) ?: snackbarHostState.showSnackbar(exception)
                     stateWrapper.onReceive()
                 }
             }

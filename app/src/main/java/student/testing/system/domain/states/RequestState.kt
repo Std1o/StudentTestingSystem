@@ -29,7 +29,11 @@ sealed interface RequestState<out R> : OperationState<R>, LoadableData<R> {
         val operationType: OperationType = OperationType.DefaultOperation
     ) : RequestState<Nothing>
 
-    data class Error(val exception: String, val code: Int = -1) : RequestState<Nothing>
+    data class Error(
+        val exception: String,
+        val code: Int = -1,
+        val operationType: OperationType = OperationType.DefaultOperation
+    ) : RequestState<Nothing>
 
     data class Loading(val operationType: OperationType = OperationType.DefaultOperation) :
         RequestState<Nothing>
