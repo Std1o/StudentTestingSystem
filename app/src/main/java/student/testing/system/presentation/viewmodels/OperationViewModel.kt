@@ -4,10 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
 import student.testing.system.annotations.IntermediateState
@@ -152,13 +157,17 @@ open class OperationViewModel : ViewModel() {
      * Если use case отправляет какие-то промежуточные результаты
      */
     @OptIn(NotScreenState::class)
-    protected fun <@FunctionalityState State, T : Any> executeFlowOperation(
-        requestFlow: Flow<State>,
+    protected suspend fun <@FunctionalityState State, T : Any> executeFlowOperation(
+        call: suspend () -> Flow<State>,
         operationType: OperationType = OperationType.DefaultOperation,
         type: KClass<T>,
         onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): Flow<State> {
+        val mutableSharedFlow = call().shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly
+        )
         if (_lastOperationStateWrapper.value.uiState is RequestState.Loading) {
             // actually you can stuff anything to queue, nothing will break
             // but return type is used for simplified debugging
@@ -171,7 +180,7 @@ open class OperationViewModel : ViewModel() {
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
-            requestFlow.collect { requestResult ->
+            mutableSharedFlow.collect { requestResult ->
                 if (requestResult is Unit) throw GenericsAutoCastIsWrong()
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is RequestState.Success) onSuccess.invoke(operationState.data as T)
@@ -193,7 +202,7 @@ open class OperationViewModel : ViewModel() {
                 }
             }
         }
-        return requestFlow
+        return mutableSharedFlow
     }
 }
 
