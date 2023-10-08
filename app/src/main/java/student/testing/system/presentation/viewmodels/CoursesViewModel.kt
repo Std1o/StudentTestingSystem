@@ -31,7 +31,7 @@ class CoursesViewModel @Inject constructor(
     private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
-) : OperationViewModel<CourseResponse>() {
+) : OperationViewModel() {
 
     private val _lastValidationStateWrapper =
         MutableStateFlow<UIStateWrapper<ValidatableOperationState<CourseResponse>>>(
@@ -41,6 +41,8 @@ class CoursesViewModel @Inject constructor(
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState: StateFlow<CoursesContentState> = _contentState.asStateFlow()
+
+    val defaultType = CourseResponse::class
     private var contentStateVar
         get() = _contentState.value
         set(value) {
@@ -65,7 +67,7 @@ class CoursesViewModel @Inject constructor(
     @OptIn(NotScreenState::class)
     fun deleteCourse(courseId: Int) {
         viewModelScope.launch {
-            executeOperation(
+            executeEmptyOperation(
                 call = { repository.deleteCourse(courseId) },
                 onEmpty = {
                     val newCourses = (contentStateVar.courses as RequestState.Success)
@@ -90,7 +92,8 @@ class CoursesViewModel @Inject constructor(
         viewModelScope.launch {
             executeFlowOperation(
                 requestFlow = createCourseUseCase(name),
-                operationType = CourseAddingOperations.CREATE_COURSE
+                operationType = CourseAddingOperations.CREATE_COURSE,
+                type = defaultType
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {
@@ -103,7 +106,8 @@ class CoursesViewModel @Inject constructor(
         viewModelScope.launch {
             executeFlowOperation(
                 requestFlow = joinCourseUseCase(courseCode),
-                operationType = CourseAddingOperations.JOIN_COURSE
+                operationType = CourseAddingOperations.JOIN_COURSE,
+                type = defaultType
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {

@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase, private val appNavigator: AppNavigator
-) : OperationViewModel<PrivateUser>() {
+) : OperationViewModel() {
 
     private val _uiStateWrapper =
         MutableStateFlow<UIStateWrapper<SignUpState<PrivateUser>>>(UIStateWrapper())
@@ -32,7 +32,7 @@ class SignUpViewModel @Inject constructor(
 
     fun signUp(email: String, username: String, password: String) {
         viewModelScope.launch {
-            val requestResult = executeOperation({
+            val requestResult = executeNotTypedOperation({
                 signUpUseCase(email = email, username = username, password = password)
             }) {
                 navigateToCourses()
