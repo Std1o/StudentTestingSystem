@@ -27,6 +27,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.defaultType
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.starProjectedType
+import kotlin.reflect.jvm.reflect
 
 
 /**
@@ -155,7 +156,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: () -> Unit,
     ): State {
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
-            requestsQueue.offer("element: ${requestsQueue.size + 1}")
+            requestsQueue.offer(call.reflect()?.returnType.toString())
         }
         var requestResult: State
         val request = viewModelScope.async {
