@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +24,9 @@ import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
+import kotlin.reflect.full.defaultType
 import kotlin.reflect.full.hasAnnotation
+import kotlin.reflect.full.starProjectedType
 
 
 /**
@@ -50,7 +53,7 @@ open class StatesViewModel : ViewModel() {
         noinline onEmpty: () -> Unit = {},
         noinline onSuccess: (T) -> Unit = {},
     ): FlowOrState {
-        return if (FlowOrState::class.java.isInstance(flow<T> { })) {
+        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
             executeOperationFlow(
                 call as suspend () -> Flow<*>,
                 type,
