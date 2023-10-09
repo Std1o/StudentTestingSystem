@@ -138,16 +138,16 @@ open class StatesViewModel : ViewModel() {
     protected suspend inline fun <reified FlowOrState> executeOperationAndIgnoreData(
         noinline call: suspend () -> FlowOrState,
         operationType: OperationType = OperationType.DefaultOperation,
-        noinline onEmpty: () -> Unit = {},
+        noinline onSuccess: () -> Unit = {}
     ): FlowOrState {
         return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
             executeOperationAndIgnoreDataFlow(
                 call as suspend () -> Flow<*>,
                 operationType,
-                onEmpty
+                onSuccess
             ) as FlowOrState
         } else {
-            executeOperationAndIgnoreDataState(call, operationType, onEmpty)
+            executeOperationAndIgnoreDataState(call, operationType, onSuccess)
         }
     }
 
