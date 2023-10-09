@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase, private val appNavigator: AppNavigator
-) : OperationViewModel() {
+) : StatesViewModel() {
 
     private val _signUpStateWrapper =
         MutableStateFlow<StateWrapper<SignUpState<PrivateUser>>>(StateWrapper())

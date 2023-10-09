@@ -2,6 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.GenericsAutoCastIsWrong
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
+import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
@@ -32,7 +34,7 @@ import kotlin.reflect.full.hasAnnotation
  * @param T Type of data that comes from the server when performing the operation
  */
 
-open class OperationViewModel : ViewModel() {
+open class StatesViewModel : ViewModel() {
 
     private val _lastOperationStateWrapper =
         MutableStateFlow<StateWrapper<OperationState<Any>>>(StateWrapper())
@@ -199,6 +201,18 @@ open class OperationViewModel : ViewModel() {
             }
         }
         return mutableSharedFlow
+    }
+
+    // State - LoadableData
+    suspend fun <State> loadData(
+        call: suspend () -> State
+    ): StateFlow<State> {
+        val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
+        viewModelScope.launch {// for asynchrony
+            var requestResult: State = call()
+            stateFlow.emit(requestResult)
+        }
+        return stateFlow
     }
 }
 

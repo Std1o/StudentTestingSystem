@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val authIfPossibleUseCase: AuthIfPossibleUseCase,
     private val appNavigator: AppNavigator
-) : OperationViewModel() {
+) : StatesViewModel() {
 
     private val _loginStateWrapper =
         MutableStateFlow<StateWrapper<LoginState<PrivateUser>>>(

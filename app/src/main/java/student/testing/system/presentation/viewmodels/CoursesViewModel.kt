@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.common.loadData
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
@@ -24,7 +23,6 @@ import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
-// TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class CoursesViewModel @Inject constructor(
     private val repository: MainRepository,
@@ -32,7 +30,7 @@ class CoursesViewModel @Inject constructor(
     private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
-) : OperationViewModel() {
+) : StatesViewModel() {
 
     private val _lastValidationStateWrapper =
         MutableStateFlow<StateWrapper<ValidatableOperationState<CourseResponse>>>(

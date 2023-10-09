@@ -9,7 +9,7 @@ class NullSharedViewModelException : RuntimeException("SharedViewModel is null")
  * 2.) Call [student.testing.system.presentation.viewmodels.protect]
  * <b/>
  *
- * on your calling of [student.testing.system.presentation.viewmodels.OperationViewModel.executeOperation]
+ * on your calling of [student.testing.system.presentation.viewmodels.StatesViewModel.executeOperation]
  * <b/>
  *
  * Explanation:

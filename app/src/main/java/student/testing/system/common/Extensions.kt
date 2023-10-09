@@ -181,18 +181,6 @@ fun EditText.isNotEmpty(): Boolean {
     }
 }
 
-// State - LoadableData
-suspend fun <State> CoroutineScope.loadData(
-    call: suspend () -> State
-): StateFlow<State> {
-    val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
-    this.launch {// for asynchrony
-        var requestResult: State = call()
-        stateFlow.emit(requestResult)
-    }
-    return stateFlow
-}
-
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.viewModelScopedTo(
     navController: NavController,
