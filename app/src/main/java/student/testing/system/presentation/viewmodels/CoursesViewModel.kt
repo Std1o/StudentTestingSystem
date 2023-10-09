@@ -11,7 +11,8 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.loadData
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
@@ -35,7 +36,7 @@ class CoursesViewModel @Inject constructor(
 
     private val _lastValidationStateWrapper =
         MutableStateFlow<StateWrapper<ValidatableOperationState<CourseResponse>>>(
-            StateWrapper(RequestState.NoState)
+            StateWrapper(OperationState.NoState)
         )
     val lastValidationStateWrapper = _lastValidationStateWrapper.asStateFlow()
 
@@ -67,10 +68,10 @@ class CoursesViewModel @Inject constructor(
             executeEmptyOperation(
                 call = { repository.deleteCourse(courseId) },
                 onEmpty = {
-                    val newCourses = (contentStateVar.courses as RequestState.Success)
+                    val newCourses = (contentStateVar.courses as LoadableData.Success)
                         .data.filter { it.id != courseId }
                     contentStateVar =
-                        contentStateVar.copy(courses = RequestState.Success(newCourses))
+                        contentStateVar.copy(courses = LoadableData.Success(newCourses))
                 }
             ).protect()
         }
@@ -116,9 +117,9 @@ class CoursesViewModel @Inject constructor(
     @OptIn(NotScreenState::class)
     private fun addCourseToContent(course: CourseResponse) {
         contentStateVar = contentStateVar.copy(
-            courses = RequestState.Success(
+            courses = LoadableData.Success(
                 listOf(
-                    *(contentStateVar.courses as RequestState.Success).data.toTypedArray(),
+                    *(contentStateVar.courses as LoadableData.Success).data.toTypedArray(),
                     course
                 )
             )

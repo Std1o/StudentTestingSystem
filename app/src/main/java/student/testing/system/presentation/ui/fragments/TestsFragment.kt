@@ -20,7 +20,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.domain.getResult.ResultState
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.OperationState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.adapters.TestsAdapter
@@ -95,7 +95,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
     }
 
     private fun getTests(courseId: Int) {
-        viewModel.getTests(courseId).subscribeInUI(this, binding.progressBar) {
+        viewModel.getTests(courseId).subscribeOnLoadableInUI(this, binding.progressBar) {
             testsAdapter.setDataList(it as MutableList<Test>)
         }
     }
@@ -143,11 +143,11 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
     @OptIn(NotScreenState::class)
     private fun deleteTest(testId: Int, courseId: Int) {
         viewModel.deleteTest(testId, courseId).onEach {
-            binding.progressBar.isVisible = it is RequestState.Loading
-            if (it is RequestState.Success) {
+            binding.progressBar.isVisible = it is OperationState.Loading
+            if (it is OperationState.Success) {
                 println(it.operationType)
                 testsAdapter.deleteById(testId)
-            } else if (it is RequestState.Error) {
+            } else if (it is OperationState.Error) {
                 showSnackbar(it.exception)
             }
         }.launchWhenStartedCollect(lifecycleScope)

@@ -1,6 +1,9 @@
 package student.testing.system.domain.states
 
 import student.testing.system.annotations.FunctionalityState
+import student.testing.system.annotations.NotScreenState
+import student.testing.system.domain.dataTypes.DataType
+import student.testing.system.domain.operationTypes.OperationType
 
 /**
  * LoadableData is used for loading UI content from any data source,
@@ -31,4 +34,29 @@ import student.testing.system.annotations.FunctionalityState
  * ```
  */
 @FunctionalityState
-sealed interface LoadableData<out R>
+sealed interface LoadableData<out R> {
+    data object NoState : LoadableData<Nothing>
+
+    @NotScreenState
+    data class Success<out T>(
+        val data: T,
+        val dataType: DataType = DataType.NotSpecified
+    ) : LoadableData<T>
+
+    /**
+     * Must be converted to Success with own local value in ViewModel
+     */
+    data class Empty204(
+        val code: Int,
+        val dataType: DataType = DataType.NotSpecified
+    ) : LoadableData<Nothing>
+
+    data class Error(
+        val exception: String,
+        val code: Int = -1,
+        val dataType: DataType = DataType.NotSpecified
+    ) : LoadableData<Nothing>
+
+    data class Loading(val operationType: OperationType = OperationType.DefaultOperation) :
+        LoadableData<Nothing>
+}

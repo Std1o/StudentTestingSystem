@@ -62,11 +62,10 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants
 import student.testing.system.domain.operationTypes.CourseAddingOperations
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.presentation.ui.activity.LaunchActivity
-import student.testing.system.presentation.ui.components.AllCastsWasChecked
-import student.testing.system.presentation.ui.components.AllOperationTypesWasHandled
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
@@ -168,11 +167,11 @@ fun CoursesScreen() {
                     }
                 }
                 when (val courses = contentState.courses) {
-                    is RequestState.Empty -> {}
-                    is RequestState.Error -> {}
-                    is RequestState.Loading -> LoadingIndicator()
-                    RequestState.NoState -> {}
-                    is RequestState.Success -> {
+                    is LoadableData.Empty204 -> {}
+                    is LoadableData.Error -> {}
+                    is LoadableData.Loading -> LoadingIndicator()
+                    LoadableData.NoState -> {}
+                    is LoadableData.Success -> {
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             items(courses.data, key = { it }) { course ->
                                 Box(
@@ -269,7 +268,7 @@ fun CoursesScreen() {
                 viewModel.joinCourse(it)
             }
             with(lastOperationStateWrapper) {
-                (uiState as? RequestState.Loading)?.let {
+                (uiState as? OperationState.Loading)?.let {
                     if (it.operationType == CourseAddingOperations.JOIN_COURSE) {
                         LoadingIndicator()
                     }

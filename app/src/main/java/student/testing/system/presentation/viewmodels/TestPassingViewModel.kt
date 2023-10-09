@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.makeOperation
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.OperationState
 import student.testing.system.models.TestResult
 import student.testing.system.models.UserQuestion
 import javax.inject.Inject
@@ -20,8 +21,8 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
 
     val userQuestions: ArrayList<UserQuestion> = arrayListOf()
 
-    fun calculateResult(testId: Int, courseId: Int): StateFlow<RequestState<Int>> {
-        val stateFlow = MutableStateFlow<RequestState<Int>>(RequestState.Loading())
+    fun calculateResult(testId: Int, courseId: Int): StateFlow<OperationState<Int>> {
+        val stateFlow = MutableStateFlow<OperationState<Int>>(OperationState.Loading())
         viewModelScope.launch {
             val requestResult =
                 makeOperation(repository.calculateResult(testId, courseId, userQuestions), 0)
@@ -30,8 +31,8 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
         return stateFlow
     }
 
-    fun calculateDemoResult(courseId: Int, testId: Int): StateFlow<RequestState<TestResult>> {
-        val stateFlow = MutableStateFlow<RequestState<TestResult>>(RequestState.Loading())
+    fun calculateDemoResult(courseId: Int, testId: Int): StateFlow<LoadableData<TestResult>> {
+        val stateFlow = MutableStateFlow<LoadableData<TestResult>>(LoadableData.Loading())
         viewModelScope.launch {
             val requestResult = repository.calculateDemoResult(courseId, testId, userQuestions)
             stateFlow.emit(requestResult)
@@ -39,8 +40,8 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
         return stateFlow
     }
 
-    fun getResult(testId: Int, courseId: Int): StateFlow<RequestState<TestResult>> {
-        val stateFlow = MutableStateFlow<RequestState<TestResult>>(RequestState.Loading())
+    fun getResult(testId: Int, courseId: Int): StateFlow<OperationState<TestResult>> {
+        val stateFlow = MutableStateFlow<OperationState<TestResult>>(OperationState.Loading())
         viewModelScope.launch {
             val requestResult = repository.getResult(testId, courseId)
             stateFlow.emit(requestResult)

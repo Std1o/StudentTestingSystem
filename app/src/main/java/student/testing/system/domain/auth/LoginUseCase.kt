@@ -4,7 +4,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.OperationState
 import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class LoginUseCase @Inject constructor(
         val authRequest =
             "grant_type=&username=$email&password=$password&scope=&client_id=&client_secret="
         val requestResult = repository.auth(authRequest)
-        if (requestResult is RequestState.Success) {
+        if (requestResult is OperationState.Success) {
             saveAuthData(email, password)
             createSession(requestResult.data)
         }

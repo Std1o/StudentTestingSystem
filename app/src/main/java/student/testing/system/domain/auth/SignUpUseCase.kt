@@ -5,7 +5,7 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.models.SignUpReq
@@ -39,7 +39,7 @@ class SignUpUseCase @Inject constructor(
         password: String
     ): AuthState<PrivateUser> {
         val requestResult = repository.signUp(SignUpReq(email, username, password))
-        if (requestResult is RequestState.Success) {
+        if (requestResult is OperationState.Success) {
             saveAuthData(email, password)
             createSession(requestResult.data)
         }

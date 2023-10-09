@@ -12,46 +12,47 @@ import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(private val mainService: MainService) :
     BaseRemoteDataSource(), RemoteDataSource {
-    override suspend fun auth(request: String) = apiCall { mainService.auth(request) }
-    override suspend fun signUp(request: SignUpReq) = apiCall { mainService.signUp(request) }
-    override suspend fun getCourses() = apiCall { mainService.getCourses() }
+    override suspend fun auth(request: String) = executeOperation { mainService.auth(request) }
+    override suspend fun signUp(request: SignUpReq) = executeOperation { mainService.signUp(request) }
+
+    override suspend fun getCourses() = loadData { mainService.getCourses() }
     override suspend fun createCourse(request: CourseCreationReq) =
-        apiCall(CourseAddingOperations.CREATE_COURSE) { mainService.createCourse(request) }
+        executeOperation(CourseAddingOperations.CREATE_COURSE) { mainService.createCourse(request) }
 
     override suspend fun joinCourse(courseCode: String) =
-        apiCall(CourseAddingOperations.JOIN_COURSE) { mainService.joinCourse(courseCode) }
+        executeOperation(CourseAddingOperations.JOIN_COURSE) { mainService.joinCourse(courseCode) }
 
     override suspend fun deleteCourse(courseId: Int) =
-        apiCall { mainService.deleteCourse(courseId) }
+        executeOperation { mainService.deleteCourse(courseId) }
 
-    override suspend fun getTests(courseId: Int) = apiCall { mainService.getTests(courseId) }
+    override suspend fun getTests(courseId: Int) = loadData { mainService.getTests(courseId) }
     override suspend fun createTest(request: TestCreationReq) =
-        apiCall(TestsOperations.CREATE_TEST) { mainService.createTest(request) }
+        executeOperation(TestsOperations.CREATE_TEST) { mainService.createTest(request) }
 
     override suspend fun deleteTest(testId: Int, courseId: Int) =
-        apiCall(TestsOperations.DELETE_TEST) { mainService.deleteTest(testId, courseId) }
+        executeOperation(TestsOperations.DELETE_TEST) { mainService.deleteTest(testId, courseId) }
 
     override suspend fun calculateResult(testId: Int, courseId: Int, request: List<UserQuestion>) =
-        apiCall { mainService.calculateResult(testId, courseId, request) }
+        executeOperation { mainService.calculateResult(testId, courseId, request) }
 
     override suspend fun calculateDemoResult(
         courseId: Int,
         testId: Int,
         request: List<UserQuestion>
-    ) = apiCall { mainService.calculateDemoResult(courseId, testId, request) }
+    ) = loadData { mainService.calculateDemoResult(courseId, testId, request) }
 
     override suspend fun getResult(testId: Int, courseId: Int) =
-        apiCall(TestsOperations.GET_RESULT) { mainService.getResult(testId, courseId) }
+        executeOperation(TestsOperations.GET_RESULT) { mainService.getResult(testId, courseId) }
 
     override suspend fun getResults(testId: Int, courseId: Int, params: TestResultsRequestParams) =
-        apiCall { mainService.getResults(testId, courseId, params) }
+        loadData { mainService.getResults(testId, courseId, params) }
 
     override suspend fun addModerator(courseId: Int, moderatorId: Int) =
-        apiCall { mainService.addModerator(courseId, moderatorId) }
+        executeOperation { mainService.addModerator(courseId, moderatorId) }
 
     override suspend fun deleteModerator(courseId: Int, moderatorId: Int) =
-        apiCall { mainService.deleteModerator(courseId, moderatorId) }
+        executeOperation { mainService.deleteModerator(courseId, moderatorId) }
 
     override suspend fun deleteParticipant(courseId: Int, participantId: Int) =
-        apiCall { mainService.deleteParticipant(courseId, participantId) }
+        executeOperation { mainService.deleteParticipant(courseId, participantId) }
 }

@@ -20,10 +20,9 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.confirmAction
 import student.testing.system.common.showSnackbar
-import student.testing.system.common.subscribeInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentCoursesBinding
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.LoadableData
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.adapters.CoursesAdapter
@@ -82,11 +81,11 @@ class CoursesFragment : Fragment(R.layout.fragment_courses) {
             viewModel.contentState.collect {
                 binding.progressBar.isVisible = false
                 when (it.courses) {
-                    is RequestState.Empty -> {}
-                    is RequestState.Error -> showSnackbar(it.courses.exception)
-                    is RequestState.Loading -> binding.progressBar.isVisible = true
-                    RequestState.NoState -> {}
-                    is RequestState.Success -> {
+                    is LoadableData.Empty204 -> {}
+                    is LoadableData.Error -> showSnackbar(it.courses.exception)
+                    is LoadableData.Loading -> binding.progressBar.isVisible = true
+                    LoadableData.NoState -> {}
+                    is LoadableData.Success -> {
                         adapter.setDataList(it.courses.data as MutableList<CourseResponse>)
                     }
                 }

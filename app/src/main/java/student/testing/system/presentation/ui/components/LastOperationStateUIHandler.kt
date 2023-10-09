@@ -6,7 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.RequestState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 
 /**
@@ -23,17 +22,17 @@ fun <T> LastOperationStateUIHandler(
 ) {
     with(stateWrapper.uiState) {
         when (this) {
-            is RequestState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
-            is RequestState.Error -> {
+            is OperationState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
+            is OperationState.Error -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
                     onError?.invoke(operationType) ?: snackbarHostState.showSnackbar(exception)
                     stateWrapper.onReceive()
                 }
             }
 
-            is RequestState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
-            is RequestState.Success,// for this use method below
-            is RequestState.NoState -> {
+            is OperationState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
+            is OperationState.Success,// for this use method below
+            is OperationState.NoState -> {
                 // do nothing
             }
         }
@@ -53,22 +52,22 @@ fun <T> LastOperationStateUIHandler(
 ) {
     with(stateWrapper.uiState) {
         when (this) {
-            is RequestState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
+            is OperationState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
 
-            is RequestState.Success -> {
+            is OperationState.Success -> {
                 onSuccess.invoke(data, operationType)
                 stateWrapper.onReceive()
             }
 
-            is RequestState.Error -> {
+            is OperationState.Error -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
                     onError?.invoke(operationType) ?: snackbarHostState.showSnackbar(exception)
                     stateWrapper.onReceive()
                 }
             }
 
-            is RequestState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
-            is RequestState.NoState -> {
+            is OperationState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
+            is OperationState.NoState -> {
                 // do nothing
             }
         }

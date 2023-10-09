@@ -22,7 +22,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.OperationState
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
@@ -102,32 +103,48 @@ fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope
 }
 
 @OptIn(NotScreenState::class)
-fun <T> StateFlow<RequestState<T>>.subscribeInUI(
+fun <T> StateFlow<OperationState<T>>.subscribeInUI(
     fragment: Fragment,
     progressBar: ProgressBar,
     listener: (T) -> Unit
 ) {
     this@subscribeInUI.onEach {
-        progressBar.showIf(it is RequestState.Loading)
-        if (it is RequestState.Success) {
+        progressBar.showIf(it is OperationState.Loading)
+        if (it is OperationState.Success) {
             listener.invoke(it.data)
-        } else if (it is RequestState.Error) {
+        } else if (it is OperationState.Error) {
             fragment.showSnackbar(it.exception)
         }
     }.launchWhenStartedCollect(fragment.lifecycleScope)
 }
 
 @OptIn(NotScreenState::class)
-fun <T> StateFlow<RequestState<T>>.subscribeInUI(
+fun <T> StateFlow<LoadableData<T>>.subscribeOnLoadableInUI(
+    fragment: Fragment,
+    progressBar: ProgressBar,
+    listener: (T) -> Unit
+) {
+    this@subscribeOnLoadableInUI.onEach {
+        progressBar.showIf(it is LoadableData.Loading)
+        if (it is LoadableData.Success) {
+            listener.invoke(it.data)
+        } else if (it is LoadableData.Error) {
+            fragment.showSnackbar(it.exception)
+        }
+    }.launchWhenStartedCollect(fragment.lifecycleScope)
+}
+
+@OptIn(NotScreenState::class)
+fun <T> StateFlow<OperationState<T>>.subscribeInUI(
     dialogFragment: DialogFragment,
     progressBar: ProgressBar,
     listener: (T) -> Unit
 ) {
     this@subscribeInUI.onEach {
-        progressBar.showIf(it is RequestState.Loading)
-        if (it is RequestState.Success) {
+        progressBar.showIf(it is OperationState.Loading)
+        if (it is OperationState.Success) {
             listener.invoke(it.data)
-        } else if (it is RequestState.Error) {
+        } else if (it is OperationState.Error) {
             dialogFragment.showSnackbar(it.exception)
         }
     }.launchWhenStartedCollect(dialogFragment.lifecycleScope)
@@ -140,15 +157,15 @@ fun Any?.trimString(): String = this@trimString.toString().trim()
  */
 @OptIn(NotScreenState::class)
 fun <E> ViewModel.makeOperation(
-    requestResult: RequestState<Void>,
+    requestResult: OperationState<Void>,
     successData: E,
-): RequestState<E> {
+): OperationState<E> {
     return when (requestResult) {
-        is RequestState.Empty -> RequestState.Success(successData, requestResult.operationType)
-        is RequestState.Error -> RequestState.Error(requestResult.exception)
-        is RequestState.Loading -> RequestState.Loading()
-        RequestState.NoState -> RequestState.NoState
-        is RequestState.Success -> RequestState.Success(successData)
+        is OperationState.Empty -> OperationState.Success(successData, requestResult.operationType)
+        is OperationState.Error -> OperationState.Error(requestResult.exception)
+        is OperationState.Loading -> OperationState.Loading()
+        OperationState.NoState -> OperationState.NoState
+        is OperationState.Success -> OperationState.Success(successData)
     }
 }
 
@@ -168,7 +185,7 @@ fun EditText.isNotEmpty(): Boolean {
 suspend fun <State> CoroutineScope.loadData(
     call: suspend () -> State
 ): StateFlow<State> {
-    val stateFlow = MutableStateFlow(RequestState.Loading() as State)
+    val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
     this.launch {// for asynchrony
         var requestResult: State = call()
         stateFlow.emit(requestResult)

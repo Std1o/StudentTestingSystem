@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.showSnackbar
 import student.testing.system.common.subscribeInUI
+import student.testing.system.common.subscribeOnLoadableInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentPassingTestBinding
 import student.testing.system.models.Answer
@@ -59,7 +60,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
             if (test.questions.count() - 1 == position) {
                 if (isUserModerator) {
                     viewModel.calculateDemoResult(test.courseId, test.id)
-                        .subscribeInUI(this, binding.progressBar) {
+                        .subscribeOnLoadableInUI(this, binding.progressBar) {
                             requireActivity().onBackPressed()
                             val action = TestPassingFragmentDirections.viewResult(it)
                             findNavController().navigate(action)

@@ -5,20 +5,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 
-/**
- * BaseViewModel is an abstract class that provides a base implementation for ViewModels in the app.
- * It contains a StateFlow that represents the current state of the UI, and a method for launching
- * requests and updating the UI state based on the response.
- *
- * @param T The type of data that the ViewModel will handle.
- */
 // TODO remove
-open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
+open class BaseLoadableViewModel<T> : ViewModel(), ResettableViewModel {
 
-    private val _uiState = MutableStateFlow<OperationState<T>>(OperationState.NoState)
-    val uiState: StateFlow<OperationState<T>> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<LoadableData<T>>(LoadableData.NoState)
+    val uiState: StateFlow<LoadableData<T>> = _uiState.asStateFlow()
 
     /**
      * Launches a request and updates the UI state based on the response.
@@ -28,15 +22,15 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
      */
     @OptIn(NotScreenState::class)
     protected fun launchRequest(
-        requestResult: OperationState<T>,
+        requestResult: LoadableData<T>,
         onSuccess: (T) -> Unit = {},
     ) {
-        _uiState.value = OperationState.Loading()
-        if (requestResult is OperationState.Success) onSuccess.invoke(requestResult.data)
+        _uiState.value = LoadableData.Loading()
+        if (requestResult is LoadableData.Success) onSuccess.invoke(requestResult.data)
         _uiState.value = requestResult
     }
 
     override fun resetState() {
-        _uiState.value = OperationState.NoState
+        _uiState.value = LoadableData.NoState
     }
 }

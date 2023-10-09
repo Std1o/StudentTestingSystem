@@ -5,8 +5,10 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Utils
+import student.testing.system.domain.dataTypes.DataType
 import student.testing.system.domain.operationTypes.OperationType
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.OperationState
 
 open class BaseRemoteDataSource {
 
@@ -23,26 +25,50 @@ open class BaseRemoteDataSource {
      * (For example: authorization with validation, registration with validation).
      */
     @OptIn(NotScreenState::class)
-    suspend fun <T> apiCall(
+    suspend fun <T> executeOperation(
         operationType: OperationType = OperationType.DefaultOperation,
         call: suspend () -> Response<T>
-    ): RequestState<T> {
+    ): OperationState<T> {
         try {
             val response = withContext(Dispatchers.IO) { call() }
             if (response.isSuccessful) {
                 val body = response.body()
                 body?.let {
-                    return RequestState.Success(body, operationType)
+                    return OperationState.Success(body, operationType)
                 }
-                return RequestState.Empty(response.code(), operationType)
+                return OperationState.Empty(response.code(), operationType)
             }
             val errorMessage = Utils.encodeErrorCode(response.errorBody())
-            return error(errorMessage, response.code())
+            return operationError(errorMessage, response.code())
         } catch (e: Exception) {
-            return error(e.message ?: " ", -1)
+            return operationError(e.message ?: " ", -1)
         }
     }
 
-    private fun <T> error(errorMessage: String, code: Int): RequestState<T> =
-        RequestState.Error(errorMessage, code)
+    @OptIn(NotScreenState::class)
+    suspend fun <T> loadData(
+        dataType: DataType = DataType.NotSpecified,
+        call: suspend () -> Response<T>
+    ): LoadableData<T> {
+        try {
+            val response = withContext(Dispatchers.IO) { call() }
+            if (response.isSuccessful) {
+                val body = response.body()
+                body?.let {
+                    return LoadableData.Success(body, dataType)
+                }
+                return LoadableData.Empty204(response.code(), dataType)
+            }
+            val errorMessage = Utils.encodeErrorCode(response.errorBody())
+            return loadError(errorMessage, response.code())
+        } catch (e: Exception) {
+            return loadError(e.message ?: " ", -1)
+        }
+    }
+
+    private fun <T> operationError(errorMessage: String, code: Int): OperationState<T> =
+        OperationState.Error(errorMessage, code)
+
+    private fun <T> loadError(errorMessage: String, code: Int): LoadableData<T> =
+        LoadableData.Error(errorMessage, code)
 }

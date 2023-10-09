@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import student.testing.system.R
 import student.testing.system.common.subscribeInUI
+import student.testing.system.common.subscribeOnLoadableInUI
 import student.testing.system.common.viewBinding
 import student.testing.system.databinding.FragmentResultsReviewBinding
 import student.testing.system.presentation.ui.adapters.UsersResultsAdapter
@@ -40,7 +41,7 @@ class ResultsReviewFragment : Fragment(R.layout.fragment_results_review) {
     }
 
     private fun subscribeObservers() {
-        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
+        viewModel.uiState.subscribeOnLoadableInUI(this, binding.progressBar) {
             adapter = UsersResultsAdapter(it.results, it.maxScore)
             binding.rv.layoutManager = LinearLayoutManager(requireContext())
             binding.rv.adapter = adapter

@@ -12,7 +12,7 @@ import kotlin.properties.Delegates
 
 @HiltViewModel
 class ResultsSharedViewModel @Inject constructor(private val repository: MainRepository) :
-    BaseViewModel<ParticipantsResults>() {
+    BaseLoadableViewModel<ParticipantsResults>() {
 
     var maxScore: Int by Delegates.observable(0) { _, _, new ->
         upperBound = new.toFloat()

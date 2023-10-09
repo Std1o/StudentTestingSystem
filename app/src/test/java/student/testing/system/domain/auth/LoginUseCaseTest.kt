@@ -18,7 +18,7 @@ import student.testing.system.R
 import student.testing.system.FakeRepository
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.RequestState
+import student.testing.system.domain.states.OperationState
 
 
 @ExperimentalCoroutinesApi
@@ -53,13 +53,13 @@ class LoginUseCaseTest {
     @Test
     fun `success auth returns PrivateUser`() = runBlocking {
         val actual = loginUseCase.invoke("test@mail.ru", "pass")
-        assertTrue(actual is RequestState.Success)
-        assertThat((actual as RequestState.Success).data, instanceOf(PrivateUser::class.java))
+        assertTrue(actual is OperationState.Success)
+        assertThat((actual as OperationState.Success).data, instanceOf(PrivateUser::class.java))
     }
 
     @Test
     fun `failed auth returns Error`() = runBlocking {
-        val expected = RequestState.Error("Incorrect username or password")
+        val expected = OperationState.Error("Incorrect username or password")
         val actual = loginUseCase.invoke("other@mail.ru", "pass")
         assertEquals(expected, actual)
     }
