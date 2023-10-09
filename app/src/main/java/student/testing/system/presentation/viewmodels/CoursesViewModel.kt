@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.common.launchRequest
+import student.testing.system.common.loadData
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.RequestState
@@ -42,7 +42,7 @@ class CoursesViewModel @Inject constructor(
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState: StateFlow<CoursesContentState> = _contentState.asStateFlow()
 
-    val defaultType = CourseResponse::class
+    private val defaultType = CourseResponse::class
     private var contentStateVar
         get() = _contentState.value
         set(value) {
@@ -55,12 +55,9 @@ class CoursesViewModel @Inject constructor(
 
     private fun getCourses() {
         viewModelScope.launch {
-            contentStateVar = contentStateVar.copy(
-                courses = launchRequest(
-                    call = { repository.getCourses() },
-                    onLoading = { contentStateVar = contentStateVar.copy(courses = it) }
-                )
-            )
+            loadData { repository.getCourses() }.collect {
+                contentStateVar = contentStateVar.copy(courses = it)
+            }
         }
     }
 

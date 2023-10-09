@@ -18,12 +18,10 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.RequestState
 import java.text.SimpleDateFormat
 import java.util.*
@@ -167,22 +165,15 @@ fun EditText.isNotEmpty(): Boolean {
 }
 
 // State - LoadableData
-@OptIn(NotScreenState::class)
-suspend fun <State, T> CoroutineScope.launchRequest(
-    call: suspend () -> State,
-    onSuccess: (T) -> Unit = {},
-    // можно просто всегда вызываеть в ViewModel contentState.someList.value = RequestState.Loading
-    // но чтобы не забывать это сделать, лучше обязать
-    onLoading: (LoadableData<T>) -> Unit
-): State {
-    var requestResult: State
-    val request = async {
-        onLoading.invoke(RequestState.Loading())
-        requestResult = call()
-        if (requestResult is RequestState.Success<*>) onSuccess.invoke((requestResult as RequestState.Success<T>).data)
-        requestResult
+suspend fun <State> CoroutineScope.loadData(
+    call: suspend () -> State
+): StateFlow<State> {
+    val stateFlow = MutableStateFlow(RequestState.Loading() as State)
+    this.launch {// for asynchrony
+        var requestResult: State = call()
+        stateFlow.emit(requestResult)
     }
-    return request.await()
+    return stateFlow
 }
 
 @Composable

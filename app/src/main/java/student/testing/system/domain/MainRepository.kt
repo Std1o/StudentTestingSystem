@@ -1,5 +1,6 @@
 package student.testing.system.domain
 
+import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.RequestState
 import student.testing.system.models.*
 
@@ -8,7 +9,7 @@ interface MainRepository {
 
     suspend fun signUp(request: SignUpReq): RequestState<PrivateUser>
 
-    suspend fun getCourses(): RequestState<List<CourseResponse>>
+    suspend fun getCourses(): LoadableData<List<CourseResponse>>
 
     suspend fun createCourse(name: String): RequestState<CourseResponse>
 
