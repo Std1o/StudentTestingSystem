@@ -4,13 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
@@ -24,7 +22,6 @@ import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
-import kotlin.reflect.full.defaultType
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.reflect
@@ -114,6 +111,7 @@ open class StatesViewModel : ViewModel() {
             // Working with OperationState
             val operationState = ToOperationStateMapper<State, T>().map(requestResult)
             if (operationState is OperationState.Success<T>) onSuccess.invoke(operationState.data)
+            if (operationState is OperationState.Empty) onEmpty.invoke()
             _lastOperationStateWrapper.value = StateWrapper(operationState)
 
             requestResult
@@ -121,12 +119,45 @@ open class StatesViewModel : ViewModel() {
         return getAwaitedResult(request)
     }
 
-    protected suspend fun <@FunctionalityState State> executeEmptyOperation(
+    protected suspend inline fun <reified FlowOrState> executeEmptyOperation(
+        noinline call: suspend () -> FlowOrState,
+        operationType: OperationType = OperationType.DefaultOperation,
+        noinline onEmpty: () -> Unit = {},
+    ): FlowOrState {
+        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
+            executeEmptyOperationFlow(
+                call as suspend () -> Flow<*>,
+                operationType,
+                onEmpty
+            ) as FlowOrState
+        } else {
+            executeEmptyOperationState(call, operationType, onEmpty)
+        }
+    }
+
+    protected suspend inline fun <reified FlowOrState> executeOperationAndIgnoreData(
+        noinline call: suspend () -> FlowOrState,
+        operationType: OperationType = OperationType.DefaultOperation,
+        noinline onEmpty: () -> Unit = {},
+    ): FlowOrState {
+        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
+            executeOperationAndIgnoreDataFlow(
+                call as suspend () -> Flow<*>,
+                operationType,
+                onEmpty
+            ) as FlowOrState
+        } else {
+            executeOperationAndIgnoreDataState(call, operationType, onEmpty)
+        }
+    }
+
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State> executeEmptyOperationState(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
     ): State {
-        return executeEmptyOrWithDataIgnoringOperation(
+        return executeEmptyOrWithDataIgnoringOperationState(
             call = call,
             operationType = operationType,
             onSuccess = {},
@@ -136,12 +167,13 @@ open class StatesViewModel : ViewModel() {
     /**
      * Используется если тип данных в onSuccess не важен
      */
-    protected suspend fun <@FunctionalityState State> executeOperationAndIgnoreData(
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State> executeOperationAndIgnoreDataState(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onSuccess: () -> Unit = {},
     ): State {
-        return executeEmptyOrWithDataIgnoringOperation(
+        return executeEmptyOrWithDataIgnoringOperationState(
             call = call,
             operationType = operationType,
             onSuccess = { onSuccess() },
@@ -149,7 +181,7 @@ open class StatesViewModel : ViewModel() {
     }
 
     @OptIn(NotScreenState::class)
-    private suspend fun <@FunctionalityState State> executeEmptyOrWithDataIgnoringOperation(
+    private suspend fun <@FunctionalityState State> executeEmptyOrWithDataIgnoringOperationState(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit,
@@ -167,7 +199,7 @@ open class StatesViewModel : ViewModel() {
 
             // Working with OperationState
             val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
-            if (operationState is OperationState.Success<*>) onSuccess.invoke()
+            if (operationState is OperationState.Success) onSuccess.invoke()
             if (operationState is OperationState.Empty) onEmpty.invoke()
             _lastOperationStateWrapper.value = StateWrapper(operationState)
 
@@ -200,12 +232,7 @@ open class StatesViewModel : ViewModel() {
             started = SharingStarted.Eagerly
         )
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
-            // actually you can stuff anything to queue, nothing will break
-            // but return type is used for simplified debugging
-
-            // ideally, get the name of the function that is called in call,
-            // but it is not yet clear how to do this
-            requestsQueue.offer("todo: put normal object")
+            requestsQueue.offer(type.toString())
         }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         // иначе код выполняется синхронно
@@ -217,23 +244,93 @@ open class StatesViewModel : ViewModel() {
                 if (operationState is OperationState.Success) onSuccess.invoke(operationState.data as T)
                 if (operationState is OperationState.Empty) onEmpty.invoke()
                 _lastOperationStateWrapper.value = StateWrapper(operationState)
-                // значит что конечный резульатат получен и можно очистить очередь
-                if (operationState !is OperationState.Loading && operationState !is OperationState.NoState) {
-                    requestsQueue.poll()
-                }
-                if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
-                    _lastOperationStateWrapper.value =
-                        StateWrapper(OperationState.Loading(operationType))
-                }
-
-                if (requestsQueue.isNotEmpty()) {
-                    // TODO мб складывать в requestsQueue как раз таки operationType,
-                    //  но с другой стороны не у всех он указан
-                    _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading())
-                }
+                pollFromQueueForFlow(operationState)
+                showLoadingForFlowIfNeed(requestResult, operationType)
             }
         }
         return mutableSharedFlow
+    }
+
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State> executeEmptyOperationFlow(
+        call: suspend () -> Flow<State>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        onEmpty: () -> Unit = {},
+    ): Flow<State> {
+        return executeEmptyOrWithDataIgnoringOperationFlow(
+            call = call,
+            operationType = operationType,
+            onSuccess = {},
+            onEmpty = { onEmpty() })
+    }
+
+    /**
+     * Используется если тип данных в onSuccess не важен
+     */
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State> executeOperationAndIgnoreDataFlow(
+        call: suspend () -> Flow<State>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        onSuccess: () -> Unit = {},
+    ): Flow<State> {
+        return executeEmptyOrWithDataIgnoringOperationFlow(
+            call = call,
+            operationType = operationType,
+            onSuccess = { onSuccess() },
+            onEmpty = {})
+    }
+
+    @OptIn(NotScreenState::class)
+    private suspend fun <@FunctionalityState State> executeEmptyOrWithDataIgnoringOperationFlow(
+        call: suspend () -> Flow<State>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        onEmpty: () -> Unit = {},
+        onSuccess: () -> Unit = {},
+    ): Flow<State> {
+        val mutableSharedFlow = call().shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly
+        )
+        if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
+            requestsQueue.offer(call.reflect()?.returnType.toString())
+        }
+        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
+        // иначе код выполняется синхронно
+        // и флоу вернется только когда весь этот участок будет пройден
+        viewModelScope.launch {
+            mutableSharedFlow.collect { requestResult ->
+                if (requestResult is Unit) throw GenericsAutoCastIsWrong()
+                val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
+                if (operationState is OperationState.Success) onSuccess.invoke()
+                if (operationState is OperationState.Empty) onEmpty.invoke()
+                _lastOperationStateWrapper.value = StateWrapper(operationState)
+                pollFromQueueForFlow(operationState)
+                showLoadingForFlowIfNeed(requestResult, operationType)
+            }
+        }
+        return mutableSharedFlow
+    }
+
+    // значит что конечный резульатат получен и можно очистить очередь
+    private fun pollFromQueueForFlow(operationState: OperationState<Any>) {
+        if (operationState !is OperationState.Loading && operationState !is OperationState.NoState) {
+            requestsQueue.poll()
+        }
+    }
+
+    private fun <State> showLoadingForFlowIfNeed(
+        requestResult: State,
+        operationType: OperationType
+    ) {
+        if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
+            _lastOperationStateWrapper.value =
+                StateWrapper(OperationState.Loading(operationType))
+        }
+        if (requestsQueue.isNotEmpty()) {
+            // TODO мб складывать в requestsQueue как раз таки operationType,
+            //  но с другой стороны не у всех он указан
+            _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading())
+        }
     }
 
     // State - LoadableData
