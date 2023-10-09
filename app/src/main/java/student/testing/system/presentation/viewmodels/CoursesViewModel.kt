@@ -86,7 +86,7 @@ class CoursesViewModel @Inject constructor(
 
     fun createCourse(name: String) {
         viewModelScope.launch {
-            executeFlowOperation(
+            executeOperation(
                 call = { createCourseUseCase(name) },
                 operationType = CourseAddingOperations.CREATE_COURSE,
                 type = defaultType
@@ -100,7 +100,7 @@ class CoursesViewModel @Inject constructor(
 
     fun joinCourse(courseCode: String) {
         viewModelScope.launch {
-            executeFlowOperation(
+            executeOperation(
                 call = { joinCourseUseCase(courseCode) },
                 operationType = CourseAddingOperations.JOIN_COURSE,
                 type = defaultType

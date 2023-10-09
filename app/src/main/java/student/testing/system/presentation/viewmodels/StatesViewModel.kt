@@ -2,7 +2,6 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
@@ -43,6 +43,32 @@ open class StatesViewModel : ViewModel() {
 
     private val requestsQueue = LinkedList<String>()
 
+    protected suspend inline fun <reified FlowOrState, T : Any> executeOperation(
+        noinline call: suspend () -> FlowOrState,
+        type: KClass<T>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        noinline onEmpty: () -> Unit = {},
+        noinline onSuccess: (T) -> Unit = {},
+    ): FlowOrState {
+        return if (FlowOrState::class.java.isInstance(flow<T> { })) {
+            executeOperationFlow(
+                call as suspend () -> Flow<*>,
+                type,
+                operationType,
+                onEmpty,
+                onSuccess
+            ) as FlowOrState
+        } else {
+            executeOperationState(
+                call,
+                type,
+                operationType,
+                onEmpty,
+                onSuccess
+            )
+        }
+    }
+
     /**
      * Launches operations and updating last operation state based on the response.
      *
@@ -63,10 +89,12 @@ open class StatesViewModel : ViewModel() {
      * @param operationType for loading
      */
     @OptIn(NotScreenState::class)
-    protected suspend fun <@FunctionalityState State, T : Any> executeOperation(
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State, T : Any> executeOperationState(
         call: suspend () -> State,
         type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
+        onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): State {
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
@@ -155,10 +183,11 @@ open class StatesViewModel : ViewModel() {
      * Если use case отправляет какие-то промежуточные результаты
      */
     @OptIn(NotScreenState::class)
-    protected suspend fun <@FunctionalityState State, T : Any> executeFlowOperation(
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State, T : Any> executeOperationFlow(
         call: suspend () -> Flow<State>,
-        operationType: OperationType = OperationType.DefaultOperation,
         type: KClass<T>,
+        operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): Flow<State> {
