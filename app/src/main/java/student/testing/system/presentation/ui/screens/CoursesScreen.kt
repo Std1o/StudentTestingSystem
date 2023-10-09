@@ -300,9 +300,11 @@ fun CoursesScreen() {
             (uiState as? ValidatableOperationState.SuccessfulValidation)?.let {
                 if (it.operationType == CourseAddingOperations.CREATE_COURSE) {
                     showCourseCreatingDialog = false
+                    lastValidationStateWrapper.onReceive()
                 }
                 if (it.operationType == CourseAddingOperations.JOIN_COURSE) {
                     showCourseJoiningDialog = false
+                    lastValidationStateWrapper.onReceive()
                 }
             }
         }

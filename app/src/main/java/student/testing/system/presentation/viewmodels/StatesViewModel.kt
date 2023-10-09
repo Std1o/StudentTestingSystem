@@ -227,6 +227,7 @@ open class StatesViewModel : ViewModel() {
         onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): Flow<State> {
+        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         val mutableSharedFlow = call().shareIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly
@@ -234,7 +235,6 @@ open class StatesViewModel : ViewModel() {
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
             requestsQueue.offer(type.toString())
         }
-        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
@@ -287,6 +287,7 @@ open class StatesViewModel : ViewModel() {
         onEmpty: () -> Unit = {},
         onSuccess: () -> Unit = {},
     ): Flow<State> {
+        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         val mutableSharedFlow = call().shareIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly
@@ -294,7 +295,6 @@ open class StatesViewModel : ViewModel() {
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
             requestsQueue.offer(call.reflect()?.returnType.toString())
         }
-        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
