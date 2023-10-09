@@ -63,15 +63,12 @@ class CoursesViewModel @Inject constructor(
     @OptIn(NotScreenState::class)
     fun deleteCourse(courseId: Int) {
         viewModelScope.launch {
-            executeEmptyOperation(
-                call = { repository.deleteCourse(courseId) },
-                onEmpty = {
-                    val newCourses = (contentStateVar.courses as LoadableData.Success)
-                        .data.filter { it.id != courseId }
-                    contentStateVar =
-                        contentStateVar.copy(courses = LoadableData.Success(newCourses))
-                }
-            ).protect()
+            executeEmptyOperation({ repository.deleteCourse(courseId) }) {
+                val newCourses = (contentStateVar.courses as LoadableData.Success)
+                    .data.filter { it.id != courseId }
+                contentStateVar =
+                    contentStateVar.copy(courses = LoadableData.Success(newCourses))
+            }.protect()
         }
     }
 
