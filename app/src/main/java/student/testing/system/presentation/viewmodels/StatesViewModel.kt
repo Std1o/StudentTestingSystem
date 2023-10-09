@@ -187,13 +187,13 @@ open class StatesViewModel : ViewModel() {
         onEmpty: () -> Unit,
         onSuccess: () -> Unit,
     ): State {
+        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
             requestsQueue.offer(call.reflect()?.returnType.toString())
         }
         var requestResult: State
         val request = viewModelScope.async {
             // Call launching
-            _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
             requestResult = call()
             if (requestResult is Unit) throw GenericsAutoCastIsWrong()
 
