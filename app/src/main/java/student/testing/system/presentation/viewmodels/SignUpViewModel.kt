@@ -32,7 +32,7 @@ class SignUpViewModel @Inject constructor(
 
     fun signUp(email: String, username: String, password: String) {
         viewModelScope.launch {
-            val requestResult = executeNotTypedOperation({
+            val requestResult = executeOperationAndIgnoreData({
                 signUpUseCase(email = email, username = username, password = password)
             }) {
                 navigateToCourses()

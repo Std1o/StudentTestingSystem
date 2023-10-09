@@ -93,7 +93,7 @@ open class OperationViewModel : ViewModel() {
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
     ): State {
-        return executeEmptyOrNotTypedOperation(
+        return executeEmptyOrWithDataIgnoringOperation(
             call = call,
             operationType = operationType,
             onSuccess = {},
@@ -103,12 +103,12 @@ open class OperationViewModel : ViewModel() {
     /**
      * Используется если тип данных в onSuccess не важен
      */
-    protected suspend fun <@FunctionalityState State> executeNotTypedOperation(
+    protected suspend fun <@FunctionalityState State> executeOperationAndIgnoreData(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onSuccess: () -> Unit = {},
     ): State {
-        return executeEmptyOrNotTypedOperation(
+        return executeEmptyOrWithDataIgnoringOperation(
             call = call,
             operationType = operationType,
             onSuccess = { onSuccess() },
@@ -116,7 +116,7 @@ open class OperationViewModel : ViewModel() {
     }
 
     @OptIn(NotScreenState::class)
-    private suspend fun <@FunctionalityState State> executeEmptyOrNotTypedOperation(
+    private suspend fun <@FunctionalityState State> executeEmptyOrWithDataIgnoringOperation(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit,

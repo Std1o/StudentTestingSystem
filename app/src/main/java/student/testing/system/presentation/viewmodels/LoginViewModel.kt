@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val requestResult = executeNotTypedOperation({ authIfPossibleUseCase() }) {
+            val requestResult = executeOperationAndIgnoreData({ authIfPossibleUseCase() }) {
                 navigateToCourses()
             }
             _loginStateWrapper.value = StateWrapper(requestResult)
@@ -45,7 +45,7 @@ class LoginViewModel @Inject constructor(
 
     fun auth(email: String, password: String) {
         viewModelScope.launch {
-            val requestResult = executeNotTypedOperation({ loginUseCase(email, password) }) {
+            val requestResult = executeOperationAndIgnoreData({ loginUseCase(email, password) }) {
                 navigateToCourses()
             }
             _loginStateWrapper.value = StateWrapper(requestResult)
