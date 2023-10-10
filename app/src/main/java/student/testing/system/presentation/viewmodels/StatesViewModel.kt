@@ -19,6 +19,8 @@ import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.SignUpState
+import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
@@ -37,10 +39,8 @@ import kotlin.reflect.jvm.reflect
 
 open class StatesViewModel : ViewModel() {
 
-    private val _lastOperationStateWrapper =
-        MutableStateFlow<StateWrapper<OperationState<Any>>>(StateWrapper())
-    val lastOperationStateWrapper: StateFlow<StateWrapper<OperationState<Any>>> =
-        _lastOperationStateWrapper.asStateFlow()
+    private val _lastOperationStateWrapper = StateWrapper.mutableStateFlow<OperationState<Any>>()
+    val lastOperationStateWrapper = _lastOperationStateWrapper.asStateFlow()
 
     private val requestsQueue = LinkedList<String>()
 

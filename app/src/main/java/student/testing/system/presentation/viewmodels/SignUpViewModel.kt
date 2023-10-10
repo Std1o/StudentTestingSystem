@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.domain.auth.SignUpUseCase
+import student.testing.system.domain.states.LoginState
 import student.testing.system.domain.states.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
@@ -23,10 +24,8 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase, private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
-    private val _signUpStateWrapper =
-        MutableStateFlow<StateWrapper<SignUpState<PrivateUser>>>(StateWrapper())
-    val signUpStateWrapper: StateFlow<StateWrapper<SignUpState<PrivateUser>>> =
-        _signUpStateWrapper.asStateFlow()
+    private val _signUpStateWrapper = StateWrapper.mutableStateFlow<SignUpState<PrivateUser>>()
+    val signUpStateWrapper = _signUpStateWrapper.asStateFlow()
 
     var contentState by mutableStateOf(SignUpContentState())
 

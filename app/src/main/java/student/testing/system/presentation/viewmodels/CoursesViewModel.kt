@@ -11,7 +11,6 @@ import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
@@ -33,9 +32,7 @@ class CoursesViewModel @Inject constructor(
 ) : StatesViewModel() {
 
     private val _lastValidationStateWrapper =
-        MutableStateFlow<StateWrapper<ValidatableOperationState<CourseResponse>>>(
-            StateWrapper(OperationState.NoState)
-        )
+        StateWrapper.mutableStateFlow<ValidatableOperationState<CourseResponse>>()
     val lastValidationStateWrapper = _lastValidationStateWrapper.asStateFlow()
 
     private val _contentState = MutableStateFlow(CoursesContentState())

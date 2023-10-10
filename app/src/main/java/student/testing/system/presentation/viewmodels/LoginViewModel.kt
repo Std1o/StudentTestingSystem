@@ -4,8 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
@@ -26,11 +24,8 @@ class LoginViewModel @Inject constructor(
 ) : StatesViewModel() {
 
     private val _loginStateWrapper =
-        MutableStateFlow<StateWrapper<LoginState<PrivateUser>>>(
-            StateWrapper(LoginState.AuthStateChecking)
-        )
-    val loginStateWrapper: StateFlow<StateWrapper<LoginState<PrivateUser>>> =
-        _loginStateWrapper.asStateFlow()
+        StateWrapper.mutableStateFlow<LoginState<PrivateUser>>(LoginState.AuthStateChecking)
+    val loginStateWrapper = _loginStateWrapper.asStateFlow()
 
     val contentState by mutableStateOf(LoginContentState())
 
