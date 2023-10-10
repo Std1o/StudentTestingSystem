@@ -20,6 +20,7 @@ fun ErrorScreen(message: String, onRetry: () -> Unit) {
         Text(
             text = stringResource(id = R.string.loading_error),
             textAlign = TextAlign.Center,
+            color = Color.DarkGray
         )
         Text(
             text = message,

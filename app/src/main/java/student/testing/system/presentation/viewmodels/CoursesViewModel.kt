@@ -49,7 +49,7 @@ class CoursesViewModel @Inject constructor(
         getCourses()
     }
 
-    private fun getCourses() {
+    fun getCourses() {
         viewModelScope.launch {
             loadData { repository.getCourses() }.collect {
                 contentStateVar = contentStateVar.copy(courses = it)
@@ -108,13 +108,17 @@ class CoursesViewModel @Inject constructor(
 
     @OptIn(NotScreenState::class)
     private fun addCourseToContent(course: CourseResponse) {
-        contentStateVar = contentStateVar.copy(
-            courses = LoadableData.Success(
-                listOf(
-                    *(contentStateVar.courses as LoadableData.Success).data.toTypedArray(),
-                    course
+        try {
+            contentStateVar = contentStateVar.copy(
+                courses = LoadableData.Success(
+                    listOf(
+                        *(contentStateVar.courses as LoadableData.Success).data.toTypedArray(),
+                        course
+                    )
                 )
             )
-        )
+        } catch (e: ClassCastException) {
+            e.printStackTrace()
+        }
     }
 }

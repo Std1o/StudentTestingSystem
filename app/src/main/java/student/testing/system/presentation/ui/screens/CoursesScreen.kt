@@ -67,6 +67,7 @@ import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
+import student.testing.system.presentation.ui.components.ErrorScreen
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
@@ -168,7 +169,12 @@ fun CoursesScreen() {
                 }
                 when (val courses = contentState.courses) {
                     is LoadableData.Empty204 -> {}
-                    is LoadableData.Error -> {}
+                    is LoadableData.Error -> {
+                        ErrorScreen(message = courses.exception) {
+                            viewModel.getCourses()
+                        }
+                    }
+
                     is LoadableData.Loading -> LoadingIndicator()
                     LoadableData.NoState -> {}
                     is LoadableData.Success -> {
