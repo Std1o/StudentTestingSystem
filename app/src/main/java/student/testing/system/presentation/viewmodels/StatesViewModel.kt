@@ -19,8 +19,6 @@ import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.SignUpState
-import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
@@ -44,32 +42,22 @@ open class StatesViewModel : ViewModel() {
 
     private val requestsQueue = LinkedList<String>()
 
-    protected suspend inline fun <reified FlowOrState, T : Any> executeOperation(
-        noinline call: suspend () -> FlowOrState,
-        type: KClass<T>,
-        operationType: OperationType = OperationType.DefaultOperation,
-        noinline onEmpty: () -> Unit = {},
-        noinline onSuccess: (T) -> Unit = {},
-    ): FlowOrState {
-        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
-            executeOperationFlow(
-                call as suspend () -> Flow<*>,
-                type,
-                operationType,
-                onEmpty,
-                onSuccess
-            ) as FlowOrState
-        } else {
-            executeOperationState(
-                call,
-                type,
-                operationType,
-                onEmpty,
-                onSuccess
-            )
+
+    // State - LoadableData
+    suspend fun <State> loadData(
+        call: suspend () -> State
+    ): StateFlow<State> {
+        val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
+        viewModelScope.launch {// for asynchrony
+            var requestResult: State = call()
+            stateFlow.emit(requestResult)
         }
+        return stateFlow
     }
 
+
+    // executeOperation()
+    // __________________________________________________________________________________
     /**
      * Launches operations and updating last operation state based on the response.
      *
@@ -89,9 +77,35 @@ open class StatesViewModel : ViewModel() {
      * ```
      * @param operationType for loading
      */
+    protected suspend inline fun <reified FlowOrState, T : Any> executeOperation(
+        noinline call: suspend () -> FlowOrState,
+        type: KClass<T>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        noinline onEmpty: () -> Unit = {},
+        noinline onSuccess: (T) -> Unit = {},
+    ): FlowOrState {
+        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
+            flowExecuteOperation(
+                call as suspend () -> Flow<*>,
+                type,
+                operationType,
+                onEmpty,
+                onSuccess
+            ) as FlowOrState
+        } else {
+            stateExecuteOperation(
+                call,
+                type,
+                operationType,
+                onEmpty,
+                onSuccess
+            )
+        }
+    }
+
     @OptIn(NotScreenState::class)
     @PublishedApi
-    internal suspend fun <@FunctionalityState State, T : Any> executeOperationState(
+    internal suspend fun <@FunctionalityState State, T : Any> stateExecuteOperation(
         call: suspend () -> State,
         type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
@@ -119,69 +133,143 @@ open class StatesViewModel : ViewModel() {
         return getAwaitedResult(request)
     }
 
+    /**
+     * Если use case отправляет какие-то промежуточные результаты
+     */
+    @OptIn(NotScreenState::class)
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State, T : Any> flowExecuteOperation(
+        call: suspend () -> Flow<State>,
+        type: KClass<T>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        onEmpty: () -> Unit = {},
+        onSuccess: (T) -> Unit = {},
+    ): Flow<State> {
+        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
+        val mutableSharedFlow = call().shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly
+        )
+        if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
+            requestsQueue.offer(type.toString())
+        }
+        // иначе код выполняется синхронно
+        // и флоу вернется только когда весь этот участок будет пройден
+        viewModelScope.launch {
+            mutableSharedFlow.collect { requestResult ->
+                if (requestResult is Unit) throw GenericsAutoCastIsWrong()
+                val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
+                if (operationState is OperationState.Success) onSuccess.invoke(operationState.data as T)
+                if (operationState is OperationState.Empty) onEmpty.invoke()
+                _lastOperationStateWrapper.value = StateWrapper(operationState)
+                pollFromQueueForFlow(operationState)
+                showLoadingForFlowIfNeed(requestResult, operationType)
+            }
+        }
+        return mutableSharedFlow
+    }
+
+
+    // executeEmptyOperation()
+    // __________________________________________________________________________________
     protected suspend inline fun <reified FlowOrState> executeEmptyOperation(
         noinline call: suspend () -> FlowOrState,
         operationType: OperationType = OperationType.DefaultOperation,
         noinline onEmpty: () -> Unit = {},
     ): FlowOrState {
         return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
-            executeEmptyOperationFlow(
+            flowExecuteEmptyOperation(
                 call as suspend () -> Flow<*>,
                 operationType,
                 onEmpty
             ) as FlowOrState
         } else {
-            executeEmptyOperationState(call, operationType, onEmpty)
-        }
-    }
-
-    protected suspend inline fun <reified FlowOrState> executeOperationAndIgnoreData(
-        noinline call: suspend () -> FlowOrState,
-        operationType: OperationType = OperationType.DefaultOperation,
-        noinline onSuccess: () -> Unit = {}
-    ): FlowOrState {
-        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
-            executeOperationAndIgnoreDataFlow(
-                call as suspend () -> Flow<*>,
-                operationType,
-                onSuccess
-            ) as FlowOrState
-        } else {
-            executeOperationAndIgnoreDataState(call, operationType, onSuccess)
+            stateExecuteEmptyOperation(call, operationType, onEmpty)
         }
     }
 
     @PublishedApi
-    internal suspend fun <@FunctionalityState State> executeEmptyOperationState(
+    internal suspend fun <@FunctionalityState State> stateExecuteEmptyOperation(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
     ): State {
-        return executeEmptyOrWithDataIgnoringOperationState(
+        return stateExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
             operationType = operationType,
             onSuccess = {},
             onEmpty = { onEmpty() })
     }
 
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State> flowExecuteEmptyOperation(
+        call: suspend () -> Flow<State>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        onEmpty: () -> Unit = {},
+    ): Flow<State> {
+        return flowExecuteEmptyOrWithDataIgnoringOperation(
+            call = call,
+            operationType = operationType,
+            onSuccess = {},
+            onEmpty = { onEmpty() })
+    }
+
+
+    // executeOperationAndIgnoreData()
+    // __________________________________________________________________________________
+    protected suspend inline fun <reified FlowOrState> executeOperationAndIgnoreData(
+        noinline call: suspend () -> FlowOrState,
+        operationType: OperationType = OperationType.DefaultOperation,
+        noinline onSuccess: () -> Unit = {}
+    ): FlowOrState {
+        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
+            flowExecuteOperationAndIgnoreData(
+                call as suspend () -> Flow<*>,
+                operationType,
+                onSuccess
+            ) as FlowOrState
+        } else {
+            stateExecuteOperationAndIgnoreData(call, operationType, onSuccess)
+        }
+    }
+
     /**
      * Используется если тип данных в onSuccess не важен
      */
     @PublishedApi
-    internal suspend fun <@FunctionalityState State> executeOperationAndIgnoreDataState(
+    internal suspend fun <@FunctionalityState State> stateExecuteOperationAndIgnoreData(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onSuccess: () -> Unit = {},
     ): State {
-        return executeEmptyOrWithDataIgnoringOperationState(
+        return stateExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
             operationType = operationType,
             onSuccess = { onSuccess() },
             onEmpty = {})
     }
 
+    /**
+     * Используется если тип данных в onSuccess не важен
+     */
+    @PublishedApi
+    internal suspend fun <@FunctionalityState State> flowExecuteOperationAndIgnoreData(
+        call: suspend () -> Flow<State>,
+        operationType: OperationType = OperationType.DefaultOperation,
+        onSuccess: () -> Unit = {},
+    ): Flow<State> {
+        return flowExecuteEmptyOrWithDataIgnoringOperation(
+            call = call,
+            operationType = operationType,
+            onSuccess = { onSuccess() },
+            onEmpty = {})
+    }
+
+
+    // Slaves
+    // __________________________________________________________________________________
     @OptIn(NotScreenState::class)
-    private suspend fun <@FunctionalityState State> executeEmptyOrWithDataIgnoringOperationState(
+    private suspend fun <@FunctionalityState State> stateExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit,
@@ -215,73 +303,8 @@ open class StatesViewModel : ViewModel() {
         }
     }
 
-    /**
-     * Если use case отправляет какие-то промежуточные результаты
-     */
     @OptIn(NotScreenState::class)
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State, T : Any> executeOperationFlow(
-        call: suspend () -> Flow<State>,
-        type: KClass<T>,
-        operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit = {},
-        onSuccess: (T) -> Unit = {},
-    ): Flow<State> {
-        _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
-        val mutableSharedFlow = call().shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly
-        )
-        if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
-            requestsQueue.offer(type.toString())
-        }
-        // иначе код выполняется синхронно
-        // и флоу вернется только когда весь этот участок будет пройден
-        viewModelScope.launch {
-            mutableSharedFlow.collect { requestResult ->
-                if (requestResult is Unit) throw GenericsAutoCastIsWrong()
-                val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
-                if (operationState is OperationState.Success) onSuccess.invoke(operationState.data as T)
-                if (operationState is OperationState.Empty) onEmpty.invoke()
-                _lastOperationStateWrapper.value = StateWrapper(operationState)
-                pollFromQueueForFlow(operationState)
-                showLoadingForFlowIfNeed(requestResult, operationType)
-            }
-        }
-        return mutableSharedFlow
-    }
-
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State> executeEmptyOperationFlow(
-        call: suspend () -> Flow<State>,
-        operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit = {},
-    ): Flow<State> {
-        return executeEmptyOrWithDataIgnoringOperationFlow(
-            call = call,
-            operationType = operationType,
-            onSuccess = {},
-            onEmpty = { onEmpty() })
-    }
-
-    /**
-     * Используется если тип данных в onSuccess не важен
-     */
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State> executeOperationAndIgnoreDataFlow(
-        call: suspend () -> Flow<State>,
-        operationType: OperationType = OperationType.DefaultOperation,
-        onSuccess: () -> Unit = {},
-    ): Flow<State> {
-        return executeEmptyOrWithDataIgnoringOperationFlow(
-            call = call,
-            operationType = operationType,
-            onSuccess = { onSuccess() },
-            onEmpty = {})
-    }
-
-    @OptIn(NotScreenState::class)
-    private suspend fun <@FunctionalityState State> executeEmptyOrWithDataIgnoringOperationFlow(
+    private suspend fun <@FunctionalityState State> flowExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> Flow<State>,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
@@ -331,18 +354,6 @@ open class StatesViewModel : ViewModel() {
             //  но с другой стороны не у всех он указан
             _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading())
         }
-    }
-
-    // State - LoadableData
-    suspend fun <State> loadData(
-        call: suspend () -> State
-    ): StateFlow<State> {
-        val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
-        viewModelScope.launch {// for asynchrony
-            var requestResult: State = call()
-            stateFlow.emit(requestResult)
-        }
-        return stateFlow
     }
 }
 
