@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
 import student.testing.system.domain.states.LoginState
+import student.testing.system.domain.states.OperationState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
@@ -16,6 +18,7 @@ import student.testing.system.presentation.ui.models.LoginContentState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
 
+@OptIn(NotScreenState::class)
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
@@ -24,17 +27,28 @@ class LoginViewModel @Inject constructor(
 ) : StatesViewModel() {
 
     private val _loginStateWrapper =
-        StateWrapper.mutableStateFlow<LoginState<PrivateUser>>(LoginState.AuthStateChecking)
+        StateWrapper.mutableStateFlow<LoginState<PrivateUser>>(LoginState.HiddenUI)
     val loginStateWrapper = _loginStateWrapper.asStateFlow()
 
     val contentState by mutableStateOf(LoginContentState())
 
     init {
+        authIfPossible()
+    }
+
+    fun authIfPossible() {
+        _loginStateWrapper.value = StateWrapper(LoginState.HiddenUI)
         viewModelScope.launch {
             val requestResult = executeOperationAndIgnoreData({ authIfPossibleUseCase() }) {
+                _loginStateWrapper.value = StateWrapper(LoginState.HiddenUI)
                 navigateToCourses()
             }
-            _loginStateWrapper.value = StateWrapper(requestResult)
+            if (requestResult !is OperationState.Success) {
+                _loginStateWrapper.value = StateWrapper(requestResult)
+            }
+            if (requestResult is OperationState.Error && requestResult.code != 401) {
+                _loginStateWrapper.value = StateWrapper(LoginState.ErrorWhenAuthorized(requestResult.exception))
+            }
         }
     }
 

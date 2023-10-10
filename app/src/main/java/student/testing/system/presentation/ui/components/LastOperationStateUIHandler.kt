@@ -18,15 +18,17 @@ fun <T> LastOperationStateUIHandler(
     stateWrapper: StateWrapper<OperationState<T>>,
     snackbarHostState: SnackbarHostState,
     onLoading: ((OperationType) -> Unit)? = null,
-    onError: ((OperationType) -> Unit)? = null
+    onError: ((String, Int, OperationType) -> Unit)? = null
 ) {
     with(stateWrapper.uiState) {
         when (this) {
             is OperationState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
             is OperationState.Error -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
-                    onError?.invoke(operationType) ?: snackbarHostState.showSnackbar(exception)
-                    stateWrapper.onReceive()
+                    onError?.invoke(exception, code, operationType)
+                        ?: snackbarHostState.showSnackbar(
+                            exception
+                        ).apply { stateWrapper.onReceive() }
                 }
             }
 

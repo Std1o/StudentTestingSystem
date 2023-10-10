@@ -4,5 +4,7 @@ import student.testing.system.annotations.FunctionalityState
 
 @FunctionalityState
 sealed interface LoginState<out R> {
-    object AuthStateChecking : LoginState<Nothing>
+    data object HiddenUI : LoginState<Nothing>
+
+    data class ErrorWhenAuthorized(val message: String) : LoginState<Nothing>
 }

@@ -23,9 +23,10 @@ import student.testing.system.domain.states.LoginState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.EmailTextField
+import student.testing.system.presentation.ui.components.ErrorScreen
+import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.PasswordTextField
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
@@ -36,7 +37,7 @@ fun LoginScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val contentState = viewModel.contentState
-    var needToHideUI by remember { mutableStateOf(loginStateWrapper.uiState is LoginState.AuthStateChecking) }
+    var needToHideUI = loginStateWrapper.uiState is LoginState.HiddenUI
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -45,6 +46,14 @@ fun LoginScreen() {
         if (needToHideUI) {
             LoadingIndicator()
             return@Scaffold
+        }
+        with(loginStateWrapper.uiState) {
+            if (this is LoginState.ErrorWhenAuthorized) {
+                ErrorScreen(message = this.message) {
+                    viewModel.authIfPossible()
+                }
+                return@Scaffold
+            }
         }
         CenteredColumn(
             modifier = Modifier
@@ -73,7 +82,7 @@ fun LoginScreen() {
             )
             Button(
                 onClick = {
-                    scope.launch { viewModel.auth(email = email, password = password) }
+                    viewModel.auth(email = email, password = password)
                 }, modifier = Modifier
                     .padding(top = 30.dp)
                     .height(45.dp)
@@ -89,5 +98,12 @@ fun LoginScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
+    LastOperationStateUIHandler(
+        lastOperationStateWrapper,
+        snackbarHostState,
+        onError = { exception, code, _ ->
+            if (loginStateWrapper.uiState !is LoginState.ErrorWhenAuthorized) {
+                scope.launch { snackbarHostState.showSnackbar(exception) }
+            }
+        })
 }
