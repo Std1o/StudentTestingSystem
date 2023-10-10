@@ -26,9 +26,8 @@ fun <T> LastOperationStateUIHandler(
             is OperationState.Error -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
                     onError?.invoke(exception, code, operationType)
-                        ?: snackbarHostState.showSnackbar(
-                            exception
-                        ).apply { stateWrapper.onReceive() }
+                        ?: snackbarHostState.showSnackbar(exception)
+                    stateWrapper.onReceive()
                 }
             }
 
