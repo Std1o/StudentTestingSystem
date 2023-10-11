@@ -18,10 +18,12 @@ import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.SignUpContentState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpUseCase: SignUpUseCase, private val appNavigator: AppNavigator
+    private val signUpUseCase: SignUpUseCase,
+    @Named("LaunchNavigation") private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
     private val _signUpStateWrapper = StateWrapper.mutableStateFlow<SignUpState<PrivateUser>>()

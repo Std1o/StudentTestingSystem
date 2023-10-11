@@ -11,10 +11,16 @@ import student.testing.system.domain.addQuestion.AddQuestionUseCase
 import student.testing.system.domain.addQuestion.QuestionState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Question
+import student.testing.system.presentation.navigation.AppNavigator
+import student.testing.system.presentation.navigation.Destination
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
-class TestCreationViewModel @Inject constructor(private val addQuestionUseCase: AddQuestionUseCase) :
+class TestCreationViewModel @Inject constructor(
+    @Named("TestCreationNavigation") private val appNavigator: AppNavigator,
+    private val addQuestionUseCase: AddQuestionUseCase
+) :
     ViewModel() {
 
     val courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
@@ -23,6 +29,10 @@ class TestCreationViewModel @Inject constructor(private val addQuestionUseCase: 
         viewModelScope.launch {
             courseFlow.tryEmit(course)
         }
+    }
+
+    fun navigateToQuestionCreation() {
+        appNavigator.tryNavigateTo(Destination.QuestionCreationScreen())
     }
 
     private val questions: ArrayList<Question> = arrayListOf()

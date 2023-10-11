@@ -26,6 +26,7 @@ import student.testing.system.presentation.navigation.AppNavigatorImpl
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.sharedPreferences.PrefsUtilsImpl
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -92,5 +93,11 @@ object AppModule {
 
     @Singleton
     @Provides
+    @Named("LaunchNavigation")
     fun provideLaunchNavigation() = AppNavigatorImpl() as AppNavigator
+
+    @Singleton
+    @Provides
+    @Named("TestCreationNavigation")
+    fun provideTestCreationNavigation() = AppNavigatorImpl() as AppNavigator
 }

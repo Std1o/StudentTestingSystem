@@ -27,14 +27,21 @@ fun TestCreationHostScreen() {
             Destination.TestCreationScreen.fullRoute
         )
     sharedViewModel?.setCourse(viewModel.course)
-    Surface {
 
+    NavigationEffects(
+        navigationChannel = viewModel.navigationChannel,
+        navHostController = navController
+    )
+    Surface {
         NavHost(
             navController = navController,
             startDestination = Destination.TestCreationScreen
         ) {
             composable(Destination.TestCreationScreen) {
                 TestCreationScreen(sharedViewModel ?: throw NullSharedViewModelException())
+            }
+            composable(Destination.QuestionCreationScreen) {
+                QuestionCreationScreen(sharedViewModel ?: throw NullSharedViewModelException())
             }
         }
     }

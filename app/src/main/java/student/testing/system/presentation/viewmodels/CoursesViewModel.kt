@@ -21,12 +21,13 @@ import student.testing.system.presentation.ui.models.CoursesContentState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class CoursesViewModel @Inject constructor(
     private val repository: MainRepository,
     private val prefUtils: PrefsUtils,
-    private val appNavigator: AppNavigator,
+    @Named("LaunchNavigation") private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
 ) : StatesViewModel() {

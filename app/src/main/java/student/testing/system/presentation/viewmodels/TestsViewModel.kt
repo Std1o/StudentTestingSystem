@@ -20,12 +20,13 @@ import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.TestsContentState
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.properties.Delegates
 
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestsViewModel @Inject constructor(
-    val appNavigator: AppNavigator,
+    @Named("LaunchNavigation") private val appNavigator: AppNavigator,
     private val repository: MainRepository,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
@@ -50,7 +51,7 @@ class TestsViewModel @Inject constructor(
         }
     }
 
-    fun onAddBtnClicked(course: CourseResponse) {
+    fun navigateToTestCreation(course: CourseResponse) {
         appNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
     }
 

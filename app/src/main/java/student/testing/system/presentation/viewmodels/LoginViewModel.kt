@@ -17,13 +17,14 @@ import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.LoginContentState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
+import javax.inject.Named
 
 @OptIn(NotScreenState::class)
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val authIfPossibleUseCase: AuthIfPossibleUseCase,
-    private val appNavigator: AppNavigator
+    @Named("LaunchNavigation") private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
     private val _loginStateWrapper =

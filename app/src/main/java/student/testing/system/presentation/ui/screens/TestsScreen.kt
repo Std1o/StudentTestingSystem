@@ -78,7 +78,7 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
                 if (isUserModerator) {
                     FloatingActionButton(
                         onClick = {
-                            testsVM.onAddBtnClicked(course)
+                            testsVM.navigateToTestCreation(course)
                         },
                         shape = CircleShape,
                         backgroundColor = Color.White,
