@@ -44,7 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
@@ -74,7 +73,7 @@ import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.Shimmer
-import student.testing.system.presentation.ui.components.placeholder.placeholder
+import student.testing.system.presentation.ui.components.modifiers.placeholder
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
 @OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)

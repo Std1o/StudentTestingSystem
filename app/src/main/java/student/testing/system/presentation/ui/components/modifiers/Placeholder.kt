@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.components.placeholder
+package student.testing.system.presentation.ui.components.modifiers
 
 import androidx.compose.foundation.background
 import androidx.compose.ui.Modifier
