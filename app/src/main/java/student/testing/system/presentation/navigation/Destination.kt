@@ -32,15 +32,15 @@ sealed class Destination(
         operator fun invoke(): String = route
     }
 
-    object LoginScreen : NoArgumentsDestination("login")
+    data object LoginScreen : NoArgumentsDestination("login")
 
-    object SignUpScreen : NoArgumentsDestination("sign_up")
+    data object SignUpScreen : NoArgumentsDestination("sign_up")
 
-    object CoursesScreen : NoArgumentsDestination("courses")
+    data object CoursesScreen : NoArgumentsDestination("courses")
 
     // Course Review
 
-    object CourseReviewScreen :
+    data object CourseReviewScreen :
         Destination("course_review", params = arrayOf("course")) {
         const val COURSE_KEY = "course"
 
@@ -62,12 +62,15 @@ sealed class Destination(
         R.drawable.ic_users
     )
 
-    data object TestCreationScreen : Destination("test_creation", params = arrayOf(COURSE_KEY)) {
+    data object TestCreationHostScreen : Destination("test_creation_host", params = arrayOf(COURSE_KEY)) {
         operator fun invoke(course: CourseResponse): String {
             val courseJson = Gson().toJson(course)
             return route.appendParams(COURSE_KEY to courseJson)
         }
     }
+
+    data object TestCreationScreen : NoArgumentsDestination("test_creation")
+    data object QuestionCreationScreen : NoArgumentsDestination("question_creation")
 }
 
 internal fun String.appendParams(vararg params: Pair<String, Any?>): String {

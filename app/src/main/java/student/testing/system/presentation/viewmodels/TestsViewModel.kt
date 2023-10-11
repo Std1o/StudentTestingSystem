@@ -51,7 +51,7 @@ class TestsViewModel @Inject constructor(
     }
 
     fun onAddBtnClicked(course: CourseResponse) {
-        appNavigator.tryNavigateTo(Destination.TestCreationScreen(course = course))
+        appNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
     }
 
     // TODO мб переместить в TestCreationViewModel
