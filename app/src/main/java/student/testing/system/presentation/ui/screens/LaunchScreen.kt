@@ -48,7 +48,7 @@ fun LaunchScreen() {
                 arguments = listOf(navArgument(COURSE_KEY) {
                     type = CustomType(CourseResponse::class)
                 })
-            ) { TestCreationScreen() }
+            ) { TestCreationScreen(navController) }
         }
     }
 }
