@@ -36,7 +36,7 @@ class CoursesViewModel @Inject constructor(
     val lastValidationStateWrapper = _lastValidationStateWrapper.asStateFlow()
 
     private val _contentState = MutableStateFlow(CoursesContentState())
-    val contentState: StateFlow<CoursesContentState> = _contentState.asStateFlow()
+    val contentState = _contentState.asStateFlow()
 
     private val defaultType = CourseResponse::class
     private var contentStateVar

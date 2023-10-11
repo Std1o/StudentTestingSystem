@@ -38,14 +38,15 @@ import student.testing.system.presentation.viewmodels.TestsViewModel
 fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     val testsVM = hiltViewModel<TestsViewModel>()
     val course by parentViewModel.courseFlow.collectAsState()
-    val tests by testsVM.getTests(course.id).collectAsState()
+    testsVM.courseId = course.id
+    val contentState by testsVM.contentState.collectAsState()
     Surface {
         CenteredColumn {
-            Text(text = "Тесты $course")
+            Text(text = "Тестыэээ $course")
             TestsList(
-                isLoading = tests is LoadableData.Loading,
+                isLoading = contentState.tests is LoadableData.Loading,
                 hidden = false,
-                tests = tests,
+                tests = contentState.tests,
                 onClick = {},
                 onLongClick = {})
         }

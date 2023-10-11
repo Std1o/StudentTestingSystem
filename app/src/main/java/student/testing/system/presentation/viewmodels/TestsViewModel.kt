@@ -1,36 +1,49 @@
 package student.testing.system.presentation.viewmodels
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.makeOperation
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
-import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import student.testing.system.models.Question
 import student.testing.system.models.Test
 import student.testing.system.models.TestCreationReq
 import student.testing.system.models.TestResult
+import student.testing.system.presentation.ui.models.TestsContentState
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestsViewModel @Inject constructor(
     private val repository: MainRepository,
     private val getResultUseCase: GetResultUseCase
-) : ViewModel() {
+) : StatesViewModel() {
 
-    fun getTests(courseId: Int): StateFlow<LoadableData<List<Test>>> {
-        val stateFlow = MutableStateFlow<LoadableData<List<Test>>>(LoadableData.Loading())
-        viewModelScope.launch {
-            stateFlow.emit(repository.getTests(courseId))
+    private val _contentState = MutableStateFlow(TestsContentState())
+    val contentState = _contentState.asStateFlow()
+    private var contentStateVar
+        get() = _contentState.value
+        set(value) {
+            _contentState.value = value
         }
-        return stateFlow
+
+    var courseId: Int by Delegates.observable(-1) { _, oldValue, newValue ->
+        if (oldValue != newValue) getTests()
+    }
+
+    private fun getTests() {
+        viewModelScope.launch {
+            loadData { repository.getTests(courseId) }.collect {
+                contentStateVar = contentStateVar.copy(tests = it)
+            }
+        }
     }
 
     // TODO мб переместить в TestCreationViewModel

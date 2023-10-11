@@ -95,9 +95,9 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
     }
 
     private fun getTests(courseId: Int) {
-        viewModel.getTests(courseId).subscribeOnLoadableInUI(this, binding.progressBar) {
-            testsAdapter.setDataList(it as MutableList<Test>)
-        }
+//        viewModel.getTests(courseId).subscribeOnLoadableInUI(this, binding.progressBar) {
+//            testsAdapter.setDataList(it as MutableList<Test>)
+//        }
     }
 
     private fun getResult(testId: Int, courseId: Int) {
