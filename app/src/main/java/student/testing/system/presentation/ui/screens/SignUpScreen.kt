@@ -2,20 +2,12 @@
 
 package student.testing.system.presentation.ui.screens
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -23,26 +15,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.SignUpState
-import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.EmailTextField
+import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
-import student.testing.system.presentation.ui.components.PasswordTextField
-import student.testing.system.presentation.ui.models.NameContentState
-import student.testing.system.presentation.ui.stateWrapper.StateWrapper
+import student.testing.system.presentation.ui.components.passwordTextField
+import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.SignUpViewModel
 
 @Composable
@@ -65,19 +50,20 @@ fun SignUpScreen() {
             val isEmailError = signUpStateWrapper.uiState is AuthState.EmailError
             val isPasswordError = signUpStateWrapper.uiState is AuthState.PasswordError
             val isUsernameError = signUpStateWrapper.uiState is SignUpState.NameError
-            val username = UsernameTextField(
+            val username = requiredTextField(
                 stateWrapper = signUpStateWrapper,
                 contentState = contentState.nameContentState,
-                isUsernameError = isUsernameError,
-                errorText = if (isUsernameError) (signUpStateWrapper.uiState as SignUpState.NameError).messageResId else 0
+                isError = isUsernameError,
+                errorText = if (isUsernameError) (signUpStateWrapper.uiState as SignUpState.NameError).messageResId else 0,
+                hint = R.string.name
             )
-            val email = EmailTextField(
+            val email = emailTextField(
                 onReceiveListener = signUpStateWrapper,
                 contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (signUpStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
-            val password = PasswordTextField(
+            val password = passwordTextField(
                 onReceiveListener = signUpStateWrapper,
                 contentState = contentState.passwordContentState,
                 isPasswordError = isPasswordError,
@@ -94,40 +80,4 @@ fun SignUpScreen() {
         }
     }
     LastOperationStateUIHandler(lastOperationState, snackbarHostState)
-}
-
-@Composable
-fun UsernameTextField(
-    stateWrapper: StateWrapper<SignUpState<PrivateUser>>,
-    contentState: NameContentState,
-    isUsernameError: Boolean,
-    @StringRes errorText: Int
-): String {
-    var isUsernameError = isUsernameError
-    var username by remember { mutableStateOf(TextFieldValue(contentState.name)) }
-    OutlinedTextField(value = username,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        label = { Text(stringResource(R.string.name)) },
-        isError = isUsernameError,
-        supportingText = {
-            if (isUsernameError) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(errorText),
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        },
-        onValueChange = {
-            username = it
-            contentState.name = it.text
-            isUsernameError = false
-            stateWrapper.onReceive()
-        },
-        trailingIcon = {
-            if (isUsernameError) Icon(
-                Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error
-            )
-        })
-    return username.text
 }

@@ -22,11 +22,11 @@ import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.LoginState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.EmailTextField
+import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.ErrorScreen
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
-import student.testing.system.presentation.ui.components.PasswordTextField
+import student.testing.system.presentation.ui.components.passwordTextField
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
 @Composable
@@ -68,13 +68,13 @@ fun LoginScreen() {
             )
             val isEmailError = loginStateWrapper.uiState is AuthState.EmailError
             val isPasswordError = loginStateWrapper.uiState is AuthState.PasswordError
-            val email = EmailTextField(
+            val email = emailTextField(
                 onReceiveListener = loginStateWrapper,
                 contentState = contentState.emailContentState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (loginStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
-            val password = PasswordTextField(
+            val password = passwordTextField(
                 onReceiveListener = loginStateWrapper,
                 contentState.passwordContentState,
                 isPasswordError = isPasswordError,

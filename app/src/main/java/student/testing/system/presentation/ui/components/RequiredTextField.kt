@@ -18,26 +18,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import student.testing.system.R
-import student.testing.system.presentation.ui.models.EmailContentState
-import student.testing.system.presentation.ui.stateWrapper.OnReceiveListener
+import student.testing.system.domain.states.SignUpState
+import student.testing.system.models.PrivateUser
+import student.testing.system.presentation.ui.models.RequiredFieldContentState
+import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 
 @Composable
-fun emailTextField(
-    onReceiveListener: OnReceiveListener,
-    contentState: EmailContentState,
-    isEmailError: Boolean,
-    @StringRes errorText: Int
+fun requiredTextField(
+    stateWrapper: StateWrapper<SignUpState<PrivateUser>>,
+    contentState: RequiredFieldContentState,
+    isError: Boolean,
+    @StringRes errorText: Int,
+    @StringRes hint: Int
 ): String {
-    var isEmailError = isEmailError
-    var email by remember { mutableStateOf(TextFieldValue(contentState.email)) }
-    OutlinedTextField(
-        value = email,
+    var localIsError = isError
+    var fieldValue by remember { mutableStateOf(TextFieldValue(contentState.fieldValue)) }
+    OutlinedTextField(value = fieldValue,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        label = { Text(stringResource(R.string.e_mail)) },
-        isError = isEmailError,
+        label = { Text(stringResource(hint)) },
+        isError = localIsError,
         supportingText = {
-            if (isEmailError) {
+            if (localIsError) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(errorText),
@@ -46,15 +47,15 @@ fun emailTextField(
             }
         },
         onValueChange = {
-            email = it
-            contentState.email = it.text
-            isEmailError = false
-            onReceiveListener.onReceive()
+            fieldValue = it
+            contentState.fieldValue = it.text
+            localIsError = false
+            stateWrapper.onReceive()
         },
         trailingIcon = {
-            if (isEmailError) Icon(
+            if (localIsError) Icon(
                 Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error
             )
         })
-    return email.text
+    return fieldValue.text
 }
