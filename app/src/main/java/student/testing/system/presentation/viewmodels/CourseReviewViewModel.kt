@@ -9,10 +9,7 @@ import student.testing.system.presentation.navigation.Destination
 import javax.inject.Inject
 
 @HiltViewModel
-class CourseReviewViewModel @Inject constructor(
-    appNavigator: AppNavigator,
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
+class CourseReviewViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     val course: CourseResponse =
         checkNotNull(savedStateHandle[Destination.CourseReviewScreen.COURSE_KEY])

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.CustomType
 import student.testing.system.presentation.navigation.Destination
+import student.testing.system.presentation.navigation.Destination.CourseReviewScreen.COURSE_KEY
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.NavigationIntent
 import student.testing.system.presentation.navigation.composable
@@ -38,10 +39,16 @@ fun LaunchScreen() {
             composable(destination = Destination.CoursesScreen) { CoursesScreen() }
             composable(
                 destination = Destination.CourseReviewScreen,
-                arguments = listOf(navArgument("course") {
+                arguments = listOf(navArgument(COURSE_KEY) {
                     type = CustomType(CourseResponse::class)
                 })
             ) { CourseReviewScreen() }
+            composable(
+                destination = Destination.TestCreationScreen,
+                arguments = listOf(navArgument(COURSE_KEY) {
+                    type = CustomType(CourseResponse::class)
+                })
+            ) { TestCreationScreen() }
         }
     }
 }

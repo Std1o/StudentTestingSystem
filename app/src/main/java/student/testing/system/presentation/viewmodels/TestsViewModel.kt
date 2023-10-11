@@ -11,10 +11,13 @@ import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
 import student.testing.system.domain.states.OperationState
+import student.testing.system.models.CourseResponse
 import student.testing.system.models.Question
 import student.testing.system.models.Test
 import student.testing.system.models.TestCreationReq
 import student.testing.system.models.TestResult
+import student.testing.system.presentation.navigation.AppNavigator
+import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.TestsContentState
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -22,8 +25,9 @@ import kotlin.properties.Delegates
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestsViewModel @Inject constructor(
+    val appNavigator: AppNavigator,
     private val repository: MainRepository,
-    private val getResultUseCase: GetResultUseCase
+    private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
 
     private val _contentState = MutableStateFlow(TestsContentState())
@@ -44,6 +48,10 @@ class TestsViewModel @Inject constructor(
                 contentStateVar = contentStateVar.copy(tests = it)
             }
         }
+    }
+
+    fun onAddBtnClicked(course: CourseResponse) {
+        appNavigator.tryNavigateTo(Destination.TestCreationScreen(course = course))
     }
 
     // TODO мб переместить в TestCreationViewModel

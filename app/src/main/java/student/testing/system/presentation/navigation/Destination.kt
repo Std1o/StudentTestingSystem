@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import com.google.gson.Gson
 import student.testing.system.R
 import student.testing.system.models.CourseResponse
+import student.testing.system.presentation.navigation.Destination.CourseReviewScreen.COURSE_KEY
 
 sealed class Destination(
     protected val route: String,
@@ -49,13 +50,24 @@ sealed class Destination(
         }
     }
 
-    object TestsScreen : BottomNavigationDestination("tests", R.string.tests, R.drawable.ic_tests)
+    data object TestsScreen : BottomNavigationDestination(
+        route = "tests",
+        stringRes = R.string.tests,
+        drawableId = R.drawable.ic_tests
+    )
 
-    object ParticipantsScreen : BottomNavigationDestination(
+    data object ParticipantsScreen : BottomNavigationDestination(
         "participants",
         R.string.participants,
         R.drawable.ic_users
     )
+
+    data object TestCreationScreen : Destination("test_creation", params = arrayOf(COURSE_KEY)) {
+        operator fun invoke(course: CourseResponse): String {
+            val courseJson = Gson().toJson(course)
+            return route.appendParams(COURSE_KEY to courseJson)
+        }
+    }
 }
 
 internal fun String.appendParams(vararg params: Pair<String, Any?>): String {

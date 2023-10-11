@@ -43,8 +43,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.common.AccountSession
 import student.testing.system.common.iTems
-import student.testing.system.common.showSnackbar
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
@@ -66,19 +66,26 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     testsVM.courseId = course.id
     val contentState by testsVM.contentState.collectAsState()
     val context = LocalContext.current as? Activity
+    val currentParticipant = course.participants
+        .first { it.userId == AccountSession.instance.userId }
+    val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
     Surface {
         Scaffold(
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState)
             },
             floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { },
-                    shape = CircleShape,
-                    backgroundColor = Color.White,
-                    modifier = Modifier.padding(bottom = 10.dp, end = 4.dp)
-                ) {
-                    Icon(Icons.Filled.Add, "")
+                if (isUserModerator) {
+                    FloatingActionButton(
+                        onClick = {
+                            testsVM.onAddBtnClicked(course)
+                        },
+                        shape = CircleShape,
+                        backgroundColor = Color.White,
+                        modifier = Modifier.padding(bottom = 10.dp, end = 4.dp)
+                    ) {
+                        Icon(Icons.Filled.Add, "")
+                    }
                 }
             }
         ) { contentPadding ->
