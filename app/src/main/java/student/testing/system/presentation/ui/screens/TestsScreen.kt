@@ -1,6 +1,11 @@
 package student.testing.system.presentation.ui.screens
 
+import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,45 +17,104 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
+import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.iTems
+import student.testing.system.common.showSnackbar
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.CenteredColumn
+import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder
+import student.testing.system.presentation.ui.fragments.TestsFragment
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestsViewModel
 
 @Composable
 fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     val testsVM = hiltViewModel<TestsViewModel>()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val lastOperationStateWrapper by testsVM.lastOperationStateWrapper.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
     testsVM.courseId = course.id
     val contentState by testsVM.contentState.collectAsState()
+    val context = LocalContext.current as? Activity
     Surface {
-        CenteredColumn {
-            Text(text = "Тестыэээ $course")
-            TestsList(
-                isLoading = contentState.tests is LoadableData.Loading,
-                hidden = false,
-                tests = contentState.tests,
-                onClick = {},
-                onLongClick = {})
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { },
+                    shape = CircleShape,
+                    backgroundColor = Color.White,
+                    modifier = Modifier.padding(bottom = 10.dp, end = 4.dp)
+                ) {
+                    Icon(Icons.Filled.Add, "")
+                }
+            }
+        ) { contentPadding ->
+            CenteredColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            ) {
+                val courseCodeWasCopied = stringResource(R.string.course_code_copied)
+                Text(
+                    text = stringResource(R.string.course_code, course.courseCode),
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .clickable {
+                            val clipboard =
+                                context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip =
+                                ClipData.newPlainText(TestsFragment.COURSE_CODE, course.courseCode);
+                            clipboard.setPrimaryClip(clip)
+                            scope.launch {
+                                snackbarHostState.showSnackbar(courseCodeWasCopied)
+                            }
+                        },
+                    textAlign = TextAlign.Center,
+                    color = Color.Black
+                )
+                TestsList(
+                    isLoading = contentState.tests is LoadableData.Loading,
+                    hidden = false,
+                    tests = contentState.tests,
+                    onClick = {},
+                    onLongClick = {})
+            }
         }
     }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
 }
 
 @OptIn(NotScreenState::class, ExperimentalFoundationApi::class)
