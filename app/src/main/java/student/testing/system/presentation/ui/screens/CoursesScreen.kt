@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
@@ -55,9 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material3.placeholder
-import com.google.accompanist.placeholder.material3.shimmer
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
@@ -75,6 +73,8 @@ import student.testing.system.presentation.ui.components.ErrorScreen
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
+import student.testing.system.presentation.ui.components.Shimmer
+import student.testing.system.presentation.ui.components.placeholder.placeholder
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
 @OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -350,10 +350,7 @@ fun CoursesList(
                     .height(150.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
-                    .placeholder(
-                        visible = isLoading,
-                        highlight = PlaceholderHighlight.shimmer(),
-                    )
+                    .placeholder(isLoading, Shimmer())
                     .combinedClickable(
                         onClick = { onClick(course) },
                         onLongClick = { onLongClick(course) },
