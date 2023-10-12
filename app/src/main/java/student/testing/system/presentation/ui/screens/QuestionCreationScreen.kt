@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
@@ -18,6 +20,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -34,12 +37,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.common.iTems
 import student.testing.system.domain.addQuestion.QuestionState
+import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
@@ -63,76 +68,88 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                     onClick = { showAnswerAddingCreatingDialog = true },
                     shape = CircleShape,
                     backgroundColor = Color.White,
-                    modifier = Modifier.padding(bottom = 10.dp, end = 4.dp)
+                    modifier = Modifier.padding(bottom = 60.dp, end = 4.dp)
                 ) {
                     Icon(Icons.Filled.Add, "")
                 }
             }
         ) { contentPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
-            ) {
-                Text(text = "Создание вопроса: ${course.courseCode}")
-                val question = requiredTextField(
-                    onReceiveListener = questionStateWrapper,
-                    contentState = contentState.questionContentState,
-                    isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
-                    errorText = R.string.error_empty_field,
-                    hint = R.string.input_question
-                )
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    iTems(contentState.answers, key = { it }) { answer ->
-                        val shape = RoundedCornerShape(5.dp)
-                        Card(
-                            elevation = 10.dp,
-                            shape = shape,
-                            modifier = Modifier
-                                .animateItemPlacement()
-                                .padding(vertical = 10.dp, horizontal = 16.dp)
-                                .fillMaxWidth()
-                        ) {
-                            Box(
+            Box(modifier = Modifier.fillMaxSize()) {
+                CenteredColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding)
+                ) {
+                    val question = requiredTextField(
+                        modifier = Modifier.padding(top = 30.dp),
+                        onReceiveListener = questionStateWrapper,
+                        contentState = contentState.questionContentState,
+                        isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
+                        errorText = R.string.error_empty_field,
+                        hint = R.string.input_question,
+                    )
+                    Text(text = stringResource(R.string.questions), fontSize = 16.sp)
+                    LazyColumn(modifier = Modifier.fillMaxSize().padding(bottom = 70.dp)) {
+                        iTems(contentState.answers, key = { it }) { answer ->
+                            val shape = RoundedCornerShape(5.dp)
+                            Card(
+                                elevation = 10.dp,
+                                shape = shape,
                                 modifier = Modifier
-                                    .clip(shape)
-                                    .combinedClickable(
-                                        onClick = { },
-                                        onLongClick = { },
-                                    )
+                                    .animateItemPlacement()
+                                    .padding(vertical = 10.dp, horizontal = 16.dp)
+                                    .fillMaxWidth()
                             ) {
-                                var checked by remember { mutableStateOf(answer.isRight) }
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
+                                Box(
                                     modifier = Modifier
-                                        .toggleable(
-                                            value = checked,
-                                            role = Role.Checkbox,
-                                            onValueChange = {
-                                                checked = !checked
-                                                answer.isRight = checked
-                                            }
+                                        .clip(shape)
+                                        .combinedClickable(
+                                            onClick = { },
+                                            onLongClick = { },
                                         )
-                                        .padding(16.dp)
-                                        .fillMaxWidth()
                                 ) {
-                                    Checkbox(
-                                        checked = checked,
-                                        onCheckedChange = { isRight ->
-                                            answer.isRight = isRight
-                                        })
-                                    Text(
-                                        text = answer.answer, modifier = Modifier
-                                            .padding(start = 10.dp)
-                                            .weight(1f),
-                                        fontSize = 14.sp,
-                                        color = Color.DarkGray
-                                    )
+                                    var checked by remember { mutableStateOf(answer.isRight) }
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier
+                                            .toggleable(
+                                                value = checked,
+                                                role = Role.Checkbox,
+                                                onValueChange = {
+                                                    checked = !checked
+                                                    answer.isRight = checked
+                                                }
+                                            )
+                                            .padding(8.dp)
+                                            .fillMaxWidth()
+                                    ) {
+                                        Checkbox(
+                                            checked = checked,
+                                            onCheckedChange = { isRight ->
+                                                answer.isRight = isRight
+                                            })
+                                        Text(
+                                            text = answer.answer, modifier = Modifier
+                                                .padding(start = 10.dp)
+                                                .weight(1f),
+                                            fontSize = 14.sp,
+                                            color = Color.DarkGray
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                Button(
+                    onClick = {
+                       // viewModel.signUp(email = email, username = username, password = password)
+                    }, modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 20.dp)
+                        .height(45.dp)
+                        .width(200.dp)
+                ) { androidx.compose.material3.Text(stringResource(R.string.save)) }
             }
         }
 
