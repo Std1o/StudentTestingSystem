@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,6 +32,7 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
+import student.testing.system.presentation.ui.components.Avatar
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder
@@ -70,14 +73,17 @@ fun ParticipantsList(
                         .clickable { onClick(participant) }
                 ) {
                     Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
-                        Text(
-                            text = participant.username,
-                            modifier = Modifier
-                                .widthIn(min = 60.dp)
-                                .clip(CircleShape),
-                            fontSize = 14.sp,
-                            color = Purple700
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Avatar(participant.username)
+                            Text(
+                                text = participant.username,
+                                modifier = Modifier
+                                    .widthIn(min = 60.dp)
+                                    .clip(CircleShape),
+                                fontSize = 16.sp,
+                                color = Color.DarkGray,
+                            )
+                        }
                         Text(
                             text = participant.email,
                             modifier = Modifier
