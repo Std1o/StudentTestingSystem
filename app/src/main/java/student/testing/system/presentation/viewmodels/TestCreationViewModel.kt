@@ -37,6 +37,7 @@ class TestCreationViewModel @Inject constructor(
     val questionStateWrapper = _questionStateWrapper.asStateFlow()
 
     var questionCreationContentState by mutableStateOf(QuestionCreationContentState())
+        private set
     var testCreationContentState by mutableStateOf(TestCreationContentState())
 
     fun setCourse(course: CourseResponse) {
@@ -56,7 +57,9 @@ class TestCreationViewModel @Inject constructor(
         if (answerStr.isEmpty()) return R.string.error_empty_field
         val answer = Answer(answerStr, false)
         if (questionCreationContentState.answers.contains(answer)) return R.string.duplicate_element
-        questionCreationContentState.answers.add(answer)
+        questionCreationContentState = questionCreationContentState.copy(
+            answers = listOf(*questionCreationContentState.answers.toTypedArray(), answer)
+        )
         return 0
     }
 
@@ -67,5 +70,8 @@ class TestCreationViewModel @Inject constructor(
             testCreationContentState.questions += question
         }
         _questionStateWrapper.value = QuestionStateWrapper(state)
+        if (state is QuestionState.QuestionSuccess) {
+            appNavigator.tryNavigateBack(Destination.TestCreationScreen.fullRoute)
+        }
     }
 }

@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -74,13 +75,21 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                 }
             }
         ) { contentPadding ->
+            lateinit var question: String
+            if (questionStateWrapper.uiState is QuestionState.NoCorrectAnswers) {
+                val text = stringResource(R.string.error_select_answers)
+                LaunchedEffect(Unit) {
+                    snackbarHostState.showSnackbar(text)
+                    questionStateWrapper.onReceive()
+                }
+            }
             Box(modifier = Modifier.fillMaxSize()) {
                 CenteredColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(contentPadding)
                 ) {
-                    val question = requiredTextField(
+                    question = requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
                         onReceiveListener = questionStateWrapper,
                         contentState = contentState.questionContentState,
@@ -89,7 +98,10 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                         hint = R.string.input_question,
                     )
                     Text(text = stringResource(R.string.questions), fontSize = 16.sp)
-                    LazyColumn(modifier = Modifier.fillMaxSize().padding(bottom = 70.dp)) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 70.dp)) {
                         iTems(contentState.answers, key = { it }) { answer ->
                             val shape = RoundedCornerShape(5.dp)
                             Card(
@@ -143,7 +155,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                 }
                 Button(
                     onClick = {
-                       // viewModel.signUp(email = email, username = username, password = password)
+                        parentViewModel.addQuestion(question)
                     }, modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 20.dp)
