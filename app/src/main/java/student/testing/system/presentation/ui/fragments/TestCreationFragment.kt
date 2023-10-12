@@ -45,9 +45,9 @@ class TestCreationFragment : Fragment(R.layout.fragment_test_creation) {
         binding.btnAdd.setOnClickListener() {
             findNavController().navigate(R.id.action_testCreationFragment_to_questionCreationFragment)
         }
-        viewModel.questionsFlow.distinctUntilChanged().onEach {
-            adapter.submitData(it)
-        }.launchWhenStartedCollect(lifecycleScope)
+//        viewModel.questionsFlow.distinctUntilChanged().onEach {
+//            adapter.submitData(it)
+//        }.launchWhenStartedCollect(lifecycleScope)
         binding.btnPublish.setOnClickListener {
             sharedViewModel.courseFlow.onEach {
                 createTest(it.id)

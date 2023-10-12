@@ -26,6 +26,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,7 +40,6 @@ import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.common.iTems
 import student.testing.system.domain.addQuestion.QuestionState
-import student.testing.system.domain.states.SignUpState
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
@@ -50,7 +50,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
     val course by parentViewModel.courseFlow.collectAsState()
     val questionStateWrapper by parentViewModel.questionStateWrapper.collectAsState()
-    val answers by parentViewModel.answersFlow.collectAsState()
+    val contentState = parentViewModel.questionCreationContentState
     var showAnswerAddingCreatingDialog by remember { mutableStateOf(false) }
     var showAnswerFieldError by remember { mutableStateOf(false) }
     Surface {
@@ -75,15 +75,15 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                     .padding(contentPadding)
             ) {
                 Text(text = "Создание вопроса: ${course.courseCode}")
-//                val question = requiredTextField(
-//                    onReceiveListener = questionStateWrapper,
-//                    contentState = contentState.nameContentState,
-//                    isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
-//                    errorText = R.string.error_empty_field,
-//                    hint = R.string.input_question
-//                )
+                val question = requiredTextField(
+                    onReceiveListener = questionStateWrapper,
+                    contentState = contentState.questionContentState,
+                    isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
+                    errorText = R.string.error_empty_field,
+                    hint = R.string.input_question
+                )
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    iTems(answers, key = { it }) { answer ->
+                    iTems(contentState.answers, key = { it }) { answer ->
                         val shape = RoundedCornerShape(5.dp)
                         Card(
                             elevation = 10.dp,
@@ -101,24 +101,30 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                                         onLongClick = { },
                                     )
                             ) {
-                                var checked by remember { mutableStateOf(false) }
+                                var checked by remember { mutableStateOf(answer.isRight) }
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
                                         .toggleable(
                                             value = checked,
                                             role = Role.Checkbox,
-                                            onValueChange = { checked = !checked }
+                                            onValueChange = {
+                                                checked = !checked
+                                                answer.isRight = checked
+                                            }
                                         )
                                         .padding(16.dp)
                                         .fillMaxWidth()
                                 ) {
-                                    Checkbox(checked = checked, onCheckedChange = null)
+                                    Checkbox(
+                                        checked = checked,
+                                        onCheckedChange = { isRight ->
+                                            answer.isRight = isRight
+                                        })
                                     Text(
                                         text = answer.answer, modifier = Modifier
                                             .padding(start = 10.dp)
-                                            .weight(1f)
-                                            .clip(CircleShape),
+                                            .weight(1f),
                                         fontSize = 14.sp,
                                         color = Color.DarkGray
                                     )
@@ -130,21 +136,22 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
             }
         }
 
+        var answerError by remember { mutableIntStateOf(0) }
         if (showAnswerAddingCreatingDialog) {
             InputDialog(
                 titleResId = R.string.answer_adding,
                 hintResId = R.string.input_answer,
                 positiveButtonResId = R.string.create,
                 isError = showAnswerFieldError,
-                errorText = R.string.error_empty_field,
+                errorText = answerError,
                 onReceiveListener = questionStateWrapper,
                 onDismiss = {
                     showAnswerAddingCreatingDialog = false
                     showAnswerFieldError = false
                 }
             ) {
-                val isSuccess = parentViewModel.addAnswer(it)
-                if (isSuccess) {
+                answerError = parentViewModel.addAnswer(it)
+                if (answerError == 0) {
                     showAnswerAddingCreatingDialog = false
                     showAnswerFieldError = false
                 } else showAnswerFieldError = true

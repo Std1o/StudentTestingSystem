@@ -34,6 +34,7 @@
     <string name="logout_request">Выйти?</string>
     <string name="error_invalid_email">Неверный формат E-mail</string>
     <string name="error_empty_field">Заполните поле</string>
+    <string name="duplicate_element">Ошибка! Такой элемент уже существует. Дубликаты запрещены.</string>
     <string name="error_empty_course_name">Ошибка! Введите название курса</string>
     <string name="error_empty_course_code">Ошибка! Введите код курса</string>
     <string name="error_empty_answer">Ошибка! Введите ответ</string>

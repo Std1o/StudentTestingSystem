@@ -36,6 +36,7 @@ class CoursesViewModel @Inject constructor(
         StateWrapper.mutableStateFlow<ValidatableOperationState<CourseResponse>>()
     val lastValidationStateWrapper = _lastValidationStateWrapper.asStateFlow()
 
+    // TODO проверить, нужно ли здесь флоу, мб достаточно mutableStateOf()
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState = _contentState.asStateFlow()
 
