@@ -97,7 +97,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                         errorText = R.string.error_empty_field,
                         hint = R.string.input_question,
                     )
-                    Text(text = stringResource(R.string.questions), fontSize = 16.sp)
+                    Text(text = stringResource(R.string.answers), fontSize = 16.sp)
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()

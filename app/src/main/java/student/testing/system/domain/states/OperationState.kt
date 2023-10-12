@@ -11,7 +11,8 @@ import student.testing.system.domain.operationTypes.OperationType
  * or used for some quick actions (show the loader, show the snackbar with an error, navigate to a new screen)
  */
 @FunctionalityState
-sealed interface OperationState<out R> : ValidatableOperationState<R>, AuthState<R> {
+sealed interface OperationState<out R> : ValidatableOperationState<R>, AuthState<R>,
+    TestCreationState<R> {
     data object NoState : OperationState<Nothing>
 
     @NotScreenState

@@ -6,5 +6,6 @@ import student.testing.system.models.Question
 
 @ContentState
 data class TestCreationContentState(
+    val testNameContentState: RequiredFieldContentState = RequiredFieldContentState(),
     val questions: ArrayList<Question> = arrayListOf(),
 )
