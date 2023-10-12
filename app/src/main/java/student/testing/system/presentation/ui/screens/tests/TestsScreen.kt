@@ -52,7 +52,6 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     val course by parentViewModel.courseFlow.collectAsState()
     testsVM.courseId = course.id
     val contentState by testsVM.contentState.collectAsState()
-    val context = LocalContext.current as? Activity
     val currentParticipant = course.participants
         .first { it.userId == AccountSession.instance.userId }
     val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
@@ -83,24 +82,7 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
                     .fillMaxSize()
                     .padding(contentPadding)
             ) {
-                val courseCodeWasCopied = stringResource(R.string.course_code_copied)
-                Text(
-                    text = stringResource(R.string.course_code, course.courseCode),
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .clickable {
-                            val clipboard =
-                                context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clip =
-                                ClipData.newPlainText(TestsFragment.COURSE_CODE, course.courseCode);
-                            clipboard.setPrimaryClip(clip)
-                            scope.launch {
-                                snackbarHostState.showSnackbar(courseCodeWasCopied)
-                            }
-                        },
-                    textAlign = TextAlign.Center,
-                    color = Color.Black
-                )
+                CourseCode(course = course, scope = scope, snackbarHostState = snackbarHostState)
                 TestsList(
                     isLoading = contentState.tests is LoadableData.Loading,
                     hidden = false,
