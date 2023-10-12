@@ -51,7 +51,7 @@ fun SignUpScreen() {
             val isPasswordError = signUpStateWrapper.uiState is AuthState.PasswordError
             val isUsernameError = signUpStateWrapper.uiState is SignUpState.NameError
             val username = requiredTextField(
-                stateWrapper = signUpStateWrapper,
+                onReceiveListener = signUpStateWrapper,
                 contentState = contentState.nameContentState,
                 isError = isUsernameError,
                 errorText = if (isUsernameError) (signUpStateWrapper.uiState as SignUpState.NameError).messageResId else 0,

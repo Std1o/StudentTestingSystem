@@ -4,10 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.domain.addQuestion.AddQuestionUseCase
@@ -44,6 +42,7 @@ class TestCreationViewModel @Inject constructor(
         appNavigator.tryNavigateTo(Destination.QuestionCreationScreen())
     }
 
+    // TODO вынести в ContentState
     private val questions: ArrayList<Question> = arrayListOf()
     val questionsFlow = MutableSharedFlow<ArrayList<Question>>(
         replay = 1,
@@ -51,6 +50,8 @@ class TestCreationViewModel @Inject constructor(
     )
 
     val answersFlow = MutableStateFlow<List<Answer>>(emptyList())
+
+    // TODO вынести в ContentState
     private var answers: List<Answer> = arrayListOf()
         set(value) {
             field = value

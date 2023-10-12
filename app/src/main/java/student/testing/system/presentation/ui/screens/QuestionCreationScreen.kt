@@ -4,11 +4,12 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -17,6 +18,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -27,15 +29,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.common.iTems
-import student.testing.system.presentation.ui.activity.ui.theme.Purple700
+import student.testing.system.domain.addQuestion.QuestionState
+import student.testing.system.domain.states.SignUpState
 import student.testing.system.presentation.ui.components.InputDialog
+import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -69,6 +75,13 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                     .padding(contentPadding)
             ) {
                 Text(text = "Создание вопроса: ${course.courseCode}")
+//                val question = requiredTextField(
+//                    onReceiveListener = questionStateWrapper,
+//                    contentState = contentState.nameContentState,
+//                    isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
+//                    errorText = R.string.error_empty_field,
+//                    hint = R.string.input_question
+//                )
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     iTems(answers, key = { it }) { answer ->
                         val shape = RoundedCornerShape(5.dp)
@@ -88,19 +101,26 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                                         onLongClick = { },
                                     )
                             ) {
-                                Column(
-                                    modifier = Modifier.padding(
-                                        vertical = 8.dp,
-                                        horizontal = 16.dp
-                                    )
+                                var checked by remember { mutableStateOf(false) }
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .toggleable(
+                                            value = checked,
+                                            role = Role.Checkbox,
+                                            onValueChange = { checked = !checked }
+                                        )
+                                        .padding(16.dp)
+                                        .fillMaxWidth()
                                 ) {
+                                    Checkbox(checked = checked, onCheckedChange = null)
                                     Text(
-                                        text = answer.answer,
-                                        modifier = Modifier
-                                            .widthIn(min = 60.dp)
+                                        text = answer.answer, modifier = Modifier
+                                            .padding(start = 10.dp)
+                                            .weight(1f)
                                             .clip(CircleShape),
                                         fontSize = 14.sp,
-                                        color = Purple700
+                                        color = Color.DarkGray
                                     )
                                 }
                             }

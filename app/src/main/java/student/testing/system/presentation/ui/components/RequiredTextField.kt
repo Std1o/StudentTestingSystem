@@ -18,14 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import student.testing.system.domain.states.SignUpState
-import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.ui.models.RequiredFieldContentState
-import student.testing.system.presentation.ui.stateWrapper.StateWrapper
+import student.testing.system.presentation.ui.stateWrapper.OnReceiveListener
 
 @Composable
 fun requiredTextField(
-    stateWrapper: StateWrapper<SignUpState<PrivateUser>>,
+    onReceiveListener: OnReceiveListener,
     contentState: RequiredFieldContentState,
     isError: Boolean,
     @StringRes errorText: Int,
@@ -50,7 +48,7 @@ fun requiredTextField(
             fieldValue = it
             contentState.fieldValue = it.text
             localIsError = false
-            stateWrapper.onReceive()
+            onReceiveListener.onReceive()
         },
         trailingIcon = {
             if (localIsError) Icon(
