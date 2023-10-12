@@ -57,14 +57,14 @@ class TestCreationFragment : Fragment(R.layout.fragment_test_creation) {
 
     private fun createTest(courseId: Int) {
         if (!binding.etName.isNotEmpty()) return
-        testsViewModel.createTest(
-            courseId,
-            binding.etName.text.trimString(),
-            Date().formatToString("yyyy-MM-dd")!!,
-            adapter.dataList
-        ).subscribeInUI(this, binding.progressBar) {
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_TEST, it)
-            requireActivity().onBackPressed()
-        }
+//        testsViewModel.createTest(
+//            courseId,
+//            binding.etName.text.trimString(),
+//            Date().formatToString("yyyy-MM-dd")!!,
+//            adapter.dataList
+//        ).subscribeInUI(this, binding.progressBar) {
+//            findNavController().previousBackStackEntry?.savedStateHandle?.set(ARG_TEST, it)
+//            requireActivity().onBackPressed()
+//        }
     }
 }

@@ -69,29 +69,16 @@ class TestsViewModel @Inject constructor(
         )
     }
 
-    // TODO мб переместить в TestCreationViewModel
-    fun createTest(
-        courseId: Int,
-        name: String,
-        creationTIme: String,
-        questions: List<Question>
-    ): StateFlow<OperationState<Test>> {
-        val stateFlow = MutableStateFlow<OperationState<Test>>(OperationState.Loading())
+    @OptIn(NotScreenState::class)
+    fun deleteTest(testId: Int, courseId: Int) {
         viewModelScope.launch {
-            val requestResult = repository
-                .createTest(TestCreationReq(courseId, name, creationTIme, questions))
-            stateFlow.emit(requestResult)
+            executeEmptyOperation({ repository.deleteTest(testId = testId, courseId = courseId) }) {
+                val newTests = (contentStateVar.tests as LoadableData.Success)
+                    .data.filter { it.id != testId }
+                contentStateVar =
+                    contentStateVar.copy(tests = LoadableData.Success(newTests))
+            }.protect()
         }
-        return stateFlow
-    }
-
-    fun deleteTest(testId: Int, courseId: Int): StateFlow<OperationState<Int>> {
-        val stateFlow = MutableStateFlow<OperationState<Int>>(OperationState.Loading())
-        viewModelScope.launch {
-            val requestResult = makeOperation(repository.deleteTest(testId, courseId), testId)
-            stateFlow.emit(requestResult)
-        }
-        return stateFlow
     }
 
     fun getResult(testId: Int, courseId: Int): StateFlow<ResultState<TestResult>> {

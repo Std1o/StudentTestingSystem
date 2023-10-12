@@ -30,8 +30,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -41,7 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
@@ -51,6 +52,7 @@ import student.testing.system.domain.states.LoadableData
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.CenteredColumn
+import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder
@@ -71,6 +73,7 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     val currentParticipant = course.participants
         .first { it.userId == AccountSession.instance.userId }
     val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
+    var deletingTestId by remember { mutableStateOf<Int?>(null) }
 
     Surface {
         Scaffold(
@@ -120,8 +123,18 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
                     hidden = false,
                     tests = contentState.tests,
                     onClick = {},
-                    onLongClick = {})
+                    onLongClick = { deletingTestId = it.id })
             }
+        }
+        deletingTestId?.let {
+            ConfirmationDialog(
+                onDismissRequest = { deletingTestId = null },
+                onConfirmation = {
+                    testsVM.deleteTest(testId = it, courseId = course.id)
+                    deletingTestId = null
+                },
+                dialogText = stringResource(id = R.string.delete_request)
+            )
         }
     }
     LaunchedEffect(key1 = Unit) {

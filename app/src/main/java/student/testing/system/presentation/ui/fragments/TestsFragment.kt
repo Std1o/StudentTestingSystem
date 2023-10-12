@@ -142,14 +142,14 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
     // Testing of OperationTypes
     @OptIn(NotScreenState::class)
     private fun deleteTest(testId: Int, courseId: Int) {
-        viewModel.deleteTest(testId, courseId).onEach {
-            binding.progressBar.isVisible = it is OperationState.Loading
-            if (it is OperationState.Success) {
-                println(it.operationType)
-                testsAdapter.deleteById(testId)
-            } else if (it is OperationState.Error) {
-                showSnackbar(it.exception)
-            }
-        }.launchWhenStartedCollect(lifecycleScope)
+//        viewModel.deleteTest(testId, courseId).onEach {
+//            binding.progressBar.isVisible = it is OperationState.Loading
+//            if (it is OperationState.Success) {
+//                println(it.operationType)
+//                testsAdapter.deleteById(testId)
+//            } else if (it is OperationState.Error) {
+//                showSnackbar(it.exception)
+//            }
+//        }.launchWhenStartedCollect(lifecycleScope)
     }
 }
