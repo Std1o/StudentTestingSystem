@@ -40,6 +40,7 @@ import student.testing.system.common.iTems
 import student.testing.system.domain.states.TestCreationState
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.CenteredColumn
+import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
 
@@ -47,6 +48,7 @@ import student.testing.system.presentation.viewmodels.TestCreationViewModel
 @Composable
 fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val lastOperationStateWrapper by parentViewModel.lastOperationStateWrapper.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
     val testStateWrapper by parentViewModel.testStateWrapper.collectAsState()
     val contentState = parentViewModel.testCreationContentState
@@ -135,4 +137,5 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
             }
         }
     }
+    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
 }

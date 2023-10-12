@@ -7,13 +7,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.formatToString
 import student.testing.system.domain.CreateTestUseCase
 import student.testing.system.domain.addQuestion.AddQuestionUseCase
 import student.testing.system.domain.addQuestion.QuestionState
+import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.TestCreationState
 import student.testing.system.models.Answer
 import student.testing.system.models.CourseResponse
@@ -86,6 +87,7 @@ class TestCreationViewModel @Inject constructor(
         }
     }
 
+    @OptIn(NotScreenState::class)
     fun createTest(courseId: Int) {
         viewModelScope.launch {
             val requestResult = executeOperation({
@@ -100,6 +102,10 @@ class TestCreationViewModel @Inject constructor(
             }, Test::class)
             println(requestResult)
             _testStateWrapper.value = StateWrapper(requestResult)
+            if (requestResult is OperationState.Success) {
+                _testStateWrapper.value =
+                    StateWrapper(TestCreationState.ReadyForPublication(requestResult.data))
+            }
         }
     }
 }
