@@ -42,6 +42,10 @@ fun CourseReviewScreen() {
     val sharedViewModel = navBackStackEntry
         ?.viewModelScopedTo<CourseSharedViewModel>(navController, Destination.TestsScreen.fullRoute)
     sharedViewModel?.setCourse(viewModel.course)
+    NavigationEffects(
+        navigationChannel = viewModel.navigationChannel,
+        navHostController = navController
+    )
     Scaffold(
         bottomBar = {
             BottomNavigation(backgroundColor = Color.White) {
@@ -93,6 +97,11 @@ fun CourseReviewScreen() {
             }
             composable(Destination.ParticipantsScreen) {
                 ParticipantsScreen(sharedViewModel ?: throw NullSharedViewModelException())
+            }
+            composable(destination = Destination.TestCreationHostScreen) {
+                TestCreationHostScreen(
+                    sharedViewModel ?: throw NullSharedViewModelException()
+                )
             }
         }
     }

@@ -98,6 +98,11 @@ object AppModule {
 
     @Singleton
     @Provides
+    @Named("CourseReviewNavigation")
+    fun provideCourseReviewNavigation() = AppNavigatorImpl() as AppNavigator
+
+    @Singleton
+    @Provides
     @Named("TestCreationNavigation")
     fun provideTestCreationNavigation() = AppNavigatorImpl() as AppNavigator
 }

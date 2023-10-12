@@ -26,7 +26,7 @@ import kotlin.properties.Delegates
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestsViewModel @Inject constructor(
-    @Named("LaunchNavigation") private val appNavigator: AppNavigator,
+    @Named("CourseReviewNavigation") private val appNavigator: AppNavigator,
     private val repository: MainRepository,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {

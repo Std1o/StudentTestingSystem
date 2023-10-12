@@ -43,12 +43,6 @@ fun LaunchScreen() {
                     type = CustomType(CourseResponse::class)
                 })
             ) { CourseReviewScreen() }
-            composable(
-                destination = Destination.TestCreationHostScreen,
-                arguments = listOf(navArgument(COURSE_KEY) {
-                    type = CustomType(CourseResponse::class)
-                })
-            ) { TestCreationHostScreen() }
         }
     }
 }

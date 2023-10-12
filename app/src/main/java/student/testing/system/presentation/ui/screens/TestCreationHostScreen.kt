@@ -1,24 +1,26 @@
 package student.testing.system.presentation.ui.screens
 
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import student.testing.system.common.NullSharedViewModelException
 import student.testing.system.common.viewModelScopedTo
+import student.testing.system.domain.states.TestCreationState
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
-import student.testing.system.presentation.ui.components.CenteredColumn
+import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestCreationHostViewModel
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
 
 @Composable
-fun TestCreationHostScreen() {
+fun TestCreationHostScreen(parentViewModel: CourseSharedViewModel) {
     val viewModel = hiltViewModel<TestCreationHostViewModel>()
+    val course by parentViewModel.courseFlow.collectAsState()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val sharedViewModel = navBackStackEntry
@@ -26,7 +28,13 @@ fun TestCreationHostScreen() {
             navController,
             Destination.TestCreationScreen.fullRoute
         )
-    sharedViewModel?.setCourse(viewModel.course)
+    sharedViewModel?.setCourse(course)
+    val testStateWrapper = sharedViewModel?.testStateWrapper?.collectAsState()
+    testStateWrapper?.value?.uiState?.let {
+        if (it is TestCreationState.ReadyForPublication) {
+            viewModel.navigateBack()
+        }
+    }
 
     NavigationEffects(
         navigationChannel = viewModel.navigationChannel,
