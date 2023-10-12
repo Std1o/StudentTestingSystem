@@ -26,6 +26,7 @@ import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
+import student.testing.system.presentation.ui.screens.tests.TestsScreen
 import student.testing.system.presentation.viewmodels.CourseReviewViewModel
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 
