@@ -42,15 +42,15 @@ class QuestionCreationFragment : Fragment(R.layout.fragment_question_creation) {
             binding.etQuestion.error = null
         }
         binding.btnSave.setOnClickListener {
-            val state = viewModel.addQuestion(Question(binding.etQuestion.text.trimString(), adapter.dataList))
-            if (state is QuestionState.EmptyQuestion) {
-                binding.etQuestion.error = getString(R.string.error_empty_field)
-            } else if (state is QuestionState.NoCorrectAnswers) {
-                showSnackbar(R.string.assign_correct_answers)
-            } else if (state is QuestionState.QuestionSuccess) {
-                requireActivity().onBackPressed()
-                return@setOnClickListener
-            }
+//            val state = viewModel.addQuestion(Question(binding.etQuestion.text.trimString(), adapter.dataList))
+//            if (state is QuestionState.EmptyQuestion) {
+//                binding.etQuestion.error = getString(R.string.error_empty_field)
+//            } else if (state is QuestionState.NoCorrectAnswers) {
+//                showSnackbar(R.string.assign_correct_answers)
+//            } else if (state is QuestionState.QuestionSuccess) {
+//                requireActivity().onBackPressed()
+//                return@setOnClickListener
+//            }
         }
     }
 

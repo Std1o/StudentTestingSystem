@@ -4,15 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.domain.addQuestion.AddQuestionUseCase
 import student.testing.system.domain.addQuestion.QuestionState
+import student.testing.system.models.Answer
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Question
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
+import student.testing.system.presentation.ui.stateWrapper.QuestionStateWrapper
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -24,6 +29,10 @@ class TestCreationViewModel @Inject constructor(
     ViewModel() {
 
     val courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
+
+    private val _questionStateWrapper =
+        QuestionStateWrapper.mutableStateFlow<QuestionState>()
+    val questionStateWrapper = _questionStateWrapper.asStateFlow()
 
     fun setCourse(course: CourseResponse) {
         viewModelScope.launch {
@@ -41,14 +50,31 @@ class TestCreationViewModel @Inject constructor(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
-    fun addQuestion(question: Question): QuestionState {
+    val answersFlow = MutableStateFlow<List<Answer>>(emptyList())
+    private var answers: List<Answer> = arrayListOf()
+        set(value) {
+            field = value
+            answersFlow.value = value
+        }
+
+    /**
+     * @return true if success added
+     */
+    fun addAnswer(answerStr: String): Boolean {
+        if (answerStr.isEmpty()) return false
+        answers = answers.toMutableList().apply {
+            add(Answer(answerStr, false))
+        }
+        return true
+    }
+
+    fun addQuestion(questionStr: String) {
+        val question = Question(questionStr, answers)
         val state = addQuestionUseCase(question)
         if (state is QuestionState.QuestionSuccess) {
             questions += question
-            viewModelScope.launch {
-                questionsFlow.tryEmit(questions)
-            }
+            questionsFlow.tryEmit(questions)
         }
-        return state
+        _questionStateWrapper.value = QuestionStateWrapper(state)
     }
 }

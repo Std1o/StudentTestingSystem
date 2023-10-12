@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Answer(
-    val answer: String,
-    @field:SerializedName("is_right") var isRight: Boolean, val id: Int? = null
-): Parcelable
+    val answer: String = "",
+    @SerializedName("is_right") var isRight: Boolean = false,
+    val id: Int? = null
+) : Parcelable

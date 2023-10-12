@@ -1,7 +1,8 @@
 package student.testing.system.domain.addQuestion
 
 sealed class QuestionState {
-    object QuestionSuccess : QuestionState()
-    object EmptyQuestion : QuestionState()
-    object NoCorrectAnswers : QuestionState()
+    data object NoState : QuestionState()
+    data object QuestionSuccess : QuestionState()
+    data object EmptyQuestion : QuestionState()
+    data object NoCorrectAnswers : QuestionState()
 }
