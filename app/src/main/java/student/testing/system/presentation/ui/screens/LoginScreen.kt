@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package student.testing.system.presentation.ui.screens
 
 import androidx.compose.foundation.clickable

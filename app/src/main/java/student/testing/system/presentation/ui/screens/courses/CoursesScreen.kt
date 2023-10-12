@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens
+package student.testing.system.presentation.ui.screens.courses
 
 import android.app.Activity
 import android.content.Intent
@@ -302,7 +302,7 @@ fun CoursesScreen() {
         }
 
         if (showUserInfoDialog) {
-            AlertDialogExample { showUserInfoDialog = false }
+            AlertUserInfoDialog { showUserInfoDialog = false }
         }
         if (showLogoutDialog) {
             ConfirmationDialog(
@@ -326,83 +326,4 @@ fun CoursesScreen() {
         }
     }
     LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
-}
-
-@OptIn(NotScreenState::class, ExperimentalFoundationApi::class)
-@Composable
-fun CoursesList(
-    isLoading: Boolean,
-    hidden: Boolean,
-    courses: LoadableData<List<CourseResponse>>,
-    onClick: (CourseResponse) -> Unit,
-    onLongClick: (CourseResponse) -> Unit
-) {
-    if (hidden) return
-    val data = (courses as? LoadableData.Success)?.data
-    val fakeCourses = listOf(CourseResponse(id = 0), CourseResponse(id = 1), CourseResponse(id = 2))
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        iTems(data ?: fakeCourses, key = { it }) { course ->
-            Box(
-                modifier = Modifier
-                    .animateItemPlacement()
-                    .padding(vertical = 10.dp, horizontal = 16.dp)
-                    .height(150.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp))
-                    .placeholder(isLoading, Shimmer())
-                    .combinedClickable(
-                        onClick = { onClick(course) },
-                        onLongClick = { onLongClick(course) },
-                    )
-            ) {
-                AsyncImage(
-                    model = "${Constants.BASE_URL}images/${course.img}",
-                    contentDescription = "Translated description of what the image contains",
-                    modifier = Modifier.fillMaxWidth(),
-                    contentScale = ContentScale.FillWidth
-                )
-                Text(
-                    text = course.name,
-                    modifier = Modifier.padding(16.dp),
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    style = TextStyle(
-                        shadow = Shadow(
-                            Color.Black,
-                            Offset(3.0f, 4.95f),
-                            1.0f
-                        )
-                    )
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun AlertDialogExample(onDismissRequest: () -> Unit) {
-    AlertDialog(
-        title = {
-            Text(text = stringResource(R.string.we_remind_you))
-        },
-        text = {
-            val account = AccountSession.instance
-            Text(
-                text = stringResource(
-                    R.string.user_info,
-                    account.username ?: "",
-                    account.email ?: ""
-                )
-            )
-        },
-        onDismissRequest = { onDismissRequest() },
-        confirmButton = {
-            TextButton(
-                onClick = { onDismissRequest() }
-            ) {
-                Text(stringResource(id = R.string.thanks))
-            }
-        },
-        containerColor = Color.White
-    )
 }

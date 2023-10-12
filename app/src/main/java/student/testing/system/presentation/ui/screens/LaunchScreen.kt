@@ -18,6 +18,7 @@ import student.testing.system.presentation.navigation.Destination.CourseReviewSc
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.NavigationIntent
 import student.testing.system.presentation.navigation.composable
+import student.testing.system.presentation.ui.screens.courses.CoursesScreen
 import student.testing.system.presentation.viewmodels.LaunchViewModel
 
 @Composable
