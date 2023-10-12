@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
@@ -69,6 +71,7 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     val currentParticipant = course.participants
         .first { it.userId == AccountSession.instance.userId }
     val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
+
     Surface {
         Scaffold(
             snackbarHost = {
@@ -118,6 +121,13 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
                     tests = contentState.tests,
                     onClick = {},
                     onLongClick = {})
+            }
+        }
+    }
+    LaunchedEffect(key1 = Unit) {
+        scope.launch {
+            parentViewModel.testFlow.collect {
+                testsVM.onTestAdded(it)
             }
         }
     }

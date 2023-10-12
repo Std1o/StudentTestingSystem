@@ -101,7 +101,9 @@ fun CourseReviewScreen() {
             composable(destination = Destination.TestCreationHostScreen) {
                 TestCreationHostScreen(
                     sharedViewModel ?: throw NullSharedViewModelException()
-                )
+                ) {
+                    sharedViewModel.onTestAdded(it)
+                }
             }
         }
     }

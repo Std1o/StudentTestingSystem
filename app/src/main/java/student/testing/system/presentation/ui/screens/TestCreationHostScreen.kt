@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import student.testing.system.common.NullSharedViewModelException
 import student.testing.system.common.viewModelScopedTo
 import student.testing.system.domain.states.TestCreationState
+import student.testing.system.models.Test
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
@@ -18,7 +19,7 @@ import student.testing.system.presentation.viewmodels.TestCreationHostViewModel
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
 
 @Composable
-fun TestCreationHostScreen(parentViewModel: CourseSharedViewModel) {
+fun TestCreationHostScreen(parentViewModel: CourseSharedViewModel, onTestCreated: (Test) -> Unit) {
     val viewModel = hiltViewModel<TestCreationHostViewModel>()
     val course by parentViewModel.courseFlow.collectAsState()
     val navController = rememberNavController()
@@ -32,6 +33,7 @@ fun TestCreationHostScreen(parentViewModel: CourseSharedViewModel) {
     val testStateWrapper = sharedViewModel?.testStateWrapper?.collectAsState()
     testStateWrapper?.value?.uiState?.let {
         if (it is TestCreationState.ReadyForPublication) {
+            onTestCreated(it.test)
             viewModel.navigateBack()
         }
     }

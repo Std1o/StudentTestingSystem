@@ -6,10 +6,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.makeOperation
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
+import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Question
@@ -53,6 +55,18 @@ class TestsViewModel @Inject constructor(
 
     fun navigateToTestCreation(course: CourseResponse) {
         appNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
+    }
+
+    @OptIn(NotScreenState::class)
+    fun onTestAdded(test: Test) {
+        contentStateVar = contentStateVar.copy(
+            tests = LoadableData.Success(
+                listOf(
+                    *(contentStateVar.tests as LoadableData.Success).data.toTypedArray(),
+                    test
+                )
+            )
+        )
     }
 
     // TODO мб переместить в TestCreationViewModel
