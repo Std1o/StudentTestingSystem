@@ -7,16 +7,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.common.makeOperation
+import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
 import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
 import student.testing.system.models.CourseResponse
-import student.testing.system.models.Question
 import student.testing.system.models.Test
-import student.testing.system.models.TestCreationReq
 import student.testing.system.models.TestResult
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
@@ -41,8 +38,18 @@ class TestsViewModel @Inject constructor(
             _contentState.value = value
         }
 
+    lateinit var course: CourseResponse
+
     var courseId: Int by Delegates.observable(-1) { _, oldValue, newValue ->
         if (oldValue != newValue) getTests()
+    }
+
+    private val currentParticipant by lazy {
+        course.participants
+            .first { it.userId == AccountSession.instance.userId }
+    }
+    val isUserModerator by lazy {
+        currentParticipant.isModerator || currentParticipant.isOwner
     }
 
     private fun getTests() {
@@ -81,6 +88,25 @@ class TestsViewModel @Inject constructor(
         }
     }
 
+    fun onTestClicked(test: Test) {
+        if (isUserModerator) {
+            appNavigator.tryNavigateTo(Destination.ResultsReviewScreen())
+        } else {
+            viewModelScope.launch {
+                val requestResult = executeOperationAndIgnoreData({
+                    getResultUseCase(testId = test.id, courseId = test.courseId)
+                })
+                if (requestResult is ResultState.Success) {
+                    appNavigator.tryNavigateTo(Destination.ResultReviewScreen())
+                }
+                if (requestResult is ResultState.NoResult) {
+                    appNavigator.tryNavigateTo(Destination.TestPassingScreen())
+                }
+            }
+        }
+    }
+
+    // TODO remove
     fun getResult(testId: Int, courseId: Int): StateFlow<ResultState<TestResult>> {
         val stateFlow = MutableStateFlow<ResultState<TestResult>>(ResultState.Loading)
         viewModelScope.launch {

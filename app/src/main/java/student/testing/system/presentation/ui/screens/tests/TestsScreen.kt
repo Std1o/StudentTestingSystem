@@ -50,11 +50,9 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     val scope = rememberCoroutineScope()
     val lastOperationStateWrapper by testsVM.lastOperationStateWrapper.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
+    testsVM.course = course
     testsVM.courseId = course.id
     val contentState by testsVM.contentState.collectAsState()
-    val currentParticipant = course.participants
-        .first { it.userId == AccountSession.instance.userId }
-    val isUserModerator = currentParticipant.isModerator || currentParticipant.isOwner
     var deletingTestId by remember { mutableStateOf<Int?>(null) }
 
     Surface {
@@ -63,7 +61,7 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
                 SnackbarHost(hostState = snackbarHostState)
             },
             floatingActionButton = {
-                if (isUserModerator) {
+                if (testsVM.isUserModerator) {
                     FloatingActionButton(
                         onClick = {
                             testsVM.navigateToTestCreation(course)
@@ -87,7 +85,7 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
                     isLoading = contentState.tests is LoadableData.Loading,
                     hidden = false,
                     tests = contentState.tests,
-                    onClick = {},
+                    onClick = { testsVM.onTestClicked(it) },
                     onLongClick = { deletingTestId = it.id })
             }
         }

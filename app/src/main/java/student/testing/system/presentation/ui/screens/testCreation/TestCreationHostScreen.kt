@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens
+package student.testing.system.presentation.ui.screens.testCreation
 
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -14,6 +14,8 @@ import student.testing.system.models.Test
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
+import student.testing.system.presentation.ui.screens.NavigationEffects
+import student.testing.system.presentation.ui.screens.QuestionCreationScreen
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestCreationHostViewModel
 import student.testing.system.presentation.viewmodels.TestCreationViewModel

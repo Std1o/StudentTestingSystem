@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens
+package student.testing.system.presentation.ui.screens.testCreation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable

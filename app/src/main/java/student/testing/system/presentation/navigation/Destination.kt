@@ -32,13 +32,13 @@ sealed class Destination(
         operator fun invoke(): String = route
     }
 
+    // Launch Navigation
+
     data object LoginScreen : NoArgumentsDestination("login")
 
     data object SignUpScreen : NoArgumentsDestination("sign_up")
 
     data object CoursesScreen : NoArgumentsDestination("courses")
-
-    // Course Review
 
     data object CourseReviewScreen :
         Destination("course_review", params = arrayOf("course")) {
@@ -49,6 +49,8 @@ sealed class Destination(
             return route.appendParams(COURSE_KEY to courseJson)
         }
     }
+
+    // Course Review
 
     data object TestsScreen : BottomNavigationDestination(
         route = "tests",
@@ -68,6 +70,14 @@ sealed class Destination(
             return route.appendParams(COURSE_KEY to courseJson)
         }
     }
+
+    data object ResultReviewScreen : NoArgumentsDestination("result_review")
+
+    data object ResultsReviewScreen : NoArgumentsDestination("results_review")
+
+    data object TestPassingScreen : NoArgumentsDestination("test_passing")
+
+    // Test Creation
 
     data object TestCreationScreen : NoArgumentsDestination("test_creation")
     data object QuestionCreationScreen : NoArgumentsDestination("question_creation")

@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package student.testing.system.presentation.ui.screens
 
 import androidx.compose.foundation.layout.padding
@@ -26,6 +24,7 @@ import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
+import student.testing.system.presentation.ui.screens.testCreation.TestCreationHostScreen
 import student.testing.system.presentation.ui.screens.tests.TestsScreen
 import student.testing.system.presentation.viewmodels.CourseReviewViewModel
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
@@ -106,6 +105,9 @@ fun CourseReviewScreen() {
                     sharedViewModel.onTestAdded(it)
                 }
             }
+            composable(Destination.ResultReviewScreen) { ResultReviewScreen() }
+            composable(Destination.ResultsReviewScreen) { ResultsReviewScreen() }
+            composable(Destination.TestPassingScreen) { TestPassingScreen() }
         }
     }
 }
