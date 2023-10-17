@@ -37,6 +37,10 @@ fun CourseReviewScreen() {
         Destination.TestsScreen,
         Destination.ParticipantsScreen,
     )
+    val showBottomBar = navController
+        .currentBackStackEntryAsState().value?.destination?.route in items.map { it.fullRoute }
+
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val sharedViewModel = navBackStackEntry
@@ -48,6 +52,7 @@ fun CourseReviewScreen() {
     )
     Scaffold(
         bottomBar = {
+            if (!showBottomBar) return@Scaffold
             BottomNavigation(backgroundColor = Color.White) {
                 items.forEach { screen ->
                     val selected = currentDestination?.route == screen.fullRoute
