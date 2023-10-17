@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
 import student.testing.system.domain.states.LoginState
@@ -24,7 +25,7 @@ import javax.inject.Named
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val authIfPossibleUseCase: AuthIfPossibleUseCase,
-    @Named("LaunchNavigation") private val appNavigator: AppNavigator
+    @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
     private val _loginStateWrapper =

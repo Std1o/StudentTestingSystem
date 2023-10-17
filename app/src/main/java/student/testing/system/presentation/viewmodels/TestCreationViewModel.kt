@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
 import student.testing.system.common.formatToString
 import student.testing.system.domain.CreateTestUseCase
 import student.testing.system.domain.addQuestion.AddQuestionUseCase
@@ -33,7 +34,7 @@ import javax.inject.Named
 
 @HiltViewModel
 class TestCreationViewModel @Inject constructor(
-    @Named("TestCreationNavigation") private val appNavigator: AppNavigator,
+    @Named(TEST_CREATION_NAVIGATION) private val appNavigator: AppNavigator,
     private val addQuestionUseCase: AddQuestionUseCase,
     private val createTestUseCase: CreateTestUseCase
 ) : StatesViewModel() {

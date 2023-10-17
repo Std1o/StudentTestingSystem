@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
+import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
+import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
@@ -25,8 +27,8 @@ import kotlin.properties.Delegates
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestsViewModel @Inject constructor(
-    @Named("CourseReviewNavigation") private val courseNavigator: AppNavigator,
-    @Named("LaunchNavigation") private val launchNavigator: AppNavigator,
+    @Named(COURSE_REVIEW_NAVIGATION) private val courseNavigator: AppNavigator,
+    @Named(LAUNCH_NAVIGATION) private val launchNavigator: AppNavigator,
     private val repository: MainRepository,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {

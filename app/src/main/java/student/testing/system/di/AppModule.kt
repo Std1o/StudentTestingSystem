@@ -14,10 +14,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import student.testing.system.common.Constants.BASE_URL
+import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
+import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.data.dataSource.RemoteDataSourceImpl
 import student.testing.system.data.MainService
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
+import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
 import student.testing.system.data.repository.MainRepositoryImpl
 import student.testing.system.domain.MainRepository
 import student.testing.system.data.dataSource.RemoteDataSource
@@ -91,20 +94,18 @@ object AppModule {
         sharedPreferences: SharedPreferences
     ) = PrefsUtilsImpl(sharedPreferences) as PrefsUtils
 
-
-    // TODO вынести имена в константы
     @Singleton
     @Provides
-    @Named("LaunchNavigation")
+    @Named(LAUNCH_NAVIGATION)
     fun provideLaunchNavigation() = AppNavigatorImpl() as AppNavigator
 
     @Singleton
     @Provides
-    @Named("CourseReviewNavigation")
+    @Named(COURSE_REVIEW_NAVIGATION)
     fun provideCourseReviewNavigation() = AppNavigatorImpl() as AppNavigator
 
     @Singleton
     @Provides
-    @Named("TestCreationNavigation")
+    @Named(TEST_CREATION_NAVIGATION)
     fun provideTestCreationNavigation() = AppNavigatorImpl() as AppNavigator
 }

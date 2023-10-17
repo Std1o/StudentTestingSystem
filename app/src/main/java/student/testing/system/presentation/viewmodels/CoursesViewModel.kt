@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
+import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
@@ -27,7 +28,7 @@ import javax.inject.Named
 class CoursesViewModel @Inject constructor(
     private val repository: MainRepository,
     private val prefUtils: PrefsUtils,
-    @Named("LaunchNavigation") private val appNavigator: AppNavigator,
+    @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
 ) : StatesViewModel() {

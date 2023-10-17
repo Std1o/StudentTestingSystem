@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.auth.SignUpUseCase
 import student.testing.system.domain.states.LoginState
 import student.testing.system.domain.states.SignUpState
@@ -23,7 +24,7 @@ import javax.inject.Named
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
-    @Named("LaunchNavigation") private val appNavigator: AppNavigator
+    @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
     private val _signUpStateWrapper = StateWrapper.mutableStateFlow<SignUpState<PrivateUser>>()
