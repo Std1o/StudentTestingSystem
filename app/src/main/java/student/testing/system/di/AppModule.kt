@@ -91,6 +91,8 @@ object AppModule {
         sharedPreferences: SharedPreferences
     ) = PrefsUtilsImpl(sharedPreferences) as PrefsUtils
 
+
+    // TODO вынести имена в константы
     @Singleton
     @Provides
     @Named("LaunchNavigation")

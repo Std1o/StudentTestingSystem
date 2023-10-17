@@ -25,7 +25,8 @@ import kotlin.properties.Delegates
 // TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestsViewModel @Inject constructor(
-    @Named("CourseReviewNavigation") private val appNavigator: AppNavigator,
+    @Named("CourseReviewNavigation") private val courseNavigator: AppNavigator,
+    @Named("LaunchNavigation") private val launchNavigator: AppNavigator,
     private val repository: MainRepository,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
@@ -61,7 +62,7 @@ class TestsViewModel @Inject constructor(
     }
 
     fun navigateToTestCreation(course: CourseResponse) {
-        appNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
+        courseNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
     }
 
     @OptIn(NotScreenState::class)
@@ -90,17 +91,17 @@ class TestsViewModel @Inject constructor(
 
     fun onTestClicked(test: Test) {
         if (isUserModerator) {
-            appNavigator.tryNavigateTo(Destination.ResultsReviewScreen())
+            launchNavigator.tryNavigateTo(Destination.ResultsReviewScreen())
         } else {
             viewModelScope.launch {
                 val requestResult = executeOperationAndIgnoreData({
                     getResultUseCase(testId = test.id, courseId = test.courseId)
                 })
                 if (requestResult is ResultState.Success) {
-                    appNavigator.tryNavigateTo(Destination.ResultReviewScreen())
+                    launchNavigator.tryNavigateTo(Destination.ResultReviewScreen())
                 }
                 if (requestResult is ResultState.NoResult) {
-                    appNavigator.tryNavigateTo(Destination.TestPassingScreen())
+                    launchNavigator.tryNavigateTo(Destination.TestPassingScreen())
                 }
             }
         }
