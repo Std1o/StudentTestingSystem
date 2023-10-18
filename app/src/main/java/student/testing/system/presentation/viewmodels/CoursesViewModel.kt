@@ -3,7 +3,6 @@ package student.testing.system.presentation.viewmodels
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,7 +17,7 @@ import student.testing.system.domain.usecases.JoinCourseUseCase
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
-import student.testing.system.presentation.ui.models.CoursesContentState
+import student.testing.system.presentation.ui.models.contentState.CoursesContentState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject

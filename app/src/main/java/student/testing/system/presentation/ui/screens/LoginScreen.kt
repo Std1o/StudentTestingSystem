@@ -3,7 +3,6 @@ package student.testing.system.presentation.ui.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -34,7 +33,7 @@ fun LoginScreen() {
     val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val contentState = viewModel.contentState
+    val screenSession = viewModel.screenSession
     var needToHideUI = loginStateWrapper.uiState is LoginState.HiddenUI
     Scaffold(
         snackbarHost = {
@@ -68,13 +67,13 @@ fun LoginScreen() {
             val isPasswordError = loginStateWrapper.uiState is AuthState.PasswordError
             val email = emailTextField(
                 onReceiveListener = loginStateWrapper,
-                contentState = contentState.emailContentState,
+                emailState = screenSession.emailState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (loginStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
             val password = passwordTextField(
                 onReceiveListener = loginStateWrapper,
-                contentState.passwordContentState,
+                screenSession.passwordState,
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (loginStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
             )

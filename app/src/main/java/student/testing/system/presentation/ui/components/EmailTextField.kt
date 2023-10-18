@@ -19,18 +19,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import student.testing.system.R
-import student.testing.system.presentation.ui.models.EmailContentState
+import student.testing.system.presentation.ui.models.screenSession.EmailState
 import student.testing.system.presentation.ui.stateWrapper.OnReceiveListener
 
 @Composable
 fun emailTextField(
     onReceiveListener: OnReceiveListener,
-    contentState: EmailContentState,
+    emailState: EmailState,
     isEmailError: Boolean,
     @StringRes errorText: Int
 ): String {
     var isEmailError = isEmailError
-    var email by remember { mutableStateOf(TextFieldValue(contentState.email)) }
+    var email by remember { mutableStateOf(TextFieldValue(emailState.email)) }
     OutlinedTextField(
         value = email,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -47,7 +47,7 @@ fun emailTextField(
         },
         onValueChange = {
             email = it
-            contentState.email = it.text
+            emailState.email = it.text
             isEmailError = false
             onReceiveListener.onReceive()
         },

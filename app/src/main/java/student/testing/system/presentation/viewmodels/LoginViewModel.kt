@@ -15,7 +15,7 @@ import student.testing.system.domain.states.OperationState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
-import student.testing.system.presentation.ui.models.LoginContentState
+import student.testing.system.presentation.ui.models.screenSession.LoginScreenSession
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
 import javax.inject.Named
@@ -32,7 +32,7 @@ class LoginViewModel @Inject constructor(
         StateWrapper.mutableStateFlow<LoginState<PrivateUser>>(LoginState.HiddenUI)
     val loginStateWrapper = _loginStateWrapper.asStateFlow()
 
-    val contentState by mutableStateOf(LoginContentState())
+    val screenSession by mutableStateOf(LoginScreenSession())
 
     init {
         authIfPossible()

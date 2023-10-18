@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
-import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
@@ -19,7 +18,7 @@ import student.testing.system.models.Test
 import student.testing.system.models.TestResult
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
-import student.testing.system.presentation.ui.models.TestsContentState
+import student.testing.system.presentation.ui.models.contentState.TestsContentState
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.properties.Delegates

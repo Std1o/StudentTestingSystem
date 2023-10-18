@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.models
+package student.testing.system.presentation.ui.models.contentState
 
 import student.testing.system.annotations.ContentState
 import student.testing.system.domain.states.LoadableData

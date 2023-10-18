@@ -3,7 +3,6 @@ package student.testing.system.presentation.ui.screens
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,9 +53,8 @@ import student.testing.system.presentation.viewmodels.TestCreationViewModel
 @Composable
 fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val course by parentViewModel.courseFlow.collectAsState()
     val questionStateWrapper by parentViewModel.questionStateWrapper.collectAsState()
-    val contentState = parentViewModel.questionCreationContentState
+    val screenSession = parentViewModel.questionCreationScreenSession
     var showAnswerAddingCreatingDialog by remember { mutableStateOf(false) }
     var showAnswerFieldError by remember { mutableStateOf(false) }
     Surface {
@@ -92,7 +90,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                     question = requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
                         onReceiveListener = questionStateWrapper,
-                        contentState = contentState.questionContentState,
+                        fieldState = screenSession.questionState,
                         isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
                         errorText = R.string.error_empty_field,
                         hint = R.string.input_question,
@@ -102,7 +100,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(bottom = 70.dp)) {
-                        iTems(contentState.answers, key = { it }) { answer ->
+                        iTems(screenSession.answers, key = { it }) { answer ->
                             val shape = RoundedCornerShape(5.dp)
                             Card(
                                 elevation = 10.dp,

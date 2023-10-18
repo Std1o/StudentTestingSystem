@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -34,7 +33,7 @@ fun SignUpScreen() {
     val signUpStateWrapper by viewModel.signUpStateWrapper.collectAsState()
     val lastOperationState by viewModel.lastOperationStateWrapper.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val contentState = viewModel.contentState
+    val screenSession = viewModel.screenSession
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -50,20 +49,20 @@ fun SignUpScreen() {
             val isUsernameError = signUpStateWrapper.uiState is SignUpState.NameError
             val username = requiredTextField(
                 onReceiveListener = signUpStateWrapper,
-                contentState = contentState.nameContentState,
+                fieldState = screenSession.nameState,
                 isError = isUsernameError,
                 errorText = if (isUsernameError) (signUpStateWrapper.uiState as SignUpState.NameError).messageResId else 0,
                 hint = R.string.name
             )
             val email = emailTextField(
                 onReceiveListener = signUpStateWrapper,
-                contentState = contentState.emailContentState,
+                emailState = screenSession.emailState,
                 isEmailError = isEmailError,
                 errorText = if (isEmailError) (signUpStateWrapper.uiState as AuthState.EmailError).messageResId else 0
             )
             val password = passwordTextField(
                 onReceiveListener = signUpStateWrapper,
-                contentState = contentState.passwordContentState,
+                passwordState = screenSession.passwordState,
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (signUpStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
             )

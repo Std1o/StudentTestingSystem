@@ -24,19 +24,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
-import student.testing.system.presentation.ui.models.PasswordContentState
+import student.testing.system.presentation.ui.models.screenSession.PasswordState
 import student.testing.system.presentation.ui.stateWrapper.OnReceiveListener
 
 @Composable
 fun passwordTextField(
     onReceiveListener: OnReceiveListener,
-    contentState: PasswordContentState,
+    passwordState: PasswordState,
     isPasswordError: Boolean,
     @StringRes errorText: Int
 ): String {
     var isPasswordError = isPasswordError
-    var password by remember { mutableStateOf(TextFieldValue(contentState.password)) }
-    var passwordVisible by remember { mutableStateOf(contentState.isVisible) }
+    var password by remember { mutableStateOf(TextFieldValue(passwordState.password)) }
+    var passwordVisible by remember { mutableStateOf(passwordState.isVisible) }
     OutlinedTextField(
         value = password,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -53,7 +53,7 @@ fun passwordTextField(
         },
         onValueChange = {
             password = it
-            contentState.password = it.text
+            passwordState.password = it.text
             isPasswordError = false
             onReceiveListener.onReceive()
         },
@@ -74,7 +74,7 @@ fun passwordTextField(
             // Toggle button to hide or display password
             IconButton(onClick = {
                 passwordVisible = !passwordVisible
-                contentState.isVisible = passwordVisible
+                passwordState.isVisible = passwordVisible
             }) {
                 Icon(imageVector = image, description)
             }

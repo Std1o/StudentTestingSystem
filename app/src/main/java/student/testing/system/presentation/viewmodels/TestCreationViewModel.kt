@@ -24,8 +24,8 @@ import student.testing.system.models.Test
 import student.testing.system.models.TestCreationReq
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
-import student.testing.system.presentation.ui.models.QuestionCreationContentState
-import student.testing.system.presentation.ui.models.TestCreationContentState
+import student.testing.system.presentation.ui.models.screenSession.QuestionCreationScreenSession
+import student.testing.system.presentation.ui.models.screenSession.TestCreationScreenSession
 import student.testing.system.presentation.ui.stateWrapper.QuestionStateWrapper
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.Date
@@ -49,9 +49,9 @@ class TestCreationViewModel @Inject constructor(
         StateWrapper.mutableStateFlow<TestCreationState<Test>>()
     val testStateWrapper = _testStateWrapper.asStateFlow()
 
-    var questionCreationContentState by mutableStateOf(QuestionCreationContentState())
+    var questionCreationScreenSession by mutableStateOf(QuestionCreationScreenSession())
         private set
-    var testCreationContentState by mutableStateOf(TestCreationContentState())
+    var testCreationScreenSession by mutableStateOf(TestCreationScreenSession())
 
     fun setCourse(course: CourseResponse) {
         viewModelScope.launch {
@@ -69,18 +69,18 @@ class TestCreationViewModel @Inject constructor(
     fun addAnswer(answerStr: String): Int {
         if (answerStr.isEmpty()) return R.string.error_empty_field
         val answer = Answer(answerStr, false)
-        if (questionCreationContentState.answers.contains(answer)) return R.string.duplicate_element
-        questionCreationContentState = questionCreationContentState.copy(
-            answers = listOf(*questionCreationContentState.answers.toTypedArray(), answer)
+        if (questionCreationScreenSession.answers.contains(answer)) return R.string.duplicate_element
+        questionCreationScreenSession = questionCreationScreenSession.copy(
+            answers = listOf(*questionCreationScreenSession.answers.toTypedArray(), answer)
         )
         return 0
     }
 
     fun addQuestion(questionStr: String) {
-        val question = Question(questionStr, questionCreationContentState.answers)
+        val question = Question(questionStr, questionCreationScreenSession.answers)
         val state = addQuestionUseCase(question)
         if (state is QuestionState.QuestionSuccess) {
-            testCreationContentState.questions += question
+            testCreationScreenSession.questions += question
         }
         _questionStateWrapper.value = QuestionStateWrapper(state)
         if (state is QuestionState.QuestionSuccess) {
@@ -95,9 +95,9 @@ class TestCreationViewModel @Inject constructor(
                 createTestUseCase(
                     TestCreationReq(
                         courseId,
-                        testCreationContentState.testNameContentState.fieldValue,
+                        testCreationScreenSession.testNameState.fieldValue,
                         Date().formatToString("yyyy-MM-dd")!!,
-                        testCreationContentState.questions
+                        testCreationScreenSession.questions
                     )
                 )
             }, Test::class)

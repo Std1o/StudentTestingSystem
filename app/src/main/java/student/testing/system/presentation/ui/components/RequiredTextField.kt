@@ -19,21 +19,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import student.testing.system.presentation.ui.models.RequiredFieldContentState
+import student.testing.system.presentation.ui.models.RequiredFieldState
 import student.testing.system.presentation.ui.stateWrapper.OnReceiveListener
 
 @Composable
 fun requiredTextField(
     modifier: Modifier = Modifier,
     onReceiveListener: OnReceiveListener,
-    contentState: RequiredFieldContentState,
+    fieldState: RequiredFieldState,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     isError: Boolean,
     @StringRes errorText: Int,
     @StringRes hint: Int
 ): String {
     var localIsError = isError
-    var fieldValue by remember { mutableStateOf(TextFieldValue(contentState.fieldValue)) }
+    var fieldValue by remember { mutableStateOf(TextFieldValue(fieldState.fieldValue)) }
     OutlinedTextField(
         modifier = modifier,
         value = fieldValue,
@@ -54,7 +54,7 @@ fun requiredTextField(
         },
         onValueChange = {
             fieldValue = it
-            contentState.fieldValue = it.text
+            fieldState.fieldValue = it.text
             localIsError = false
             onReceiveListener.onReceive()
         },

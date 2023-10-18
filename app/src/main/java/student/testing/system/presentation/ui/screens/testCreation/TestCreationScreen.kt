@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,7 +50,7 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
     val lastOperationStateWrapper by parentViewModel.lastOperationStateWrapper.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
     val testStateWrapper by parentViewModel.testStateWrapper.collectAsState()
-    val contentState = parentViewModel.testCreationContentState
+    val screenSession = parentViewModel.testCreationScreenSession
     Surface {
         Scaffold(
             snackbarHost = {
@@ -78,7 +77,7 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
                     testName = requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
                         onReceiveListener = testStateWrapper,
-                        contentState = contentState.testNameContentState,
+                        fieldState = screenSession.testNameState,
                         isError = testStateWrapper.uiState is TestCreationState.EmptyName,
                         errorText = R.string.error_empty_field,
                         hint = R.string.test_name,
@@ -89,7 +88,7 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
                             .fillMaxSize()
                             .padding(bottom = 70.dp)
                     ) {
-                        iTems(contentState.questions, key = { it }) { question ->
+                        iTems(screenSession.questions, key = { it }) { question ->
                             val shape = RoundedCornerShape(5.dp)
                             Card(
                                 elevation = 10.dp,
