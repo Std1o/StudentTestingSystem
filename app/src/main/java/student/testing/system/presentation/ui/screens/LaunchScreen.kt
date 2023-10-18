@@ -44,9 +44,6 @@ fun LaunchScreen() {
                     type = CustomType(CourseResponse::class)
                 })
             ) { CourseReviewScreen() }
-            composable(Destination.ResultReviewScreen) { ResultReviewScreen() }
-            composable(Destination.ResultsReviewScreen) { ResultsReviewScreen() }
-            composable(Destination.TestPassingScreen) { TestPassingScreen() }
         }
     }
 }

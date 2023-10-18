@@ -28,7 +28,6 @@ import kotlin.properties.Delegates
 @HiltViewModel
 class TestsViewModel @Inject constructor(
     @Named(COURSE_REVIEW_NAVIGATION) private val courseNavigator: AppNavigator,
-    @Named(LAUNCH_NAVIGATION) private val launchNavigator: AppNavigator,
     private val repository: MainRepository,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
@@ -93,17 +92,17 @@ class TestsViewModel @Inject constructor(
 
     fun onTestClicked(test: Test) {
         if (isUserModerator) {
-            launchNavigator.tryNavigateTo(Destination.ResultsReviewScreen())
+            courseNavigator.tryNavigateTo(Destination.ResultsReviewScreen())
         } else {
             viewModelScope.launch {
                 val requestResult = executeOperationAndIgnoreData({
                     getResultUseCase(testId = test.id, courseId = test.courseId)
                 })
                 if (requestResult is ResultState.Success) {
-                    launchNavigator.tryNavigateTo(Destination.ResultReviewScreen())
+                    courseNavigator.tryNavigateTo(Destination.ResultReviewScreen())
                 }
                 if (requestResult is ResultState.NoResult) {
-                    launchNavigator.tryNavigateTo(Destination.TestPassingScreen())
+                    courseNavigator.tryNavigateTo(Destination.TestPassingScreen())
                 }
             }
         }

@@ -110,6 +110,9 @@ fun CourseReviewScreen() {
                     sharedViewModel.onTestAdded(it)
                 }
             }
+            composable(Destination.ResultReviewScreen) { ResultReviewScreen() }
+            composable(Destination.ResultsReviewScreen) { ResultsReviewScreen() }
+            composable(Destination.TestPassingScreen) { TestPassingScreen() }
         }
     }
 }
