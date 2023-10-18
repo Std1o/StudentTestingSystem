@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
+import student.testing.system.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
@@ -41,11 +42,7 @@ class CoursesViewModel @Inject constructor(
     val contentState = _contentState.asStateFlow()
 
     private val defaultType = CourseResponse::class
-    private var contentStateVar
-        get() = _contentState.value
-        set(value) {
-            _contentState.value = value
-        }
+    private var contentStateVar by stateFlowVar(_contentState)
 
     init {
         getCourses()
