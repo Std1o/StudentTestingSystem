@@ -29,7 +29,7 @@ annotation class ContentState
 
 // TODO написать норм KDoc
 /**
- * InteractivityState - состояние UI компонентов, которые вызвано исключительно действиями пользователя
+ * ScreenSession - состояние UI компонентов, которые вызвано исключительно действиями пользователя
  * и не имеет прямого отношения к слоям отличным от presentation.
  * Оно формируется на экране и хранится во ViewModel
  *
@@ -39,7 +39,7 @@ annotation class ContentState
  * как правило приходят с других слоев. Он точно не формируется на экране
  */
 @MustBeDocumented
-annotation class InteractivityState
+annotation class ScreenSession
 
 // TODO написать норм Kdoc
 /**

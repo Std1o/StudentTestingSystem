@@ -1,11 +1,11 @@
 package student.testing.system.presentation.ui.models
 
-import student.testing.system.annotations.InteractivityState
+import student.testing.system.annotations.ScreenSession
 
 /**
  * For saving inputted email and password after screen recreating
  */
-@InteractivityState
+@ScreenSession
 data class LoginContentState(
     val emailContentState: EmailContentState = EmailContentState(),
     val passwordContentState: PasswordContentState = PasswordContentState()
@@ -14,11 +14,11 @@ data class LoginContentState(
 /**
  * In order to EmailTextField couldn't change password value
  */
-@InteractivityState
+@ScreenSession
 class EmailContentState(var email: String = "")
 
 /**
  * In order to PasswordTextField couldn't change email value
  */
-@InteractivityState
+@ScreenSession
 class PasswordContentState(var password: String = "", var isVisible: Boolean = false)
