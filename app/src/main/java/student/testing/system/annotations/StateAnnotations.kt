@@ -27,9 +27,23 @@ annotation class FunctionalityState
 @MustBeDocumented
 annotation class ContentState
 
+// TODO написать норм KDoc
+/**
+ * InteractivityState - состояние UI компонентов, которые вызвано исключительно действиями пользователя
+ * и не имеет прямого отношения к слоям отличным от presentation.
+ * Оно формируется на экране и хранится во ViewModel
+ *
+ * Пример: инпуты, чекбоксы, показ диалогов
+ *
+ * Отличие от ContentState: ContentState формируется во ViewModel из данных, которые,
+ * как правило приходят с других слоев. Он точно не формируется на экране
+ */
+@MustBeDocumented
+annotation class InteractivityState
+
 // TODO написать норм Kdoc
 /**
  * Для стейтов из юзккейса, помечается если при этом стейте должен крутиться лоадер.
  */
 @MustBeDocumented
-annotation class IntermediateState
+annotation class IntermediateState // TODO мб поменять на @Loading

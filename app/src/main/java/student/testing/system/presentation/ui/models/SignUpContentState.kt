@@ -1,8 +1,8 @@
 package student.testing.system.presentation.ui.models
 
-import student.testing.system.annotations.ContentState
+import student.testing.system.annotations.InteractivityState
 
-@ContentState
+@InteractivityState
 data class SignUpContentState(
     val nameContentState: RequiredFieldContentState = RequiredFieldContentState(),
     val emailContentState: EmailContentState = EmailContentState(),

@@ -1,6 +1,6 @@
 package student.testing.system.presentation.ui.models
 
-import student.testing.system.annotations.ContentState
+import student.testing.system.annotations.InteractivityState
 
-@ContentState
+@InteractivityState
 class RequiredFieldContentState(var fieldValue: String = "")
