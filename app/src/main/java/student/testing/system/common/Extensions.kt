@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,7 +20,6 @@ import androidx.navigation.NavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.R
@@ -30,14 +30,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
-
-fun View.showIf(visible: Boolean) {
-    visibility = if (visible) {
-        View.VISIBLE
-    } else {
-        View.GONE
-    }
-}
 
 fun Fragment.showSnackbar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     requireActivity().window?.let {
@@ -74,9 +66,6 @@ fun Fragment.confirmAction(@StringRes message: Int, listener: DialogInterface.On
 }
 
 @SuppressLint("SimpleDateFormat")
-fun String.toDate(pattern: String): Date? = SimpleDateFormat(pattern).parse(this)
-
-@SuppressLint("SimpleDateFormat")
 fun Date.formatToString(pattern: String): String? = SimpleDateFormat(pattern).format(this)
 
 /** Fragment binding delegate, may be used since onViewCreated up to onDestroyView (inclusive) */
@@ -111,7 +100,7 @@ fun <T> StateFlow<OperationState<T>>.subscribeInUI(
     listener: (T) -> Unit
 ) {
     this@subscribeInUI.onEach {
-        progressBar.showIf(it is OperationState.Loading)
+        progressBar.isVisible = it is OperationState.Loading
         if (it is OperationState.Success) {
             listener.invoke(it.data)
         } else if (it is OperationState.Error) {
@@ -127,7 +116,7 @@ fun <T> StateFlow<LoadableData<T>>.subscribeOnLoadableInUI(
     listener: (T) -> Unit
 ) {
     this@subscribeOnLoadableInUI.onEach {
-        progressBar.showIf(it is LoadableData.Loading)
+        progressBar.isVisible = it is LoadableData.Loading
         if (it is LoadableData.Success) {
             listener.invoke(it.data)
         } else if (it is LoadableData.Error) {
@@ -143,7 +132,7 @@ fun <T> StateFlow<OperationState<T>>.subscribeInUI(
     listener: (T) -> Unit
 ) {
     this@subscribeInUI.onEach {
-        progressBar.showIf(it is OperationState.Loading)
+        progressBar.isVisible = it is OperationState.Loading
         if (it is OperationState.Success) {
             listener.invoke(it.data)
         } else if (it is OperationState.Error) {

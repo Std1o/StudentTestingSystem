@@ -71,7 +71,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
         binding.rv.adapter = testsAdapter
         getTests(course.id)
 
-        binding.btnAdd.showIf(isUserModerator)
+        binding.btnAdd.isVisible = isUserModerator
         binding.btnAdd.setOnClickListener {
             val bundle = Bundle()
             //bundle.putParcelable(CoursesFragment.ARG_COURSE, course)
@@ -102,7 +102,7 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
 
     private fun getResult(testId: Int, courseId: Int) {
         viewModel.getResult(testId, courseId).onEach {
-            binding.progressBar.showIf(it is ResultState.Loading)
+            binding.progressBar.isVisible = it is ResultState.Loading
             if (it is ResultState.Success) {
                 val action = TestsFragmentDirections.viewResult(it.data)
                 findNavController().navigate(action)

@@ -5,11 +5,10 @@ import agency.tango.android.avatarview.loader.PicassoLoader
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import student.testing.system.R
 import student.testing.system.models.Participant
-import student.testing.system.common.AccountSession
-import student.testing.system.common.showIf
 import student.testing.system.databinding.ItemParticipantBinding
 
 
@@ -47,12 +46,12 @@ class ParticipantsAdapter(
             binding.tvName.text = participant.username
             binding.tvMail.text = participant.email
             if (currentParticipant.isOwner && !participant.isOwner) {
-                binding.btnMenu.showIf(true)
+                binding.btnMenu.isVisible = true
                 binding.btnMenu.setOnClickListener {
                     listener.invoke(binding.btnMenu, participant)
                 }
             }
-            binding.ivStar.showIf(participant.isOwner || participant.isModerator)
+            binding.ivStar.isVisible = participant.isOwner || participant.isModerator
             if (participant.isModerator) {
                 binding.ivStar.setColorFilter(R.color.gray)
             }
