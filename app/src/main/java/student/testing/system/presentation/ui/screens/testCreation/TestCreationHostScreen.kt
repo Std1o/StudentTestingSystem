@@ -15,7 +15,7 @@ import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.components.NavigationEffects
-import student.testing.system.presentation.ui.screens.QuestionCreationScreen
+import student.testing.system.presentation.ui.screens.questionCreation.QuestionCreationScreen
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestCreationHostViewModel
 import student.testing.system.presentation.viewmodels.TestCreationViewModel

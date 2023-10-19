@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens
+package student.testing.system.presentation.ui.screens.questionCreation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -96,60 +96,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                         hint = R.string.input_question,
                     )
                     Text(text = stringResource(R.string.answers), fontSize = 16.sp)
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 70.dp)) {
-                        iTems(screenSession.answers, key = { it }) { answer ->
-                            val shape = RoundedCornerShape(5.dp)
-                            Card(
-                                elevation = 10.dp,
-                                shape = shape,
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                                    .padding(vertical = 10.dp, horizontal = 16.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .clip(shape)
-                                        .combinedClickable(
-                                            onClick = { },
-                                            onLongClick = { },
-                                        )
-                                ) {
-                                    var checked by remember { mutableStateOf(answer.isRight) }
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier
-                                            .toggleable(
-                                                value = checked,
-                                                role = Role.Checkbox,
-                                                onValueChange = {
-                                                    checked = !checked
-                                                    answer.isRight = checked
-                                                }
-                                            )
-                                            .padding(8.dp)
-                                            .fillMaxWidth()
-                                    ) {
-                                        Checkbox(
-                                            checked = checked,
-                                            onCheckedChange = { isRight ->
-                                                answer.isRight = isRight
-                                            })
-                                        Text(
-                                            text = answer.answer, modifier = Modifier
-                                                .padding(start = 10.dp)
-                                                .weight(1f),
-                                            fontSize = 14.sp,
-                                            color = Color.DarkGray
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    AnswersList(answers = screenSession.answers)
                 }
                 Button(
                     onClick = {
