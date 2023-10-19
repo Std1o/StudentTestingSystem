@@ -65,9 +65,6 @@ fun CoursesScreen() {
     var showUserInfoDialog by rememberSaveable { mutableStateOf(false) }
     var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
     var deletingCourseId by remember { mutableStateOf<Int?>(null) }
-
-    val sheetState: SheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     var showCourseJoiningDialog by remember { mutableStateOf(false) }
     var showCourseCreatingDialog by remember { mutableStateOf(false) }
@@ -108,8 +105,7 @@ fun CoursesScreen() {
                         text = stringResource(R.string.courses),
                         fontSize = 18.sp,
                         color = Color.Black,
-                        modifier = Modifier
-                            .align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center)
                     )
                     CoursesContextMenu(
                         modifier = Modifier
@@ -136,37 +132,11 @@ fun CoursesScreen() {
         }
 
         if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                sheetState = sheetState
+            CourseAddingBottomSheet(
+                onShowCourseCreating = { showCourseCreatingDialog = true },
+                onShowCourseJoining = { showCourseJoiningDialog = true },
             ) {
-                val onClick = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) showBottomSheet = false
-                    }
-                }
-                Text(
-                    stringResource(R.string.create_course),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            showCourseCreatingDialog = true
-                            onClick()
-                        }
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                )
-                Text(stringResource(R.string.join_course),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp)
-                        .clickable {
-                            showCourseJoiningDialog = true
-                            onClick()
-                        }
-                        .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
-                )
+                showBottomSheet = false
             }
         }
 
@@ -188,13 +158,6 @@ fun CoursesScreen() {
                 onDismiss = { showCourseJoiningDialog = false },
             ) {
                 viewModel.joinCourse(it)
-            }
-            with(lastOperationStateWrapper) {
-                (uiState as? OperationState.Loading)?.let {
-                    if (it.operationType == CourseAddingOperations.JOIN_COURSE) {
-                        LoadingIndicator()
-                    }
-                }
             }
         }
 

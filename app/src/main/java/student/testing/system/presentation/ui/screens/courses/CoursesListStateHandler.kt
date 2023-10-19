@@ -32,6 +32,10 @@ fun CoursesListStateHandler(
         }
 
         is LoadableData.Success -> {
+            // TODO
+            /*if (courses.data.isEmpty()) {
+                ShowEmptyScreen()
+            }*/
             onHideCoursesList(false)
         }
     }
