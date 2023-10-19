@@ -67,14 +67,13 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
                 }
             }
         ) { contentPadding ->
-            lateinit var testName: String
             Box(modifier = Modifier.fillMaxSize()) {
                 CenteredColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(contentPadding)
                 ) {
-                    testName = requiredTextField(
+                    requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
                         onReceiveListener = testStateWrapper,
                         fieldState = screenSession.testNameState,

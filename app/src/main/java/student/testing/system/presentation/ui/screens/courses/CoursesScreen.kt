@@ -42,7 +42,6 @@ import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
-@OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CoursesScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
