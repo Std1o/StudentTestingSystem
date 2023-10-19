@@ -3,27 +3,18 @@ package student.testing.system.presentation.ui.screens.courses
 import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -31,7 +22,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,38 +33,25 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.common.AccountSession
-import student.testing.system.common.Constants
-import student.testing.system.common.iTems
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ValidatableOperationState
-import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
-import student.testing.system.presentation.ui.components.ErrorScreen
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.ui.components.LoadingIndicator
-import student.testing.system.presentation.ui.components.Shimmer
-import student.testing.system.presentation.ui.components.modifiers.placeholder
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
 @OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -150,29 +127,10 @@ fun CoursesScreen() {
                     courses = contentState.courses, onClick = { viewModel.onCourseClicked(it) },
                     onLongClick = { deletingCourseId = it.id },
                 )
-                when (val courses = contentState.courses) {
-                    is LoadableData.Empty204 -> {
-                        hideCoursesList = true
-                    }
-
-                    is LoadableData.Error -> {
-                        hideCoursesList = true
-                        ErrorScreen(message = courses.exception) {
-                            viewModel.getCourses()
-                        }
-                    }
-
-                    is LoadableData.Loading -> {
-                        hideCoursesList = false
-                    }
-
-                    LoadableData.NoState -> {
-                        hideCoursesList = false
-                    }
-
-                    is LoadableData.Success -> {
-                        hideCoursesList = false
-                    }
+                CoursesListStateHandler(
+                    courses = contentState.courses,
+                    onRetry = { viewModel.getCourses() }) {
+                    hideCoursesList = it
                 }
             }
         }
