@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.SignUpState
+import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
@@ -66,14 +67,9 @@ fun SignUpScreen() {
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (signUpStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
             )
-            Button(
-                onClick = {
-                    viewModel.signUp(email = email, username = username, password = password)
-                }, modifier = Modifier
-                    .padding(top = 30.dp)
-                    .height(45.dp)
-                    .width(250.dp)
-            ) { Text(stringResource(R.string.sign_up)) }
+            BigButton(text = R.string.sign_up) {
+                viewModel.signUp(email = email, username = username, password = password)
+            }
         }
     }
     LastOperationStateUIHandler(lastOperationState, snackbarHostState)

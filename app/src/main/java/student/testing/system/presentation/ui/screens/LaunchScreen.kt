@@ -1,22 +1,15 @@
 package student.testing.system.presentation.ui.screens
 
-import android.app.Activity
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.CustomType
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.Destination.CourseReviewScreen.COURSE_KEY
 import student.testing.system.presentation.navigation.NavHost
-import student.testing.system.presentation.navigation.NavigationIntent
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.components.NavigationEffects
 import student.testing.system.presentation.ui.screens.courses.CoursesScreen

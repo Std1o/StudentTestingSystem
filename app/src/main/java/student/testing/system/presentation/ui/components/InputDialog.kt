@@ -62,7 +62,6 @@ fun InputDialog(
             modifier = Modifier.padding(8.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
-            // TODO when flow in data and domain will be added, remove Box and LoadingIndicatorNotCentered
             Box(contentAlignment = Alignment.Center) {
                 Column(
                     Modifier

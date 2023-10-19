@@ -18,6 +18,7 @@ import student.testing.system.R
 import student.testing.system.domain.states.AuthState
 import student.testing.system.domain.states.LoginState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
+import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.ErrorScreen
@@ -77,14 +78,9 @@ fun LoginScreen() {
                 isPasswordError = isPasswordError,
                 errorText = if (isPasswordError) (loginStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
             )
-            Button(
-                onClick = {
-                    viewModel.auth(email = email, password = password)
-                }, modifier = Modifier
-                    .padding(top = 30.dp)
-                    .height(45.dp)
-                    .width(250.dp)
-            ) { Text(stringResource(R.string.sign_in)) }
+            BigButton(text = R.string.sign_in) {
+                viewModel.auth(email = email, password = password)
+            }
             Text(
                 text = stringResource(R.string.registration),
                 color = LoginTextColor,
