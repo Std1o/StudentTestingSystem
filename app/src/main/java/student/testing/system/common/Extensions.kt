@@ -43,12 +43,6 @@ fun Fragment.showSnackbar(@StringRes message: Int, duration: Int = Snackbar.LENG
     }
 }
 
-fun DialogFragment.showSnackbar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT) {
-    requireDialog().window?.let {
-        Snackbar.make(it.decorView, message, duration).show()
-    }
-}
-
 fun DialogFragment.showSnackbar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
     requireDialog().window?.let {
         Snackbar.make(it.decorView, message, duration).show()
@@ -125,22 +119,6 @@ fun <T> StateFlow<LoadableData<T>>.subscribeOnLoadableInUI(
     }.launchWhenStartedCollect(fragment.lifecycleScope)
 }
 
-@OptIn(NotScreenState::class)
-fun <T> StateFlow<OperationState<T>>.subscribeInUI(
-    dialogFragment: DialogFragment,
-    progressBar: ProgressBar,
-    listener: (T) -> Unit
-) {
-    this@subscribeInUI.onEach {
-        progressBar.isVisible = it is OperationState.Loading
-        if (it is OperationState.Success) {
-            listener.invoke(it.data)
-        } else if (it is OperationState.Error) {
-            dialogFragment.showSnackbar(it.exception)
-        }
-    }.launchWhenStartedCollect(dialogFragment.lifecycleScope)
-}
-
 fun Any?.trimString(): String = this@trimString.toString().trim()
 
 /**
@@ -157,18 +135,6 @@ fun <E> ViewModel.makeOperation(
         is OperationState.Loading -> OperationState.Loading()
         OperationState.NoState -> OperationState.NoState
         is OperationState.Success -> OperationState.Success(successData)
-    }
-}
-
-fun EditText.isNotEmpty(): Boolean {
-    val editText = this@isNotEmpty
-    val context = editText.context
-    return if (editText.text.isEmpty()) {
-        editText.error = context.getString(R.string.error_empty_field)
-        false
-    } else {
-        editText.error = null
-        true
     }
 }
 
