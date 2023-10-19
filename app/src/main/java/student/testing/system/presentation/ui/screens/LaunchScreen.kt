@@ -18,6 +18,7 @@ import student.testing.system.presentation.navigation.Destination.CourseReviewSc
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.NavigationIntent
 import student.testing.system.presentation.navigation.composable
+import student.testing.system.presentation.ui.components.NavigationEffects
 import student.testing.system.presentation.ui.screens.courses.CoursesScreen
 import student.testing.system.presentation.viewmodels.LaunchViewModel
 
@@ -44,39 +45,6 @@ fun LaunchScreen() {
                     type = CustomType(CourseResponse::class)
                 })
             ) { CourseReviewScreen() }
-        }
-    }
-}
-
-@Composable
-fun NavigationEffects(
-    navigationChannel: Channel<NavigationIntent>,
-    navHostController: NavHostController
-) {
-    val activity = (LocalContext.current as? Activity)
-    LaunchedEffect(activity, navHostController, navigationChannel) {
-        navigationChannel.receiveAsFlow().collect { intent ->
-            if (activity?.isFinishing == true) {
-                return@collect
-            }
-            when (intent) {
-                is NavigationIntent.NavigateBack -> {
-                    if (intent.route != null) {
-                        navHostController.popBackStack(intent.route, intent.inclusive)
-                    } else {
-                        navHostController.popBackStack()
-                    }
-                }
-
-                is NavigationIntent.NavigateTo -> {
-                    navHostController.navigate(intent.route) {
-                        launchSingleTop = intent.isSingleTop
-                        intent.popUpToRoute?.let { popUpToRoute ->
-                            popUpTo(popUpToRoute) { inclusive = intent.inclusive }
-                        }
-                    }
-                }
-            }
         }
     }
 }
