@@ -9,32 +9,22 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.domain.operationTypes.CourseAddingOperations
-import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.ValidatableOperationState
-import student.testing.system.models.CourseResponse
-import student.testing.system.presentation.ui.components.InputDialog
-import student.testing.system.presentation.ui.components.LoadingIndicator
-import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CourseAddingBottomSheet(
+    showBottomSheet: Boolean,
     onShowCourseCreating: () -> Unit,
     onShowCourseJoining: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
+    if (!showBottomSheet) return
     val sheetState: SheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 

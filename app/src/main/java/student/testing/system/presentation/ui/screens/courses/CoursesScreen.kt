@@ -131,14 +131,11 @@ fun CoursesScreen() {
             }
         }
 
-        if (showBottomSheet) {
-            CourseAddingBottomSheet(
-                onShowCourseCreating = { showCourseCreatingDialog = true },
-                onShowCourseJoining = { showCourseJoiningDialog = true },
-            ) {
-                showBottomSheet = false
-            }
-        }
+        CourseAddingBottomSheet(
+            showBottomSheet = showBottomSheet,
+            onShowCourseCreating = { showCourseCreatingDialog = true },
+            onShowCourseJoining = { showCourseJoiningDialog = true },
+        ) { showBottomSheet = false }
 
         if (showCourseJoiningDialog) {
             val error = lastValidationStateWrapper.run {
