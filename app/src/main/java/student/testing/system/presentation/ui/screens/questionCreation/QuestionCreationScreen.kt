@@ -1,6 +1,5 @@
 package student.testing.system.presentation.ui.screens.questionCreation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,9 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,19 +30,16 @@ import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.domain.addQuestion.QuestionState
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
     val questionStateWrapper by parentViewModel.questionStateWrapper.collectAsState()
     val screenSession = parentViewModel.questionCreationScreenSession
-    var showAnswerAddingCreatingDialog by remember { mutableStateOf(false) }
-    var showAnswerFieldError by remember { mutableStateOf(false) }
+    var showAnswerAddingDialog by rememberSaveable { mutableStateOf(false) }
     Surface {
         Scaffold(
             snackbarHost = {
@@ -51,7 +47,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
             },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = { showAnswerAddingCreatingDialog = true },
+                    onClick = { showAnswerAddingDialog = true },
                     shape = CircleShape,
                     backgroundColor = Color.White,
                     modifier = Modifier.padding(bottom = 60.dp, end = 4.dp)
@@ -92,26 +88,12 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
             }
         }
 
-        var answerError by remember { mutableIntStateOf(0) }
-        if (showAnswerAddingCreatingDialog) {
-            InputDialog(
-                titleResId = R.string.answer_adding,
-                hintResId = R.string.input_answer,
-                positiveButtonResId = R.string.create,
-                isError = showAnswerFieldError,
-                errorText = answerError,
-                onReceiveListener = questionStateWrapper,
-                onDismiss = {
-                    showAnswerAddingCreatingDialog = false
-                    showAnswerFieldError = false
-                }
-            ) {
-                answerError = parentViewModel.addAnswer(it)
-                if (answerError == 0) {
-                    showAnswerAddingCreatingDialog = false
-                    showAnswerFieldError = false
-                } else showAnswerFieldError = true
-            }
+        if (showAnswerAddingDialog) {
+            AnswerAddingDialog(
+                onDismiss = { showAnswerAddingDialog = false },
+                onAnswerAdded = { parentViewModel.addAnswer(it) },
+                questionStateWrapper = questionStateWrapper
+            )
         }
     }
 }
