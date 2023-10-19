@@ -3,7 +3,6 @@ package student.testing.system.presentation.ui.screens.courses
 import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,20 +14,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,18 +35,15 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
-import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
 @OptIn(NotScreenState::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -152,7 +144,10 @@ fun CoursesScreen() {
                 isError = error != 0,
                 errorText = error,
                 onReceiveListener = lastValidationStateWrapper,
-                onDismiss = { showCourseJoiningDialog = false },
+                onDismiss = {
+                    showCourseJoiningDialog = false
+                    lastValidationStateWrapper.onReceive()
+                },
             ) {
                 viewModel.joinCourse(it)
             }
@@ -172,7 +167,10 @@ fun CoursesScreen() {
                 isError = error != 0,
                 errorText = error,
                 onReceiveListener = lastValidationStateWrapper,
-                onDismiss = { showCourseCreatingDialog = false }
+                onDismiss = {
+                    showCourseCreatingDialog = false
+                    lastValidationStateWrapper.onReceive()
+                }
             ) {
                 viewModel.createCourse(it)
             }
@@ -180,14 +178,12 @@ fun CoursesScreen() {
 
         with(lastValidationStateWrapper) {
             (uiState as? ValidatableOperationState.SuccessfulValidation)?.let {
-                if (it.operationType == CourseAddingOperations.CREATE_COURSE) {
-                    showCourseCreatingDialog = false
-                    lastValidationStateWrapper.onReceive()
+                when (it.operationType) {
+                    CourseAddingOperations.CREATE_COURSE -> showCourseCreatingDialog = false
+                    CourseAddingOperations.JOIN_COURSE -> showCourseJoiningDialog = false
+                    else -> {}
                 }
-                if (it.operationType == CourseAddingOperations.JOIN_COURSE) {
-                    showCourseJoiningDialog = false
-                    lastValidationStateWrapper.onReceive()
-                }
+                lastValidationStateWrapper.onReceive()
             }
         }
 

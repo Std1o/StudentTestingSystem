@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
 import student.testing.system.annotations.IntermediateState
@@ -144,11 +145,12 @@ open class StatesViewModel : ViewModel() {
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
-    ): Flow<State> {
+    ): StateFlow<State> {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
-        val mutableSharedFlow = call().shareIn(
+        val mutableSharedFlow = call().stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Eagerly
+            started = SharingStarted.Eagerly,
+            initialValue = OperationState.Loading(operationType) as State
         )
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
             requestsQueue.offer(type.toString())
@@ -162,8 +164,8 @@ open class StatesViewModel : ViewModel() {
                 if (operationState is OperationState.Success) onSuccess.invoke(operationState.data as T)
                 if (operationState is OperationState.Empty) onEmpty.invoke()
                 _lastOperationStateWrapper.value = StateWrapper(operationState)
-                pollFromQueueForFlow(operationState)
-                showLoadingForFlowIfNeed(requestResult, operationType)
+                pollFromQueueForFlow(requestResult)
+                showLoadingForFlowIfNeed()
             }
         }
         return mutableSharedFlow
@@ -309,11 +311,12 @@ open class StatesViewModel : ViewModel() {
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty: () -> Unit = {},
         onSuccess: () -> Unit = {},
-    ): Flow<State> {
+    ): StateFlow<State> {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
-        val mutableSharedFlow = call().shareIn(
+        val mutableSharedFlow = call().stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Eagerly
+            started = SharingStarted.Eagerly,
+            initialValue = OperationState.Loading(operationType) as State
         )
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
             requestsQueue.offer(call.reflect()?.returnType.toString())
@@ -327,28 +330,22 @@ open class StatesViewModel : ViewModel() {
                 if (operationState is OperationState.Success) onSuccess.invoke()
                 if (operationState is OperationState.Empty) onEmpty.invoke()
                 _lastOperationStateWrapper.value = StateWrapper(operationState)
-                pollFromQueueForFlow(operationState)
-                showLoadingForFlowIfNeed(requestResult, operationType)
+                pollFromQueueForFlow(requestResult)
+                showLoadingForFlowIfNeed()
             }
         }
         return mutableSharedFlow
     }
 
     // значит что конечный резульатат получен и можно очистить очередь
-    private fun pollFromQueueForFlow(operationState: OperationState<Any>) {
-        if (operationState !is OperationState.Loading && operationState !is OperationState.NoState) {
-            requestsQueue.poll()
+    private fun <State> pollFromQueueForFlow(requestResult: State) {
+        if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
+            return
         }
+        requestsQueue.poll()
     }
 
-    private fun <State> showLoadingForFlowIfNeed(
-        requestResult: State,
-        operationType: OperationType
-    ) {
-        if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
-            _lastOperationStateWrapper.value =
-                StateWrapper(OperationState.Loading(operationType))
-        }
+    private fun showLoadingForFlowIfNeed() {
         if (requestsQueue.isNotEmpty()) {
             // TODO мб складывать в requestsQueue как раз таки operationType,
             //  но с другой стороны не у всех он указан
