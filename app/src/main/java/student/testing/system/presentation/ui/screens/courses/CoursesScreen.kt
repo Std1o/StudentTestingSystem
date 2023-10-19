@@ -31,18 +31,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.annotations.NotScreenState
-import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
-import student.testing.system.presentation.ui.components.InputDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
@@ -58,9 +54,6 @@ fun CoursesScreen() {
     var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
     var deletingCourseId by remember { mutableStateOf<Int?>(null) }
     var showBottomSheet by remember { mutableStateOf(false) }
-    var showCourseJoiningDialog by remember { mutableStateOf(false) }
-    var showCourseCreatingDialog by remember { mutableStateOf(false) }
-
 
     if (contentState.isLoggedOut) { // TODO check comment in CoursesContentState
         val activity = (LocalContext.current as? Activity)
@@ -123,69 +116,12 @@ fun CoursesScreen() {
             }
         }
 
-        CourseAddingBottomSheet(
+        CourseAddingDialogs(
             showBottomSheet = showBottomSheet,
-            onShowCourseCreating = { showCourseCreatingDialog = true },
-            onShowCourseJoining = { showCourseJoiningDialog = true },
+            lastValidationStateWrapper = lastValidationStateWrapper,
+            onCreateCourse = { viewModel.createCourse(it) },
+            onJoinCourse = { viewModel.joinCourse(it) }
         ) { showBottomSheet = false }
-
-        if (showCourseJoiningDialog) {
-            val error = lastValidationStateWrapper.run {
-                (uiState as? ValidatableOperationState.ValidationError)
-                    ?.let {
-                        if (it.operationType == CourseAddingOperations.JOIN_COURSE) it.messageResId else 0
-                    } ?: 0
-            }
-            InputDialog(
-                titleResId = R.string.join_course,
-                hintResId = R.string.course_code_hint,
-                positiveButtonResId = R.string.btn_continue,
-                capitalization = KeyboardCapitalization.Characters,
-                isError = error != 0,
-                errorText = error,
-                onReceiveListener = lastValidationStateWrapper,
-                onDismiss = {
-                    showCourseJoiningDialog = false
-                    lastValidationStateWrapper.onReceive()
-                },
-            ) {
-                viewModel.joinCourse(it)
-            }
-        }
-
-        if (showCourseCreatingDialog) {
-            val error = lastValidationStateWrapper.run {
-                (uiState as? ValidatableOperationState.ValidationError)
-                    ?.let {
-                        if (it.operationType == CourseAddingOperations.CREATE_COURSE) it.messageResId else 0
-                    } ?: 0
-            }
-            InputDialog(
-                titleResId = R.string.create_course,
-                hintResId = R.string.input_name,
-                positiveButtonResId = R.string.create,
-                isError = error != 0,
-                errorText = error,
-                onReceiveListener = lastValidationStateWrapper,
-                onDismiss = {
-                    showCourseCreatingDialog = false
-                    lastValidationStateWrapper.onReceive()
-                }
-            ) {
-                viewModel.createCourse(it)
-            }
-        }
-
-        with(lastValidationStateWrapper) {
-            (uiState as? ValidatableOperationState.SuccessfulValidation)?.let {
-                when (it.operationType) {
-                    CourseAddingOperations.CREATE_COURSE -> showCourseCreatingDialog = false
-                    CourseAddingOperations.JOIN_COURSE -> showCourseJoiningDialog = false
-                    else -> {}
-                }
-                lastValidationStateWrapper.onReceive()
-            }
-        }
 
         if (showUserInfoDialog) {
             AlertUserInfoDialog { showUserInfoDialog = false }
