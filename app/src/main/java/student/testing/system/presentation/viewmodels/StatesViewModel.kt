@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
@@ -147,7 +146,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: (T) -> Unit = {},
     ): StateFlow<State> {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
-        val mutableSharedFlow = call().stateIn(
+        val mutableStateFlow = call().stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
             initialValue = OperationState.Loading(operationType) as State
@@ -158,7 +157,7 @@ open class StatesViewModel : ViewModel() {
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
-            mutableSharedFlow.collect { requestResult ->
+            mutableStateFlow.collect { requestResult ->
                 if (requestResult is Unit) throw GenericsAutoCastIsWrong()
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is OperationState.Success) onSuccess.invoke(operationState.data as T)
@@ -168,7 +167,7 @@ open class StatesViewModel : ViewModel() {
                 showLoadingForFlowIfNeed()
             }
         }
-        return mutableSharedFlow
+        return mutableStateFlow
     }
 
 
@@ -313,7 +312,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: () -> Unit = {},
     ): StateFlow<State> {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
-        val mutableSharedFlow = call().stateIn(
+        val mutableStateFlow = call().stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
             initialValue = OperationState.Loading(operationType) as State
@@ -324,7 +323,7 @@ open class StatesViewModel : ViewModel() {
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
-            mutableSharedFlow.collect { requestResult ->
+            mutableStateFlow.collect { requestResult ->
                 if (requestResult is Unit) throw GenericsAutoCastIsWrong()
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is OperationState.Success) onSuccess.invoke()
@@ -334,7 +333,7 @@ open class StatesViewModel : ViewModel() {
                 showLoadingForFlowIfNeed()
             }
         }
-        return mutableSharedFlow
+        return mutableStateFlow
     }
 
     // значит что конечный резульатат получен и можно очистить очередь
