@@ -39,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,8 +85,8 @@ fun CoursesScreen() {
     val contentState by viewModel.contentState.collectAsState()
     val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
     val lastValidationStateWrapper by viewModel.lastValidationStateWrapper.collectAsState()
-    var showUserInfoDialog by remember { mutableStateOf(false) }
-    var showLogoutDialog by remember { mutableStateOf(false) }
+    var showUserInfoDialog by rememberSaveable { mutableStateOf(false) }
+    var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
     var deletingCourseId by remember { mutableStateOf<Int?>(null) }
 
     val sheetState: SheetState = rememberModalBottomSheetState()
@@ -133,42 +134,13 @@ fun CoursesScreen() {
                         modifier = Modifier
                             .align(Alignment.Center)
                     )
-                    var expanded by remember { mutableStateOf(false) }
-                    Box(
+                    CoursesContextMenu(
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
-                            .padding(end = 20.dp)
-                    ) {
-                        IconButton(
-                            onClick = { expanded = true },
-                        ) {
-                            Icon(Icons.Default.MoreVert, contentDescription = "Показать меню")
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.background(Color.White),
-                        ) {
-                            Text(
-                                stringResource(R.string.who_am_i), modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(onClick = {
-                                        expanded = false
-                                        showUserInfoDialog = true
-                                    })
-                                    .padding(vertical = 10.dp, horizontal = 20.dp)
-                            )
-                            Text(
-                                stringResource(R.string.logout), modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(onClick = {
-                                        expanded = false
-                                        showLogoutDialog = true
-                                    })
-                                    .padding(vertical = 10.dp, horizontal = 20.dp)
-                            )
-                        }
-                    }
+                            .padding(end = 20.dp),
+                        onUserInfoDialogShow = { showUserInfoDialog = true },
+                        onLogoutDialogShow = { showLogoutDialog = true }
+                    )
                 }
                 val coursesIsLoading = contentState.courses is LoadableData.Loading
                 var hideCoursesList by remember { mutableStateOf(false) }
