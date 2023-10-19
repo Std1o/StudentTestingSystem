@@ -40,6 +40,7 @@ import student.testing.system.domain.states.TestCreationState
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
 
@@ -123,15 +124,10 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
                         }
                     }
                 }
-                Button(
-                    onClick = {
-                        parentViewModel.createTest(course.id)
-                    }, modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 20.dp)
-                        .height(45.dp)
-                        .width(200.dp)
-                ) { androidx.compose.material3.Text(stringResource(R.string.publish)) }
+                MediumButton(
+                    text = R.string.publish,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) { parentViewModel.createTest(course.id) }
             }
         }
     }
