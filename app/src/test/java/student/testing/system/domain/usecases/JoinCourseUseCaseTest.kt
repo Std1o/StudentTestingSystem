@@ -1,5 +1,3 @@
-@file:OptIn(NotScreenState::class)
-
 package student.testing.system.domain.usecases
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,5 +1,3 @@
-@file:OptIn(NotScreenState::class)
-
 package student.testing.system
 
 import io.mockk.mockk
