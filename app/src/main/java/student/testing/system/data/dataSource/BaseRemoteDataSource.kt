@@ -3,7 +3,7 @@ package student.testing.system.data.dataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import student.testing.system.common.Utils
+import com.stdio.godofappstates.Utils
 import student.testing.system.domain.dataTypes.DataType
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.LoadableData
