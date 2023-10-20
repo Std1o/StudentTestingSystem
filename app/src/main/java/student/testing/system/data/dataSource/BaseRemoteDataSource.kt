@@ -12,7 +12,7 @@ import student.testing.system.domain.states.OperationState
 open class BaseRemoteDataSource {
 
     /**
-     * Generates a OperationState that contains a limited set of states for any request.
+     * Generates OperationState that contains a limited set of states for any request.
      *
      * ```
      * ```
@@ -41,7 +41,9 @@ open class BaseRemoteDataSource {
         }
     }
 
-    // TODO написать KDoc
+    /**
+     * Generates LoadableData that contains a limited set of loading data states
+     */
     suspend fun <T> loadData(
         dataType: DataType = DataType.NotSpecified,
         call: suspend () -> Response<T>
