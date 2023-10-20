@@ -1,6 +1,6 @@
 package student.testing.system.domain.states
 
-import student.testing.system.annotations.FunctionalityState
+import com.stdio.godofappstates.annotations.FunctionalityState
 
 @FunctionalityState
 sealed interface LoginState<out R> {

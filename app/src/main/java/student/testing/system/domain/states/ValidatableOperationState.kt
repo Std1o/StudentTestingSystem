@@ -1,7 +1,7 @@
 package student.testing.system.domain.states
 
 import androidx.annotation.StringRes
-import student.testing.system.annotations.StillLoading
+import com.stdio.godofappstates.annotations.StillLoading
 import student.testing.system.domain.operationTypes.OperationType
 
 sealed interface ValidatableOperationState<out R> {

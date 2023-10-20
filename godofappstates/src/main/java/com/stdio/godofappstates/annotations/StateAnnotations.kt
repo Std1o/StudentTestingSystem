@@ -1,4 +1,4 @@
-package student.testing.system.annotations
+package com.stdio.godofappstates.annotations
 
 /**
  * It is the domain-level state. It can be used in the presentation layer, but it cannot be formed there.

@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import student.testing.system.annotations.FunctionalityState
-import student.testing.system.annotations.StillLoading
+import com.stdio.godofappstates.annotations.FunctionalityState
+import com.stdio.godofappstates.annotations.StillLoading
 import student.testing.system.common.GenericsAutoCastIsWrong
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
