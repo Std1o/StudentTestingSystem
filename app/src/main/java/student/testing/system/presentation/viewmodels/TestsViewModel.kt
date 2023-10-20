@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
+import student.testing.system.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
@@ -22,7 +23,6 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlin.properties.Delegates
 
-// TODO сделать поле StateFlow и убрать StateFlow с методов, либо написать, почему этого сделать нельзя
 @HiltViewModel
 class TestsViewModel @Inject constructor(
     @Named(COURSE_REVIEW_NAVIGATION) private val courseNavigator: AppNavigator,
@@ -32,11 +32,7 @@ class TestsViewModel @Inject constructor(
 
     private val _contentState = MutableStateFlow(TestsContentState())
     val contentState = _contentState.asStateFlow()
-    private var contentStateVar
-        get() = _contentState.value
-        set(value) {
-            _contentState.value = value
-        }
+    private var contentStateVar by stateFlowVar(_contentState)
 
     lateinit var course: CourseResponse
 

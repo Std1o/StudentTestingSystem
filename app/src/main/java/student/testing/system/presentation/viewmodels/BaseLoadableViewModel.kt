@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import student.testing.system.domain.states.LoadableData
 
 // TODO remove
-open class BaseLoadableViewModel<T> : ViewModel(), ResettableViewModel {
+open class BaseLoadableViewModel<T> : ViewModel() {
 
     private val _uiState = MutableStateFlow<LoadableData<T>>(LoadableData.NoState)
     val uiState: StateFlow<LoadableData<T>> = _uiState.asStateFlow()
@@ -25,9 +25,5 @@ open class BaseLoadableViewModel<T> : ViewModel(), ResettableViewModel {
         _uiState.value = LoadableData.Loading()
         if (requestResult is LoadableData.Success) onSuccess.invoke(requestResult.data)
         _uiState.value = requestResult
-    }
-
-    override fun resetState() {
-        _uiState.value = LoadableData.NoState
     }
 }

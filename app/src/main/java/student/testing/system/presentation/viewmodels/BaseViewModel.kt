@@ -14,7 +14,7 @@ import student.testing.system.domain.states.OperationState
  * @param T The type of data that the ViewModel will handle.
  */
 // TODO remove
-open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
+open class BaseViewModel<T> : ViewModel() {
 
     private val _uiState = MutableStateFlow<OperationState<T>>(OperationState.NoState)
     val uiState: StateFlow<OperationState<T>> = _uiState.asStateFlow()
@@ -32,9 +32,5 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
         _uiState.value = OperationState.Loading()
         if (requestResult is OperationState.Success) onSuccess.invoke(requestResult.data)
         _uiState.value = requestResult
-    }
-
-    override fun resetState() {
-        _uiState.value = OperationState.NoState
     }
 }
