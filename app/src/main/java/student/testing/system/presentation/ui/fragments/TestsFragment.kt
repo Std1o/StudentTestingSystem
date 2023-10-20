@@ -16,11 +16,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
 import student.testing.system.domain.getResult.ResultState
-import student.testing.system.domain.states.OperationState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.adapters.TestsAdapter
@@ -140,7 +138,6 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
     }
 
     // Testing of OperationTypes
-    @OptIn(NotScreenState::class)
     private fun deleteTest(testId: Int, courseId: Int) {
 //        viewModel.deleteTest(testId, courseId).onEach {
 //            binding.progressBar.isVisible = it is OperationState.Loading

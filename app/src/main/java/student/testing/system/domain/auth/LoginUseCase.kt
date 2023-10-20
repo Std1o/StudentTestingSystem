@@ -1,6 +1,5 @@
 package student.testing.system.domain.auth
 
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.AuthState
@@ -24,7 +23,6 @@ class LoginUseCase @Inject constructor(
         }
     }
 
-    @OptIn(NotScreenState::class)
     private suspend fun auth(email: String, password: String): AuthState<PrivateUser> {
         val authRequest =
             "grant_type=&username=$email&password=$password&scope=&client_id=&client_secret="

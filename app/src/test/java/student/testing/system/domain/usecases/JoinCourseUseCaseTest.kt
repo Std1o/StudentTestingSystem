@@ -11,7 +11,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ValidatableOperationState
 import student.testing.system.models.CourseResponse

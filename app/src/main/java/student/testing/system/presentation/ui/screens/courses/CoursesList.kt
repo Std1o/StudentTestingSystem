@@ -21,7 +21,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Constants
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.LoadableData
@@ -29,7 +28,7 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder
 
-@OptIn(NotScreenState::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CoursesList(
     isLoading: Boolean,

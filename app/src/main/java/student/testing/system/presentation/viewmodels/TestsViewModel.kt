@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import student.testing.system.domain.MainRepository
@@ -65,7 +64,6 @@ class TestsViewModel @Inject constructor(
         courseNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
     }
 
-    @OptIn(NotScreenState::class)
     fun onTestAdded(test: Test) {
         contentStateVar = contentStateVar.copy(
             tests = LoadableData.Success(
@@ -77,7 +75,6 @@ class TestsViewModel @Inject constructor(
         )
     }
 
-    @OptIn(NotScreenState::class)
     fun deleteTest(testId: Int, courseId: Int) {
         viewModelScope.launch {
             executeEmptyOperation({ repository.deleteTest(testId = testId, courseId = courseId) }) {

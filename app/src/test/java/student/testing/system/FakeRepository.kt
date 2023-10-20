@@ -3,7 +3,6 @@
 package student.testing.system
 
 import io.mockk.mockk
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState

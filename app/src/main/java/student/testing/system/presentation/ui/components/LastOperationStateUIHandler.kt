@@ -3,7 +3,6 @@ package student.testing.system.presentation.ui.components
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
@@ -12,7 +11,6 @@ import student.testing.system.presentation.ui.stateWrapper.StateWrapper
  * Used for temporary and short-lived states caused by the last operation
  * @param onLoading if you want override default loading
  */
-@OptIn(NotScreenState::class)
 @Composable
 fun <T> LastOperationStateUIHandler(
     stateWrapper: StateWrapper<OperationState<T>>,
@@ -42,7 +40,6 @@ fun <T> LastOperationStateUIHandler(
 
 // TODO написать что succes надо бы по-хорошему ловить в VM
 //  и потом уже кидать через свои FunctionallityState сделать
-@OptIn(NotScreenState::class)
 @Composable
 fun <T> LastOperationStateUIHandler(
     stateWrapper: StateWrapper<OperationState<T>>,

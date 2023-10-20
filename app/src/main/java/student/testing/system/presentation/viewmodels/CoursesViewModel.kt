@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.domain.MainRepository
@@ -56,7 +55,6 @@ class CoursesViewModel @Inject constructor(
         }
     }
 
-    @OptIn(NotScreenState::class)
     fun deleteCourse(courseId: Int) {
         viewModelScope.launch {
             executeEmptyOperation({ repository.deleteCourse(courseId) }) {
@@ -105,7 +103,6 @@ class CoursesViewModel @Inject constructor(
         }
     }
 
-    @OptIn(NotScreenState::class)
     private fun addCourseToContent(course: CourseResponse) {
         try {
             contentStateVar = contentStateVar.copy(

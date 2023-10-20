@@ -3,7 +3,6 @@ package student.testing.system.data.dataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Utils
 import student.testing.system.domain.dataTypes.DataType
 import student.testing.system.domain.operationTypes.OperationType
@@ -24,7 +23,6 @@ open class BaseRemoteDataSource {
      *
      * (For example: authorization with validation, registration with validation).
      */
-    @OptIn(NotScreenState::class)
     suspend fun <T> executeOperation(
         operationType: OperationType = OperationType.DefaultOperation,
         call: suspend () -> Response<T>
@@ -45,7 +43,6 @@ open class BaseRemoteDataSource {
         }
     }
 
-    @OptIn(NotScreenState::class)
     suspend fun <T> loadData(
         dataType: DataType = DataType.NotSpecified,
         call: suspend () -> Response<T>

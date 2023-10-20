@@ -3,7 +3,6 @@ package student.testing.system.common
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.view.View
-import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -23,7 +22,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import java.text.SimpleDateFormat
@@ -87,7 +85,6 @@ fun <T> Flow<T>.launchWhenStartedCollect(lifecycleScope: LifecycleCoroutineScope
     }
 }
 
-@OptIn(NotScreenState::class)
 fun <T> StateFlow<OperationState<T>>.subscribeInUI(
     fragment: Fragment,
     progressBar: ProgressBar,
@@ -103,7 +100,6 @@ fun <T> StateFlow<OperationState<T>>.subscribeInUI(
     }.launchWhenStartedCollect(fragment.lifecycleScope)
 }
 
-@OptIn(NotScreenState::class)
 fun <T> StateFlow<LoadableData<T>>.subscribeOnLoadableInUI(
     fragment: Fragment,
     progressBar: ProgressBar,
@@ -124,7 +120,6 @@ fun Any?.trimString(): String = this@trimString.toString().trim()
 /**
  * Use if you sure that request when success returns 204
  */
-@OptIn(NotScreenState::class)
 fun <E> ViewModel.makeOperation(
     requestResult: OperationState<Void>,
     successData: E,

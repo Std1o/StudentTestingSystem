@@ -1,7 +1,6 @@
 package student.testing.system.domain.states
 
 import student.testing.system.annotations.FunctionalityState
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.dataTypes.DataType
 import student.testing.system.domain.operationTypes.OperationType
 
@@ -37,7 +36,6 @@ import student.testing.system.domain.operationTypes.OperationType
 sealed interface LoadableData<out R> {
     data object NoState : LoadableData<Nothing>
 
-    @NotScreenState
     data class Success<out T>(
         val data: T,
         val dataType: DataType = DataType.NotSpecified

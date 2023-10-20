@@ -1,7 +1,6 @@
 package student.testing.system.domain.states
 
 import student.testing.system.annotations.FunctionalityState
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.operationTypes.OperationType
 
 /**
@@ -15,7 +14,6 @@ sealed interface OperationState<out R> : ValidatableOperationState<R>, AuthState
     TestCreationState<R> {
     data object NoState : OperationState<Nothing>
 
-    @NotScreenState
     data class Success<out T>(
         val data: T,
         val operationType: OperationType = OperationType.DefaultOperation

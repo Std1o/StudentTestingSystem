@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.models.Test
@@ -27,7 +26,7 @@ import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder
 
-@OptIn(NotScreenState::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TestsList(
     isLoading: Boolean,

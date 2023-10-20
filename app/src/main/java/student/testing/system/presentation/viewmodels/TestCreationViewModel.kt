@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
 import student.testing.system.common.formatToString
 import student.testing.system.domain.CreateTestUseCase
@@ -88,7 +87,6 @@ class TestCreationViewModel @Inject constructor(
         }
     }
 
-    @OptIn(NotScreenState::class)
     fun createTest(courseId: Int) {
         viewModelScope.launch {
             val requestResult = executeOperation({

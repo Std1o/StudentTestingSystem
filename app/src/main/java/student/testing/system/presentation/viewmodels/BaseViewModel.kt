@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.domain.states.OperationState
 
 /**
@@ -26,7 +25,6 @@ open class BaseViewModel<T> : ViewModel(), ResettableViewModel {
      * @param requestResult A Flow representing the result of the request
      * @param onSuccess An optional callback function that will be called with each DataState emitted by the request result.
      */
-    @OptIn(NotScreenState::class)
     protected fun launchRequest(
         requestResult: OperationState<T>,
         onSuccess: (T) -> Unit = {},

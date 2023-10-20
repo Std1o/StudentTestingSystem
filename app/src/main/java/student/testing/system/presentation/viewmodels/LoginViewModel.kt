@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
@@ -20,7 +19,6 @@ import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
 import javax.inject.Named
 
-@OptIn(NotScreenState::class)
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,

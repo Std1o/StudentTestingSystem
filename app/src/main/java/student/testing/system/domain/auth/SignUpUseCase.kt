@@ -1,7 +1,6 @@
 package student.testing.system.domain.auth
 
 import student.testing.system.R
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.AuthState
@@ -32,7 +31,6 @@ class SignUpUseCase @Inject constructor(
         }
     }
 
-    @OptIn(NotScreenState::class)
     private suspend fun signUp(
         email: String,
         username: String,

@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
 import student.testing.system.annotations.IntermediateState
-import student.testing.system.annotations.NotScreenState
 import student.testing.system.common.GenericsAutoCastIsWrong
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
@@ -103,7 +102,6 @@ open class StatesViewModel : ViewModel() {
         }
     }
 
-    @OptIn(NotScreenState::class)
     @PublishedApi
     internal suspend fun <@FunctionalityState State, T : Any> stateExecuteOperation(
         call: suspend () -> State,
@@ -136,7 +134,6 @@ open class StatesViewModel : ViewModel() {
     /**
      * Если use case отправляет какие-то промежуточные результаты
      */
-    @OptIn(NotScreenState::class)
     @PublishedApi
     internal suspend fun <@FunctionalityState State, T : Any> flowExecuteOperation(
         call: suspend () -> Flow<State>,
@@ -269,7 +266,6 @@ open class StatesViewModel : ViewModel() {
 
     // Slaves
     // __________________________________________________________________________________
-    @OptIn(NotScreenState::class)
     private suspend fun <@FunctionalityState State> stateExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
@@ -304,7 +300,6 @@ open class StatesViewModel : ViewModel() {
         }
     }
 
-    @OptIn(NotScreenState::class)
     private suspend fun <@FunctionalityState State> flowExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> Flow<State>,
         operationType: OperationType = OperationType.DefaultOperation,
