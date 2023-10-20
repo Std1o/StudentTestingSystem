@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import student.testing.system.annotations.FunctionalityState
-import student.testing.system.annotations.IntermediateState
+import student.testing.system.annotations.StillLoading
 import student.testing.system.common.GenericsAutoCastIsWrong
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
@@ -66,10 +66,8 @@ open class StatesViewModel : ViewModel() {
      * @param call Suspend fun that will be called here
      * @param onSuccess An optional callback function that may be called for some ViewModel businesses
      * @param type for auto cast. Believe me, you don't want to write that long generic
-     * <b/>
      *
      * Example:
-     * <b/>
      *
      * ```
      * PrivateUser::class
@@ -333,7 +331,7 @@ open class StatesViewModel : ViewModel() {
 
     // значит что конечный резульатат получен и можно очистить очередь
     private fun <State> pollFromQueueForFlow(requestResult: State) {
-        if (requestResult!!::class.hasAnnotation<IntermediateState>()) {
+        if (requestResult!!::class.hasAnnotation<StillLoading>()) {
             return
         }
         requestsQueue.poll()

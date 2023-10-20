@@ -2,7 +2,6 @@ package student.testing.system.annotations
 
 /**
  * It is the domain-level state. It can be used in the presentation layer, but it cannot be formed there.
- * <p>
  *
  * As a rule, it is formed in UseCase.
  * Or it is LoadableData or OperationState, which are identical in structure, but different in semantics.
@@ -17,23 +16,18 @@ annotation class FunctionalityState
 @MustBeDocumented
 annotation class ContentState
 
-// TODO написать норм KDoc
 /**
- * ScreenSession - состояние UI компонентов, которые вызвано исключительно действиями пользователя
- * и не имеет прямого отношения к слоям отличным от presentation.
- * Оно формируется на экране и хранится во ViewModel
+ * The ScreenSession is used for those cases when rememberSaveable can't cope.
+ * Or if you plan to store the state of some screen in the database in the future.
  *
- * Пример: инпуты, чекбоксы, показ диалогов
- *
- * Отличие от ContentState: ContentState формируется во ViewModel из данных, которые,
- * как правило приходят с других слоев. Он точно не формируется на экране
+ * The ScreenSession is formed and used on the presentation layer.
+ * It is not connected to other layers
  */
 @MustBeDocumented
 annotation class ScreenSession
 
-// TODO написать норм Kdoc
 /**
- * Для стейтов из юзккейса, помечается если при этом стейте должен крутиться лоадер.
+ * For states from UseCase. It is marked if loader should be still shown
  */
 @MustBeDocumented
-annotation class IntermediateState // TODO мб поменять на @Loading
+annotation class StillLoading
