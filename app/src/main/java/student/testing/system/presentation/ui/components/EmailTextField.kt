@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import student.testing.system.R
 import student.testing.system.presentation.ui.models.screenSession.EmailState
-import student.testing.system.presentation.ui.stateWrapper.OnReceiveListener
+import com.stdio.godofappstates.presentation.stateWrapper.OnReceiveListener
 
 @Composable
 fun emailTextField(

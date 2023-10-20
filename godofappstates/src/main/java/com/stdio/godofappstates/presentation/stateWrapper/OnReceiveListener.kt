@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.stateWrapper
+package com.stdio.godofappstates.presentation.stateWrapper
 
 /**
  * It is necessary for sending a callback from StateWrapper without sending the entire contentState

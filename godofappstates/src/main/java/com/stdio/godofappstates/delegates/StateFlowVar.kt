@@ -1,4 +1,4 @@
-package student.testing.system.delegates
+package com.stdio.godofappstates.delegates
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.properties.ReadWriteProperty

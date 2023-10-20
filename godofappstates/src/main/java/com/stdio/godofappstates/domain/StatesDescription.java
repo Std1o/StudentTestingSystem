@@ -1,4 +1,4 @@
-package student.testing.system.domain.states;
+package com.stdio.godofappstates.domain;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 

@@ -2,7 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stdio.godofappstates.GenericsAutoCastIsWrong
+import com.stdio.godofappstates.util.GenericsAutoCastIsWrong
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow

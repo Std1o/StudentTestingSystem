@@ -1,4 +1,4 @@
-package com.stdio.godofappstates
+package com.stdio.godofappstates.util
 
 /**
  * 1.) Make sure that you are using RequestState or his parent in your UseCase or Repository
