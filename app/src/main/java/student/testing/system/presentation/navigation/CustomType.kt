@@ -7,12 +7,12 @@ import com.google.gson.Gson
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-class CustomType<T : Parcelable>(private val kclass: KClass<T>) :
+class CustomType<T : Parcelable>(private val kClass: KClass<T>) :
     NavType<T>(isNullableAllowed = false) {
     override fun get(bundle: Bundle, key: String): T? = bundle.getParcelable(key)
 
     override fun parseValue(value: String): T {
-        val type: Type = kclass.javaObjectType
+        val type: Type = kClass.javaObjectType
         return Gson().fromJson(value, type)
     }
 

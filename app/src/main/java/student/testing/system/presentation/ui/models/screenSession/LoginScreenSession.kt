@@ -2,6 +2,7 @@ package student.testing.system.presentation.ui.models.screenSession
 
 import student.testing.system.annotations.ScreenSession
 
+// TODO replace with rememberSaveable
 /**
  * For saving inputted email and password after screen recreating
  */

@@ -9,4 +9,4 @@ data class AnswerResult(
     val answer: String,
     @SerializedName("is_right") var isRight: Boolean,
     @SerializedName("is_selected") var isSelected: Boolean, val id: Int
-): Parcelable
+) : Parcelable

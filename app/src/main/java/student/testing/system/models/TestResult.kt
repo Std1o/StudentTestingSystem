@@ -9,4 +9,4 @@ data class TestResult(
     val questions: List<QuestionResult>,
     @SerializedName("max_score") val maxScore: Int,
     val score: Double
-): Parcelable
+) : Parcelable
