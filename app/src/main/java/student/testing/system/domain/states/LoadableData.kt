@@ -7,7 +7,6 @@ import student.testing.system.domain.operationTypes.OperationType
 /**
  * LoadableData is used for loading UI content from any data source,
  * such as list, images, text information.
- * <p>
  *
  * Usage exmaple:
  * ```
@@ -16,10 +15,8 @@ import student.testing.system.domain.operationTypes.OperationType
  *     val stories: LoadableData<Stories>
  * )
  * ```
- * <p>
  *
  * Or you can parse LoadableData in ViewModel and update ContentState fields
- * <p>
  *
  * ```
  * data class FeedContentState(

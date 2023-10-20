@@ -13,13 +13,11 @@ open class BaseRemoteDataSource {
 
     /**
      * Generates a RequestState that contains a limited set of states for any request.
-     * <p>
      *
      * ```
      * ```
      *
      * In its turn, use cases generate special states some any functionality
-     * <p>
      *
      * (For example: authorization with validation, registration with validation).
      */
