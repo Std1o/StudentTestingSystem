@@ -1,8 +1,7 @@
 package student.testing.system.presentation.ui.stateWrapper
 
-// TODO написать нормальный KDoc
 /**
- * Нужно чтобы прокидывать коллбек из враппера не прокидывая весь ui стейт
+ * It is necessary for sending a callback from StateWrapper without sending the entire contentState
  */
 interface OnReceiveListener {
     fun onReceive()
