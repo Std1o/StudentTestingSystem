@@ -108,6 +108,6 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
 
     implementation(project(':godofappstates-core'))
-    implementation(project(':godofappstates-processor'))// TODO replace with annotation module
+    implementation(project(':godofappstates-annotations'))
     ksp(project(":godofappstates-processor"))
 }

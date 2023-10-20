@@ -17,3 +17,4 @@ rootProject.name = "StudentTestingSystem"
 include ':app'
 include ':godofappstates-core'
 include ':godofappstates-processor'
+include ':godofappstates-annotations'
