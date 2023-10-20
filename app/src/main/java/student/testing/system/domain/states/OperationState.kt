@@ -19,8 +19,11 @@ sealed interface OperationState<out R> : ValidatableOperationState<R>, AuthState
         val operationType: OperationType = OperationType.DefaultOperation
     ) : OperationState<T>
 
+    // TODO дописать 204
     /**
-     * Must be converted to Success with own local value in ViewModel
+     * Must be converted to Success with own local value in ViewModel.
+     *
+     * Or you have to handle it by yourself
      */
     data class Empty(
         val code: Int,

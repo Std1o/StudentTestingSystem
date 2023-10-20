@@ -5,8 +5,9 @@ import student.testing.system.domain.dataTypes.DataType
 import student.testing.system.domain.operationTypes.OperationType
 
 /**
- * LoadableData is used for loading UI content from any data source,
- * such as list, images, text information.
+ * LoadableData is used for loading UI content from any data source.
+ *
+ * Examples of UI content: images, text information, lists.
  *
  * Usage exmaple:
  * ```
@@ -39,7 +40,7 @@ sealed interface LoadableData<out R> {
     ) : LoadableData<T>
 
     /**
-     * Must be converted to Success with own local value in ViewModel
+     * Used only for 204 response code
      */
     data class Empty204(
         val code: Int,

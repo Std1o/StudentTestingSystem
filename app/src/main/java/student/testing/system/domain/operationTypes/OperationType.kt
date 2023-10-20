@@ -1,9 +1,8 @@
 package student.testing.system.domain.operationTypes
 
-// TODO написать нормальный KDoc
 /**
- * Для решение коллизий при использовании нескольких операций на одном экране,
- * на success которых ui должно реагировать по-разному
+ * To solve collisions when using multiple operations on screen,
+ * the result of which UI should react differently
  */
 sealed interface OperationType {
     data object DefaultOperation : OperationType
