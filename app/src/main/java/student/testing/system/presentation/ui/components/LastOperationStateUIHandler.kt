@@ -29,7 +29,7 @@ fun <T> LastOperationStateUIHandler(
                 }
             }
 
-            is OperationState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
+            is OperationState.Empty204, // it mustn't reach here, it must be replaced with Success in the ViewModel
             is OperationState.Success,// for this use method below
             is OperationState.NoState -> {
                 // do nothing
@@ -64,7 +64,7 @@ fun <T> LastOperationStateUIHandler(
                 }
             }
 
-            is OperationState.Empty, // it mustn't reach here, it must be replaced with Success in the ViewModel
+            is OperationState.Empty204, // it mustn't reach here, it must be replaced with Success in the ViewModel
             is OperationState.NoState -> {
                 // do nothing
             }

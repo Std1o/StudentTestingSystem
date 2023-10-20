@@ -78,7 +78,7 @@ open class StatesViewModel : ViewModel() {
         noinline call: suspend () -> FlowOrState,
         type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
-        noinline onEmpty: () -> Unit = {},
+        noinline onEmpty204: () -> Unit = {},
         noinline onSuccess: (T) -> Unit = {},
     ): FlowOrState {
         return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
@@ -86,7 +86,7 @@ open class StatesViewModel : ViewModel() {
                 call as suspend () -> Flow<*>,
                 type,
                 operationType,
-                onEmpty,
+                onEmpty204,
                 onSuccess
             ) as FlowOrState
         } else {
@@ -94,7 +94,7 @@ open class StatesViewModel : ViewModel() {
                 call,
                 type,
                 operationType,
-                onEmpty,
+                onEmpty204,
                 onSuccess
             )
         }
@@ -105,7 +105,7 @@ open class StatesViewModel : ViewModel() {
         call: suspend () -> State,
         type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit = {},
+        onEmpty204: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): State {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
@@ -121,7 +121,7 @@ open class StatesViewModel : ViewModel() {
             // Working with OperationState
             val operationState = ToOperationStateMapper<State, T>().map(requestResult)
             if (operationState is OperationState.Success<T>) onSuccess.invoke(operationState.data)
-            if (operationState is OperationState.Empty) onEmpty.invoke()
+            if (operationState is OperationState.Empty204) onEmpty204.invoke()
             _lastOperationStateWrapper.value = StateWrapper(operationState)
 
             requestResult
@@ -137,7 +137,7 @@ open class StatesViewModel : ViewModel() {
         call: suspend () -> Flow<State>,
         type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit = {},
+        onEmpty204: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): StateFlow<State> {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
@@ -156,7 +156,7 @@ open class StatesViewModel : ViewModel() {
                 if (requestResult is Unit) throw GenericsAutoCastIsWrong()
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is OperationState.Success) onSuccess.invoke(operationState.data as T)
-                if (operationState is OperationState.Empty) onEmpty.invoke()
+                if (operationState is OperationState.Empty204) onEmpty204.invoke()
                 _lastOperationStateWrapper.value = StateWrapper(operationState)
                 pollFromQueueForFlow(requestResult)
                 showLoadingForFlowIfNeed()
@@ -171,16 +171,16 @@ open class StatesViewModel : ViewModel() {
     protected suspend inline fun <reified FlowOrState> executeEmptyOperation(
         noinline call: suspend () -> FlowOrState,
         operationType: OperationType = OperationType.DefaultOperation,
-        noinline onEmpty: () -> Unit = {},
+        noinline onEmpty204: () -> Unit = {},
     ): FlowOrState {
         return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
             flowExecuteEmptyOperation(
                 call as suspend () -> Flow<*>,
                 operationType,
-                onEmpty
+                onEmpty204
             ) as FlowOrState
         } else {
-            stateExecuteEmptyOperation(call, operationType, onEmpty)
+            stateExecuteEmptyOperation(call, operationType, onEmpty204)
         }
     }
 
@@ -188,26 +188,26 @@ open class StatesViewModel : ViewModel() {
     internal suspend fun <@FunctionalityState State> stateExecuteEmptyOperation(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit = {},
+        onEmpty204: () -> Unit = {},
     ): State {
         return stateExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
             operationType = operationType,
             onSuccess = {},
-            onEmpty = { onEmpty() })
+            onEmpty204 = { onEmpty204() })
     }
 
     @PublishedApi
     internal suspend fun <@FunctionalityState State> flowExecuteEmptyOperation(
         call: suspend () -> Flow<State>,
         operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit = {},
+        onEmpty204: () -> Unit = {},
     ): Flow<State> {
         return flowExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
             operationType = operationType,
             onSuccess = {},
-            onEmpty = { onEmpty() })
+            onEmpty204 = { onEmpty204() })
     }
 
 
@@ -242,7 +242,7 @@ open class StatesViewModel : ViewModel() {
             call = call,
             operationType = operationType,
             onSuccess = { onSuccess() },
-            onEmpty = {})
+            onEmpty204 = {})
     }
 
     /**
@@ -258,7 +258,7 @@ open class StatesViewModel : ViewModel() {
             call = call,
             operationType = operationType,
             onSuccess = { onSuccess() },
-            onEmpty = {})
+            onEmpty204 = {})
     }
 
 
@@ -267,7 +267,7 @@ open class StatesViewModel : ViewModel() {
     private suspend fun <@FunctionalityState State> stateExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> State,
         operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit,
+        onEmpty204: () -> Unit,
         onSuccess: () -> Unit,
     ): State {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
@@ -283,7 +283,7 @@ open class StatesViewModel : ViewModel() {
             // Working with OperationState
             val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
             if (operationState is OperationState.Success) onSuccess.invoke()
-            if (operationState is OperationState.Empty) onEmpty.invoke()
+            if (operationState is OperationState.Empty204) onEmpty204.invoke()
             _lastOperationStateWrapper.value = StateWrapper(operationState)
 
             requestResult
@@ -301,7 +301,7 @@ open class StatesViewModel : ViewModel() {
     private suspend fun <@FunctionalityState State> flowExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> Flow<State>,
         operationType: OperationType = OperationType.DefaultOperation,
-        onEmpty: () -> Unit = {},
+        onEmpty204: () -> Unit = {},
         onSuccess: () -> Unit = {},
     ): StateFlow<State> {
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
@@ -320,7 +320,7 @@ open class StatesViewModel : ViewModel() {
                 if (requestResult is Unit) throw GenericsAutoCastIsWrong()
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is OperationState.Success) onSuccess.invoke()
-                if (operationState is OperationState.Empty) onEmpty.invoke()
+                if (operationState is OperationState.Empty204) onEmpty204.invoke()
                 _lastOperationStateWrapper.value = StateWrapper(operationState)
                 pollFromQueueForFlow(requestResult)
                 showLoadingForFlowIfNeed()

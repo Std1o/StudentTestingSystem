@@ -32,7 +32,7 @@ open class BaseRemoteDataSource {
                 body?.let {
                     return OperationState.Success(body, operationType)
                 }
-                return OperationState.Empty(response.code(), operationType)
+                return OperationState.Empty204(response.code(), operationType)
             }
             val errorMessage = Utils.encodeErrorCode(response.errorBody())
             return operationError(errorMessage, response.code())
