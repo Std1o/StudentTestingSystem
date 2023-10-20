@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "StudentTestingSystem"
 include ':app'
 include ':godofappstates'
+include ':godofappstates-processor'
