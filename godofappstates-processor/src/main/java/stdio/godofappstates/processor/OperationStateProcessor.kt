@@ -5,19 +5,17 @@ import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
-import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
 import stdio.godofappstates.annotations.OperationState
-import java.io.OutputStream
+import stdio.godofappstates.visitors.OperationStateKClassVisitor
 
 class OperationStateProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
     private val options: Map<String, String>
-): SymbolProcessor {
+) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val symbols = resolver
             .getSymbolsWithAnnotation(OperationState::class.qualifiedName!!)
@@ -26,81 +24,10 @@ class OperationStateProcessor(
         val dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray())
 
         symbols.filter { it is KSClassDeclaration && it.validate() }
-            .forEach { it.accept(OperationStateKClassVisitor(dependencies), Unit) }
-
-        return unableToProcess.toList()
-    }
-
-    private inner class OperationStateKClassVisitor(val dependencies: Dependencies) : KSVisitorVoid() {
-
-        override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
-
-            val packageName = classDeclaration.packageName.asString()
-
-            if (classDeclaration.classKind != ClassKind.INTERFACE) {
-                logger.error(
-                    "||Class Annotated with OperationState should be interface", classDeclaration)
+            .forEach {
+                it.accept(OperationStateKClassVisitor(codeGenerator, logger, dependencies), Unit)
             }
 
-            val className = classDeclaration.simpleName.getShortName()
-            val classPackage = classDeclaration.packageName.asString() + "." + className
-
-            logger.warn("package $classPackage")
-
-            val interfaceName = classDeclaration.simpleName.getShortName()
-
-            val outputStream: OutputStream = codeGenerator.createNewFile(
-                dependencies = dependencies,
-                packageName,
-                fileName = "OperationState"
-            )
-
-
-
-            outputStream.write(
-                """
-    |package $packageName
-
-    |import stdio.godofappstates.annotations.FunctionalityState
-    |import com.stdio.godofappstates.domain.OperationType
-    |
-    |/**
-    | * OperationState contains the result of operation and is not intended for long-term storage of the screen state.
-    | *
-    | * Its value must either be passed to the ContentState,
-    | * or used for some quick actions (show the loader, show the snackbar with an error, navigate to a new screen)
-    | */
-    |@FunctionalityState
-    |sealed interface OperationState<out R> : $interfaceName<R> {
-    |    data object NoState : OperationState<Nothing>
-    |
-    |    data class Success<out T>(
-    |        val data: T,
-    |        val operationType: OperationType = OperationType.DefaultOperation
-    |    ) : OperationState<T>
-    |
-    |    /**
-    |     * Must be converted to Success with own local value in ViewModel.
-    |     *
-    |     * Or you have to handle it by yourself
-    |     */
-    |    data class Empty204(
-    |        val code: Int,
-    |        val operationType: OperationType = OperationType.DefaultOperation
-    |    ) : OperationState<Nothing>
-    |
-    |    data class Error(
-    |        val exception: String,
-    |        val code: Int = -1,
-    |        val operationType: OperationType = OperationType.DefaultOperation
-    |    ) : OperationState<Nothing>
-    |
-    |    data class Loading(val operationType: OperationType = OperationType.DefaultOperation) :
-    |        OperationState<Nothing>
-    |}
-    """.trimMargin().toByteArray()
-            )
-
-        }
+        return unableToProcess.toList()
     }
 }
