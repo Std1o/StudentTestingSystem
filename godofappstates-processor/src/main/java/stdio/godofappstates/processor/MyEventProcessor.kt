@@ -1,6 +1,5 @@
 package stdio.godofappstates.processor
 
-import com.google.devtools.ksp.isAbstract
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
@@ -13,6 +12,7 @@ import com.google.devtools.ksp.symbol.KSValueParameter
 import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
 import stdio.godofappstates.annotations.MyEvent
+import stdio.godofappstates.annotations.OperationState
 import java.io.OutputStream
 
 class MyEventProcessor(
@@ -22,7 +22,7 @@ class MyEventProcessor(
 ): SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val symbols = resolver
-            .getSymbolsWithAnnotation(MyEvent::class.qualifiedName!!)
+            .getSymbolsWithAnnotation(OperationState::class.qualifiedName!!)
         val unableToProcess = symbols.filterNot { it.validate() }
 
         val dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray())
@@ -39,60 +39,22 @@ class MyEventProcessor(
 
             val packageName = classDeclaration.packageName.asString()
 
-            if (classDeclaration.isAbstract()) {
+            if (classDeclaration.classKind != ClassKind.INTERFACE) {
                 logger.error(
-                    "||Class Annotated with MyEvent should kotlin data class",classDeclaration)
-            }
-
-            if (classDeclaration.classKind != ClassKind.CLASS) {
-                logger.error(
-                    "||Class Annotated with Projections should kotlin data class", classDeclaration)
+                    "||Class Annotated with OperationState should be interface", classDeclaration)
             }
 
             val className = classDeclaration.simpleName.getShortName()
             val classPackage = classDeclaration.packageName.asString() + "." + className
-            val classVariableNameInCamelCase = className.replaceFirst(className[0], className[0].lowercaseChar()) //need this for using in generated code
 
             logger.warn("package $classPackage")
 
-            val properties = classDeclaration.primaryConstructor?.parameters ?: emptyList()
-
-            if (properties.isEmpty())
-                logger.error("No variables found in class", classDeclaration)
-
-            val hashmapEntries = StringBuilder()
-            val bundleEntries = StringBuilder()
-            for (prop in properties) {
-                // Throw Error if param is not primitive
-                if (prop.isNotKotlinPrimitive())
-                    logger.error("|| Event params variables should be Primitive", prop)
-
-                val propName = prop.name?.getShortName() ?: ""
-                logger.warn("|| ${prop.name?.getShortName()}")
-
-                hashmapEntries.append(
-                    """
-                put("$propName", $classVariableNameInCamelCase.$propName)
-
-                """.trimMargin()
-                )
-
-                val propPrimitiveTypeName = prop.getPrimitiveTypeName()
-
-                bundleEntries.append(
-                    """
-                put$propPrimitiveTypeName("$propName", $classVariableNameInCamelCase.$propName)
-
-                """.trimMargin()
-                )
-            }
-
-            val toGenerateFileName = "${classDeclaration.simpleName.getShortName()}Event"
+            val interfaceName = classDeclaration.simpleName.getShortName()
 
             val outputStream: OutputStream = codeGenerator.createNewFile(
                 dependencies = dependencies,
                 packageName,
-                fileName = toGenerateFileName
+                fileName = "OperationState"
             )
 
 
@@ -104,22 +66,22 @@ class MyEventProcessor(
     |import $classPackage
     |import android.os.Bundle
 
-    |sealed interface $toGenerateFileName<out R> {
+    |sealed interface OperationState<out R> : $interfaceName<R> {
     |
     |data class Success<out T>(
     |    val data: T
-    ) : $toGenerateFileName<T>
+    ) : OperationState<T>
     |  
     |   /**
     | * Must be converted to Success with own local value in ViewModel
     | */
     |data class Empty(
     |    val code: Int
-    ) : $toGenerateFileName<Nothing>
+    ) : OperationState<Nothing>
     |
-    | data class Error(val exception: String, val code: Int = -1) : $toGenerateFileName<Nothing>
+    | data class Error(val exception: String, val code: Int = -1) : OperationState<Nothing>
     | 
-    |  object Loading : $toGenerateFileName<Nothing>
+    |  object Loading : OperationState<Nothing>
     |}
     """.trimMargin().toByteArray()
             )

@@ -1,4 +1,4 @@
-package com.stdio.godofappstates.annotations
+package stdio.godofappstates.annotations
 
 /**
  * It is the domain-level state. It can be used in the presentation layer, but it cannot be formed there.
@@ -9,6 +9,12 @@ package com.stdio.godofappstates.annotations
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE_PARAMETER)
 @MustBeDocumented
 annotation class FunctionalityState
+
+@Target(AnnotationTarget.CLASS)
+annotation class OperationState
+
+@Target(AnnotationTarget.CLASS)
+annotation class LoadableData
 
 /**
  * It is the presentation-level state. It must be formed and must be used only in presentation layer.

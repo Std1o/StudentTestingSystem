@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import com.stdio.godofappstates.annotations.FunctionalityState
-import com.stdio.godofappstates.annotations.StillLoading
+import stdio.godofappstates.annotations.FunctionalityState
+import stdio.godofappstates.annotations.StillLoading
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.operationTypes.OperationType
 import student.testing.system.domain.states.LoadableData

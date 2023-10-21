@@ -1,5 +1,5 @@
 package student.testing.system.experimantal
 
 fun codeGenerationTest() {
-    lateinit var someState: TicketBookToClickedParamsEvent<String>
+    lateinit var someState: OperationState<String>
 }

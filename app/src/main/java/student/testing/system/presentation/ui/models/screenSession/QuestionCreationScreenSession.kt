@@ -1,6 +1,6 @@
 package student.testing.system.presentation.ui.models.screenSession
 
-import com.stdio.godofappstates.annotations.ScreenSession
+import stdio.godofappstates.annotations.ScreenSession
 import student.testing.system.models.Answer
 import student.testing.system.presentation.ui.models.RequiredFieldState
 

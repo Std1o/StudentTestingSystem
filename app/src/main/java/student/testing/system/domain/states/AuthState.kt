@@ -1,7 +1,7 @@
 package student.testing.system.domain.states
 
 import androidx.annotation.StringRes
-import com.stdio.godofappstates.annotations.FunctionalityState
+import stdio.godofappstates.annotations.FunctionalityState
 
 @FunctionalityState
 sealed interface AuthState<out R> : SignUpState<R>, LoginState<R> {

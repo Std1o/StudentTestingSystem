@@ -1,6 +1,6 @@
 package student.testing.system.domain.states
 
-import com.stdio.godofappstates.annotations.FunctionalityState
+import stdio.godofappstates.annotations.FunctionalityState
 import student.testing.system.domain.operationTypes.OperationType
 
 /**
