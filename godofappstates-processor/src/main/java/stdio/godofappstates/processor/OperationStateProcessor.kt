@@ -21,6 +21,8 @@ class OperationStateProcessor(
 ) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray())
+        val viewModelPackage = resolver.getAllFiles()
+            .first { it.fileName.contains("ViewModel") }.packageName.asString()
 
         // OperationState
         val symbolsOperationState = resolver
@@ -43,8 +45,19 @@ class OperationStateProcessor(
         // Processor is runs twice. First runs with annotations and second start without.
         // That's why we can't ruin building relying on annotation symbols emptiness
         if ((symbolsOperationStateList + symbolsLoadableDataList).isNotEmpty()) {
-            if (symbolsOperationStateList.isEmpty()) logger.error(Constants.NO_OPERATION_STATE_ANNOTATION)
-            if (symbolsLoadableDataList.isEmpty()) logger.error(Constants.NO_LOADABLE_DATA_ANNOTATION)
+            if (symbolsOperationStateList.isEmpty()) {
+                logger.error(Constants.NO_OPERATION_STATE_ANNOTATION)
+            } else if (symbolsLoadableDataList.isEmpty()) {
+                logger.error(Constants.NO_LOADABLE_DATA_ANNOTATION)
+            } else {
+                val operationStatePackage = resolver.getAllFiles()
+                    .first { it.fileName == "OperationState.kt" }.packageName.asString()
+                val loadableDataPackage = resolver.getAllFiles()
+                    .first { it.fileName == "LoadableData.kt" }.packageName.asString()
+                logger.warn("viewModelPackage: $viewModelPackage")
+                logger.warn("operationStatePackage: $operationStatePackage")
+                logger.warn("loadableDataPackage: $loadableDataPackage")
+            }
         }
 
         val unableToProcessOperationsState = symbolsOperationState.filterNot { it.validate() }
