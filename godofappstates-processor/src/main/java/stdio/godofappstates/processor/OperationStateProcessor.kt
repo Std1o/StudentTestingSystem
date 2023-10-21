@@ -8,14 +8,12 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSValueParameter
 import com.google.devtools.ksp.symbol.KSVisitorVoid
 import com.google.devtools.ksp.validate
-import stdio.godofappstates.annotations.MyEvent
 import stdio.godofappstates.annotations.OperationState
 import java.io.OutputStream
 
-class MyEventProcessor(
+class OperationStateProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
     private val options: Map<String, String>
@@ -28,12 +26,12 @@ class MyEventProcessor(
         val dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray())
 
         symbols.filter { it is KSClassDeclaration && it.validate() }
-            .forEach { it.accept(MyEventKClassVisitor(dependencies), Unit) }
+            .forEach { it.accept(OperationStateKClassVisitor(dependencies), Unit) }
 
         return unableToProcess.toList()
     }
 
-    private inner class MyEventKClassVisitor(val dependencies: Dependencies) : KSVisitorVoid() {
+    private inner class OperationStateKClassVisitor(val dependencies: Dependencies) : KSVisitorVoid() {
 
         override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
 
@@ -105,17 +103,4 @@ class MyEventProcessor(
 
         }
     }
-}
-
-fun KSValueParameter.isNotKotlinPrimitive(): Boolean {
-
-    return when (type.element?.toString()) {
-        "String", "Int", "Short", "Number", "Boolean", "Byte", "Char", "Float", "Double", "Long", "Unit", "Any" -> false
-        else -> true
-    }
-}
-
-fun KSValueParameter.getPrimitiveTypeName(): String {
-
-    return type.element?.toString() ?: throw IllegalAccessException()
 }
