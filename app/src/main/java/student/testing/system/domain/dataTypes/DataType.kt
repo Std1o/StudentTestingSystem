@@ -1,5 +1,5 @@
 package student.testing.system.domain.dataTypes
 
-sealed interface DataType {
+interface DataType {
     data object NotSpecified : DataType
 }

@@ -2,7 +2,6 @@ package student.testing.system.domain.states
 
 import stdio.godofappstates.annotations.FunctionalityState
 import student.testing.system.domain.dataTypes.DataType
-import student.testing.system.domain.operationTypes.OperationType
 
 /**
  * LoadableData is used for loading UI content from any data source.
@@ -53,6 +52,6 @@ sealed interface LoadableData<out R> {
         val dataType: DataType = DataType.NotSpecified
     ) : LoadableData<Nothing>
 
-    data class Loading(val operationType: OperationType = OperationType.DefaultOperation) :
+    data class Loading(val dataType: DataType = DataType.NotSpecified) :
         LoadableData<Nothing>
 }
