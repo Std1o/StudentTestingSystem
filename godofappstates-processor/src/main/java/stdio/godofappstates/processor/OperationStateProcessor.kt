@@ -22,7 +22,8 @@ class OperationStateProcessor(
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray())
         val viewModelPackage = resolver.getAllFiles()
-            .first { it.fileName.contains("ViewModel") }.packageName.asString()
+            .firstOrNull { it.fileName.contains("ViewModel") }?.packageName?.asString()
+        if (viewModelPackage == null) logger.warn(Constants.VIEW_MODEL_PACKAGE_NOT_FOUND)
 
         // OperationState
         val symbolsOperationState = resolver
@@ -51,9 +52,9 @@ class OperationStateProcessor(
                 logger.error(Constants.NO_LOADABLE_DATA_ANNOTATION)
             } else {
                 val operationStatePackage = resolver.getAllFiles()
-                    .first { it.fileName == "OperationState.kt" }.packageName.asString()
+                    .firstOrNull { it.fileName == "OperationState.kt" }?.packageName?.asString()
                 val loadableDataPackage = resolver.getAllFiles()
-                    .first { it.fileName == "LoadableData.kt" }.packageName.asString()
+                    .firstOrNull { it.fileName == "LoadableData.kt" }?.packageName?.asString()
                 logger.warn("viewModelPackage: $viewModelPackage")
                 logger.warn("operationStatePackage: $operationStatePackage")
                 logger.warn("loadableDataPackage: $loadableDataPackage")

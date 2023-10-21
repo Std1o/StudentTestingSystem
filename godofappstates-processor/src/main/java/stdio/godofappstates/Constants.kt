@@ -17,4 +17,5 @@ object Constants {
             "Example:\n" +
             "@LoadableData\n" +
             "sealed interface LoadableDataTrigger<out R>"
+    const val VIEW_MODEL_PACKAGE_NOT_FOUND = "ViewModel package not found"
 }
