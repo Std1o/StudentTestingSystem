@@ -1,4 +1,4 @@
-package student.testing.system.domain.operationTypes
+package com.stdio.godofappstates.domain
 
 /**
  * To solve collisions when using multiple operations on screen,

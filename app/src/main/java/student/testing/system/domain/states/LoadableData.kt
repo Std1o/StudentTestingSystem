@@ -1,7 +1,7 @@
 package student.testing.system.domain.states
 
 import stdio.godofappstates.annotations.FunctionalityState
-import student.testing.system.domain.dataTypes.DataType
+import com.stdio.godofappstates.domain.DataType
 
 /**
  * LoadableData is used for loading UI content from any data source.

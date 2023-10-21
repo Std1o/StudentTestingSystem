@@ -4,8 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import com.stdio.godofappstates.util.Utils
-import student.testing.system.domain.dataTypes.DataType
-import student.testing.system.domain.operationTypes.OperationType
+import com.stdio.godofappstates.domain.DataType
+import com.stdio.godofappstates.domain.OperationType
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 

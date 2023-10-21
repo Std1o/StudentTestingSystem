@@ -1,4 +1,4 @@
-package student.testing.system.domain.dataTypes
+package com.stdio.godofappstates.domain
 
 interface DataType {
     data object NotSpecified : DataType

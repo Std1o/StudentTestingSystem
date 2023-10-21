@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.StillLoading
 import student.testing.system.data.mapper.ToOperationStateMapper
-import student.testing.system.domain.operationTypes.OperationType
+import com.stdio.godofappstates.domain.OperationType
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper

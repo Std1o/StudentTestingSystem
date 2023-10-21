@@ -1,7 +1,7 @@
 package student.testing.system.domain.states
 
 import stdio.godofappstates.annotations.FunctionalityState
-import student.testing.system.domain.operationTypes.OperationType
+import com.stdio.godofappstates.domain.OperationType
 
 /**
  * OperationState contains the result of operation and is not intended for long-term storage of the screen state.
