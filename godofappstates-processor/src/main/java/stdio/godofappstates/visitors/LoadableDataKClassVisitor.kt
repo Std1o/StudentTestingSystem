@@ -6,6 +6,7 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
+import stdio.godofappstates.Constants
 import java.io.OutputStream
 
 internal class LoadableDataKClassVisitor(
@@ -19,9 +20,7 @@ internal class LoadableDataKClassVisitor(
         val packageName = classDeclaration.packageName.asString()
 
         if (classDeclaration.classKind != ClassKind.INTERFACE) {
-            logger.error(
-                "||Class Annotated with OperationState should be interface", classDeclaration
-            )
+            logger.error(Constants.LOADABLE_MUST_BE_AN_INTERFACE, classDeclaration)
         }
 
         val className = classDeclaration.simpleName.getShortName()
