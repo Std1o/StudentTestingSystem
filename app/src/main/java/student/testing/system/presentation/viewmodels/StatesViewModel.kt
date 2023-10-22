@@ -16,13 +16,16 @@ import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.StillLoading
 import student.testing.system.data.mapper.ToOperationStateMapper
 import com.stdio.godofappstates.domain.OperationType
+import student.testing.system.common.WrongFunctionReturnType
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
 import kotlin.reflect.full.hasAnnotation
+import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.starProjectedType
+import kotlin.reflect.jvm.jvmErasure
 import kotlin.reflect.jvm.reflect
 
 
@@ -270,9 +273,13 @@ open class StatesViewModel : ViewModel() {
         onEmpty204: () -> Unit,
         onSuccess: () -> Unit,
     ): State {
+        val kType = call.reflect()?.returnType
+        if (kType?.jvmErasure?.isSuperclassOf(OperationState::class) == false) {
+            throw WrongFunctionReturnType(kType)
+        }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
-            requestsQueue.offer(call.reflect()?.returnType.toString())
+            requestsQueue.offer(kType.toString())
         }
         var requestResult: State
         val request = viewModelScope.async {
