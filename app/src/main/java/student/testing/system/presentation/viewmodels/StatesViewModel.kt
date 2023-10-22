@@ -2,6 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stdio.godofappstates.domain.OperationType
 import com.stdio.godofappstates.util.GenericsAutoCastIsWrong
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -14,14 +15,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.StillLoading
-import student.testing.system.data.mapper.ToOperationStateMapper
-import com.stdio.godofappstates.domain.OperationType
+import student.testing.system.common.NoFlowOfOperationStateFoundException
 import student.testing.system.common.WrongFunctionReturnType
+import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
 import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.starProjectedType
@@ -87,7 +89,6 @@ open class StatesViewModel : ViewModel() {
         return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
             flowExecuteOperation(
                 call as suspend () -> Flow<*>,
-                type,
                 operationType,
                 onEmpty204,
                 onSuccess
@@ -138,11 +139,14 @@ open class StatesViewModel : ViewModel() {
     @PublishedApi
     internal suspend fun <@FunctionalityState State, T : Any> flowExecuteOperation(
         call: suspend () -> Flow<State>,
-        type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): StateFlow<State> {
+        val kType = call.reflect()?.returnType
+        if (isFlowOfOperationState(kType) == false) {
+            throw NoFlowOfOperationStateFoundException(kType)
+        }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         val mutableStateFlow = call().stateIn(
             scope = viewModelScope,
@@ -150,7 +154,7 @@ open class StatesViewModel : ViewModel() {
             initialValue = OperationState.Loading(operationType) as State
         )
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
-            requestsQueue.offer(type.toString())
+            requestsQueue.offer(kType.toString())
         }
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден
@@ -274,7 +278,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: () -> Unit,
     ): State {
         val kType = call.reflect()?.returnType
-        if (kType?.jvmErasure?.isSuperclassOf(OperationState::class) == false) {
+        if (isOperationState(kType) == false) {
             throw WrongFunctionReturnType(kType)
         }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
@@ -351,6 +355,14 @@ open class StatesViewModel : ViewModel() {
             _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading())
         }
     }
+
+    private fun isOperationState(kType: KType?) =
+        kType?.jvmErasure?.isSuperclassOf(OperationState::class)
+
+    private fun isFlowOfOperationState(kType: KType?) =
+        kType?.arguments?.first()?.type?.jvmErasure?.isSuperclassOf(
+            OperationState::class
+        )
 }
 
 fun <State> State.protect() {}
