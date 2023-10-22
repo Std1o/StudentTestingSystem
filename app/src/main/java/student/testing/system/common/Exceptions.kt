@@ -14,5 +14,5 @@ class WrongFunctionReturnType(kType: KType?) : RuntimeException(
 class NoFlowOfOperationStateFoundException(kType: KType?) : RuntimeException(
     "\nExpected: Flow of OperationState or OperationState superclass\n" +
             "Found: $kType\n\n" +
-            "Please make sure that you use sealed interface marked with annotation @OperationState\n\n"
+            "Please make sure that you use Flow of sealed interface marked with annotation @OperationState\n\n"
 )

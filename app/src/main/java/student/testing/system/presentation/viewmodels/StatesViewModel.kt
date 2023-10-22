@@ -96,7 +96,6 @@ open class StatesViewModel : ViewModel() {
         } else {
             stateExecuteOperation(
                 call,
-                type,
                 operationType,
                 onEmpty204,
                 onSuccess
@@ -107,14 +106,17 @@ open class StatesViewModel : ViewModel() {
     @PublishedApi
     internal suspend fun <@FunctionalityState State, T : Any> stateExecuteOperation(
         call: suspend () -> State,
-        type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): State {
+        val kType = call.reflect()?.returnType
+        if (isOperationState(kType) == false) {
+            throw WrongFunctionReturnType(kType)
+        }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
-            requestsQueue.offer(type.toString())
+            requestsQueue.offer(kType.toString())
         }
         var requestResult: State
         val request = viewModelScope.async {
@@ -315,6 +317,10 @@ open class StatesViewModel : ViewModel() {
         onEmpty204: () -> Unit = {},
         onSuccess: () -> Unit = {},
     ): StateFlow<State> {
+        val kType = call.reflect()?.returnType
+        if (isFlowOfOperationState(kType) == false) {
+            throw NoFlowOfOperationStateFoundException(kType)
+        }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         val mutableStateFlow = call().stateIn(
             scope = viewModelScope,
@@ -322,7 +328,7 @@ open class StatesViewModel : ViewModel() {
             initialValue = OperationState.Loading(operationType) as State
         )
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
-            requestsQueue.offer(call.reflect()?.returnType.toString())
+            requestsQueue.offer(kType.toString())
         }
         // иначе код выполняется синхронно
         // и флоу вернется только когда весь этот участок будет пройден

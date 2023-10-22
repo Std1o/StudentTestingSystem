@@ -10,7 +10,7 @@ class CreateTestUseCase @Inject constructor(private val repository: MainReposito
 
     suspend operator fun invoke(testCreationReq: TestCreationReq): TestCreationState<Test> {
         if (testCreationReq.name.isEmpty()) return TestCreationState.EmptyName
-        if (testCreationReq.questions.isEmpty()) return TestCreationState.NoQuestions
+        if (testCreationReq.questions.isEmpty()) return TestCreationState.NoQuestions // TODO обрабатывать этот стейт
         return repository.createTest(testCreationReq)
     }
 }
