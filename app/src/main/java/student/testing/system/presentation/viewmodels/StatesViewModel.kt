@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.StillLoading
 import student.testing.system.common.NoFlowOfOperationStateFoundException
-import student.testing.system.common.WrongFunctionReturnType
+import student.testing.system.common.NoOperationStateFoundException
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState
@@ -112,7 +112,7 @@ open class StatesViewModel : ViewModel() {
     ): State {
         val kType = call.reflect()?.returnType
         if (isOperationState(kType) == false) {
-            throw WrongFunctionReturnType(kType)
+            throw NoOperationStateFoundException(kType)
         }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
@@ -281,7 +281,7 @@ open class StatesViewModel : ViewModel() {
     ): State {
         val kType = call.reflect()?.returnType
         if (isOperationState(kType) == false) {
-            throw WrongFunctionReturnType(kType)
+            throw NoOperationStateFoundException(kType)
         }
         _lastOperationStateWrapper.value = StateWrapper(OperationState.Loading(operationType))
         if (_lastOperationStateWrapper.value.uiState is OperationState.Loading) {
