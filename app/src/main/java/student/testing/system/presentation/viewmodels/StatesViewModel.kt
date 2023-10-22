@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stdio.godofappstates.domain.OperationType
 import com.stdio.godofappstates.util.GenericsAutoCastIsWrong
+import com.stdio.godofappstates.util.NoFlowOfOperationStateFoundException
+import com.stdio.godofappstates.util.NoOperationStateFoundException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -15,8 +17,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.StillLoading
-import student.testing.system.common.NoFlowOfOperationStateFoundException
-import student.testing.system.common.NoOperationStateFoundException
 import student.testing.system.data.mapper.ToOperationStateMapper
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.OperationState

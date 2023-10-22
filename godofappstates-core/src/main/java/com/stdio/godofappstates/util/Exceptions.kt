@@ -1,5 +1,7 @@
 package com.stdio.godofappstates.util
 
+import kotlin.reflect.KType
+
 /**
  * 1.) Make sure that you are using RequestState or his parent in your UseCase or Repository
  *
@@ -24,4 +26,16 @@ package com.stdio.godofappstates.util
 class GenericsAutoCastIsWrong : RuntimeException(
     "\n1.) Make sure that you are using RequestState or his parent in your UseCase or Repository\n" +
             "2.) Call protect() extension on your calling of executeOperation()"
+)
+
+class NoOperationStateFoundException(kType: KType?) : RuntimeException(
+    "\nExpected: OperationState or OperationState superclass\n" +
+            "Found: $kType\n\n" +
+            "Please make sure that you use sealed interface marked with annotation @OperationState\n\n"
+)
+
+class NoFlowOfOperationStateFoundException(kType: KType?) : RuntimeException(
+    "\nExpected: Flow of OperationState or OperationState superclass\n" +
+            "Found: $kType\n\n" +
+            "Please make sure that you use Flow of sealed interface marked with annotation @OperationState\n\n"
 )
