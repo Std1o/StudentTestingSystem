@@ -12,7 +12,8 @@ import java.io.OutputStream
 internal class OperationStateKClassVisitor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
-    private val dependencies: Dependencies
+    private val dependencies: Dependencies,
+    private val onPackageKnown: (String) -> Unit
 ) : KSVisitorVoid() {
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
@@ -22,11 +23,7 @@ internal class OperationStateKClassVisitor(
         if (classDeclaration.classKind != ClassKind.INTERFACE) {
             logger.error(Constants.OPERATION_MUST_BE_AN_INTERFACE, classDeclaration)
         }
-
-        val className = classDeclaration.simpleName.getShortName()
-        val classPackage = classDeclaration.packageName.asString() + "." + className
-
-        logger.warn("package $classPackage")
+        onPackageKnown(packageName)
 
         val interfaceName = classDeclaration.simpleName.getShortName()
 

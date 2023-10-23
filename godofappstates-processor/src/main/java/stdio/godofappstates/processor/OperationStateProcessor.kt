@@ -20,6 +20,9 @@ class OperationStateProcessor(
     private val options: Map<String, String>
 ) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
+        var operationStatePackage: String? = null
+        var loadableDataPackage: String? = null
+
         val dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray())
         val viewModelPackage = resolver.getAllFiles()
             .firstOrNull { it.fileName.contains("ViewModel") }?.packageName?.asString()
@@ -30,7 +33,11 @@ class OperationStateProcessor(
             .getSymbolsWithAnnotation(OperationState::class.qualifiedName!!)
         symbolsOperationState.filter { it is KSClassDeclaration && it.validate() }
             .forEach {
-                it.accept(OperationStateKClassVisitor(codeGenerator, logger, dependencies), Unit)
+                it.accept(
+                    OperationStateKClassVisitor(codeGenerator, logger, dependencies) { mPackage ->
+                        operationStatePackage = mPackage
+                    }, Unit
+                )
             }
 
         // LoadableData
@@ -38,23 +45,22 @@ class OperationStateProcessor(
             .getSymbolsWithAnnotation(LoadableData::class.qualifiedName!!)
         symbolsLoadableData.filter { it is KSClassDeclaration && it.validate() }
             .forEach {
-                it.accept(LoadableDataKClassVisitor(codeGenerator, logger, dependencies), Unit)
+                it.accept(
+                    LoadableDataKClassVisitor(codeGenerator, logger, dependencies) { mPackage ->
+                        loadableDataPackage = mPackage
+                    },
+                    Unit
+                )
             }
 
-        val symbolsOperationStateList = symbolsOperationState.toList()
-        val symbolsLoadableDataList = symbolsLoadableData.toList()
-        // Processor is runs twice. First runs with annotations and second start without.
-        // That's why we can't ruin building relying on annotation symbols emptiness
-        if ((symbolsOperationStateList + symbolsLoadableDataList).isNotEmpty()) {
-            if (symbolsOperationStateList.isEmpty()) {
+        // Shouldn't bombard the user with errors as soon as he has connected library
+        // We'll do it as soon as he starts using it incorrectly
+        if (operationStatePackage != null || loadableDataPackage != null) {
+            if (operationStatePackage == null) {
                 logger.error(Constants.NO_OPERATION_STATE_ANNOTATION)
-            } else if (symbolsLoadableDataList.isEmpty()) {
+            } else if (loadableDataPackage == null) {
                 logger.error(Constants.NO_LOADABLE_DATA_ANNOTATION)
             } else {
-                val operationStatePackage = resolver.getAllFiles()
-                    .firstOrNull { it.fileName == "OperationState.kt" }?.packageName?.asString()
-                val loadableDataPackage = resolver.getAllFiles()
-                    .firstOrNull { it.fileName == "LoadableData.kt" }?.packageName?.asString()
                 logger.warn("viewModelPackage: $viewModelPackage")
                 logger.warn("operationStatePackage: $operationStatePackage")
                 logger.warn("loadableDataPackage: $loadableDataPackage")
