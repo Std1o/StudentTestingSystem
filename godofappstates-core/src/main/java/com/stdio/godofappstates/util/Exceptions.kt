@@ -2,6 +2,7 @@ package com.stdio.godofappstates.util
 
 import kotlin.reflect.KType
 
+// TODO обновить KDoc
 /**
  * 1.) Make sure that you are using RequestState or his parent in your UseCase or Repository
  *
@@ -23,9 +24,10 @@ import kotlin.reflect.KType
  *
  * [Watch issue](https://github.com/Kotlin/kotlinx.coroutines/issues/3904)
  */
-class GenericsAutoCastIsWrong : RuntimeException(
-    "\n1.) Make sure that you are using RequestState or his parent in your UseCase or Repository\n" +
-            "2.) Call protect() extension on your calling of executeOperation()"
+class WrongGenericsAutoCastException : RuntimeException(
+    "\n1.) If passed method returns Flow, make sure that you are calling .collect{}\n" +
+            "2.) You can create val with result of this method, if you need to. It will help\n" +
+            "3.) Else call protect() extension on your calling"
 )
 
 class NoOperationStateFoundException(kType: KType?) : RuntimeException(

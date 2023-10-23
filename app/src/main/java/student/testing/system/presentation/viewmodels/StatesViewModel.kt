@@ -3,7 +3,7 @@ package student.testing.system.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stdio.godofappstates.domain.OperationType
-import com.stdio.godofappstates.util.GenericsAutoCastIsWrong
+import com.stdio.godofappstates.util.WrongGenericsAutoCastException
 import com.stdio.godofappstates.util.NoFlowOfOperationStateFoundException
 import com.stdio.godofappstates.util.NoOperationStateFoundException
 import kotlinx.coroutines.Deferred
@@ -111,6 +111,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: (T) -> Unit = {},
     ): State {
         val kType = call.reflect()?.returnType
+        if (isUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isOperationState(kType) == false) {
             throw NoOperationStateFoundException(kType)
         }
@@ -122,7 +123,6 @@ open class StatesViewModel : ViewModel() {
         val request = viewModelScope.async {
             // Call launching
             requestResult = call()
-            if (requestResult is Unit) throw GenericsAutoCastIsWrong()
 
             // Working with OperationState
             val operationState = ToOperationStateMapper<State, T>().map(requestResult)
@@ -146,6 +146,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: (T) -> Unit = {},
     ): StateFlow<State> {
         val kType = call.reflect()?.returnType
+        if (isFlowOfUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isFlowOfOperationState(kType) == false) {
             throw NoFlowOfOperationStateFoundException(kType)
         }
@@ -162,7 +163,6 @@ open class StatesViewModel : ViewModel() {
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
             mutableStateFlow.collect { requestResult ->
-                if (requestResult is Unit) throw GenericsAutoCastIsWrong()
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is OperationState.Success) onSuccess.invoke(operationState.data as T)
                 if (operationState is OperationState.Empty204) onEmpty204.invoke()
@@ -280,6 +280,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: () -> Unit,
     ): State {
         val kType = call.reflect()?.returnType
+        if (isUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isOperationState(kType) == false) {
             throw NoOperationStateFoundException(kType)
         }
@@ -291,7 +292,6 @@ open class StatesViewModel : ViewModel() {
         val request = viewModelScope.async {
             // Call launching
             requestResult = call()
-            if (requestResult is Unit) throw GenericsAutoCastIsWrong()
 
             // Working with OperationState
             val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
@@ -318,6 +318,7 @@ open class StatesViewModel : ViewModel() {
         onSuccess: () -> Unit = {},
     ): StateFlow<State> {
         val kType = call.reflect()?.returnType
+        if (isFlowOfUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isFlowOfOperationState(kType) == false) {
             throw NoFlowOfOperationStateFoundException(kType)
         }
@@ -334,7 +335,6 @@ open class StatesViewModel : ViewModel() {
         // и флоу вернется только когда весь этот участок будет пройден
         viewModelScope.launch {
             mutableStateFlow.collect { requestResult ->
-                if (requestResult is Unit) throw GenericsAutoCastIsWrong()
                 val operationState = ToOperationStateMapper<State, Any>().map(requestResult)
                 if (operationState is OperationState.Success) onSuccess.invoke()
                 if (operationState is OperationState.Empty204) onEmpty204.invoke()
@@ -362,6 +362,14 @@ open class StatesViewModel : ViewModel() {
         }
     }
 
+    private fun isUnit(kType: KType?) =
+        kType?.jvmErasure?.isSuperclassOf(Unit::class)
+
+    private fun isFlowOfUnit(kType: KType?) =
+        kType?.arguments?.first()?.type?.jvmErasure?.isSuperclassOf(
+            Unit::class
+        )
+
     private fun isOperationState(kType: KType?) =
         kType?.jvmErasure?.isSuperclassOf(OperationState::class)
 
@@ -371,4 +379,5 @@ open class StatesViewModel : ViewModel() {
         )
 }
 
+// TODO написать KDoc
 fun <State> State.protect() {}
