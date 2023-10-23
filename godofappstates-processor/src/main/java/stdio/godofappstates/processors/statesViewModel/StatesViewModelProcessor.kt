@@ -31,7 +31,7 @@ class StatesViewModelProcessor(
             logger.error(Constants.NO_LOADABLE_DATA_ANNOTATION)
         } else {
             symbols.firstOrNull()?.accept(
-                StatesViewModelKClassVisitor(codeGenerator, dependencies, operationStatePackage!!),
+                StatesViewModelKClassVisitor(codeGenerator, dependencies),
                 Unit
             )
         }

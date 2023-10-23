@@ -28,7 +28,7 @@ class StateWrapperProcessor(
             logger.error(Constants.NO_OPERATION_STATE_ANNOTATION)
         } else {
             symbols.firstOrNull()?.accept(
-                StateWrapperKClassVisitor(codeGenerator, dependencies, operationStatePackage!!),
+                StateWrapperKClassVisitor(codeGenerator, dependencies),
                 Unit
             )
         }

@@ -4,12 +4,12 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
+import stdio.godofappstates.UsedPackages.operationStatePackage
 import java.io.OutputStream
 
 internal class StateWrapperKClassVisitor(
     private val codeGenerator: CodeGenerator,
     private val dependencies: Dependencies,
-    private val operationStatePackage: String,
 ) : KSVisitorVoid() {
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {

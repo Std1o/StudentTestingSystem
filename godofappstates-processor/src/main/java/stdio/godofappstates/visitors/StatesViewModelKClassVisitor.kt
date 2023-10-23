@@ -4,6 +4,8 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
+import stdio.godofappstates.UsedPackages.loadableDataPackage
+import stdio.godofappstates.UsedPackages.operationStatePackage
 import java.io.OutputStream
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -11,7 +13,6 @@ import java.nio.file.Paths
 internal class StatesViewModelKClassVisitor(
     private val codeGenerator: CodeGenerator,
     private val dependencies: Dependencies,
-    private val operationStatePackage: String,
 ) : KSVisitorVoid() {
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
@@ -30,8 +31,8 @@ internal class StatesViewModelKClassVisitor(
             ("""
     |package $packageName
 
-    |import student.testing.system.domain.states.LoadableData
-    |import student.testing.system.domain.states.OperationState
+    |import $operationStatePackage.OperationState
+    |import $loadableDataPackage.LoadableData
     """.trimMargin() + "\n" + content).trimMargin().toByteArray()
         )
 
