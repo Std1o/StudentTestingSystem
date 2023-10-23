@@ -23,7 +23,7 @@ class StateWrapperProcessor(
         val symbols = resolver
             .getSymbolsWithAnnotation(AllStatesReadyToUse::class.qualifiedName!!)
             .filter { it is KSClassDeclaration && it.validate() }
-        logger.warn("symbolsPackageForStatesViewModel: ${symbols.toList()}")
+        if (symbols.toList().isEmpty()) return emptyList()
         if (operationStatePackage == null) {
             logger.error(Constants.NO_OPERATION_STATE_ANNOTATION)
         } else {
