@@ -13,6 +13,7 @@ internal class LoadableDataKClassVisitor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
     private val dependencies: Dependencies,
+    private val parents: String,
     private val onPackageKnown: (String) -> Unit
 ) : KSVisitorVoid() {
 
@@ -24,8 +25,6 @@ internal class LoadableDataKClassVisitor(
             logger.error(Constants.LOADABLE_MUST_BE_AN_INTERFACE, classDeclaration)
         }
         onPackageKnown(packageName)
-
-        val interfaceName = classDeclaration.simpleName.getShortName()
 
         val outputStream: OutputStream = codeGenerator.createNewFile(
             dependencies = dependencies,
@@ -69,7 +68,7 @@ internal class LoadableDataKClassVisitor(
     | * ```
     | */
     |@FunctionalityState
-    |sealed interface LoadableData<out R> : $interfaceName<R> {
+    |sealed interface LoadableData<out R> : $parents {
     |    data object NoState : LoadableData<Nothing>
     |
     |    data class Success<out T>(

@@ -32,7 +32,7 @@ class OperationStateProcessor(
         val symbolsOperationState = resolver
             .getSymbolsWithAnnotation(OperationState::class.qualifiedName!!)
             .filter { it is KSClassDeclaration && it.validate() }
-        val operationStateParents = symbolsOperationState.toList().map { it.toString() }
+        val operationStateParents = getStrParents(symbolsOperationState)
         symbolsOperationState.firstOrNull()?.accept(
             OperationStateKClassVisitor(
                 codeGenerator, logger, dependencies, operationStateParents
@@ -45,15 +45,16 @@ class OperationStateProcessor(
         // LoadableData
         val symbolsLoadableData = resolver
             .getSymbolsWithAnnotation(LoadableData::class.qualifiedName!!)
-        symbolsLoadableData.filter { it is KSClassDeclaration && it.validate() }
-            .forEach {
-                it.accept(
-                    LoadableDataKClassVisitor(codeGenerator, logger, dependencies) { mPackage ->
-                        loadableDataPackage = mPackage
-                    },
-                    Unit
-                )
-            }
+            .filter { it is KSClassDeclaration && it.validate() }
+        val loadableDataParents = getStrParents(symbolsLoadableData)
+        symbolsLoadableData.firstOrNull()?.accept(
+            LoadableDataKClassVisitor(
+                codeGenerator, logger, dependencies, loadableDataParents
+            ) { mPackage ->
+                loadableDataPackage = mPackage
+            },
+            Unit
+        )
 
         // Shouldn't bombard the user with errors as soon as he has connected library
         // We'll do it as soon as he starts using it incorrectly
@@ -72,5 +73,13 @@ class OperationStateProcessor(
         val unableToProcessOperationsState = symbolsOperationState.filterNot { it.validate() }
         val unableToProcessLoadableData = symbolsLoadableData.filterNot { it.validate() }
         return unableToProcessOperationsState.toList() + unableToProcessLoadableData.toList()
+    }
+
+    private fun getStrParents(annotatedClasses: Sequence<KSAnnotated>): String {
+        val parents = annotatedClasses.toList().map { it.toString() }
+        var strParents = ""
+        parents.forEach { strParents += "$it<R>, " }
+        strParents = strParents.dropLast(2)
+        return strParents
     }
 }

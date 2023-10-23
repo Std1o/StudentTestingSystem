@@ -13,7 +13,7 @@ internal class OperationStateKClassVisitor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
     private val dependencies: Dependencies,
-    private val parents: List<String>,
+    private val parents: String,
     private val onPackageKnown: (String) -> Unit
 ) : KSVisitorVoid() {
 
@@ -25,10 +25,6 @@ internal class OperationStateKClassVisitor(
             logger.error(Constants.OPERATION_MUST_BE_AN_INTERFACE, classDeclaration)
         }
         onPackageKnown(packageName)
-
-        var strParents = ""
-        parents.forEach { strParents += "$it<R>, " }
-        strParents = strParents.dropLast(2)
 
         val outputStream: OutputStream = codeGenerator.createNewFile(
             dependencies = dependencies,
@@ -52,7 +48,7 @@ internal class OperationStateKClassVisitor(
     | * or used for some quick actions (show the loader, show the snackbar with an error, navigate to a new screen)
     | */
     |@FunctionalityState
-    |sealed interface OperationState<out R> : $strParents {
+    |sealed interface OperationState<out R> : $parents {
     |    data object NoState : OperationState<Nothing>
     |
     |    data class Success<out T>(
