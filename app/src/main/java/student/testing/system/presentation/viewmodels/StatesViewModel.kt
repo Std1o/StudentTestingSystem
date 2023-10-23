@@ -3,9 +3,10 @@ package student.testing.system.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stdio.godofappstates.domain.OperationType
-import com.stdio.godofappstates.util.WrongGenericsAutoCastException
+import com.stdio.godofappstates.util.InvalidArgumentException
 import com.stdio.godofappstates.util.NoFlowOfOperationStateFoundException
 import com.stdio.godofappstates.util.NoOperationStateFoundException
+import com.stdio.godofappstates.util.WrongGenericsAutoCastException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -48,13 +49,41 @@ open class StatesViewModel : ViewModel() {
 
 
     // State - LoadableData
-    suspend fun <State> loadData(
-        call: suspend () -> State
+    protected suspend inline fun <reified State> loadData(
+        noinline call: suspend () -> State
     ): StateFlow<State> {
+        val kClass = State::class
+        if (!isLoadableData(kClass)) {
+            throw InvalidArgumentException(
+                expected = "LoadableData or LoadableData superclass",
+                found = kClass.starProjectedType,
+                advice = if (isFlow(kClass)) "Use loadDataFlow() instead" else ""
+            )
+        }
         val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
         viewModelScope.launch {// for asynchrony
             var requestResult: State = call()
             stateFlow.emit(requestResult)
+        }
+        return stateFlow
+    }
+
+    // Flow - LoadableData
+    protected suspend inline fun <reified State> loadDataFlow(
+        noinline call: suspend () -> Flow<State>
+    ): StateFlow<State> {
+        val kClass = State::class
+        if (!isLoadableData(kClass)) {
+            throw InvalidArgumentException(
+                expected = "Flow of LoadableData or LoadableData superclass",
+                found = kClass.starProjectedType
+            )
+        }
+        val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
+        viewModelScope.launch {// for asynchrony
+            call().collect {
+                stateFlow.emit(it)
+            }
         }
         return stateFlow
     }
@@ -86,7 +115,7 @@ open class StatesViewModel : ViewModel() {
         noinline onEmpty204: () -> Unit = {},
         noinline onSuccess: (T) -> Unit = {},
     ): FlowOrState {
-        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
+        return if (isFlow(FlowOrState::class)) {
             flowExecuteOperation(
                 call as suspend () -> Flow<*>,
                 operationType,
@@ -182,7 +211,7 @@ open class StatesViewModel : ViewModel() {
         operationType: OperationType = OperationType.DefaultOperation,
         noinline onEmpty204: () -> Unit = {},
     ): FlowOrState {
-        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
+        return if (isFlow(FlowOrState::class)) {
             flowExecuteEmptyOperation(
                 call as suspend () -> Flow<*>,
                 operationType,
@@ -227,7 +256,7 @@ open class StatesViewModel : ViewModel() {
         operationType: OperationType = OperationType.DefaultOperation,
         noinline onSuccess: () -> Unit = {}
     ): FlowOrState {
-        return if (FlowOrState::class.starProjectedType.classifier == Flow::class) {
+        return if (isFlow(FlowOrState::class)) {
             flowExecuteOperationAndIgnoreData(
                 call as suspend () -> Flow<*>,
                 operationType,
@@ -377,6 +406,13 @@ open class StatesViewModel : ViewModel() {
         kType?.arguments?.first()?.type?.jvmErasure?.isSuperclassOf(
             OperationState::class
         )
+
+    @PublishedApi
+    internal fun isFlow(kClass: KClass<*>) = kClass.starProjectedType.classifier == Flow::class
+
+    @PublishedApi
+    internal fun isLoadableData(kClass: KClass<*>) =
+        kClass.starProjectedType.jvmErasure.isSuperclassOf(LoadableData::class)
 }
 
 // TODO написать KDoc
