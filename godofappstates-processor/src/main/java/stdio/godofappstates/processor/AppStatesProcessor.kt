@@ -14,7 +14,7 @@ import stdio.godofappstates.annotations.OperationState
 import stdio.godofappstates.visitors.LoadableDataKClassVisitor
 import stdio.godofappstates.visitors.OperationStateKClassVisitor
 
-class OperationStateProcessor(
+class AppStatesProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
     private val options: Map<String, String>
