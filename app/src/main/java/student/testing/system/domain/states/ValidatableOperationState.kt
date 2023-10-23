@@ -3,7 +3,9 @@ package student.testing.system.domain.states
 import androidx.annotation.StringRes
 import stdio.godofappstates.annotations.StillLoading
 import com.stdio.godofappstates.domain.OperationType
+import stdio.godofappstates.annotations.OperationState
 
+@OperationState
 sealed interface ValidatableOperationState<out R> {
     data class ValidationError(
         @StringRes val messageResId: Int,

@@ -2,8 +2,9 @@ package student.testing.system.domain.states
 
 import androidx.annotation.StringRes
 import stdio.godofappstates.annotations.FunctionalityState
+import stdio.godofappstates.annotations.OperationState
 
-@FunctionalityState
+@OperationState
 sealed interface AuthState<out R> : SignUpState<R>, LoginState<R> {
     data class EmailError(@StringRes val messageResId: Int) : AuthState<Nothing>
     data class PasswordError(@StringRes val messageResId: Int) : AuthState<Nothing>
