@@ -1,7 +1,3 @@
-package student.testing.system.presentation.viewmodels
-
-import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stdio.godofappstates.domain.OperationType
@@ -39,7 +35,6 @@ import kotlin.reflect.jvm.reflect
  * @param State State that is used for this functionality
  * @param T Type of data that comes from the server when performing the operation
  */
-
 open class StatesViewModel : ViewModel() {
 
     private val _lastOperationStateWrapper = StateWrapper.mutableStateFlow<OperationState<Any>>()

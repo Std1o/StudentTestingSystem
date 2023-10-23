@@ -1,3 +1,4 @@
 stdio.godofappstates.processors.operationState.OperationStateProcessorProvider
 stdio.godofappstates.processors.loadableData.LoadableDataProcessorProvider
 stdio.godofappstates.processors.stateWrapper.StateWrapperProcessorProvider
+stdio.godofappstates.processors.statesViewModel.StatesViewModelProcessorProvider
