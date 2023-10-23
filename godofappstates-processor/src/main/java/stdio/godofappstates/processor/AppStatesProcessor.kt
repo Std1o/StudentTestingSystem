@@ -9,21 +9,18 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.validate
 import stdio.godofappstates.Constants
+import stdio.godofappstates.UsedPackages.loadableDataPackage
+import stdio.godofappstates.UsedPackages.operationStatePackage
 import stdio.godofappstates.annotations.LoadableData
 import stdio.godofappstates.annotations.OperationState
-import stdio.godofappstates.annotations.PackageForStatesViewModel
 import stdio.godofappstates.visitors.LoadableDataKClassVisitor
 import stdio.godofappstates.visitors.OperationStateKClassVisitor
-import stdio.godofappstates.visitors.StateWrapperKClassVisitor
 
 class AppStatesProcessor(
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger,
-    private val options: Map<String, String>
 ) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        var operationStatePackage: String? = null
-        var loadableDataPackage: String? = null
 
         val dependencies = Dependencies(false, *resolver.getAllFiles().toList().toTypedArray())
         val viewModelPackage = resolver.getAllFiles()
@@ -57,34 +54,6 @@ class AppStatesProcessor(
             },
             Unit
         )
-
-        // PackageForStatesViewModel
-        val symbolsPackageForStatesViewModel = resolver
-            .getSymbolsWithAnnotation(PackageForStatesViewModel::class.qualifiedName!!)
-            .filter { it is KSClassDeclaration && it.validate() }
-        logger.warn("symbolsPackageForStatesViewModel: ${symbolsPackageForStatesViewModel.toList()}")
-        // Shouldn't bombard the user with errors as soon as he has connected library
-        // We'll do it as soon as he starts using it incorrectly
-        if (symbolsPackageForStatesViewModel.toList().isNotEmpty()) {
-            if (operationStatePackage == null) {
-                logger.error(Constants.NO_OPERATION_STATE_ANNOTATION)
-            } else if (loadableDataPackage == null) {
-                logger.error(Constants.NO_LOADABLE_DATA_ANNOTATION)
-            } else {
-                logger.warn("viewModelPackage: $viewModelPackage")
-                logger.warn("operationStatePackage: $operationStatePackage")
-                logger.warn("loadableDataPackage: $loadableDataPackage")
-                symbolsPackageForStatesViewModel.firstOrNull()?.accept(
-                    StateWrapperKClassVisitor(
-                        codeGenerator,
-                        logger,
-                        dependencies,
-                        operationStatePackage!!
-                    ),
-                    Unit
-                )
-            }
-        }
 
         val unableToProcessOperationsState = symbolsOperationState.filterNot { it.validate() }
         val unableToProcessLoadableData = symbolsLoadableData.filterNot { it.validate() }

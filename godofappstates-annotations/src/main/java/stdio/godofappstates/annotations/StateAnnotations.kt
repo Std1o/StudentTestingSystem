@@ -39,4 +39,4 @@ annotation class ScreenSession
 annotation class StillLoading
 
 @Target(AnnotationTarget.CLASS)
-annotation class PackageForStatesViewModel
+annotation class AllStatesReadyToUse

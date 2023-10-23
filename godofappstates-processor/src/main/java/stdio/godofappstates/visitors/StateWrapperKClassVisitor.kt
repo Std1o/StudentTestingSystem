@@ -2,23 +2,19 @@ package stdio.godofappstates.visitors
 
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
-import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSVisitorVoid
-import stdio.godofappstates.Constants
 import java.io.OutputStream
 
 internal class StateWrapperKClassVisitor(
     private val codeGenerator: CodeGenerator,
-    private val logger: KSPLogger,
     private val dependencies: Dependencies,
     private val operationStatePackage: String,
 ) : KSVisitorVoid() {
 
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
 
-        val packageName = "com.stdio.godofappstates.presentation.stateWrapper"
+        val packageName = "godofappstates.presentation.stateWrapper"
 
         val outputStream: OutputStream = codeGenerator.createNewFile(
             dependencies = dependencies,

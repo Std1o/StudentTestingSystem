@@ -1,1 +1,2 @@
 stdio.godofappstates.processor.AppStatesProcessorProvider
+stdio.godofappstates.processor.StateWrapperProcessorProvider
