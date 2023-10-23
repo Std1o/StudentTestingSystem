@@ -37,3 +37,6 @@ annotation class ScreenSession
  */
 @MustBeDocumented
 annotation class StillLoading
+
+@Target(AnnotationTarget.CLASS)
+annotation class PackageForStatesViewModel

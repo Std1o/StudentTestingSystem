@@ -11,8 +11,10 @@ import com.google.devtools.ksp.validate
 import stdio.godofappstates.Constants
 import stdio.godofappstates.annotations.LoadableData
 import stdio.godofappstates.annotations.OperationState
+import stdio.godofappstates.annotations.PackageForStatesViewModel
 import stdio.godofappstates.visitors.LoadableDataKClassVisitor
 import stdio.godofappstates.visitors.OperationStateKClassVisitor
+import stdio.godofappstates.visitors.StateWrapperKClassVisitor
 
 class AppStatesProcessor(
     private val codeGenerator: CodeGenerator,
@@ -56,9 +58,14 @@ class AppStatesProcessor(
             Unit
         )
 
+        // PackageForStatesViewModel
+        val symbolsPackageForStatesViewModel = resolver
+            .getSymbolsWithAnnotation(PackageForStatesViewModel::class.qualifiedName!!)
+            .filter { it is KSClassDeclaration && it.validate() }
+        logger.warn("symbolsPackageForStatesViewModel: ${symbolsPackageForStatesViewModel.toList()}")
         // Shouldn't bombard the user with errors as soon as he has connected library
         // We'll do it as soon as he starts using it incorrectly
-        if (operationStatePackage != null || loadableDataPackage != null) {
+        if (symbolsPackageForStatesViewModel.toList().isNotEmpty()) {
             if (operationStatePackage == null) {
                 logger.error(Constants.NO_OPERATION_STATE_ANNOTATION)
             } else if (loadableDataPackage == null) {
@@ -67,6 +74,15 @@ class AppStatesProcessor(
                 logger.warn("viewModelPackage: $viewModelPackage")
                 logger.warn("operationStatePackage: $operationStatePackage")
                 logger.warn("loadableDataPackage: $loadableDataPackage")
+                symbolsPackageForStatesViewModel.firstOrNull()?.accept(
+                    StateWrapperKClassVisitor(
+                        codeGenerator,
+                        logger,
+                        dependencies,
+                        operationStatePackage!!
+                    ),
+                    Unit
+                )
             }
         }
 
