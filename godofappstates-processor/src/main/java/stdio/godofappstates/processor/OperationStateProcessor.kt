@@ -31,14 +31,16 @@ class OperationStateProcessor(
         // OperationState
         val symbolsOperationState = resolver
             .getSymbolsWithAnnotation(OperationState::class.qualifiedName!!)
-        symbolsOperationState.filter { it is KSClassDeclaration && it.validate() }
-            .forEach {
-                it.accept(
-                    OperationStateKClassVisitor(codeGenerator, logger, dependencies) { mPackage ->
-                        operationStatePackage = mPackage
-                    }, Unit
-                )
-            }
+            .filter { it is KSClassDeclaration && it.validate() }
+        val operationStateParents = symbolsOperationState.toList().map { it.toString() }
+        symbolsOperationState.firstOrNull()?.accept(
+            OperationStateKClassVisitor(
+                codeGenerator, logger, dependencies, operationStateParents
+            ) { mPackage ->
+                operationStatePackage = mPackage
+            },
+            Unit
+        )
 
         // LoadableData
         val symbolsLoadableData = resolver
