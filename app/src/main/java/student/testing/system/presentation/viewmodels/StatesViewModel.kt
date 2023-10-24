@@ -1,3 +1,6 @@
+@file:Suppress("UNCHECKED_CAST")
+@file:OptIn(ExperimentalReflectionOnLambdas::class)
+
 package student.testing.system.presentation.viewmodels
 
 import student.testing.system.domain.states.LoadableData
@@ -28,18 +31,17 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.starProjectedType
+import kotlin.reflect.jvm.ExperimentalReflectionOnLambdas
 import kotlin.reflect.jvm.jvmErasure
 import kotlin.reflect.jvm.reflect
 
 
 /**
- * OperationViewModel contains a StateFlow that broadcasts last operation state,
+ * StatesViewModel contains a StateFlow that broadcasts last operation state,
  * and a method that launching operations and updating last operation state based on the response.
  *
- * @param State State that is used for this functionality
- * @param T Type of data that comes from the server when performing the operation
+ * Also StatesViewModel has methods for calling LoadableData requests with automatically setting Loading status
  */
-
 open class StatesViewModel : ViewModel() {
 
     private val _lastOperationStateWrapper = StateWrapper.mutableStateFlow<OperationState<Any>>()
@@ -49,6 +51,10 @@ open class StatesViewModel : ViewModel() {
 
 
     // State - LoadableData
+    /**
+     * Method for calling LoadableData requests, that automatically sets Loading status
+     * @param call lambda that returns LoadableData or parent of LoadableData
+     */
     protected suspend inline fun <reified State> loadData(
         noinline call: suspend () -> State
     ): StateFlow<State> {
@@ -62,13 +68,17 @@ open class StatesViewModel : ViewModel() {
         }
         val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
         viewModelScope.launch {// for asynchrony
-            var requestResult: State = call()
+            val requestResult: State = call()
             stateFlow.emit(requestResult)
         }
         return stateFlow
     }
 
     // Flow - LoadableData
+    /**
+     * Method for calling LoadableData requests, that automatically sets Loading status
+     * @param call lambda that returns flow of LoadableData or parent of LoadableData
+     */
     protected suspend inline fun <reified State> loadDataFlow(
         noinline call: suspend () -> Flow<State>
     ): StateFlow<State> {

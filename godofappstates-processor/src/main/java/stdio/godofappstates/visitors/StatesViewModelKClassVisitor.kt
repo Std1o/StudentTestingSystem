@@ -29,6 +29,9 @@ internal class StatesViewModelKClassVisitor(
 
         outputStream.write(
             ("""
+    |@file:Suppress("UNCHECKED_CAST")
+    |@file:OptIn(ExperimentalReflectionOnLambdas::class)
+
     |package $packageName
 
     |import $operationStatePackage.OperationState
