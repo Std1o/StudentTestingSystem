@@ -82,7 +82,7 @@ open class StatesViewModel : ViewModel() {
         call: suspend () -> Flow<State>
     ): StateFlow<State> {
         val kType = call.reflect()?.returnType
-        if (isLoadableData(kType) == false) {
+        if (isFlowOfLoadableData(kType) == false) {
             throw InvalidArgumentException(
                 expected = "Flow of LoadableData or LoadableData superclass",
                 found = kType
@@ -438,6 +438,11 @@ open class StatesViewModel : ViewModel() {
 
     private fun isLoadableData(kType: KType?) =
         kType?.jvmErasure?.isSuperclassOf(LoadableData::class)
+
+    private fun isFlowOfLoadableData(kType: KType?) =
+        kType?.arguments?.first()?.type?.jvmErasure?.isSuperclassOf(
+            LoadableData::class
+        )
 }
 
 /**
