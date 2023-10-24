@@ -30,7 +30,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.isSuperclassOf
-import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.ExperimentalReflectionOnLambdas
 import kotlin.reflect.jvm.jvmErasure
 import kotlin.reflect.jvm.reflect
@@ -55,15 +54,15 @@ open class StatesViewModel : ViewModel() {
      * Method for calling LoadableData requests, that automatically sets Loading status
      * @param call lambda that returns LoadableData or parent of LoadableData
      */
-    protected suspend inline fun <reified State> loadData(
-        noinline call: suspend () -> State
+    protected suspend fun <State> loadData(
+        call: suspend () -> State
     ): StateFlow<State> {
-        val kClass = State::class
-        if (!isLoadableData(kClass)) {
+        val kType = call.reflect()?.returnType
+        if (isLoadableData(kType) == false) {
             throw InvalidArgumentException(
                 expected = "LoadableData or LoadableData superclass",
-                found = kClass.starProjectedType,
-                advice = if (isFlow(kClass)) "Use loadDataFlow() instead" else ""
+                found = kType,
+                advice = if (isFlow(kType)) "Use loadDataFlow() instead" else ""
             )
         }
         val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
@@ -79,14 +78,14 @@ open class StatesViewModel : ViewModel() {
      * Method for calling LoadableData requests, that automatically sets Loading status
      * @param call lambda that returns flow of LoadableData or parent of LoadableData
      */
-    protected suspend inline fun <reified State> loadDataFlow(
-        noinline call: suspend () -> Flow<State>
+    protected suspend fun <State> loadDataFlow(
+        call: suspend () -> Flow<State>
     ): StateFlow<State> {
-        val kClass = State::class
-        if (!isLoadableData(kClass)) {
+        val kType = call.reflect()?.returnType
+        if (isLoadableData(kType) == false) {
             throw InvalidArgumentException(
                 expected = "Flow of LoadableData or LoadableData superclass",
-                found = kClass.starProjectedType
+                found = kType
             )
         }
         val stateFlow = MutableStateFlow(LoadableData.Loading() as State)
@@ -109,7 +108,9 @@ open class StatesViewModel : ViewModel() {
      *
      * @param call Suspend fun that will be called here
      * @param onSuccess An optional callback function that may be called for some ViewModel businesses
-     * @param type for auto cast. Believe me, you don't want to write that long generic
+     * @param type for auto cast. Believe, you don't want to write that long generic
+     *
+     * [Watch issue](https://github.com/Kotlin/kotlinx.coroutines/issues/3904)
      *
      * Example:
      *
@@ -118,16 +119,18 @@ open class StatesViewModel : ViewModel() {
      * ```
      * @param operationType for loading
      */
-    protected suspend inline fun <reified FlowOrState, T : Any> executeOperation(
-        noinline call: suspend () -> FlowOrState,
+    protected suspend fun <FlowOrState, T : Any> executeOperation(
+        call: suspend () -> FlowOrState,
         type: KClass<T>,
         operationType: OperationType = OperationType.DefaultOperation,
-        noinline onEmpty204: () -> Unit = {},
-        noinline onSuccess: (T) -> Unit = {},
+        onEmpty204: () -> Unit = {},
+        onSuccess: (T) -> Unit = {},
     ): FlowOrState {
-        return if (isFlow(FlowOrState::class)) {
+        val kType = call.reflect()?.returnType
+        return if (isFlow(kType)) {
             flowExecuteOperation(
                 call as suspend () -> Flow<*>,
+                kType,
                 operationType,
                 onEmpty204,
                 onSuccess
@@ -135,6 +138,7 @@ open class StatesViewModel : ViewModel() {
         } else {
             stateExecuteOperation(
                 call,
+                kType,
                 operationType,
                 onEmpty204,
                 onSuccess
@@ -142,14 +146,13 @@ open class StatesViewModel : ViewModel() {
         }
     }
 
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State, T : Any> stateExecuteOperation(
+    private suspend fun <@FunctionalityState State, T : Any> stateExecuteOperation(
         call: suspend () -> State,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): State {
-        val kType = call.reflect()?.returnType
         if (isUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isOperationState(kType) == false) {
             throw NoOperationStateFoundException(kType)
@@ -177,14 +180,13 @@ open class StatesViewModel : ViewModel() {
     /**
      * Если use case отправляет какие-то промежуточные результаты
      */
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State, T : Any> flowExecuteOperation(
+    private suspend fun <@FunctionalityState State, T : Any> flowExecuteOperation(
         call: suspend () -> Flow<State>,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit = {},
         onSuccess: (T) -> Unit = {},
     ): StateFlow<State> {
-        val kType = call.reflect()?.returnType
         if (isFlowOfUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isFlowOfOperationState(kType) == false) {
             throw NoFlowOfOperationStateFoundException(kType)
@@ -216,43 +218,47 @@ open class StatesViewModel : ViewModel() {
 
     // executeEmptyOperation()
     // __________________________________________________________________________________
-    protected suspend inline fun <reified FlowOrState> executeEmptyOperation(
-        noinline call: suspend () -> FlowOrState,
+    protected suspend fun <FlowOrState> executeEmptyOperation(
+        call: suspend () -> FlowOrState,
         operationType: OperationType = OperationType.DefaultOperation,
-        noinline onEmpty204: () -> Unit = {},
+        onEmpty204: () -> Unit = {},
     ): FlowOrState {
-        return if (isFlow(FlowOrState::class)) {
+        val kType = call.reflect()?.returnType
+        return if (isFlow(kType)) {
             flowExecuteEmptyOperation(
                 call as suspend () -> Flow<*>,
+                kType,
                 operationType,
                 onEmpty204
             ) as FlowOrState
         } else {
-            stateExecuteEmptyOperation(call, operationType, onEmpty204)
+            stateExecuteEmptyOperation(call, kType, operationType, onEmpty204)
         }
     }
 
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State> stateExecuteEmptyOperation(
+    private suspend fun <@FunctionalityState State> stateExecuteEmptyOperation(
         call: suspend () -> State,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit = {},
     ): State {
         return stateExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
+            kType = kType,
             operationType = operationType,
             onSuccess = {},
             onEmpty204 = { onEmpty204() })
     }
 
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State> flowExecuteEmptyOperation(
+    private suspend fun <@FunctionalityState State> flowExecuteEmptyOperation(
         call: suspend () -> Flow<State>,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit = {},
     ): Flow<State> {
         return flowExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
+            kType = kType,
             operationType = operationType,
             onSuccess = {},
             onEmpty204 = { onEmpty204() })
@@ -261,33 +267,36 @@ open class StatesViewModel : ViewModel() {
 
     // executeOperationAndIgnoreData()
     // __________________________________________________________________________________
-    protected suspend inline fun <reified FlowOrState> executeOperationAndIgnoreData(
-        noinline call: suspend () -> FlowOrState,
+    protected suspend fun <FlowOrState> executeOperationAndIgnoreData(
+        call: suspend () -> FlowOrState,
         operationType: OperationType = OperationType.DefaultOperation,
-        noinline onSuccess: () -> Unit = {}
+        onSuccess: () -> Unit = {}
     ): FlowOrState {
-        return if (isFlow(FlowOrState::class)) {
+        val kType = call.reflect()?.returnType
+        return if (isFlow(kType)) {
             flowExecuteOperationAndIgnoreData(
                 call as suspend () -> Flow<*>,
+                kType,
                 operationType,
                 onSuccess
             ) as FlowOrState
         } else {
-            stateExecuteOperationAndIgnoreData(call, operationType, onSuccess)
+            stateExecuteOperationAndIgnoreData(call, kType, operationType, onSuccess)
         }
     }
 
     /**
      * Используется если тип данных в onSuccess не важен
      */
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State> stateExecuteOperationAndIgnoreData(
+    private suspend fun <@FunctionalityState State> stateExecuteOperationAndIgnoreData(
         call: suspend () -> State,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onSuccess: () -> Unit = {},
     ): State {
         return stateExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
+            kType = kType,
             operationType = operationType,
             onSuccess = { onSuccess() },
             onEmpty204 = {})
@@ -296,14 +305,15 @@ open class StatesViewModel : ViewModel() {
     /**
      * Используется если тип данных в onSuccess не важен
      */
-    @PublishedApi
-    internal suspend fun <@FunctionalityState State> flowExecuteOperationAndIgnoreData(
+    private suspend fun <@FunctionalityState State> flowExecuteOperationAndIgnoreData(
         call: suspend () -> Flow<State>,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onSuccess: () -> Unit = {},
     ): Flow<State> {
         return flowExecuteEmptyOrWithDataIgnoringOperation(
             call = call,
+            kType = kType,
             operationType = operationType,
             onSuccess = { onSuccess() },
             onEmpty204 = {})
@@ -314,11 +324,11 @@ open class StatesViewModel : ViewModel() {
     // __________________________________________________________________________________
     private suspend fun <@FunctionalityState State> stateExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> State,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit,
         onSuccess: () -> Unit,
     ): State {
-        val kType = call.reflect()?.returnType
         if (isUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isOperationState(kType) == false) {
             throw NoOperationStateFoundException(kType)
@@ -352,11 +362,11 @@ open class StatesViewModel : ViewModel() {
 
     private suspend fun <@FunctionalityState State> flowExecuteEmptyOrWithDataIgnoringOperation(
         call: suspend () -> Flow<State>,
+        kType: KType?,
         operationType: OperationType = OperationType.DefaultOperation,
         onEmpty204: () -> Unit = {},
         onSuccess: () -> Unit = {},
     ): StateFlow<State> {
-        val kType = call.reflect()?.returnType
         if (isFlowOfUnit(kType) == true) throw WrongGenericsAutoCastException()
         if (isFlowOfOperationState(kType) == false) {
             throw NoFlowOfOperationStateFoundException(kType)
@@ -417,12 +427,10 @@ open class StatesViewModel : ViewModel() {
             OperationState::class
         )
 
-    @PublishedApi
-    internal fun isFlow(kClass: KClass<*>) = kClass.starProjectedType.classifier == Flow::class
+    private fun isFlow(kType: KType?) = kType?.classifier == Flow::class
 
-    @PublishedApi
-    internal fun isLoadableData(kClass: KClass<*>) =
-        kClass.starProjectedType.jvmErasure.isSuperclassOf(LoadableData::class)
+    private fun isLoadableData(kType: KType?) =
+        kType?.jvmErasure?.isSuperclassOf(LoadableData::class)
 }
 
 // TODO написать KDoc

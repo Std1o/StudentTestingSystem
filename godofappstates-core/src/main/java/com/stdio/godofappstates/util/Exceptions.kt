@@ -42,10 +42,10 @@ class NoFlowOfOperationStateFoundException(kType: KType?) : RuntimeException(
             "Please make sure that you use Flow of sealed interface marked with annotation @OperationState\n\n"
 )
 
-class InvalidArgumentException(expected: String, found: KType, advice: String = "") :
+class InvalidArgumentException(expected: String, found: KType?, advice: String = "") :
     RuntimeException(
         "" +
                 "\nExpected: $expected" +
-                "\nFound: ${found.classifier}" +
+                "\nFound: ${found?.classifier}" +
                 "\n $advice"
     )
