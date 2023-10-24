@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import godofappstates.presentation.stateWrapper.StateWrapper
+import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION

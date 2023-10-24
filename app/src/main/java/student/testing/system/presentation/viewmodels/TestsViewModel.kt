@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import com.stdio.godofappstates.delegates.StateFlowVar.Companion.stateFlowVar
+import godofappstates.presentation.viewmodel.StatesViewModel
+import godofappstates.presentation.viewmodel.protect
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState

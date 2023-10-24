@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import com.stdio.godofappstates.delegates.StateFlowVar.Companion.stateFlowVar
 import godofappstates.presentation.stateWrapper.StateWrapper
+import godofappstates.presentation.viewmodel.StatesViewModel
+import godofappstates.presentation.viewmodel.protect
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
