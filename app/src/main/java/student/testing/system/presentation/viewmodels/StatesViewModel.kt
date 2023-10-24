@@ -103,14 +103,9 @@ open class StatesViewModel : ViewModel() {
     /**
      * Launches operations and updating last operation state based on the response.
      *
-     * Your coroutine must contain at least one val/var or you must specify explicit generics for this method!
-     *  [Watch issue](https://github.com/Kotlin/kotlinx.coroutines/issues/3904)
-     *
      * @param call Suspend fun that will be called here
      * @param onSuccess An optional callback function that may be called for some ViewModel businesses
      * @param type for auto cast. Believe, you don't want to write that long generic
-     *
-     * [Watch issue](https://github.com/Kotlin/kotlinx.coroutines/issues/3904)
      *
      * Example:
      *
@@ -218,6 +213,15 @@ open class StatesViewModel : ViewModel() {
 
     // executeEmptyOperation()
     // __________________________________________________________________________________
+    /**
+     * If you are sure that method return 204 response code instead of 200.
+     *
+     * This method launches operations and updating last operation state based on the response.
+     *
+     * @param call Suspend fun that will be called here
+     * @param onEmpty204 An optional callback function that may be called for some ViewModel businesses
+     * @param operationType for loading
+     */
     protected suspend fun <FlowOrState> executeEmptyOperation(
         call: suspend () -> FlowOrState,
         operationType: OperationType = OperationType.DefaultOperation,
@@ -267,6 +271,15 @@ open class StatesViewModel : ViewModel() {
 
     // executeOperationAndIgnoreData()
     // __________________________________________________________________________________
+    /**
+     * If it doesn't matter to you what response data will be returned on success.
+     *
+     * This method launches operations and updating last operation state based on the response.
+     *
+     * @param call Suspend fun that will be called here
+     * @param onSuccess An optional callback function that may be called for some ViewModel businesses
+     * @param operationType for loading
+     */
     protected suspend fun <FlowOrState> executeOperationAndIgnoreData(
         call: suspend () -> FlowOrState,
         operationType: OperationType = OperationType.DefaultOperation,
@@ -285,9 +298,6 @@ open class StatesViewModel : ViewModel() {
         }
     }
 
-    /**
-     * Используется если тип данных в onSuccess не важен
-     */
     private suspend fun <@FunctionalityState State> stateExecuteOperationAndIgnoreData(
         call: suspend () -> State,
         kType: KType?,
@@ -302,9 +312,6 @@ open class StatesViewModel : ViewModel() {
             onEmpty204 = {})
     }
 
-    /**
-     * Используется если тип данных в onSuccess не важен
-     */
     private suspend fun <@FunctionalityState State> flowExecuteOperationAndIgnoreData(
         call: suspend () -> Flow<State>,
         kType: KType?,
@@ -433,5 +440,15 @@ open class StatesViewModel : ViewModel() {
         kType?.jvmErasure?.isSuperclassOf(LoadableData::class)
 }
 
-// TODO написать KDoc
+/**
+ * If you use [StatesViewModel.executeOperation] or [StatesViewModel.executeEmptyOperation] or
+ * [StatesViewModel.executeOperationAndIgnoreData] with labda that returns some OperationState
+ * there may be problem with generics auto cast
+ *
+ * [Watch issue](https://github.com/Kotlin/kotlinx.coroutines/issues/3904)
+ *
+ * Use this extension, otherwise your coroutine must contain at least one val/var
+ * or you must specify explicit generics for this method!
+ *
+ */
 fun <State> State.protect() {}
