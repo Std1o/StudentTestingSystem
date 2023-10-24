@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.StillLoading
-import student.testing.system.data.mapper.ToOperationStateMapper
+import godofappstates.data.mapper.ToOperationStateMapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
