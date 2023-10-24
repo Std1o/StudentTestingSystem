@@ -39,7 +39,7 @@ internal class LoadableDataKClassVisitor(
     |package $packageName
 
     |import stdio.godofappstates.annotations.FunctionalityState
-    |import com.stdio.godofappstates.domain.DataType
+    |import stdio.godofappstates.core.domain.DataType
     |
     |/**
     | * LoadableData is used for loading UI content from any data source.

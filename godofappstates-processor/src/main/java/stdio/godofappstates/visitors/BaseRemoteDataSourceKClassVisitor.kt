@@ -34,9 +34,9 @@ internal class BaseRemoteDataSourceKClassVisitor(
     |import kotlinx.coroutines.Dispatchers
     |import kotlinx.coroutines.withContext
     |import retrofit2.Response
-    |import com.stdio.godofappstates.util.Utils
-    |import com.stdio.godofappstates.domain.DataType
-    |import com.stdio.godofappstates.domain.OperationType
+    |import stdio.godofappstates.core.util.Utils
+    |import stdio.godofappstates.core.domain.DataType
+    |import stdio.godofappstates.core.domain.OperationType
     |
     |open class BaseRemoteDataSource {
     |

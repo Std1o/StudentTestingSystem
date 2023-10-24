@@ -29,8 +29,8 @@ internal class StateWrapperKClassVisitor(
     |package $packageName
 
     |import stdio.godofappstates.annotations.FunctionalityState
-    |import com.stdio.godofappstates.domain.OperationType
-    |import com.stdio.godofappstates.presentation.stateWrapper.OnReceiveListener
+    |import stdio.godofappstates.core.domain.OperationType
+    |import stdio.godofappstates.core.presentation.stateWrapper.OnReceiveListener
     |import kotlinx.coroutines.flow.MutableStateFlow
     |import $operationStatePackage.OperationState
     |

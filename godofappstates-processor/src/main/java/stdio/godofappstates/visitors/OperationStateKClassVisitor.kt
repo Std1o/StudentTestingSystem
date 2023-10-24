@@ -39,7 +39,7 @@ internal class OperationStateKClassVisitor(
     |package $packageName
 
     |import stdio.godofappstates.annotations.FunctionalityState
-    |import com.stdio.godofappstates.domain.OperationType
+    |import stdio.godofappstates.core.domain.OperationType
     |
     |/**
     | * OperationState contains the result of operation and is not intended for long-term storage of the screen state.

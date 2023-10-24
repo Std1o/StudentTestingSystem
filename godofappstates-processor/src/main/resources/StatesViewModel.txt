@@ -1,10 +1,10 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stdio.godofappstates.domain.OperationType
-import com.stdio.godofappstates.util.InvalidArgumentException
-import com.stdio.godofappstates.util.NoFlowOfOperationStateFoundException
-import com.stdio.godofappstates.util.NoOperationStateFoundException
-import com.stdio.godofappstates.util.WrongGenericsAutoCastException
+import stdio.godofappstates.core.domain.OperationType
+import stdio.godofappstates.core.util.InvalidArgumentException
+import stdio.godofappstates.core.util.NoFlowOfOperationStateFoundException
+import stdio.godofappstates.core.util.NoOperationStateFoundException
+import stdio.godofappstates.core.util.WrongGenericsAutoCastException
 import godofappstates.presentation.stateWrapper.StateWrapper
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
