@@ -4,7 +4,10 @@ import godofappstates.presentation.stateWrapper.StateWrapper
 import godofappstates.presentation.viewmodel.StatesViewModel
 import student.testing.system.domain.states.OperationState
 
-fun codeGenerationTest() {
+class CodeGenerationTestViewModel : StatesViewModel() {
     lateinit var stateWrapper: StateWrapper<OperationState<String>>
-    lateinit var statesViewModel: StatesViewModel
+
+    init {
+        
+    }
 }
