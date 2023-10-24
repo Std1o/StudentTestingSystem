@@ -2,7 +2,7 @@ package student.testing.system.domain.states
 
 import androidx.annotation.StringRes
 import stdio.godofappstates.annotations.StillLoading
-import com.stdio.godofappstates.domain.OperationType
+import stdio.godofappstates.core.domain.OperationType
 import stdio.godofappstates.annotations.OperationState
 
 @OperationState

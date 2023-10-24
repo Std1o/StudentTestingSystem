@@ -1,4 +1,4 @@
-package com.stdio.godofappstates.util
+package stdio.godofappstates.core.util
 
 import okhttp3.ResponseBody
 import okio.Buffer

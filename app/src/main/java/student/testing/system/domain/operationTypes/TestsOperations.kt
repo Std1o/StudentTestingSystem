@@ -1,6 +1,6 @@
 package student.testing.system.domain.operationTypes
 
-import com.stdio.godofappstates.domain.OperationType
+import stdio.godofappstates.core.domain.OperationType
 
 enum class TestsOperations : OperationType {
     CREATE_TEST, DELETE_TEST, GET_RESULT

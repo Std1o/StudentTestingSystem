@@ -25,7 +25,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
 import student.testing.system.presentation.ui.models.screenSession.PasswordState
-import com.stdio.godofappstates.presentation.stateWrapper.OnReceiveListener
+import stdio.godofappstates.core.presentation.stateWrapper.OnReceiveListener
 
 @Composable
 fun passwordTextField(

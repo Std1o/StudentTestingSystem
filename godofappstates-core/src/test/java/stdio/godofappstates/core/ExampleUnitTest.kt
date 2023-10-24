@@ -1,4 +1,4 @@
-package com.stdio.godofappstates
+package stdio.godofappstates.core
 
 import org.junit.Test
 

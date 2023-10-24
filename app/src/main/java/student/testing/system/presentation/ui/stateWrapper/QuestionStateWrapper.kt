@@ -1,6 +1,6 @@
 package student.testing.system.presentation.ui.stateWrapper
 
-import com.stdio.godofappstates.presentation.stateWrapper.OnReceiveListener
+import stdio.godofappstates.core.presentation.stateWrapper.OnReceiveListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import student.testing.system.domain.addQuestion.QuestionState
 

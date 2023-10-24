@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
-import com.stdio.godofappstates.delegates.StateFlowVar.Companion.stateFlowVar
+import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import godofappstates.presentation.stateWrapper.StateWrapper
 import godofappstates.presentation.viewmodel.StatesViewModel
 import godofappstates.presentation.viewmodel.protect

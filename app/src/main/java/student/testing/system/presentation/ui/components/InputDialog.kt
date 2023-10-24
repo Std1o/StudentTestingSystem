@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import student.testing.system.R
-import com.stdio.godofappstates.presentation.stateWrapper.OnReceiveListener
+import stdio.godofappstates.core.presentation.stateWrapper.OnReceiveListener
 
 @Composable
 fun InputDialog(

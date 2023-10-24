@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import student.testing.system.presentation.ui.models.RequiredFieldState
-import com.stdio.godofappstates.presentation.stateWrapper.OnReceiveListener
+import stdio.godofappstates.core.presentation.stateWrapper.OnReceiveListener
 
 @Composable
 fun requiredTextField(

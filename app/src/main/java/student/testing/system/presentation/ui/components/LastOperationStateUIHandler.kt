@@ -3,7 +3,7 @@ package student.testing.system.presentation.ui.components
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.stdio.godofappstates.domain.OperationType
+import stdio.godofappstates.core.domain.OperationType
 import godofappstates.presentation.stateWrapper.StateWrapper
 import student.testing.system.domain.states.OperationState
 

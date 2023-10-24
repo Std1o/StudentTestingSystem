@@ -1,4 +1,4 @@
-package com.stdio.godofappstates.delegates
+package stdio.godofappstates.core.delegates
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.properties.ReadWriteProperty

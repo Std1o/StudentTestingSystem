@@ -1,4 +1,4 @@
-package com.stdio.godofappstates.domain
+package stdio.godofappstates.core.domain
 
 /**
  * To solve collisions when using multiple operations on screen,
