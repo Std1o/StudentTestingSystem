@@ -9,6 +9,7 @@ import com.stdio.godofappstates.util.InvalidArgumentException
 import com.stdio.godofappstates.util.NoFlowOfOperationStateFoundException
 import com.stdio.godofappstates.util.NoOperationStateFoundException
 import com.stdio.godofappstates.util.WrongGenericsAutoCastException
+import godofappstates.presentation.stateWrapper.StateWrapper
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +22,6 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.StillLoading
 import student.testing.system.data.mapper.ToOperationStateMapper
-import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import java.util.LinkedList
 import kotlin.reflect.KClass
 import kotlin.reflect.KType

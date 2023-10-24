@@ -4,8 +4,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.stdio.godofappstates.domain.OperationType
+import godofappstates.presentation.stateWrapper.StateWrapper
 import student.testing.system.domain.states.OperationState
-import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 
 /**
  * Used for temporary and short-lived states caused by the last operation

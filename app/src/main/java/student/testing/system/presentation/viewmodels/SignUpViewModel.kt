@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import godofappstates.presentation.stateWrapper.StateWrapper
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
@@ -14,7 +15,6 @@ import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.screenSession.SignUpScreenSession
-import student.testing.system.presentation.ui.stateWrapper.StateWrapper
 import javax.inject.Inject
 import javax.inject.Named
 
