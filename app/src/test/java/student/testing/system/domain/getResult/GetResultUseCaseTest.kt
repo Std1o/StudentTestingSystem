@@ -1,7 +1,6 @@
 package student.testing.system.domain.getResult
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
@@ -9,6 +8,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
+import student.testing.system.domain.states.ResultState
 import student.testing.system.models.TestResult
 
 

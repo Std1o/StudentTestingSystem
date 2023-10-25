@@ -12,8 +12,9 @@ import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import godofappstates.presentation.viewmodel.StatesViewModel
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
-import student.testing.system.domain.getResult.ResultState
+import student.testing.system.domain.states.ResultState
 import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.protect
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
@@ -92,7 +93,7 @@ class TestsViewModel @Inject constructor(
                 val requestResult = executeOperationAndIgnoreData({
                     getResultUseCase(testId = test.id, courseId = test.courseId)
                 })
-                if (requestResult is ResultState.Success) {
+                if (requestResult is OperationState.Success) {
                     courseNavigator.tryNavigateTo(Destination.ResultReviewScreen())
                 }
                 if (requestResult is ResultState.NoResult) {
@@ -104,7 +105,7 @@ class TestsViewModel @Inject constructor(
 
     // TODO remove
     fun getResult(testId: Int, courseId: Int): StateFlow<ResultState<TestResult>> {
-        val stateFlow = MutableStateFlow<ResultState<TestResult>>(ResultState.Loading)
+        val stateFlow = MutableStateFlow<ResultState<TestResult>>(OperationState.Loading())
         viewModelScope.launch {
             stateFlow.emit(getResultUseCase(testId, courseId))
         }

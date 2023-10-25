@@ -18,7 +18,8 @@ import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
-import student.testing.system.domain.getResult.ResultState
+import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.ResultState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.adapters.TestsAdapter
@@ -100,15 +101,15 @@ class TestsFragment : Fragment(R.layout.fragment_tests) {
 
     private fun getResult(testId: Int, courseId: Int) {
         viewModel.getResult(testId, courseId).onEach {
-            binding.progressBar.isVisible = it is ResultState.Loading
-            if (it is ResultState.Success) {
+            binding.progressBar.isVisible = it is OperationState.Loading
+            if (it is OperationState.Success) {
                 val action = TestsFragmentDirections.viewResult(it.data)
                 findNavController().navigate(action)
             } else if (it is ResultState.NoResult) {
                 val action = TestsFragmentDirections
                     .navigateToTestPassing(selectedTest, 0, false)
                 findNavController().navigate(action)
-            } else if (it is ResultState.Error) {
+            } else if (it is OperationState.Error) {
                 showSnackbar(it.exception)
             }
         }.launchWhenStartedCollect(lifecycleScope)
