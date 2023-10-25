@@ -8,6 +8,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
+import student.testing.system.domain.states.OperationState
 import student.testing.system.domain.states.ResultState
 import student.testing.system.models.TestResult
 
@@ -28,13 +29,13 @@ class GetResultUseCaseTest {
     @Test
     fun `all errors except 404 returns Error state`() = runTest {
         val actual = getResultUseCase(-1, 1)
-        assertTrue(actual is ResultState.Error)
+        assertTrue(actual is OperationState.Error)
     }
 
     @Test
     fun `success response returns TestResult`() = runTest {
         val actual = getResultUseCase(13, 1)
-        assertTrue(actual is ResultState.Success)
-        assertThat((actual as ResultState.Success).data, instanceOf(TestResult::class.java))
+        assertTrue(actual is OperationState.Success)
+        assertThat((actual as OperationState.Success).data, instanceOf(TestResult::class.java))
     }
 }
