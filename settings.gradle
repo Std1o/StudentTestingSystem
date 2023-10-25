@@ -10,11 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
         jcenter()
     }
 }
 rootProject.name = "StudentTestingSystem"
 include ':app'
-include ':godofappstates-core'
-include ':godofappstates-processor'
-include ':godofappstates-annotations'
