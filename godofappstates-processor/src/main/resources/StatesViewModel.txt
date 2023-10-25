@@ -437,16 +437,3 @@ open class StatesViewModel : ViewModel() {
             LoadableData::class
         )
 }
-
-/**
- * If you use [StatesViewModel.executeOperation] or [StatesViewModel.executeEmptyOperation] or
- * [StatesViewModel.executeOperationAndIgnoreData] with labda that returns some OperationState
- * there may be problem with generics auto cast
- *
- * [Watch issue](https://github.com/Kotlin/kotlinx.coroutines/issues/3904)
- *
- * Use this extension, otherwise your coroutine must contain at least one val/var
- * or you must specify explicit generics for this method!
- *
- */
-fun <State> State.protect() {}

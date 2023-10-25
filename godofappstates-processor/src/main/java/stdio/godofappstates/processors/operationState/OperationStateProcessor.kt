@@ -12,6 +12,7 @@ import stdio.godofappstates.UsedPackages.operationStatePackage
 import stdio.godofappstates.Utils.getStrParents
 import stdio.godofappstates.annotations.OperationState
 import stdio.godofappstates.visitors.OperationStateKClassVisitor
+import stdio.godofappstates.visitors.StatesProtectionKClassVisitor
 
 class OperationStateProcessor(
     private val codeGenerator: CodeGenerator,
@@ -31,6 +32,12 @@ class OperationStateProcessor(
             ) { mPackage ->
                 operationStatePackage = mPackage
             },
+            Unit
+        )
+        symbols.firstOrNull()?.accept(
+            StatesProtectionKClassVisitor(
+                codeGenerator, logger, dependencies, symbols.toList().map { it.toString() }
+            ),
             Unit
         )
         return symbols.filterNot { it.validate() }.toList()

@@ -10,11 +10,11 @@ import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import godofappstates.presentation.stateWrapper.StateWrapper
 import godofappstates.presentation.viewmodel.StatesViewModel
-import godofappstates.presentation.viewmodel.protect
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.LoadableData
 import student.testing.system.domain.states.ValidatableOperationState
+import student.testing.system.domain.states.protect
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
 import student.testing.system.models.CourseResponse

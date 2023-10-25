@@ -10,11 +10,11 @@ import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import godofappstates.presentation.viewmodel.StatesViewModel
-import godofappstates.presentation.viewmodel.protect
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.getResult.ResultState
 import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.protect
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.models.TestResult
