@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import stdio.godofappstates.core.domain.OperationType
 import godofappstates.presentation.stateWrapper.StateWrapper
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.operationStates.OperationState
 
 /**
  * Used for temporary and short-lived states caused by the last operation

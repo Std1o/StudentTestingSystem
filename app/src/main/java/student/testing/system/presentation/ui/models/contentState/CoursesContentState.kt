@@ -1,7 +1,7 @@
 package student.testing.system.presentation.ui.models.contentState
 
 import stdio.godofappstates.annotations.ContentState
-import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.CourseResponse
 
 @ContentState

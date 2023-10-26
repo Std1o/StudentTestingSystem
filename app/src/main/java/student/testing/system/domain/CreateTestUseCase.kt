@@ -1,7 +1,6 @@
 package student.testing.system.domain
 
-import student.testing.system.domain.states.TestCreationState
-import student.testing.system.models.Question
+import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.models.Test
 import student.testing.system.models.TestCreationReq
 import javax.inject.Inject

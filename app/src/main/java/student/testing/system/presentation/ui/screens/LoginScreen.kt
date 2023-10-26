@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.LoginState
+import student.testing.system.domain.states.operationStates.AuthState
+import student.testing.system.domain.states.operationStates.LoginState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn

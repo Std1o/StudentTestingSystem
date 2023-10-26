@@ -9,7 +9,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import student.testing.system.common.NullSharedViewModelException
 import student.testing.system.common.viewModelScopedTo
-import student.testing.system.domain.states.TestCreationState
+import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.models.Test
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost

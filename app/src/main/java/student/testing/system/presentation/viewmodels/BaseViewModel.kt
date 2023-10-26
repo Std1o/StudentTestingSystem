@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.operationStates.OperationState
 
 /**
  * BaseViewModel is an abstract class that provides a base implementation for ViewModels in the app.

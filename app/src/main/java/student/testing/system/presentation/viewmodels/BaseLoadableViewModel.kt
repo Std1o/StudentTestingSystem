@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.loadableData.LoadableData
 
 // TODO remove
 open class BaseLoadableViewModel<T> : ViewModel() {

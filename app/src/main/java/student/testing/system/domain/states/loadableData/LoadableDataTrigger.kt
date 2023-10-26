@@ -1,4 +1,4 @@
-package student.testing.system.domain.states
+package student.testing.system.domain.states.loadableData
 
 import stdio.godofappstates.annotations.LoadableData
 

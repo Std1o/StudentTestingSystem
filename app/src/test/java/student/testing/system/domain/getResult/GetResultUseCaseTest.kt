@@ -8,8 +8,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.FakeRepository
-import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.ResultState
+import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.models.TestResult
 
 

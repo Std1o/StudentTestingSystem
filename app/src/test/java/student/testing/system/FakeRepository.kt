@@ -2,8 +2,8 @@ package student.testing.system
 
 import io.mockk.mockk
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant
 import student.testing.system.models.ParticipantsResults

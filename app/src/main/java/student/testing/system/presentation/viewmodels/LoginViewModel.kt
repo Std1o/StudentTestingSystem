@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.auth.LoginUseCase
-import student.testing.system.domain.states.LoginState
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.operationStates.LoginState
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination

@@ -2,7 +2,7 @@ package student.testing.system.domain.auth
 
 import androidx.core.util.PatternsCompat
 import student.testing.system.R
-import student.testing.system.domain.states.AuthState
+import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.models.PrivateUser
 import javax.inject.Inject
 

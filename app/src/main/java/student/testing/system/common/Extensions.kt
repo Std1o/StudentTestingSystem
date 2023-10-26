@@ -22,8 +22,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.domain.states.operationStates.OperationState
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.ReadOnlyProperty

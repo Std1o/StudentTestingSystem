@@ -2,8 +2,8 @@ package student.testing.system.domain.auth
 
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.operationStates.AuthState
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject

@@ -12,8 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
-import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.SignUpState
+import student.testing.system.domain.states.operationStates.AuthState
+import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.emailTextField

@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.common.iTems
-import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.Shimmer

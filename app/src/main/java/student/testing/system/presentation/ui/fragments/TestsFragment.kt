@@ -18,8 +18,8 @@ import kotlinx.coroutines.flow.onEach
 import student.testing.system.R
 import student.testing.system.common.*
 import student.testing.system.databinding.FragmentTestsBinding
-import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.ResultState
+import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.presentation.ui.adapters.TestsAdapter

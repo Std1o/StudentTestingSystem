@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.makeOperation
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.TestResult
 import student.testing.system.models.UserQuestion
 import javax.inject.Inject

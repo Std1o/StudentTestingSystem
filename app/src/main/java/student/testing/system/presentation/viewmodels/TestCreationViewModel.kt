@@ -16,8 +16,8 @@ import student.testing.system.common.formatToString
 import student.testing.system.domain.CreateTestUseCase
 import student.testing.system.domain.addQuestion.AddQuestionUseCase
 import student.testing.system.domain.addQuestion.QuestionState
-import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.TestCreationState
+import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.models.Answer
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Question

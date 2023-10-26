@@ -1,7 +1,7 @@
 package student.testing.system.presentation.ui.screens.courses
 
 import androidx.compose.runtime.Composable
-import student.testing.system.domain.states.LoadableData
+import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.ui.components.ErrorScreen
 

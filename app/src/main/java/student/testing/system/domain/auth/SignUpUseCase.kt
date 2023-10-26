@@ -3,9 +3,9 @@ package student.testing.system.domain.auth
 import student.testing.system.R
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.states.AuthState
-import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.SignUpState
+import student.testing.system.domain.states.operationStates.AuthState
+import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.models.SignUpReq
 import student.testing.system.sharedPreferences.PrefsUtils

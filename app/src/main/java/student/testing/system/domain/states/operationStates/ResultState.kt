@@ -1,4 +1,4 @@
-package student.testing.system.domain.states
+package student.testing.system.domain.states.operationStates
 
 import stdio.godofappstates.annotations.OperationState
 

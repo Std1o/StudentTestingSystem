@@ -1,8 +1,8 @@
 package student.testing.system.domain.getResult
 
 import student.testing.system.domain.MainRepository
-import student.testing.system.domain.states.OperationState
-import student.testing.system.domain.states.ResultState
+import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.models.TestResult
 import javax.inject.Inject
 

@@ -1,7 +1,6 @@
-package student.testing.system.domain.states
+package student.testing.system.domain.states.operationStates
 
 import androidx.annotation.StringRes
-import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.OperationState
 
 @OperationState

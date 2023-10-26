@@ -1,7 +1,7 @@
 package student.testing.system.data.dataSource
 
-import student.testing.system.domain.states.LoadableData
-import student.testing.system.domain.states.OperationState
+import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.*
 
 interface RemoteDataSource {

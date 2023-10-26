@@ -1,6 +1,5 @@
-package student.testing.system.domain.states
+package student.testing.system.domain.states.operationStates
 
-import stdio.godofappstates.annotations.FunctionalityState
 import stdio.godofappstates.annotations.OperationState
 import student.testing.system.models.Test
 

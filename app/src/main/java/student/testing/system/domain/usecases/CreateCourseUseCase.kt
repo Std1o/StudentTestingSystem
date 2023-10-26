@@ -4,8 +4,7 @@ import kotlinx.coroutines.flow.flow
 import student.testing.system.R
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
-import student.testing.system.domain.states.ValidatableOperationState
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.states.operationStates.ValidatableOperationState
 import javax.inject.Inject
 
 class CreateCourseUseCase @Inject constructor(private val repository: MainRepository) {
