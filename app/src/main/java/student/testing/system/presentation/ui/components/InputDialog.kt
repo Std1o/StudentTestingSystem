@@ -44,7 +44,7 @@ fun InputDialog(
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     isError: Boolean = false,
     @StringRes errorText: Int = 0,
-    onReceiveListener: OnReceiveListener? = null,
+    onTextChanged: (() -> Unit)? = null,
     onDismiss: () -> Unit,
     onPositiveClick: (String) -> Unit
 ) {
@@ -76,7 +76,7 @@ fun InputDialog(
                         onValueChange = {
                             inputtedText = it
                             isError = false
-                            onReceiveListener?.onReceive()
+                            onTextChanged?.invoke()
                         },
                         modifier = Modifier.padding(8.dp),
                         label = { Text(stringResource(id = hintResId)) },
@@ -104,7 +104,6 @@ fun InputDialog(
                     Row {
                         OutlinedButton(
                             onClick = {
-                                onReceiveListener?.onReceive()
                                 onDismiss()
                             },
                             Modifier

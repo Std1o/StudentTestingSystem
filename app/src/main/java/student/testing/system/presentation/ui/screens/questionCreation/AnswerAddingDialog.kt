@@ -16,7 +16,6 @@ import student.testing.system.presentation.ui.stateWrapper.QuestionStateWrapper
 fun AnswerAddingDialog(
     onDismiss: () -> Unit,
     onAnswerAdded: (String) -> Int,
-    questionStateWrapper: QuestionStateWrapper<QuestionState>
 ) {
     var answerError by rememberSaveable { mutableIntStateOf(0) }
     InputDialog(
@@ -25,7 +24,7 @@ fun AnswerAddingDialog(
         positiveButtonResId = R.string.create,
         isError = answerError != 0,
         errorText = answerError,
-        onReceiveListener = questionStateWrapper,
+        onTextChanged = { answerError = 0 },
         onDismiss = {
             answerError = 0
             onDismiss()

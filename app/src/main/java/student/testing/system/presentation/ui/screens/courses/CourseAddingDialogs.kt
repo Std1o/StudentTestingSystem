@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import godofappstates.presentation.stateWrapper.StateWrapper
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.operationTypes.CourseAddingOperations
@@ -30,7 +29,8 @@ import student.testing.system.presentation.ui.components.InputDialog
 @Composable
 fun CourseAddingDialogs(
     showBottomSheet: Boolean,
-    lastValidationStateWrapper: StateWrapper<ValidatableOperationState<CourseResponse>>,
+    lastValidationState: ValidatableOperationState<CourseResponse>,
+    onNeedResetValidation: (ResetValidationReasons) -> Unit,
     onCreateCourse: (String) -> Unit,
     onJoinCourse: (String) -> Unit,
     onDismissRequest: () -> Unit
@@ -42,22 +42,20 @@ fun CourseAddingDialogs(
     var showCourseJoiningDialog by remember { mutableStateOf(false) }
 
     if (showCourseCreatingDialog) {
-        val error = lastValidationStateWrapper.run {
-            (uiState as? ValidatableOperationState.ValidationError)
-                ?.let {
-                    if (it.operationType == CourseAddingOperations.CREATE_COURSE) it.messageResId else 0
-                } ?: 0
-        }
+        val error = (lastValidationState as? ValidatableOperationState.ValidationError)
+            ?.let {
+                if (it.operationType == CourseAddingOperations.CREATE_COURSE) it.messageResId else 0
+            } ?: 0
         InputDialog(
             titleResId = R.string.create_course,
             hintResId = R.string.input_name,
             positiveButtonResId = R.string.create,
             isError = error != 0,
             errorText = error,
-            onReceiveListener = lastValidationStateWrapper,
+            onTextChanged = { onNeedResetValidation(ResetValidationReasons.OnTextFieldChanged) },
             onDismiss = {
                 showCourseCreatingDialog = false
-                lastValidationStateWrapper.onReceive()
+                onNeedResetValidation(ResetValidationReasons.OnDialogDismissed)
             }
         ) {
             onCreateCourse(it)
@@ -65,12 +63,10 @@ fun CourseAddingDialogs(
     }
 
     if (showCourseJoiningDialog) {
-        val error = lastValidationStateWrapper.run {
-            (uiState as? ValidatableOperationState.ValidationError)
-                ?.let {
-                    if (it.operationType == CourseAddingOperations.JOIN_COURSE) it.messageResId else 0
-                } ?: 0
-        }
+        val error = (lastValidationState as? ValidatableOperationState.ValidationError)
+            ?.let {
+                if (it.operationType == CourseAddingOperations.JOIN_COURSE) it.messageResId else 0
+            } ?: 0
         InputDialog(
             titleResId = R.string.join_course,
             hintResId = R.string.course_code_hint,
@@ -78,25 +74,23 @@ fun CourseAddingDialogs(
             capitalization = KeyboardCapitalization.Characters,
             isError = error != 0,
             errorText = error,
-            onReceiveListener = lastValidationStateWrapper,
+            onTextChanged = { onNeedResetValidation(ResetValidationReasons.OnTextFieldChanged) },
             onDismiss = {
                 showCourseJoiningDialog = false
-                lastValidationStateWrapper.onReceive()
+                onNeedResetValidation(ResetValidationReasons.OnDialogDismissed)
             },
         ) {
             onJoinCourse(it)
         }
     }
 
-    with(lastValidationStateWrapper) {
-        (uiState as? ValidatableOperationState.SuccessfulValidation)?.let {
-            when (it.operationType) {
-                CourseAddingOperations.CREATE_COURSE -> showCourseCreatingDialog = false
-                CourseAddingOperations.JOIN_COURSE -> showCourseJoiningDialog = false
-                else -> {}
-            }
-            lastValidationStateWrapper.onReceive()
+    (lastValidationState as? ValidatableOperationState.SuccessfulValidation)?.let {
+        when (it.operationType) {
+            CourseAddingOperations.CREATE_COURSE -> showCourseCreatingDialog = false
+            CourseAddingOperations.JOIN_COURSE -> showCourseJoiningDialog = false
+            else -> {}
         }
+        onNeedResetValidation(ResetValidationReasons.OnValidationSuccess)
     }
 
     if (!showBottomSheet) return

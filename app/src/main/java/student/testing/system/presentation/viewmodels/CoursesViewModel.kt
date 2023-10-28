@@ -1,18 +1,21 @@
 package student.testing.system.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import godofappstates.presentation.stateWrapper.StateWrapper
+import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
-import godofappstates.presentation.stateWrapper.StateWrapper
-import godofappstates.presentation.viewmodel.StatesViewModel
+import student.testing.system.common.Constants.LAUNCH_NAVIGATION
+import student.testing.system.common.Constants.LOG_TAG
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.domain.usecases.CreateCourseUseCase
@@ -21,6 +24,7 @@ import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.CoursesContentState
+import student.testing.system.presentation.ui.screens.courses.ResetValidationReasons
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 import javax.inject.Named
@@ -34,9 +38,9 @@ class CoursesViewModel @Inject constructor(
     private val joinCourseUseCase: JoinCourseUseCase
 ) : StatesViewModel() {
 
-    private val _lastValidationStateWrapper =
-        StateWrapper.mutableStateFlow<ValidatableOperationState<CourseResponse>>()
-    val lastValidationStateWrapper = _lastValidationStateWrapper.asStateFlow()
+    private val _lastValidationState =
+        MutableStateFlow<ValidatableOperationState<CourseResponse>>(OperationState.NoState)
+    val lastValidationState = _lastValidationState.asStateFlow()
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState = _contentState.asStateFlow()
@@ -85,7 +89,7 @@ class CoursesViewModel @Inject constructor(
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {
-                _lastValidationStateWrapper.value = StateWrapper(it)
+                _lastValidationState.value = it
             }
         }
     }
@@ -99,7 +103,7 @@ class CoursesViewModel @Inject constructor(
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {
-                _lastValidationStateWrapper.value = StateWrapper(it)
+                _lastValidationState.value = it
             }
         }
     }
@@ -117,5 +121,10 @@ class CoursesViewModel @Inject constructor(
         } catch (e: ClassCastException) {
             e.printStackTrace()
         }
+    }
+
+    fun onNeedResetValidation(resetValidationReason: ResetValidationReasons) {
+        Log.d(LOG_TAG, resetValidationReason.toString())
+        _lastValidationState.value = OperationState.NoState
     }
 }

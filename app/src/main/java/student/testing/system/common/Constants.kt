@@ -6,4 +6,5 @@ object Constants {
     const val LAUNCH_NAVIGATION = "launch_navigation"
     const val COURSE_REVIEW_NAVIGATION = "course_review_navigation"
     const val TEST_CREATION_NAVIGATION = "test_creation_navigation"
+    const val LOG_TAG = "StudentTestingSystem"
 }

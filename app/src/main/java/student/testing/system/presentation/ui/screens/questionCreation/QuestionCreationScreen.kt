@@ -91,8 +91,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
         if (showAnswerAddingDialog) {
             AnswerAddingDialog(
                 onDismiss = { showAnswerAddingDialog = false },
-                onAnswerAdded = { parentViewModel.addAnswer(it) },
-                questionStateWrapper = questionStateWrapper
+                onAnswerAdded = { parentViewModel.addAnswer(it) }
             )
         }
     }
