@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import godofappstates.presentation.stateWrapper.StateWrapper
 import godofappstates.presentation.viewmodel.StatesViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.auth.SignUpUseCase
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
@@ -25,8 +27,8 @@ class SignUpViewModel @Inject constructor(
     @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
-    private val _signUpStateWrapper = StateWrapper.mutableStateFlow<SignUpState<PrivateUser>>()
-    val signUpStateWrapper = _signUpStateWrapper.asStateFlow()
+    private val _signUpState = MutableStateFlow<SignUpState<PrivateUser>>(OperationState.NoState)
+    val signUpState = _signUpState.asStateFlow()
 
     var screenSession by mutableStateOf(SignUpScreenSession())
 
@@ -37,7 +39,7 @@ class SignUpViewModel @Inject constructor(
             }) {
                 navigateToCourses()
             }
-            _signUpStateWrapper.value = StateWrapper(requestResult)
+            _signUpState.value = requestResult
         }
     }
 
@@ -47,5 +49,9 @@ class SignUpViewModel @Inject constructor(
             inclusive = true,
             route = Destination.CoursesScreen()
         )
+    }
+
+    fun onTextFieldChanged() {
+        _signUpState.value = OperationState.NoState
     }
 }

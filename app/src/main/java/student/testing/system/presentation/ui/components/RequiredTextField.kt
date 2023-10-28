@@ -25,7 +25,7 @@ import stdio.godofappstates.core.presentation.stateWrapper.OnReceiveListener
 @Composable
 fun requiredTextField(
     modifier: Modifier = Modifier,
-    onReceiveListener: OnReceiveListener,
+    onTextChanged: () -> Unit,
     fieldState: RequiredFieldState,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     isError: Boolean,
@@ -56,7 +56,7 @@ fun requiredTextField(
             fieldValue = it
             fieldState.fieldValue = it.text
             localIsError = false
-            onReceiveListener.onReceive()
+            onTextChanged()
         },
         trailingIcon = {
             if (localIsError) Icon(

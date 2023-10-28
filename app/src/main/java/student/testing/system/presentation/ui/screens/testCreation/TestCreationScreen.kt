@@ -73,7 +73,7 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
                 ) {
                     requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
-                        onReceiveListener = testStateWrapper,
+                        onTextChanged = { testStateWrapper.onReceive() },
                         fieldState = screenSession.testNameState,
                         isError = testStateWrapper.uiState is TestCreationState.EmptyName,
                         errorText = R.string.error_empty_field,

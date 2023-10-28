@@ -25,11 +25,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import student.testing.system.R
 import student.testing.system.presentation.ui.models.screenSession.PasswordState
-import stdio.godofappstates.core.presentation.stateWrapper.OnReceiveListener
 
 @Composable
 fun passwordTextField(
-    onReceiveListener: OnReceiveListener,
+    onTextChanged: () -> Unit,
     passwordState: PasswordState,
     isPasswordError: Boolean,
     @StringRes errorText: Int
@@ -55,7 +54,7 @@ fun passwordTextField(
             password = it
             passwordState.password = it.text
             isPasswordError = false
-            onReceiveListener.onReceive()
+            onTextChanged()
         },
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {

@@ -29,12 +29,12 @@ import student.testing.system.presentation.viewmodels.LoginViewModel
 @Composable
 fun LoginScreen() {
     val viewModel = hiltViewModel<LoginViewModel>()
-    val loginStateWrapper by viewModel.loginStateWrapper.collectAsState()
+    val loginState by viewModel.loginState.collectAsState()
     val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val screenSession = viewModel.screenSession
-    var needToHideUI = loginStateWrapper.uiState is LoginState.HiddenUI
+    var needToHideUI = loginState is LoginState.HiddenUI
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -44,7 +44,7 @@ fun LoginScreen() {
             LoadingIndicator()
             return@Scaffold
         }
-        with(loginStateWrapper.uiState) {
+        with(loginState) {
             if (this is LoginState.ErrorWhenAuthorized) {
                 ErrorScreen(message = this.message) {
                     viewModel.authIfPossible()
@@ -63,19 +63,19 @@ fun LoginScreen() {
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 100.dp)
             )
-            val isEmailError = loginStateWrapper.uiState is AuthState.EmailError
-            val isPasswordError = loginStateWrapper.uiState is AuthState.PasswordError
+            val isEmailError = loginState is AuthState.EmailError
+            val isPasswordError = loginState is AuthState.PasswordError
             val email = emailTextField(
-                onReceiveListener = loginStateWrapper,
+                onTextChanged = { viewModel.onTextFieldChanged() },
                 emailState = screenSession.emailState,
                 isEmailError = isEmailError,
-                errorText = if (isEmailError) (loginStateWrapper.uiState as AuthState.EmailError).messageResId else 0
+                errorText = if (isEmailError) (loginState as AuthState.EmailError).messageResId else 0
             )
             val password = passwordTextField(
-                onReceiveListener = loginStateWrapper,
+                onTextChanged = { viewModel.onTextFieldChanged() },
                 screenSession.passwordState,
                 isPasswordError = isPasswordError,
-                errorText = if (isPasswordError) (loginStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
+                errorText = if (isPasswordError) (loginState as AuthState.PasswordError).messageResId else 0
             )
             BigButton(text = R.string.sign_in) {
                 viewModel.auth(email = email, password = password)
@@ -94,7 +94,7 @@ fun LoginScreen() {
         lastOperationStateWrapper,
         snackbarHostState,
         onError = { exception, code, _ ->
-            if (loginStateWrapper.uiState !is LoginState.ErrorWhenAuthorized) {
+            if (loginState !is LoginState.ErrorWhenAuthorized) {
                 scope.launch { snackbarHostState.showSnackbar(exception) }
             }
         })

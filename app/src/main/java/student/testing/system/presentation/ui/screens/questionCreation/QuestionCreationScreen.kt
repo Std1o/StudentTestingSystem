@@ -72,7 +72,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                 ) {
                     question = requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
-                        onReceiveListener = questionStateWrapper,
+                        onTextChanged = { questionStateWrapper.onReceive() },
                         fieldState = screenSession.questionState,
                         isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
                         errorText = R.string.error_empty_field,

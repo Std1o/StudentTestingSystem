@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import godofappstates.presentation.stateWrapper.StateWrapper
 import godofappstates.presentation.viewmodel.StatesViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
@@ -27,9 +27,8 @@ class LoginViewModel @Inject constructor(
     @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
-    private val _loginStateWrapper =
-        StateWrapper.mutableStateFlow<LoginState<PrivateUser>>(LoginState.HiddenUI)
-    val loginStateWrapper = _loginStateWrapper.asStateFlow()
+    private val _loginState = MutableStateFlow<LoginState<PrivateUser>>(LoginState.HiddenUI)
+    val loginState = _loginState.asStateFlow()
 
     val screenSession by mutableStateOf(LoginScreenSession())
 
@@ -38,17 +37,17 @@ class LoginViewModel @Inject constructor(
     }
 
     fun authIfPossible() {
-        _loginStateWrapper.value = StateWrapper(LoginState.HiddenUI)
+        _loginState.value = LoginState.HiddenUI
         viewModelScope.launch {
             val requestResult = executeOperationAndIgnoreData({ authIfPossibleUseCase() }) {
-                _loginStateWrapper.value = StateWrapper(LoginState.HiddenUI)
+                _loginState.value = LoginState.HiddenUI
                 navigateToCourses()
             }
             if (requestResult !is OperationState.Success) {
-                _loginStateWrapper.value = StateWrapper(requestResult)
+                _loginState.value = requestResult
             }
             if (requestResult is OperationState.Error && requestResult.code != 401) {
-                _loginStateWrapper.value = StateWrapper(LoginState.ErrorWhenAuthorized(requestResult.exception))
+                _loginState.value = LoginState.ErrorWhenAuthorized(requestResult.exception)
             }
         }
     }
@@ -58,7 +57,7 @@ class LoginViewModel @Inject constructor(
             val requestResult = executeOperationAndIgnoreData({ loginUseCase(email, password) }) {
                 navigateToCourses()
             }
-            _loginStateWrapper.value = StateWrapper(requestResult)
+            _loginState.value = requestResult
         }
     }
 
@@ -72,5 +71,9 @@ class LoginViewModel @Inject constructor(
             inclusive = true,
             route = Destination.CoursesScreen()
         )
+    }
+
+    fun onTextFieldChanged() {
+        _loginState.value = OperationState.NoState
     }
 }

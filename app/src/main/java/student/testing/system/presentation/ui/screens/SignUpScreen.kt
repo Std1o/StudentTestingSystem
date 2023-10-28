@@ -25,7 +25,7 @@ import student.testing.system.presentation.viewmodels.SignUpViewModel
 @Composable
 fun SignUpScreen() {
     val viewModel = hiltViewModel<SignUpViewModel>()
-    val signUpStateWrapper by viewModel.signUpStateWrapper.collectAsState()
+    val signUpState by viewModel.signUpState.collectAsState()
     val lastOperationState by viewModel.lastOperationStateWrapper.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val screenSession = viewModel.screenSession
@@ -39,27 +39,27 @@ fun SignUpScreen() {
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            val isEmailError = signUpStateWrapper.uiState is AuthState.EmailError
-            val isPasswordError = signUpStateWrapper.uiState is AuthState.PasswordError
-            val isUsernameError = signUpStateWrapper.uiState is SignUpState.NameError
+            val isEmailError = signUpState is AuthState.EmailError
+            val isPasswordError = signUpState is AuthState.PasswordError
+            val isUsernameError = signUpState is SignUpState.NameError
             val username = requiredTextField(
-                onReceiveListener = signUpStateWrapper,
+                onTextChanged = { viewModel.onTextFieldChanged() },
                 fieldState = screenSession.nameState,
                 isError = isUsernameError,
-                errorText = if (isUsernameError) (signUpStateWrapper.uiState as SignUpState.NameError).messageResId else 0,
+                errorText = if (isUsernameError) (signUpState as SignUpState.NameError).messageResId else 0,
                 hint = R.string.name
             )
             val email = emailTextField(
-                onReceiveListener = signUpStateWrapper,
+                onTextChanged = { viewModel.onTextFieldChanged() },
                 emailState = screenSession.emailState,
                 isEmailError = isEmailError,
-                errorText = if (isEmailError) (signUpStateWrapper.uiState as AuthState.EmailError).messageResId else 0
+                errorText = if (isEmailError) (signUpState as AuthState.EmailError).messageResId else 0
             )
             val password = passwordTextField(
-                onReceiveListener = signUpStateWrapper,
+                onTextChanged = { viewModel.onTextFieldChanged() },
                 passwordState = screenSession.passwordState,
                 isPasswordError = isPasswordError,
-                errorText = if (isPasswordError) (signUpStateWrapper.uiState as AuthState.PasswordError).messageResId else 0
+                errorText = if (isPasswordError) (signUpState as AuthState.PasswordError).messageResId else 0
             )
             BigButton(text = R.string.sign_up) {
                 viewModel.signUp(email = email, username = username, password = password)
