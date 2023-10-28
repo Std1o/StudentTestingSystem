@@ -45,8 +45,7 @@ class TestCreationViewModel @Inject constructor(
         QuestionStateWrapper.mutableStateFlow<QuestionState>()
     val questionStateWrapper = _questionStateWrapper.asStateFlow()
 
-    private val _testStateWrapper =
-        StateWrapper.mutableStateFlow<TestCreationState<Test>>()
+    private val _testStateWrapper = StateWrapper.mutableStateFlow<TestCreationState<Test>>()
     val testStateWrapper = _testStateWrapper.asStateFlow()
 
     var questionCreationScreenSession by mutableStateOf(QuestionCreationScreenSession())
@@ -104,7 +103,7 @@ class TestCreationViewModel @Inject constructor(
             _testStateWrapper.value = StateWrapper(requestResult)
             if (requestResult is OperationState.Success) {
                 _testStateWrapper.value =
-                    StateWrapper(TestCreationState.ReadyForPublication(requestResult.data))
+                    StateWrapper(TestCreationState.Created(requestResult.data))
             }
         }
     }

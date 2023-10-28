@@ -10,6 +10,7 @@ import student.testing.system.domain.states.operationStates.OperationState
 /**
  * Used for temporary and short-lived states caused by the last operation
  * @param onLoading if you want override default loading
+ * @param onError if you want override on error default reaction
  */
 @Composable
 fun <T> LastOperationStateUIHandler(
