@@ -30,7 +30,7 @@ import student.testing.system.presentation.viewmodels.LoginViewModel
 fun LoginScreen() {
     val viewModel = hiltViewModel<LoginViewModel>()
     val loginState by viewModel.loginState.collectAsState()
-    val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
+    val lastOperationState by viewModel.lastOperationState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val screenSession = viewModel.screenSession
@@ -91,7 +91,8 @@ fun LoginScreen() {
         }
     }
     LastOperationStateUIHandler(
-        lastOperationStateWrapper,
+        lastOperationState,
+        { viewModel.onErrorReceived() },
         snackbarHostState,
         onError = { exception, code, _ ->
             if (loginState !is LoginState.ErrorWhenAuthorized) {

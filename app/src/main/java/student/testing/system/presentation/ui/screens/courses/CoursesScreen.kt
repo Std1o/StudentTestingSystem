@@ -44,7 +44,7 @@ fun CoursesScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     val viewModel = hiltViewModel<CoursesViewModel>()
     val contentState by viewModel.contentState.collectAsState()
-    val lastOperationStateWrapper by viewModel.lastOperationStateWrapper.collectAsState()
+    val lastOperationState by viewModel.lastOperationState.collectAsState()
     val lastValidationState by viewModel.lastValidationState.collectAsState()
     var showUserInfoDialog by rememberSaveable { mutableStateOf(false) }
     var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
@@ -144,5 +144,9 @@ fun CoursesScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
+    LastOperationStateUIHandler(
+        lastOperationState,
+        { viewModel.onErrorReceived() },
+        snackbarHostState
+    )
 }

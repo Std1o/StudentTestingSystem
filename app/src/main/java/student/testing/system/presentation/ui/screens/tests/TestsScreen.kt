@@ -38,7 +38,7 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
     val testsVM = hiltViewModel<TestsViewModel>()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val lastOperationStateWrapper by testsVM.lastOperationStateWrapper.collectAsState()
+    val lastOperationState by testsVM.lastOperationState.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
     testsVM.course = course
     testsVM.courseId = course.id
@@ -97,5 +97,9 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
             }
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
+    LastOperationStateUIHandler(
+        lastOperationState,
+        { testsVM.onErrorReceived() },
+        snackbarHostState
+    )
 }

@@ -16,8 +16,8 @@ import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.passwordTextField
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.SignUpViewModel
@@ -26,7 +26,7 @@ import student.testing.system.presentation.viewmodels.SignUpViewModel
 fun SignUpScreen() {
     val viewModel = hiltViewModel<SignUpViewModel>()
     val signUpState by viewModel.signUpState.collectAsState()
-    val lastOperationState by viewModel.lastOperationStateWrapper.collectAsState()
+    val lastOperationState by viewModel.lastOperationState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val screenSession = viewModel.screenSession
     Scaffold(
@@ -66,5 +66,9 @@ fun SignUpScreen() {
             }
         }
     }
-    LastOperationStateUIHandler(lastOperationState, snackbarHostState)
+    LastOperationStateUIHandler(
+        lastOperationState,
+        { viewModel.onErrorReceived() },
+        snackbarHostState
+    )
 }

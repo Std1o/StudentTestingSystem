@@ -4,7 +4,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import stdio.godofappstates.core.domain.OperationType
-import godofappstates.presentation.stateWrapper.StateWrapper
 import student.testing.system.domain.states.operationStates.OperationState
 
 /**
@@ -14,19 +13,20 @@ import student.testing.system.domain.states.operationStates.OperationState
  */
 @Composable
 fun <T> LastOperationStateUIHandler(
-    stateWrapper: StateWrapper<OperationState<T>>,
+    operationState: OperationState<T>,
+    onErrorReceived: () -> Unit,
     snackbarHostState: SnackbarHostState,
     onLoading: ((OperationType) -> Unit)? = null,
     onError: ((String, Int, OperationType) -> Unit)? = null
 ) {
-    with(stateWrapper.uiState) {
+    with(operationState) {
         when (this) {
             is OperationState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
             is OperationState.Error -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
                     onError?.invoke(exception, code, operationType)
                         ?: snackbarHostState.showSnackbar(exception)
-                    stateWrapper.onReceive()
+                    onErrorReceived()
                 }
             }
 

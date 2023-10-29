@@ -45,7 +45,7 @@ import student.testing.system.presentation.viewmodels.TestCreationViewModel
 @Composable
 fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val lastOperationStateWrapper by parentViewModel.lastOperationStateWrapper.collectAsState()
+    val lastOperationState by parentViewModel.lastOperationState.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
     val testState by parentViewModel.testState.collectAsState()
     val screenSession = parentViewModel.testCreationScreenSession
@@ -128,5 +128,9 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
             }
         }
     }
-    LastOperationStateUIHandler(lastOperationStateWrapper, snackbarHostState)
+    LastOperationStateUIHandler(
+        lastOperationState,
+        { parentViewModel.onErrorReceived() },
+        snackbarHostState
+    )
 }
