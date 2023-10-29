@@ -37,7 +37,7 @@ import student.testing.system.presentation.viewmodels.TestCreationViewModel
 @Composable
 fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val questionStateWrapper by parentViewModel.questionStateWrapper.collectAsState()
+    val questionState by parentViewModel.questionState.collectAsState()
     val screenSession = parentViewModel.questionCreationScreenSession
     var showAnswerAddingDialog by rememberSaveable { mutableStateOf(false) }
     Surface {
@@ -57,11 +57,11 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
             }
         ) { contentPadding ->
             lateinit var question: String
-            if (questionStateWrapper.uiState is QuestionState.NoCorrectAnswers) {
+            if (questionState is QuestionState.NoCorrectAnswers) {
                 val text = stringResource(R.string.error_select_answers)
                 LaunchedEffect(Unit) {
                     snackbarHostState.showSnackbar(text)
-                    questionStateWrapper.onReceive()
+                    parentViewModel.onSnackbarShown()
                 }
             }
             Box(modifier = Modifier.fillMaxSize()) {
@@ -72,9 +72,9 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                 ) {
                     question = requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
-                        onTextChanged = { questionStateWrapper.onReceive() },
+                        onTextChanged = { parentViewModel.onTextFieldChanged() },
                         fieldState = screenSession.questionState,
-                        isError = questionStateWrapper.uiState is QuestionState.EmptyQuestion,
+                        isError = questionState is QuestionState.EmptyQuestion,
                         errorText = R.string.error_empty_field,
                         hint = R.string.input_question,
                     )

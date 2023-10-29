@@ -27,7 +27,6 @@ import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.screenSession.QuestionCreationScreenSession
 import student.testing.system.presentation.ui.models.screenSession.TestCreationScreenSession
-import student.testing.system.presentation.ui.stateWrapper.QuestionStateWrapper
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Named
@@ -41,9 +40,8 @@ class TestCreationViewModel @Inject constructor(
 
     val courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
 
-    private val _questionStateWrapper =
-        QuestionStateWrapper.mutableStateFlow<QuestionState>()
-    val questionStateWrapper = _questionStateWrapper.asStateFlow()
+    private val _questionState = MutableStateFlow<QuestionState>(QuestionState.NoState)
+    val questionState = _questionState.asStateFlow()
 
     private val _testStateWrapper = StateWrapper.mutableStateFlow<TestCreationState<Test>>()
     val testStateWrapper = _testStateWrapper.asStateFlow()
@@ -81,7 +79,7 @@ class TestCreationViewModel @Inject constructor(
         if (state is QuestionState.QuestionSuccess) {
             testCreationScreenSession.questions += question
         }
-        _questionStateWrapper.value = QuestionStateWrapper(state)
+        _questionState.value = state
         if (state is QuestionState.QuestionSuccess) {
             appNavigator.tryNavigateBack(Destination.TestCreationScreen.fullRoute)
         }
@@ -106,5 +104,13 @@ class TestCreationViewModel @Inject constructor(
                     StateWrapper(TestCreationState.Created(requestResult.data))
             }
         }
+    }
+
+    fun onTextFieldChanged() {
+        _questionState.value = QuestionState.NoState
+    }
+
+    fun onSnackbarShown() {
+        _questionState.value = QuestionState.NoState
     }
 }
