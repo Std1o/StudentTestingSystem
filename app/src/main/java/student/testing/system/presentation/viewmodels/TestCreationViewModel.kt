@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import godofappstates.presentation.stateWrapper.StateWrapper
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,8 +42,8 @@ class TestCreationViewModel @Inject constructor(
     private val _questionState = MutableStateFlow<QuestionState>(QuestionState.NoState)
     val questionState = _questionState.asStateFlow()
 
-    private val _testStateWrapper = StateWrapper.mutableStateFlow<TestCreationState<Test>>()
-    val testStateWrapper = _testStateWrapper.asStateFlow()
+    private val _testState = MutableStateFlow<TestCreationState<Test>>(OperationState.NoState)
+    val testState = _testState.asStateFlow()
 
     var questionCreationScreenSession by mutableStateOf(QuestionCreationScreenSession())
         private set
@@ -98,19 +97,18 @@ class TestCreationViewModel @Inject constructor(
                 )
             }, Test::class)
             println(requestResult)
-            _testStateWrapper.value = StateWrapper(requestResult)
+            _testState.value = requestResult
             if (requestResult is OperationState.Success) {
-                _testStateWrapper.value =
-                    StateWrapper(TestCreationState.Created(requestResult.data))
+                _testState.value = TestCreationState.Created(requestResult.data)
             }
         }
     }
 
-    fun onTextFieldChanged() {
+    fun onQuestionStateReceived() {
         _questionState.value = QuestionState.NoState
     }
 
-    fun onSnackbarShown() {
-        _questionState.value = QuestionState.NoState
+    fun onTestNameChanged() {
+        _testState.value = OperationState.NoState
     }
 }

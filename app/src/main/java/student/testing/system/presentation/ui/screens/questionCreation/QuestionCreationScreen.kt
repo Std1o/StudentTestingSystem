@@ -61,7 +61,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                 val text = stringResource(R.string.error_select_answers)
                 LaunchedEffect(Unit) {
                     snackbarHostState.showSnackbar(text)
-                    parentViewModel.onSnackbarShown()
+                    parentViewModel.onQuestionStateReceived()
                 }
             }
             Box(modifier = Modifier.fillMaxSize()) {
@@ -72,7 +72,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
                 ) {
                     question = requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
-                        onTextChanged = { parentViewModel.onTextFieldChanged() },
+                        onTextChanged = { parentViewModel.onQuestionStateReceived() },
                         fieldState = screenSession.questionState,
                         isError = questionState is QuestionState.EmptyQuestion,
                         errorText = R.string.error_empty_field,

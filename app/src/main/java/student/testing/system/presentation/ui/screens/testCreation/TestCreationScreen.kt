@@ -47,7 +47,7 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
     val lastOperationStateWrapper by parentViewModel.lastOperationStateWrapper.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
-    val testStateWrapper by parentViewModel.testStateWrapper.collectAsState()
+    val testState by parentViewModel.testState.collectAsState()
     val screenSession = parentViewModel.testCreationScreenSession
     Surface {
         Scaffold(
@@ -73,9 +73,9 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
                 ) {
                     requiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
-                        onTextChanged = { testStateWrapper.onReceive() },
+                        onTextChanged = { parentViewModel.onTestNameChanged() },
                         fieldState = screenSession.testNameState,
-                        isError = testStateWrapper.uiState is TestCreationState.EmptyName,
+                        isError = testState is TestCreationState.EmptyName,
                         errorText = R.string.error_empty_field,
                         hint = R.string.test_name,
                     )

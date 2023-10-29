@@ -32,8 +32,8 @@ fun TestCreationHostScreen(parentViewModel: CourseSharedViewModel, onTestCreated
             Destination.TestCreationScreen.fullRoute
         )
     sharedViewModel?.setCourse(course)
-    val testStateWrapper = sharedViewModel?.testStateWrapper?.collectAsState()
-    testStateWrapper?.value?.uiState?.let {
+    val testState = sharedViewModel?.testState?.collectAsState()
+    testState?.value?.let {
         if (it is TestCreationState.Created) {
             onTestCreated(it.test)
             viewModel.navigateBack()
