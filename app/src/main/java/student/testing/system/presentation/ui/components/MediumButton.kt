@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MediumButton(@StringRes text: Int, modifier: Modifier, onClick: () -> Unit) {
+fun MediumButton(@StringRes text: Int, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         modifier = modifier
