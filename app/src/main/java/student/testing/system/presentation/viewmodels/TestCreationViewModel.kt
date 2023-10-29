@@ -80,6 +80,7 @@ class TestCreationViewModel @Inject constructor(
         }
         _questionState.value = state
         if (state is QuestionState.QuestionSuccess) {
+            questionCreationScreenSession = QuestionCreationScreenSession()
             appNavigator.tryNavigateBack(Destination.TestCreationScreen.fullRoute)
         }
     }

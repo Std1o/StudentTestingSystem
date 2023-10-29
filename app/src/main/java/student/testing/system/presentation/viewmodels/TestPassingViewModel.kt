@@ -36,10 +36,11 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
         this.test = test
         this.isUserModerator = isUserModerator
 
-        contentStateVar = contentStateVar.copy(
-            question = test.questions[contentStateVar.position].question,
-            answers = test.questions[contentStateVar.position].answers
-        )
+        updateTestPassingContentState(0)
+    }
+
+    fun onNextQuestion() {
+        updateTestPassingContentState(contentStateVar.position + 1)
     }
 
     fun calculateResult(testId: Int, courseId: Int): StateFlow<OperationState<Int>> {
@@ -68,5 +69,13 @@ class TestPassingViewModel @Inject constructor(private val repository: MainRepos
             stateFlow.emit(requestResult)
         }
         return stateFlow
+    }
+
+    private fun updateTestPassingContentState(position: Int) {
+        contentStateVar = contentStateVar.copy(
+            question = test.questions[position].question,
+            answers = test.questions[position].answers,
+            position = position
+        )
     }
 }
