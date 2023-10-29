@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
+import student.testing.system.common.Utils.isUserModerator
 import student.testing.system.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
@@ -20,4 +21,8 @@ class CourseReviewViewModel @Inject constructor(
         checkNotNull(savedStateHandle[Destination.CourseReviewScreen.COURSE_KEY])
 
     val navigationChannel = appNavigator.navigationChannel
+
+    val isUserModerator by lazy {
+        isUserModerator(course)
+    }
 }

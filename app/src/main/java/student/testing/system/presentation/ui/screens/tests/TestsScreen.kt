@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.models.Test
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
@@ -34,7 +35,7 @@ import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestsViewModel
 
 @Composable
-fun TestsScreen(parentViewModel: CourseSharedViewModel) {
+fun TestsScreen(parentViewModel: CourseSharedViewModel, onTestClicked: (Test) -> Unit) {
     val testsVM = hiltViewModel<TestsViewModel>()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -75,7 +76,10 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel) {
                     isLoading = contentState.tests is LoadableData.Loading,
                     hidden = false,
                     tests = contentState.tests,
-                    onClick = { testsVM.onTestClicked(it) },
+                    onClick = {
+                        onTestClicked(it)
+                        testsVM.onTestClicked(it)
+                    },
                     onLongClick = { deletingTestId = it.id })
             }
         }

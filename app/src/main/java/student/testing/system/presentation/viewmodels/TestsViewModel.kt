@@ -10,6 +10,7 @@ import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import godofappstates.presentation.viewmodel.StatesViewModel
+import student.testing.system.common.Utils
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
 import student.testing.system.domain.states.loadableData.LoadableData
@@ -43,12 +44,8 @@ class TestsViewModel @Inject constructor(
         if (oldValue != newValue) getTests()
     }
 
-    private val currentParticipant by lazy {
-        course.participants
-            .first { it.userId == AccountSession.instance.userId }
-    }
     val isUserModerator by lazy {
-        currentParticipant.isModerator || currentParticipant.isOwner
+        Utils.isUserModerator(course)
     }
 
     private fun getTests() {

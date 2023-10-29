@@ -8,6 +8,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -19,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import student.testing.system.common.NullSharedViewModelException
 import student.testing.system.common.viewModelScopedTo
+import student.testing.system.models.Test
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
@@ -46,6 +50,7 @@ fun CourseReviewScreen() {
     val sharedViewModel = navBackStackEntry
         ?.viewModelScopedTo<CourseSharedViewModel>(navController, Destination.TestsScreen.fullRoute)
     sharedViewModel?.setCourse(viewModel.course)
+    var clickedTest by remember { mutableStateOf(Test()) }
     NavigationEffects(
         navigationChannel = viewModel.navigationChannel,
         navHostController = navController
@@ -98,7 +103,9 @@ fun CourseReviewScreen() {
             Modifier.padding(innerPadding)
         ) {
             composable(Destination.TestsScreen) {
-                TestsScreen(sharedViewModel ?: throw NullSharedViewModelException())
+                TestsScreen(sharedViewModel ?: throw NullSharedViewModelException()) {
+                    clickedTest = it
+                }
             }
             composable(Destination.ParticipantsScreen) {
                 ParticipantsScreen(sharedViewModel ?: throw NullSharedViewModelException())
@@ -112,7 +119,12 @@ fun CourseReviewScreen() {
             }
             composable(Destination.ResultReviewScreen) { ResultReviewScreen() }
             composable(Destination.ResultsReviewScreen) { ResultsReviewScreen() }
-            composable(Destination.TestPassingScreen) { TestPassingScreen() }
+            composable(Destination.TestPassingScreen) {
+                TestPassingScreen(
+                    clickedTest,
+                    viewModel.isUserModerator
+                )
+            }
         }
     }
 }
