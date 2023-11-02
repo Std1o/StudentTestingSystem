@@ -37,9 +37,8 @@ fun QuestionResultsList(questionResults: List<QuestionResult>) {
                 CenteredColumn(modifier = Modifier.padding(8.dp)) {
                     Text(
                         text = question,
-                        modifier = Modifier.padding(start = 10.dp),
-                        fontSize = 14.sp,
-                        color = Color.DarkGray
+                        fontSize = 16.sp,
+                        color = Color.Black
                     )
                     AnswerResultsList(answerResults = answers)
                 }
