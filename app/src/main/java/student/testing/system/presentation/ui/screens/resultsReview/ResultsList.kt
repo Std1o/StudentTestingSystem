@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,8 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import student.testing.system.R
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.ParticipantResult
@@ -39,10 +40,10 @@ fun ResultsList(
     results: LoadableData<ParticipantsResults>
 ) {
     if (hidden) return
-    val data = (results as? LoadableData.Success)?.data?.results
+    val data = (results as? LoadableData.Success)?.data
     val mockTests = listOf(ParticipantResult(), ParticipantResult(), ParticipantResult())
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        iTems(data ?: mockTests) { participantResult ->
+        iTems(data?.results ?: mockTests) { participantResult ->
             val shape = RoundedCornerShape(5.dp)
             Card(
                 elevation = 10.dp,
@@ -70,25 +71,51 @@ fun ResultsList(
                         } else if (results is LoadableData.Success) {
                             Avatar(participantResult.username)
                         }
-                        Text(
-                            text = participantResult.username,
-                            modifier = Modifier
-                                .widthIn(min = 60.dp)
-                                .clip(CircleShape)
-                                .placeholder(isLoading, Shimmer()),
-                            fontSize = 16.sp,
-                            color = Color.DarkGray,
-                        )
+                        Column {
+                            Text(
+                                text = participantResult.username,
+                                modifier = Modifier
+                                    .widthIn(min = 60.dp)
+                                    .clip(CircleShape)
+                                    .placeholder(isLoading, Shimmer()),
+                                fontSize = 17.sp,
+                                color = Color.DarkGray,
+                            )
+                            val score =
+                                if (data == null) "" else if (participantResult.score % 1.0 != 0.0) {
+                                    stringResource(
+                                        R.string.participant_result,
+                                        participantResult.score,
+                                        data.maxScore
+                                    )
+                                } else {
+                                    stringResource(
+                                        R.string.participant_result,
+                                        participantResult.score.toInt(),
+                                        data.maxScore
+                                    )
+                                }
+                            Row {
+                                Text(
+                                    text = score,
+                                    modifier = Modifier
+                                        .widthIn(min = 40.dp)
+                                        .clip(CircleShape)
+                                        .placeholder(isLoading, Shimmer()),
+                                    color = Color.DarkGray,
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = participantResult.email,
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .placeholder(isLoading, Shimmer())
+                                        .widthIn(min = 100.dp),
+                                    color = Color.DarkGray
+                                )
+                            }
+                        }
                     }
-                    Text(
-                        text = participantResult.email,
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .clip(CircleShape)
-                            .placeholder(isLoading, Shimmer())
-                            .widthIn(min = 100.dp),
-                        color = Color.DarkGray
-                    )
                 }
             }
         }
