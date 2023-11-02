@@ -96,16 +96,13 @@ class TestsViewModel @Inject constructor(
                 }, TestResult::class)
                 if (requestResult is OperationState.Success) {
                     _resultReviewChannel.send(requestResult.data)
+                    courseNavigator.tryNavigateTo(Destination.ResultReviewScreen())
                 }
                 if (requestResult is ResultState.NoResult) {
                     courseNavigator.tryNavigateTo(Destination.TestPassingScreen())
                 }
             }
         }
-    }
-
-    fun navigateToResult() {
-        courseNavigator.tryNavigateTo(Destination.ResultReviewScreen())
     }
 
     // TODO remove

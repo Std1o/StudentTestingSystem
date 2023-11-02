@@ -108,7 +108,6 @@ fun TestsScreen(
         scope.launch {
             testsVM.resultReviewFlow.collect {
                 onResultReview(it)
-                testsVM.navigateToResult()
             }
         }
     }
