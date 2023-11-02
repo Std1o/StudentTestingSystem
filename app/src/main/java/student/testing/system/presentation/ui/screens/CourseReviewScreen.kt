@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import student.testing.system.common.NullSharedViewModelException
 import student.testing.system.common.viewModelScopedTo
 import student.testing.system.models.Test
+import student.testing.system.models.TestResult
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
@@ -52,6 +53,7 @@ fun CourseReviewScreen() {
         ?.viewModelScopedTo<CourseSharedViewModel>(navController, Destination.TestsScreen.fullRoute)
     sharedViewModel?.setCourse(viewModel.course)
     var clickedTest by remember { mutableStateOf(Test()) }
+    var testResult by remember { mutableStateOf(TestResult()) }
     NavigationEffects(
         navigationChannel = viewModel.navigationChannel,
         navHostController = navController
@@ -104,8 +106,10 @@ fun CourseReviewScreen() {
             Modifier.padding(innerPadding)
         ) {
             composable(Destination.TestsScreen) {
-                TestsScreen(sharedViewModel ?: throw NullSharedViewModelException()) {
-                    clickedTest = it
+                TestsScreen(
+                    sharedViewModel ?: throw NullSharedViewModelException(),
+                    onTestClicked = { clickedTest = it }) {
+                    testResult = it
                 }
             }
             composable(Destination.ParticipantsScreen) {
@@ -118,13 +122,12 @@ fun CourseReviewScreen() {
                     sharedViewModel.onTestAdded(it)
                 }
             }
-            composable(Destination.ResultReviewScreen) { ResultReviewScreen() }
+            composable(Destination.ResultReviewScreen) { ResultReviewScreen(testResult) }
             composable(Destination.ResultsReviewScreen) { ResultsReviewScreen() }
             composable(Destination.TestPassingScreen) {
-                TestPassingScreen(
-                    clickedTest,
-                    viewModel.isUserModerator
-                )
+                TestPassingScreen(clickedTest, viewModel.isUserModerator) {
+                    testResult = it
+                }
             }
         }
     }

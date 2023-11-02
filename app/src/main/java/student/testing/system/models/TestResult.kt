@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TestResult(
-    val questions: List<QuestionResult>,
-    @SerializedName("max_score") val maxScore: Int,
-    val score: Double
+    val questions: List<QuestionResult> = emptyList(),
+    @SerializedName("max_score") val maxScore: Int = 0,
+    val score: Double = 0.0
 ) : Parcelable

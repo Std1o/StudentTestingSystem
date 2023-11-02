@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.Test
+import student.testing.system.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
@@ -35,7 +36,11 @@ import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestsViewModel
 
 @Composable
-fun TestsScreen(parentViewModel: CourseSharedViewModel, onTestClicked: (Test) -> Unit) {
+fun TestsScreen(
+    parentViewModel: CourseSharedViewModel,
+    onTestClicked: (Test) -> Unit,
+    onResultReview: (TestResult) -> Unit
+) {
     val testsVM = hiltViewModel<TestsViewModel>()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -98,6 +103,12 @@ fun TestsScreen(parentViewModel: CourseSharedViewModel, onTestClicked: (Test) ->
         scope.launch {
             parentViewModel.testFlow.collect {
                 testsVM.onTestAdded(it)
+            }
+        }
+        scope.launch {
+            testsVM.resultReviewFlow.collect {
+                onResultReview(it)
+                testsVM.navigateToResult()
             }
         }
     }

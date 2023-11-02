@@ -22,16 +22,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.models.Test
+import student.testing.system.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.screens.questionCreation.AnswersList
 import student.testing.system.presentation.viewmodels.TestPassingViewModel
 
 @Composable
-fun TestPassingScreen(test: Test, isUserModerator: Boolean) {
+fun TestPassingScreen(test: Test, isUserModerator: Boolean, onResultReview: (TestResult) -> Unit) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -77,6 +79,11 @@ fun TestPassingScreen(test: Test, isUserModerator: Boolean) {
         scope.launch {
             viewModel.snackbarFlow.collect {
                 snackbarHostState.showSnackbar(context.resources.getString(it))
+            }
+        }
+        scope.launch {
+            viewModel.resultReviewFlow.collect {
+                onResultReview(it)
             }
         }
     }

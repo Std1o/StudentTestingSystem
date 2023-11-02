@@ -2,14 +2,15 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import godofappstates.presentation.viewmodel.StatesViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import student.testing.system.common.AccountSession
-import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
-import godofappstates.presentation.viewmodel.StatesViewModel
+import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import student.testing.system.common.Utils
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.getResult.GetResultUseCase
@@ -37,6 +38,9 @@ class TestsViewModel @Inject constructor(
     private val _contentState = MutableStateFlow(TestsContentState())
     val contentState = _contentState.asStateFlow()
     private var contentStateVar by stateFlowVar(_contentState)
+
+    private val _resultReviewChannel = Channel<TestResult>()
+    val resultReviewFlow = _resultReviewChannel.receiveAsFlow()
 
     lateinit var course: CourseResponse
 
@@ -87,17 +91,21 @@ class TestsViewModel @Inject constructor(
             courseNavigator.tryNavigateTo(Destination.ResultsReviewScreen())
         } else {
             viewModelScope.launch {
-                val requestResult = executeOperationAndIgnoreData({
+                val requestResult = executeOperation({
                     getResultUseCase(testId = test.id, courseId = test.courseId)
-                })
+                }, TestResult::class)
                 if (requestResult is OperationState.Success) {
-                    courseNavigator.tryNavigateTo(Destination.ResultReviewScreen())
+                    _resultReviewChannel.send(requestResult.data)
                 }
                 if (requestResult is ResultState.NoResult) {
                     courseNavigator.tryNavigateTo(Destination.TestPassingScreen())
                 }
             }
         }
+    }
+
+    fun navigateToResult() {
+        courseNavigator.tryNavigateTo(Destination.ResultReviewScreen())
     }
 
     // TODO remove

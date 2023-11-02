@@ -39,6 +39,9 @@ class TestPassingViewModel @Inject constructor(
     val contentState = _contentState.asStateFlow()
     private var contentStateVar by stateFlowVar(_contentState)
 
+    private val _resultReviewChannel = Channel<TestResult>()
+    val resultReviewFlow = _resultReviewChannel.receiveAsFlow()
+
     private lateinit var test: Test
     private var isUserModerator = false
 
@@ -68,7 +71,9 @@ class TestPassingViewModel @Inject constructor(
             viewModelScope.launch {
                 executeEmptyOperation({
                     repository.calculateResult(test.id, test.courseId, userQuestions)
-                }) { navigateToResult() }.protect()
+                }) {
+                    getResult()
+                }.protect()
             }
         } else {
             updateTestPassingContentState(contentStateVar.position + 1)
@@ -77,7 +82,7 @@ class TestPassingViewModel @Inject constructor(
 
     private fun navigateToResult() {
         courseNavigator.tryNavigateTo(
-            Destination.ResultReviewScreen.fullRoute,
+            Destination.ResultReviewScreen(),
             inclusive = true,
             popUpToRoute = Destination.TestPassingScreen()
         )
@@ -100,6 +105,15 @@ class TestPassingViewModel @Inject constructor(
             stateFlow.emit(requestResult)
         }
         return stateFlow
+    }
+
+    private fun getResult() {
+        viewModelScope.launch {
+            executeOperation({ repository.getResult(test.id, test.courseId) }, TestResult::class) {
+                _resultReviewChannel.trySend(it)
+                navigateToResult()
+            }.protect()
+        }
     }
 
     fun getResult(testId: Int, courseId: Int): StateFlow<OperationState<TestResult>> {
