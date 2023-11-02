@@ -1,10 +1,16 @@
 package student.testing.system.presentation.ui.screens.resultsReview
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -34,11 +40,7 @@ fun ResultsList(
 ) {
     if (hidden) return
     val data = (results as? LoadableData.Success)?.data?.results
-    val mockTests = listOf(
-        ParticipantResult(username = "1"),
-        ParticipantResult(username = "2"),
-        ParticipantResult(username = "3")
-    )
+    val mockTests = listOf(ParticipantResult(), ParticipantResult(), ParticipantResult())
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         iTems(data ?: mockTests) { participantResult ->
             val shape = RoundedCornerShape(5.dp)
@@ -51,7 +53,23 @@ fun ResultsList(
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Avatar(participantResult.username)
+                        if (isLoading) {
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Column {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Spacer(
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .background(Shimmer())
+                                        .padding(10.dp)
+                                        .size(22.dp)
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                            }
+                            Spacer(modifier = Modifier.width(6.dp))
+                        } else if (results is LoadableData.Success) {
+                            Avatar(participantResult.username)
+                        }
                         Text(
                             text = participantResult.username,
                             modifier = Modifier
