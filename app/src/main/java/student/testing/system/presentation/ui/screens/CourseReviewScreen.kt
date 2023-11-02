@@ -30,6 +30,7 @@ import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
 import student.testing.system.presentation.ui.components.NavigationEffects
 import student.testing.system.presentation.ui.screens.resultReview.ResultReviewScreen
+import student.testing.system.presentation.ui.screens.resultsReview.ResultsReviewScreen
 import student.testing.system.presentation.ui.screens.testCreation.TestCreationHostScreen
 import student.testing.system.presentation.ui.screens.testPassing.TestPassingScreen
 import student.testing.system.presentation.ui.screens.tests.TestsScreen
@@ -124,7 +125,7 @@ fun CourseReviewScreen() {
                 }
             }
             composable(Destination.ResultReviewScreen) { ResultReviewScreen(testResult) }
-            composable(Destination.ResultsReviewScreen) { ResultsReviewScreen() }
+            composable(Destination.ResultsReviewScreen) { ResultsReviewScreen(clickedTest) }
             composable(Destination.TestPassingScreen) {
                 TestPassingScreen(clickedTest, viewModel.isUserModerator) {
                     testResult = it

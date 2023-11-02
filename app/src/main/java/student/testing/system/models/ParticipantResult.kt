@@ -6,9 +6,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ParticipantResult(
-    @SerializedName("user_id") val userId: Int,
-    val username: String,
-    val email: String,
-    val score: Double,
-    @SerializedName("passing_time") val passingTime: String
+    @SerializedName("user_id") val userId: Int = 0,
+    val username: String = "",
+    val email: String = "",
+    val score: Double = 0.0,
+    @SerializedName("passing_time") val passingTime: String = ""
 ): Parcelable
