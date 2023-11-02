@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens
+package student.testing.system.presentation.ui.screens.resultReview
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
@@ -36,6 +36,7 @@ fun ResultReviewScreen(testResult: TestResult) {
                 color = Color.Black,
                 modifier = Modifier.padding(30.dp)
             )
+            QuestionResultsList(questionResults = testResult.questions)
         }
     }
 }
