@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +54,7 @@ fun AnswersList(answers: List<Answer>) {
                             onLongClick = { },
                         )
                 ) {
-                    var checked by remember { mutableStateOf(answer.isRight) }
+                    var checked by rememberSaveable { mutableStateOf(false) }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -71,6 +72,7 @@ fun AnswersList(answers: List<Answer>) {
                         Checkbox(
                             checked = checked,
                             onCheckedChange = { isRight ->
+                                checked = !checked
                                 answer.isRight = isRight
                             })
                         Text(
