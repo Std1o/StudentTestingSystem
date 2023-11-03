@@ -2,6 +2,10 @@ package student.testing.system.presentation.ui.screens.resultsReview
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,7 +28,14 @@ fun ResultsReviewScreen(test: Test) {
     Surface {
         Scaffold(
             topBar = {
-                SearchAppBar {
+                SearchAppBar(actions = {
+                    IconButton(onClick = { /* do something */ }) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }) {
                     viewModel.searchPrefix = it
                     viewModel.getResults()
                 }
@@ -35,7 +46,6 @@ fun ResultsReviewScreen(test: Test) {
                     .fillMaxSize()
                     .padding(contentPadding)
             ) {
-                Text(text = "Просмотр результатов")
                 ResultsList(
                     isLoading = contentState.results is LoadableData.Loading,
                     hidden = false,
