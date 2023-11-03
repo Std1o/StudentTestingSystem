@@ -25,7 +25,8 @@ fun ResultsReviewScreen(test: Test) {
         Scaffold(
             topBar = {
                 SearchAppBar {
-                    println(it)
+                    viewModel.searchPrefix = it
+                    viewModel.getResults()
                 }
             }
         ) { contentPadding ->

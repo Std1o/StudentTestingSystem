@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import student.testing.system.R
 
@@ -37,13 +38,8 @@ fun SearchAppBar(onQueryChanged: (String) -> Unit) {
     TextField(
         value = query,
         onValueChange = { newQuery ->
-            // If user makes changes to text, immediately updated it.
             query = newQuery
-            // To avoid crash, only query when string isn't empty.
-            if (newQuery.isNotEmpty()) {
-                // Pass latest query to refresh search results.
-                onQueryChanged(newQuery)
-            }
+            onQueryChanged(newQuery)
         },
         leadingIcon = {
             Icon(
@@ -67,7 +63,7 @@ fun SearchAppBar(onQueryChanged: (String) -> Unit) {
         placeholder = { Text(text = stringResource(R.string.hint_search_query)) },
         textStyle = MaterialTheme.typography.subtitle1,
         singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, capitalization = KeyboardCapitalization.Sentences),
         modifier = Modifier
             .fillMaxWidth()
             .background(color = MaterialTheme.colors.background, shape = RectangleShape)
