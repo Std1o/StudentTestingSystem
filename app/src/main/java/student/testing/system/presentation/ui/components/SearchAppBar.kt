@@ -83,8 +83,10 @@ fun SearchAppBar(actions: @Composable RowScope.() -> Unit = {}, onQueryChanged: 
             trailingIcon = {
                 IconButton(onClick = {
                     if (query.isEmpty()) collapsed = true
-                    query = ""
-                    onQueryChanged("")
+                    else {
+                        query = ""
+                        onQueryChanged("")
+                    }
                 }) {
                     Icon(
                         imageVector = Icons.Rounded.Clear,
