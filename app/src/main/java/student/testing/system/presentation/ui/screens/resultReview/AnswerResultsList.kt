@@ -17,7 +17,7 @@ import student.testing.system.models.AnswerResult
 
 @Composable
 fun AnswerResultsList(answerResults: List<AnswerResult>) {
-    answerResults.forEach { answerResults ->
+    answerResults.forEach { answerResult ->
         val shape = RoundedCornerShape(5.dp)
         Card(
             elevation = 10.dp,
@@ -32,13 +32,13 @@ fun AnswerResultsList(answerResults: List<AnswerResult>) {
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
-                Checkbox(checked = answerResults.isSelected, onCheckedChange = null, enabled = false)
+                Checkbox(checked = answerResult.isSelected, onCheckedChange = null, enabled = false)
                 Text(
-                    text = answerResults.answer, modifier = Modifier
+                    text = answerResult.answer, modifier = Modifier
                         .padding(start = 10.dp)
                         .weight(1f),
                     fontSize = 14.sp,
-                    color = if (answerResults.isRight) Color.Green else Color.Red
+                    color = if (answerResult.isRight) Color.Green else Color.Red
                 )
             }
         }

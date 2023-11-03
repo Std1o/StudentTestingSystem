@@ -93,7 +93,7 @@ fun ResultsList(
                                     )
                                 } else {
                                     stringResource(
-                                        R.string.participant_result,
+                                        R.string.participant_int_result,
                                         participantResult.score.toInt(),
                                         data.maxScore
                                     )
