@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.RangeSlider
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -15,7 +17,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -25,11 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.launch
 import student.testing.system.R
-import student.testing.system.presentation.ui.components.CenteredColumn
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
     val sheetState: SheetState = rememberModalBottomSheetState()
@@ -49,24 +49,24 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                 fontSize = 18.sp
             )
             Divider(color = Color.DarkGray, thickness = 0.5.dp)
-            var checked by rememberSaveable { mutableStateOf(false) }
+            var onlyMaxResults by rememberSaveable { mutableStateOf(false) }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .toggleable(
-                        value = checked,
+                        value = onlyMaxResults,
                         role = Role.Checkbox,
                         onValueChange = {
-                            checked = !checked
+                            onlyMaxResults = !onlyMaxResults
                         }
                     )
                     .padding(8.dp)
                     .fillMaxWidth()
             ) {
                 Checkbox(
-                    checked = checked,
-                    onCheckedChange = { isRight ->
-                        checked = !checked
+                    checked = onlyMaxResults,
+                    onCheckedChange = {
+                        onlyMaxResults = !onlyMaxResults
                     })
                 Text(
                     text = stringResource(id = R.string.only_max_results),
@@ -78,6 +78,45 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                 )
             }
             Text(text = stringResource(id = R.string.ratings_range), fontSize = 14.sp)
+            var sliderPosition by remember { mutableStateOf(0f..100f) }
+            RangeSlider(
+                value = sliderPosition,
+                onValueChange = { sliderPosition = it },
+                valueRange = 0f..100f,
+                onValueChangeFinished = {
+                    // launch some business logic update with the state you hold
+                    // viewModel.updateSelectedSliderValue(sliderPosition)
+                },
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+            var scoreEquals by rememberSaveable { mutableStateOf(false) }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .toggleable(
+                        value = scoreEquals,
+                        role = Role.Checkbox,
+                        onValueChange = {
+                            scoreEquals = !scoreEquals
+                        }
+                    )
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
+                Checkbox(
+                    checked = scoreEquals,
+                    onCheckedChange = {
+                        scoreEquals = !scoreEquals
+                    })
+                Text(
+                    text = stringResource(id = R.string.score_equals),
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .weight(1f),
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+            }
         }
     }
 }
