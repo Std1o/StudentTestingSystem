@@ -1,15 +1,21 @@
 package student.testing.system.presentation.ui.screens.resultsReview
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.RangeSlider
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,8 +25,10 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
+import student.testing.system.presentation.ui.components.modifiers.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
@@ -138,6 +147,51 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                     keyboardType = KeyboardType.Number
                 )
             )
+            Row(modifier = Modifier.padding(top = 30.dp).padding(horizontal = 10.dp)) {
+                OutlinedTextField(
+                    value = scoreValue,
+                    onValueChange = {
+                        scoreValue = it
+                    },
+                    modifier = Modifier.weight(1f).padding(8.dp).noRippleClickable { println("aaaa") },
+                    label = { Text(stringResource(id = R.string.start)) },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Number
+                    ),
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.CalendarMonth, "calendar"
+                        )
+                    },
+                    enabled = false,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        //For Icons
+                        disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant)
+                )
+                OutlinedTextField(
+                    value = scoreValue,
+                    onValueChange = {
+                        scoreValue = it
+                    },
+                    modifier = Modifier.weight(1f).padding(8.dp),
+                    label = { Text(stringResource(id = R.string.end)) },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Number
+                    ),
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.CalendarMonth, "calendar"
+                        )
+                    }
+                )
+            }
         }
     }
 }
