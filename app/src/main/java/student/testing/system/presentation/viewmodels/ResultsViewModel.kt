@@ -29,7 +29,7 @@ class ResultsViewModel @Inject constructor(private val repository: MainRepositor
         filtersContainer.upperBound = new.toFloat()
     }
     var searchPrefix: String? = null
-    val filtersContainer by lazy { FiltersContainer() }
+    val filtersContainer = FiltersContainer()
 
     fun setInitialData(test: Test) {
         this.test = test

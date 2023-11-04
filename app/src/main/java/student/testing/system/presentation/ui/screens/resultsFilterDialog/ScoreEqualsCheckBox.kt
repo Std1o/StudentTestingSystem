@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import student.testing.system.R
 
 @Composable
-fun ScoreEqualsCheckBox(onValueChange: (Boolean) -> Unit) {
-    var scoreEquals by rememberSaveable { mutableStateOf(false) }
+fun ScoreEqualsCheckBox(value: Boolean, onValueChange: (Boolean) -> Unit) {
+    var scoreEquals by rememberSaveable { mutableStateOf(value) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

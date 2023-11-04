@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.RangeSlider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -40,6 +40,7 @@ fun ResultsFilterDialog(
     val sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+    var scoreFieldEnabled by remember { mutableStateOf(filtersContainer.scoreEqualsEnabled) }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -73,19 +74,20 @@ fun ResultsFilterDialog(
                 text = "%.2f".format(sliderPosition.start) + ".." + "%.2f".format(sliderPosition.endInclusive),
                 fontSize = 14.sp
             )
-            ScoreEqualsCheckBox {
-
+            ScoreEqualsCheckBox(scoreFieldEnabled) {
+                scoreFieldEnabled = it
+                filtersContainer.scoreEqualsEnabled = it
             }
             var scoreValue by rememberSaveable { mutableStateOf("") }
             OutlinedTextField(
                 value = scoreValue,
                 onValueChange = { scoreValue = it },
-                modifier = Modifier.padding(8.dp),
                 label = { Text(stringResource(id = R.string.score_value)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Number
-                )
+                ),
+                enabled = scoreFieldEnabled
             )
             DateRangeFilter()
             OrderingTypeSelector()
