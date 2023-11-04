@@ -36,7 +36,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
     val course by parentViewModel.courseFlow.collectAsState(CourseResponse("", 0, "", "", listOf()))
     Surface {
         CenteredColumn {
-            ParticipantsList(hidden = false, participants = course.participants, onClick = {})
+            ParticipantsList(hidden = false, participants = course.participants)
         }
     }
 }
@@ -45,8 +45,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
 @Composable
 fun ParticipantsList(
     hidden: Boolean,
-    participants: List<Participant>,
-    onClick: (Participant) -> Unit
+    participants: List<Participant>
 ) {
     if (hidden) return
     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -63,7 +62,6 @@ fun ParticipantsList(
                 Box(
                     modifier = Modifier
                         .clip(shape)
-                        .clickable { onClick(participant) }
                 ) {
                     Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
