@@ -19,10 +19,10 @@ import student.testing.system.models.enums.OrderingType
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun OrderingTypeSelector() {
+fun OrderingTypeSelector(value: OrderingType?, onItemSelected: (OrderingType?) -> Unit) {
     val items = OrderingType.getOrderingTypes()
     var expanded by remember { mutableStateOf(false) }
-    var selectedMovie by remember { mutableStateOf("") }
+    var selectedItem by remember { mutableStateOf(value?.toString() ?: "") }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -34,7 +34,7 @@ fun OrderingTypeSelector() {
             modifier = Modifier
                 .menuAnchor(),
             readOnly = true,
-            value = selectedMovie,
+            value = selectedItem,
             onValueChange = {},
             label = { Text(stringResource(id = R.string.select_ordering_type)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
@@ -50,7 +50,8 @@ fun OrderingTypeSelector() {
                 DropdownMenuItem(
                     text = { Text(selectionOption.toString()) },
                     onClick = {
-                        selectedMovie = selectionOption.toString()
+                        selectedItem = selectionOption.toString()
+                        onItemSelected(selectionOption)
                         expanded = false
                     }
                 )

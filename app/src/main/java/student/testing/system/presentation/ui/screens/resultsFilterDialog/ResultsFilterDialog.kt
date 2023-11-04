@@ -87,7 +87,10 @@ fun ResultsFilterDialog(
             var scoreValue by rememberSaveable { mutableStateOf("") }
             OutlinedTextField(
                 value = scoreValue,
-                onValueChange = { scoreValue = it },
+                onValueChange = {
+                    scoreValue = it
+                    filtersContainer.scoreEqualsValue = it.toFloatOrNull()
+                },
                 label = { Text(stringResource(id = R.string.score_value)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -96,7 +99,9 @@ fun ResultsFilterDialog(
                 enabled = scoreFieldEnabled
             )
             DateRangeFilter()
-            OrderingTypeSelector()
+            OrderingTypeSelector(filtersContainer.orderingType) {
+                filtersContainer.orderingType = it
+            }
             MediumButton(
                 text = R.string.apply,
                 modifier = Modifier.padding(vertical = 30.dp)
