@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens.resultsReview
+package student.testing.system.presentation.ui.screens.resultsFilterDialog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,33 +65,8 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit, onSave: () -> Unit) {
                 fontSize = 18.sp
             )
             Divider(color = Color.DarkGray, thickness = 0.5.dp)
-            var onlyMaxResults by rememberSaveable { mutableStateOf(false) }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .toggleable(
-                        value = onlyMaxResults,
-                        role = Role.Checkbox,
-                        onValueChange = {
-                            onlyMaxResults = !onlyMaxResults
-                        }
-                    )
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            ) {
-                Checkbox(
-                    checked = onlyMaxResults,
-                    onCheckedChange = {
-                        onlyMaxResults = !onlyMaxResults
-                    })
-                Text(
-                    text = stringResource(id = R.string.only_max_results),
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .weight(1f),
-                    fontSize = 14.sp,
-                    color = Color.DarkGray
-                )
+            OnlyMaxResultsCheckBox {
+
             }
             Text(text = stringResource(id = R.string.ratings_range), fontSize = 14.sp)
             var sliderPosition by remember { mutableStateOf(0f..100f) }
@@ -105,33 +80,8 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit, onSave: () -> Unit) {
                 },
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
-            var scoreEquals by rememberSaveable { mutableStateOf(false) }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .toggleable(
-                        value = scoreEquals,
-                        role = Role.Checkbox,
-                        onValueChange = {
-                            scoreEquals = !scoreEquals
-                        }
-                    )
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            ) {
-                Checkbox(
-                    checked = scoreEquals,
-                    onCheckedChange = {
-                        scoreEquals = !scoreEquals
-                    })
-                Text(
-                    text = stringResource(id = R.string.score_equals),
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .weight(1f),
-                    fontSize = 14.sp,
-                    color = Color.DarkGray
-                )
+            ScoreEqualsCheckBox {
+
             }
             var scoreValue by rememberSaveable { mutableStateOf("") }
             OutlinedTextField(
