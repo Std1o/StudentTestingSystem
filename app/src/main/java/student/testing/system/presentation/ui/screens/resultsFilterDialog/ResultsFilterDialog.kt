@@ -65,6 +65,10 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit, onSave: () -> Unit) {
                 },
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
+            Text(
+                text = "%.2f".format(sliderPosition.start) + ".." + "%.2f".format(sliderPosition.endInclusive),
+                fontSize = 14.sp
+            )
             ScoreEqualsCheckBox {
 
             }
