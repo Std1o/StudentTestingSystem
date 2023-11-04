@@ -98,7 +98,10 @@ fun ResultsFilterDialog(
                 ),
                 enabled = scoreFieldEnabled
             )
-            DateRangeFilter()
+            DateRangeFilter(filtersContainer.dateFrom, filtersContainer.dateTo) { dateFrom, dateTo ->
+                filtersContainer.dateFrom = dateFrom
+                filtersContainer.dateTo = dateTo
+            }
             OrderingTypeSelector(filtersContainer.orderingType) {
                 filtersContainer.orderingType = it
             }
