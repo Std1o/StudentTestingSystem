@@ -37,9 +37,7 @@ fun ResultsFilterDialog(
     filtersContainer: FiltersContainer,
     onDismissRequest: () -> Unit
 ) {
-    val sheetState: SheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
-    )
+    val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var scoreFieldEnabled by remember { mutableStateOf(filtersContainer.scoreEqualsEnabled) }
 
     ModalBottomSheet(
@@ -98,7 +96,10 @@ fun ResultsFilterDialog(
                 ),
                 enabled = scoreFieldEnabled
             )
-            DateRangeFilter(filtersContainer.dateFrom, filtersContainer.dateTo) { dateFrom, dateTo ->
+            DateRangeFilter(
+                filtersContainer.dateFrom,
+                filtersContainer.dateTo
+            ) { dateFrom, dateTo ->
                 filtersContainer.dateFrom = dateFrom
                 filtersContainer.dateTo = dateTo
             }
@@ -108,9 +109,7 @@ fun ResultsFilterDialog(
             MediumButton(
                 text = R.string.apply,
                 modifier = Modifier.padding(vertical = 30.dp)
-            ) {
-                onDismissRequest()
-            }
+            ) { onDismissRequest() }
         }
         LaunchedEffect(Unit) {
             println(sheetState.hasExpandedState)

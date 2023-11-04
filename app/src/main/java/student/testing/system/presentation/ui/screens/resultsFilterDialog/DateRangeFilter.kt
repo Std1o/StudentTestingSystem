@@ -5,14 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -22,23 +18,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import student.testing.system.R
-import student.testing.system.common.formatToString
 import student.testing.system.presentation.ui.components.ClickableTextField
 import student.testing.system.presentation.ui.components.DatePickerDialog
 import student.testing.system.presentation.ui.components.modifiers.noRippleClickable
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangeFilter(dateFrom: String?, dateTo: String?, onDateRangeChanged: (String?, String?) -> Unit) {
     var showDateFromPicker by remember { mutableStateOf(false) }
     var showDateToPicker by remember { mutableStateOf(false) }
     var localDateFrom by remember { mutableStateOf(dateFrom) }
     var localDateTo by remember { mutableStateOf(dateTo) }
-    // ---------------------------------------
+
     Row(
         modifier = Modifier
             .padding(top = 30.dp, bottom = 10.dp)
