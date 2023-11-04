@@ -76,6 +76,7 @@
     <string name="hint_search_query">Поиск</string>
     <string name="start">Начало</string>
     <string name="end">Конец</string>
+    <string name="apply">Применить</string>
 
     <array name="answers_mode">
         <item>Один из списка</item>

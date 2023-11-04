@@ -29,10 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.presentation.ui.components.MediumButton
+import student.testing.system.presentation.ui.models.FiltersContainer
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun ResultsFilterDialog(onDismissRequest: () -> Unit, onSave: () -> Unit) {
+fun ResultsFilterDialog(
+    filtersContainer: FiltersContainer,
+    onDismissRequest: () -> Unit
+) {
     val sheetState: SheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -51,8 +55,8 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit, onSave: () -> Unit) {
                 fontSize = 18.sp
             )
             Divider(color = Color.DarkGray, thickness = 0.5.dp)
-            OnlyMaxResultsCheckBox {
-
+            OnlyMaxResultsCheckBox(filtersContainer.showOnlyMaxResults) {
+                filtersContainer.showOnlyMaxResults = it
             }
             Text(text = stringResource(id = R.string.ratings_range), fontSize = 14.sp)
             var sliderPosition by remember { mutableStateOf(0f..100f) }
@@ -86,10 +90,10 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit, onSave: () -> Unit) {
             DateRangeFilter()
             OrderingTypeSelector()
             MediumButton(
-                text = R.string.save,
+                text = R.string.apply,
                 modifier = Modifier.padding(vertical = 30.dp)
             ) {
-                onSave()
+                onDismissRequest()
             }
         }
         LaunchedEffect(Unit) {

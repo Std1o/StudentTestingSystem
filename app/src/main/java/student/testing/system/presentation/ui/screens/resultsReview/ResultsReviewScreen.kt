@@ -59,8 +59,9 @@ fun ResultsReviewScreen(test: Test) {
             }
         }
         if (showBottomFiltersSheet) {
-            ResultsFilterDialog(onDismissRequest = { showBottomFiltersSheet = false }) {
-
+            ResultsFilterDialog(viewModel.filtersContainer) {
+                showBottomFiltersSheet = false
+                viewModel.getResults()
             }
         }
     }

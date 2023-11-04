@@ -10,7 +10,7 @@ import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.domain.MainRepository
 import student.testing.system.models.Test
 import student.testing.system.models.TestResultsRequestParams
-import student.testing.system.models.enums.OrderingType
+import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -26,18 +26,10 @@ class ResultsViewModel @Inject constructor(private val repository: MainRepositor
     private lateinit var test: Test
 
     var maxScore: Int by Delegates.observable(0) { _, _, new ->
-        upperBound = new.toFloat()
+        filtersContainer.upperBound = new.toFloat()
     }
-    var showOnlyMaxResults: Boolean = false
     var searchPrefix: String? = null
-    var ratingRangeEnabled = true
-    var lowerBound: Float = 0f
-    var upperBound: Float? = null
-    var scoreEqualsEnabled: Boolean = false
-    var scoreEqualsValue: Float? = null
-    var dateFrom: String? = null
-    var dateTo: String? = null
-    var orderingType: OrderingType? = null
+    val filtersContainer by lazy { FiltersContainer() }
 
     fun setInitialData(test: Test) {
         this.test = test
@@ -45,13 +37,15 @@ class ResultsViewModel @Inject constructor(private val repository: MainRepositor
     }
 
     fun getResults() {
-        val params = TestResultsRequestParams(
-            onlyMaxResult = showOnlyMaxResults, searchPrefix = searchPrefix,
-            upperBound = if (ratingRangeEnabled) upperBound else null,
-            lowerBound = if (ratingRangeEnabled) lowerBound else null,
-            scoreEquals = if (scoreEqualsEnabled) scoreEqualsValue else null,
-            dateFrom = dateFrom, dateTo = dateTo, ordering = orderingType
-        )
+        val params = with(filtersContainer) {
+            TestResultsRequestParams(
+                onlyMaxResult = showOnlyMaxResults, searchPrefix = searchPrefix,
+                upperBound = if (ratingRangeEnabled) upperBound else null,
+                lowerBound = if (ratingRangeEnabled) lowerBound else null,
+                scoreEquals = if (scoreEqualsEnabled) scoreEqualsValue else null,
+                dateFrom = dateFrom, dateTo = dateTo, ordering = orderingType
+            )
+        }
 
         viewModelScope.launch {
             loadData { repository.getResults(test.id, test.courseId, params) }.collect {

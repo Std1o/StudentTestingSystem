@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import student.testing.system.R
 
 @Composable
-fun OnlyMaxResultsCheckBox(onValueChange: (Boolean) -> Unit) {
-    var onlyMaxResults by rememberSaveable { mutableStateOf(false) }
+fun OnlyMaxResultsCheckBox(value: Boolean, onValueChange: (Boolean) -> Unit) {
+    var onlyMaxResults by rememberSaveable { mutableStateOf(value) }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
