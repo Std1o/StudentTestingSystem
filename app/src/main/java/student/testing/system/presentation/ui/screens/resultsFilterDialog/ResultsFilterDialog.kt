@@ -60,13 +60,19 @@ fun ResultsFilterDialog(
                 filtersContainer.showOnlyMaxResults = it
             }
             Text(text = stringResource(id = R.string.ratings_range), fontSize = 14.sp)
-            var sliderPosition by remember { mutableStateOf(0f..100f) }
+            var sliderPosition by remember {
+                mutableStateOf(
+                    filtersContainer.lowerBound..(filtersContainer.upperBound
+                        ?: filtersContainer.maxScore.toFloat())
+                )
+            }
             RangeSlider(
                 value = sliderPosition,
                 onValueChange = { sliderPosition = it },
-                valueRange = 0f..100f,
+                valueRange = 0f..filtersContainer.maxScore.toFloat(),
                 onValueChangeFinished = {
-                    // do something
+                    filtersContainer.lowerBound = sliderPosition.start
+                    filtersContainer.upperBound = sliderPosition.endInclusive
                 },
                 modifier = Modifier.padding(horizontal = 20.dp)
             )

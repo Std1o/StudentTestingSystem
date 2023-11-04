@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.domain.MainRepository
+import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.Test
 import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.presentation.ui.models.FiltersContainer
@@ -24,10 +25,6 @@ class ResultsViewModel @Inject constructor(private val repository: MainRepositor
     private var contentStateVar by stateFlowVar(_contentState)
 
     private lateinit var test: Test
-
-    var maxScore: Int by Delegates.observable(0) { _, _, new ->
-        filtersContainer.upperBound = new.toFloat()
-    }
     var searchPrefix: String? = null
     val filtersContainer = FiltersContainer()
 
@@ -50,6 +47,12 @@ class ResultsViewModel @Inject constructor(private val repository: MainRepositor
         viewModelScope.launch {
             loadData { repository.getResults(test.id, test.courseId, params) }.collect {
                 contentStateVar = contentStateVar.copy(results = it)
+                if (it is LoadableData.Success && filtersContainer.maxScore == 0) {
+                    filtersContainer.maxScore = it.data.maxScore
+                    if (filtersContainer.maxScore == 0) {
+                        filtersContainer.maxScore = 100 // this can happen if there are no results
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package student.testing.system.presentation.ui.models
 
 import student.testing.system.models.enums.OrderingType
+import kotlin.properties.Delegates
 
 class FiltersContainer(
     var showOnlyMaxResults: Boolean = false,
@@ -12,4 +13,8 @@ class FiltersContainer(
     var dateFrom: String? = null,
     var dateTo: String? = null,
     var orderingType: OrderingType? = null,
-)
+) {
+    var maxScore: Int by Delegates.observable(0) { _, _, new ->
+        upperBound = new.toFloat()
+    }
+}
