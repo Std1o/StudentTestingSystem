@@ -8,14 +8,17 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuDefaults
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.RangeSlider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -177,6 +180,56 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                     }
                 )
             }
+
+            val moviesList = listOf(
+                "Iron Man",
+                "Thor: Ragnarok",
+                "Captain America: Civil War",
+                "Doctor Strange",
+                "The Incredible Hulk",
+                "Ant-Man and the Wasp"
+            )
+            var expanded by remember { mutableStateOf(false) }
+            var selectedMovie by remember { mutableStateOf(moviesList[0]) }
+
+            // menu box
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = {
+                    expanded = !expanded
+                }
+            ) {
+                // textfield
+                OutlinedTextField(
+                    modifier = Modifier
+                        .menuAnchor(), // menuAnchor modifier must be passed to the text field for correctness.
+                    readOnly = true,
+                    value = selectedMovie,
+                    onValueChange = {},
+                    label = { Text("Movies") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
+                )
+
+                // menu
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = {
+                        expanded = false
+                    },
+                ) {
+                    // menu items
+                    moviesList.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption) },
+                            onClick = {
+                                selectedMovie = selectionOption
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
+
         }
     }
 }
