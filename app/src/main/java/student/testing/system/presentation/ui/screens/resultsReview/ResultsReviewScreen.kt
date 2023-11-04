@@ -13,6 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.domain.states.loadableData.LoadableData
@@ -25,11 +28,12 @@ import student.testing.system.presentation.viewmodels.ResultsViewModel
 fun ResultsReviewScreen(test: Test) {
     val viewModel = hiltViewModel<ResultsViewModel>()
     val contentState by viewModel.contentState.collectAsState()
+    var showBottomFiltersSheet by remember { mutableStateOf(false) }
     Surface {
         Scaffold(
             topBar = {
                 SearchAppBar(actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { showBottomFiltersSheet = true }) {
                         Icon(
                             imageVector = Icons.Filled.Menu,
                             contentDescription = "Localized description"
@@ -51,6 +55,11 @@ fun ResultsReviewScreen(test: Test) {
                     hidden = false,
                     results = contentState.results,
                 )
+            }
+        }
+        if (showBottomFiltersSheet) {
+            ResultsFilterDialog {
+                showBottomFiltersSheet = false
             }
         }
     }
