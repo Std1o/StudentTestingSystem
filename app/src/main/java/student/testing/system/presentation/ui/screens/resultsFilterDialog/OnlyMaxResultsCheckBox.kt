@@ -40,7 +40,8 @@ fun OnlyMaxResultsCheckBox(value: Boolean, onValueChange: (Boolean) -> Unit) {
         Checkbox(
             checked = onlyMaxResults,
             onCheckedChange = {
-                onlyMaxResults = !onlyMaxResults
+                onlyMaxResults = it
+                onValueChange(it)
             })
         Text(
             text = stringResource(id = R.string.only_max_results),

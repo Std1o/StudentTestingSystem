@@ -30,7 +30,8 @@ fun ScoreEqualsCheckBox(onValueChange: (Boolean) -> Unit) {
                 value = scoreEquals,
                 role = Role.Checkbox,
                 onValueChange = {
-                    scoreEquals = !scoreEquals
+                    scoreEquals = it
+                    onValueChange(it)
                 }
             )
             .padding(8.dp)
