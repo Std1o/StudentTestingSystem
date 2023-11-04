@@ -23,6 +23,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,21 +39,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
+import student.testing.system.models.enums.OrderingType
 import student.testing.system.presentation.ui.components.ClickableTextField
+import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.modifiers.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
-    val sheetState: SheetState = rememberModalBottomSheetState()
+fun ResultsFilterDialog(onDismissRequest: () -> Unit, onSave: () -> Unit) {
+    val sheetState: SheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(bottom = 30.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(R.string.filter),
@@ -181,16 +185,9 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                 )
             }
 
-            val moviesList = listOf(
-                "Iron Man",
-                "Thor: Ragnarok",
-                "Captain America: Civil War",
-                "Doctor Strange",
-                "The Incredible Hulk",
-                "Ant-Man and the Wasp"
-            )
+            val items = OrderingType.getOrderingTypes()
             var expanded by remember { mutableStateOf(false) }
-            var selectedMovie by remember { mutableStateOf(moviesList[0]) }
+            var selectedMovie by remember { mutableStateOf("") }
 
             // menu box
             ExposedDropdownMenuBox(
@@ -202,11 +199,11 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                 // textfield
                 OutlinedTextField(
                     modifier = Modifier
-                        .menuAnchor(), // menuAnchor modifier must be passed to the text field for correctness.
+                        .menuAnchor(),
                     readOnly = true,
                     value = selectedMovie,
                     onValueChange = {},
-                    label = { Text("Movies") },
+                    label = { Text(stringResource(id = R.string.select_ordering_type)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
                 )
 
@@ -218,11 +215,11 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                     },
                 ) {
                     // menu items
-                    moviesList.forEach { selectionOption ->
+                    items.forEach { selectionOption ->
                         DropdownMenuItem(
-                            text = { Text(selectionOption) },
+                            text = { Text(selectionOption.toString()) },
                             onClick = {
-                                selectedMovie = selectionOption
+                                selectedMovie = selectionOption.toString()
                                 expanded = false
                             }
                         )
@@ -230,6 +227,15 @@ fun ResultsFilterDialog(onDismissRequest: () -> Unit) {
                 }
             }
 
+            MediumButton(
+                text = R.string.save,
+                modifier = Modifier.padding(vertical = 30.dp)
+            ) {
+                onSave()
+            }
+        }
+        LaunchedEffect(Unit) {
+            println(sheetState.hasExpandedState)
         }
     }
 }
