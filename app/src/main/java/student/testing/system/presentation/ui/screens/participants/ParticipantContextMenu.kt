@@ -5,11 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +25,7 @@ import student.testing.system.presentation.ui.components.modifiers.noRippleClick
 @Composable
 fun ParticipantContextMenu(
     modifier: Modifier,
+    isModerator: Boolean,
     onAppointModerator: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -44,7 +42,8 @@ fun ParticipantContextMenu(
             modifier = Modifier.background(Color.White),
         ) {
             Text(
-                stringResource(R.string.appoint_moderator), modifier = Modifier
+                stringResource(if (isModerator) R.string.remove_from_moderators else R.string.appoint_moderator),
+                modifier = Modifier
                     .fillMaxWidth()
                     .clickable(onClick = {
                         expanded = false

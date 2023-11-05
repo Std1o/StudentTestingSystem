@@ -76,6 +76,7 @@ fun ParticipantsList(
                                 if (currentParticipant.isOwner && !participant.isOwner) {
                                     ParticipantContextMenu(
                                         modifier = Modifier.align(Alignment.CenterEnd),
+                                        isModerator = participant.isModerator,
                                         onAppointModerator = {
                                             onAppointModerator(
                                                 participant.userId,
