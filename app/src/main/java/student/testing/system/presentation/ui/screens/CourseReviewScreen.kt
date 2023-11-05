@@ -29,6 +29,7 @@ import student.testing.system.presentation.navigation.NavHost
 import student.testing.system.presentation.navigation.composable
 import student.testing.system.presentation.ui.activity.ui.theme.Purple500
 import student.testing.system.presentation.ui.components.NavigationEffects
+import student.testing.system.presentation.ui.screens.participants.ParticipantsScreen
 import student.testing.system.presentation.ui.screens.resultReview.ResultReviewScreen
 import student.testing.system.presentation.ui.screens.resultsReview.ResultsReviewScreen
 import student.testing.system.presentation.ui.screens.testCreation.TestCreationHostScreen
