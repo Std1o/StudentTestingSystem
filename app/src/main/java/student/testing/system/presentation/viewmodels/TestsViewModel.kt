@@ -52,7 +52,7 @@ class TestsViewModel @Inject constructor(
         Utils.isUserModerator(course)
     }
 
-    private fun getTests() {
+    fun getTests() {
         viewModelScope.launch {
             loadData { repository.getTests(courseId) }.collect {
                 contentStateVar = contentStateVar.copy(tests = it)

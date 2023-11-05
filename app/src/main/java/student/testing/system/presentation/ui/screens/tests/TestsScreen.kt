@@ -32,6 +32,7 @@ import student.testing.system.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.ListStateHandler
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestsViewModel
 
@@ -77,15 +78,23 @@ fun TestsScreen(
                     .padding(contentPadding)
             ) {
                 CourseCode(course = course, scope = scope, snackbarHostState = snackbarHostState)
+                var hideTestsList by remember { mutableStateOf(false) }
                 TestsList(
                     isLoading = contentState.tests is LoadableData.Loading,
-                    hidden = false,
+                    hidden = hideTestsList,
                     tests = contentState.tests,
                     onClick = {
                         onTestClicked(it)
                         testsVM.onTestClicked(it)
                     },
                     onLongClick = { deletingTestId = it.id })
+                ListStateHandler(
+                    loadableData = contentState.tests,
+                    onRetry = { testsVM.getTests() },
+                    emptyListText = R.string.empty_tests
+                ) {
+                    hideTestsList = it
+                }
             }
         }
         deletingTestId?.let {
