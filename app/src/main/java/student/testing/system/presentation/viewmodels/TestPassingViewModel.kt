@@ -69,11 +69,23 @@ class TestPassingViewModel @Inject constructor(
         userQuestions += UserQuestion(currentQuestion.id!!, userAnswers)
         if (contentStateVar.position == test.questions.size - 1) {
             viewModelScope.launch {
-                executeEmptyOperation({
-                    repository.calculateResult(test.id, test.courseId, userQuestions)
-                }) {
-                    getResult()
-                }.protect()
+                if (isUserModerator) {
+                    executeOperation(
+                        call = {
+                            repository.calculateDemoResult(test.courseId, test.id, userQuestions)
+                        },
+                        type = TestResult::class
+                    ) {
+                        _resultReviewChannel.trySend(it)
+                        navigateToResult()
+                    }
+                } else {
+                    executeEmptyOperation(
+                        call = {
+                            repository.calculateResult(test.id, test.courseId, userQuestions)
+                        }
+                    ) { getResult() }.protect()
+                }
             }
         } else {
             updateTestPassingContentState(contentStateVar.position + 1)
