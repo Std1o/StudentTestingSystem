@@ -33,7 +33,6 @@ import student.testing.system.presentation.ui.screens.participants.ParticipantsS
 import student.testing.system.presentation.ui.screens.resultReview.ResultReviewScreen
 import student.testing.system.presentation.ui.screens.resultsReview.ResultsReviewScreen
 import student.testing.system.presentation.ui.screens.testCreation.TestCreationHostScreen
-import student.testing.system.presentation.ui.screens.testPassing.TestPassingScreen
 import student.testing.system.presentation.ui.screens.tests.TestsScreen
 import student.testing.system.presentation.viewmodels.CourseReviewViewModel
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel

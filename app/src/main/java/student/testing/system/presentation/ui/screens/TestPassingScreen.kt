@@ -1,4 +1,4 @@
-package student.testing.system.presentation.ui.screens.testPassing
+package student.testing.system.presentation.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +29,7 @@ import student.testing.system.models.Test
 import student.testing.system.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.MediumButton
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.screens.questionCreation.AnswersList
 import student.testing.system.presentation.viewmodels.TestPassingViewModel
 
@@ -39,6 +40,7 @@ fun TestPassingScreen(test: Test, isUserModerator: Boolean, onResultReview: (Tes
     val context = LocalContext.current
     val viewModel = hiltViewModel<TestPassingViewModel>()
     viewModel.setInitialData(test, isUserModerator)
+    val lastOperationState by viewModel.lastOperationState.collectAsState()
     val contentState by viewModel.contentState.collectAsState()
     Surface {
         Scaffold(
@@ -87,4 +89,9 @@ fun TestPassingScreen(test: Test, isUserModerator: Boolean, onResultReview: (Tes
             }
         }
     }
+    UIReactionOnLastOperationState(
+        lastOperationState,
+        { viewModel.onErrorReceived() },
+        snackbarHostState
+    )
 }
