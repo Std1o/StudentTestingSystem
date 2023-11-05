@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import student.testing.system.domain.states.loadableData.LoadableData
 
 @Composable
-fun ListStateHandler(
+fun UIReactionOnListState(
     loadableData: LoadableData<List<*>>,
     onRetry: () -> Unit,
     @StringRes emptyListText: Int,

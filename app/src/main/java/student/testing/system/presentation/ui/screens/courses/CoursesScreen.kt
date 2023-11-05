@@ -36,8 +36,8 @@ import student.testing.system.R
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
-import student.testing.system.presentation.ui.components.ListStateHandler
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.UIReactionOnListState
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
 @Composable
@@ -105,7 +105,7 @@ fun CoursesScreen() {
                     courses = contentState.courses, onClick = { viewModel.onCourseClicked(it) },
                     onLongClick = { deletingCourseId = it.id },
                 )
-                ListStateHandler(
+                UIReactionOnListState(
                     loadableData = contentState.courses,
                     onRetry = { viewModel.getCourses() },
                     emptyListText = R.string.empty_courses
@@ -147,7 +147,7 @@ fun CoursesScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(
+    UIReactionOnLastOperationState(
         lastOperationState,
         { viewModel.onErrorReceived() },
         snackbarHostState

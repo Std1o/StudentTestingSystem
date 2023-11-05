@@ -31,8 +31,8 @@ import student.testing.system.models.Test
 import student.testing.system.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
-import student.testing.system.presentation.ui.components.ListStateHandler
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
+import student.testing.system.presentation.ui.components.UIReactionOnListState
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestsViewModel
 
@@ -88,7 +88,7 @@ fun TestsScreen(
                         testsVM.onTestClicked(it)
                     },
                     onLongClick = { deletingTestId = it.id })
-                ListStateHandler(
+                UIReactionOnListState(
                     loadableData = contentState.tests,
                     onRetry = { testsVM.getTests() },
                     emptyListText = R.string.empty_tests
@@ -120,7 +120,7 @@ fun TestsScreen(
             }
         }
     }
-    LastOperationStateUIHandler(
+    UIReactionOnLastOperationState(
         lastOperationState,
         { testsVM.onErrorReceived() },
         snackbarHostState

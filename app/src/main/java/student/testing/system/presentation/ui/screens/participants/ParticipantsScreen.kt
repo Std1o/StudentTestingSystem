@@ -15,7 +15,7 @@ import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.Participant
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.ParticipantsViewModel
 
@@ -58,7 +58,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
             parentViewModel.setCourse(course.copy(participants = data as List<Participant>))
         }
     }
-    LastOperationStateUIHandler(
+    UIReactionOnLastOperationState(
         lastOperationState,
         { viewModel.onErrorReceived() },
         snackbarHostState

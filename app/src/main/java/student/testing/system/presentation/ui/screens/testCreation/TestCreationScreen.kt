@@ -36,7 +36,7 @@ import student.testing.system.common.iTems
 import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationViewModel
@@ -128,7 +128,7 @@ fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
             }
         }
     }
-    LastOperationStateUIHandler(
+    UIReactionOnLastOperationState(
         lastOperationState,
         { parentViewModel.onErrorReceived() },
         snackbarHostState

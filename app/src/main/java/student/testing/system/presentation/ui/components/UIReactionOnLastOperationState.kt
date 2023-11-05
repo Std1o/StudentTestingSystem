@@ -12,7 +12,7 @@ import student.testing.system.domain.states.operationStates.OperationState
  * @param onError if you want override on error default reaction
  */
 @Composable
-fun <T> LastOperationStateUIHandler(
+fun <T> UIReactionOnLastOperationState(
     operationState: OperationState<T>,
     onErrorReceived: () -> Unit,
     snackbarHostState: SnackbarHostState,

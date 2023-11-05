@@ -16,7 +16,7 @@ import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.passwordTextField
 import student.testing.system.presentation.ui.components.requiredTextField
@@ -66,7 +66,7 @@ fun SignUpScreen() {
             }
         }
     }
-    LastOperationStateUIHandler(
+    UIReactionOnLastOperationState(
         lastOperationState,
         { viewModel.onErrorReceived() },
         snackbarHostState

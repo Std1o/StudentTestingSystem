@@ -21,7 +21,7 @@ import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.ErrorScreen
-import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.LoadingIndicator
 import student.testing.system.presentation.ui.components.passwordTextField
 import student.testing.system.presentation.viewmodels.LoginViewModel
@@ -90,7 +90,7 @@ fun LoginScreen() {
             )
         }
     }
-    LastOperationStateUIHandler(
+    UIReactionOnLastOperationState(
         lastOperationState,
         { viewModel.onErrorReceived() },
         snackbarHostState,
