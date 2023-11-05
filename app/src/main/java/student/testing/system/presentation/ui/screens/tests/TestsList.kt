@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.common.iTems
@@ -62,7 +63,7 @@ fun TestsList(
                             text = test.name,
                             modifier = Modifier
                                 .widthIn(min = 60.dp)
-                                .clip(CircleShape)
+                                .clip(if (isLoading) CircleShape else RectangleShape)
                                 .placeholder(isLoading, Shimmer()),
                             fontSize = 14.sp,
                             color = Purple700
@@ -71,7 +72,7 @@ fun TestsList(
                             text = test.creationTime,
                             modifier = Modifier
                                 .padding(top = 4.dp)
-                                .clip(CircleShape)
+                                .clip(if (isLoading) CircleShape else RectangleShape)
                                 .widthIn(min = 100.dp)
                                 .placeholder(isLoading, Shimmer()),
                             color = Color.DarkGray

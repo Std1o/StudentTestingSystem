@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,7 +78,7 @@ fun ResultsList(
                                 text = participantResult.username,
                                 modifier = Modifier
                                     .widthIn(min = 60.dp)
-                                    .clip(CircleShape)
+                                    .clip(if (isLoading) CircleShape else RectangleShape)
                                     .placeholder(isLoading, Shimmer()),
                                 fontSize = 17.sp,
                                 color = Color.DarkGray,
@@ -103,7 +102,7 @@ fun ResultsList(
                                     text = score,
                                     modifier = Modifier
                                         .widthIn(min = 40.dp)
-                                        .clip(CircleShape)
+                                        .clip(if (isLoading) CircleShape else RectangleShape)
                                         .placeholder(isLoading, Shimmer()),
                                     color = Color.DarkGray,
                                 )
@@ -111,7 +110,7 @@ fun ResultsList(
                                 Text(
                                     text = participantResult.email,
                                     modifier = Modifier
-                                        .clip(CircleShape)
+                                        .clip(if (isLoading) CircleShape else RectangleShape)
                                         .placeholder(isLoading, Shimmer())
                                         .widthIn(min = 100.dp),
                                     color = Color.DarkGray
@@ -119,7 +118,11 @@ fun ResultsList(
                             }
                         }
                     }
-                    Divider(color = Color.DarkGray, thickness = 0.5.dp, modifier = Modifier.padding(vertical = 5.dp))
+                    Divider(
+                        color = Color.DarkGray,
+                        thickness = 0.5.dp,
+                        modifier = Modifier.padding(vertical = 5.dp)
+                    )
                     Text(
                         text = stringResource(R.string.passing_time, participantResult.passingTime),
                         modifier = Modifier
