@@ -27,7 +27,7 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
 
     private val binding by viewBinding(FragmentParticipantsBinding::bind)
     lateinit var adapter: ParticipantsAdapter
-    private val viewModel by viewModels<ParticipantsViewModel>()
+    //private val viewModel by viewModels<ParticipantsViewModel>()
     private val sharedViewModel: CourseSharedViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,11 +42,11 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
             initRV(it)
         }.launchWhenStartedCollect(lifecycleScope)
 
-        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
-            course.participants = it
-            sharedViewModel.setCourse(course)
-            adapter.updateDataList(it)
-        }
+//        viewModel.uiState.subscribeInUI(this, binding.progressBar) {
+//            course.participants = it
+//            sharedViewModel.setCourse(course)
+//            adapter.updateDataList(it)
+//        }
     }
 
     private fun initRV(course: CourseResponse) {
@@ -79,15 +79,15 @@ class ParticipantsFragment : Fragment(R.layout.fragment_participants) {
                         else R.string.appoint_moderator_request
                     confirmAction(message) { _, _ ->
                         if (participant.isModerator) {
-                            viewModel.deleteModerator(course.id, participant.userId)
+                           // viewModel.deleteModerator(course.id, participant.userId)
                         } else {
-                            viewModel.addModerator(course.id, participant.userId)
+                          //  viewModel.addModerator(course.id, participant.userId)
                         }
                     }
                 }
                 R.id.action_delete -> {
                     confirmAction(R.string.delete_request) { _, _ ->
-                        viewModel.deleteParticipant(course.id, participant.userId)
+                       // viewModel.deleteParticipant(course.id, participant.userId)
                     }
                 }
             }

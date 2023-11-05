@@ -11,13 +11,14 @@ import student.testing.system.models.Test
 
 class CourseSharedViewModel : ViewModel() {
 
-    val courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
+    private val _courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
+    val courseFlow = _courseFlow.asStateFlow()
     private val _testChannel = Channel<Test>()
     val testFlow = _testChannel.receiveAsFlow()
 
     fun setCourse(course: CourseResponse) {
         viewModelScope.launch {
-            courseFlow.tryEmit(course)
+            _courseFlow.value = course
         }
     }
 

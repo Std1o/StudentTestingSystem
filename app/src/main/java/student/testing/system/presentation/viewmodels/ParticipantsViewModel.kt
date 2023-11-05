@@ -2,30 +2,37 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.domain.MainRepository
-import student.testing.system.models.Participant
+import student.testing.system.domain.states.operationStates.protect
 import javax.inject.Inject
 
 @HiltViewModel
 class ParticipantsViewModel @Inject constructor(private val repository: MainRepository) :
-    BaseViewModel<List<Participant>>() {
+    StatesViewModel() {
 
-    fun addModerator(courseId: Int, moderatorId: Int){
+    fun addModerator(courseId: Int, moderatorId: Int) {
         viewModelScope.launch {
-            launchRequest(repository.addModerator(courseId, moderatorId))
+            executeOperationAndIgnoreData({
+                repository.addModerator(courseId, moderatorId)
+            }).protect()
         }
     }
 
     fun deleteModerator(courseId: Int, moderatorId: Int) {
         viewModelScope.launch {
-            launchRequest(repository.deleteModerator(courseId, moderatorId))
+            executeOperationAndIgnoreData({
+                repository.deleteModerator(courseId, moderatorId)
+            }).protect()
         }
     }
 
     fun deleteParticipant(courseId: Int, participantId: Int) {
         viewModelScope.launch {
-            launchRequest(repository.deleteParticipant(courseId, participantId))
+            executeOperationAndIgnoreData({
+                repository.deleteParticipant(courseId, participantId)
+            }).protect()
         }
     }
 }
