@@ -36,6 +36,7 @@ import student.testing.system.R
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
+import student.testing.system.presentation.ui.components.ListStateHandler
 import student.testing.system.presentation.ui.components.LastOperationStateUIHandler
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
@@ -104,8 +105,8 @@ fun CoursesScreen() {
                     courses = contentState.courses, onClick = { viewModel.onCourseClicked(it) },
                     onLongClick = { deletingCourseId = it.id },
                 )
-                CoursesListStateHandler(
-                    courses = contentState.courses,
+                ListStateHandler(
+                    loadableData = contentState.courses,
                     onRetry = { viewModel.getCourses() }) {
                     hideCoursesList = it
                 }
