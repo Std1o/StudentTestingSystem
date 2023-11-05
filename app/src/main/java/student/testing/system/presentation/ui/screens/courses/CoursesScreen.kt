@@ -107,7 +107,9 @@ fun CoursesScreen() {
                 )
                 ListStateHandler(
                     loadableData = contentState.courses,
-                    onRetry = { viewModel.getCourses() }) {
+                    onRetry = { viewModel.getCourses() },
+                    emptyListText = R.string.empty_courses
+                ) {
                     hideCoursesList = it
                 }
             }
