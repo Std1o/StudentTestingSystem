@@ -72,7 +72,8 @@ fun ResultsFilterDialog(
                     filtersContainer.lowerBound = sliderPosition.start
                     filtersContainer.upperBound = sliderPosition.endInclusive
                 },
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 20.dp),
+                enabled = filtersContainer.ratingRangeEnabled
             )
             Text(
                 text = "%.2f".format(sliderPosition.start) + ".." + "%.2f".format(sliderPosition.endInclusive),
@@ -81,8 +82,11 @@ fun ResultsFilterDialog(
             ScoreEqualsCheckBox(scoreFieldEnabled) {
                 scoreFieldEnabled = it
                 filtersContainer.scoreEqualsEnabled = it
+                filtersContainer.ratingRangeEnabled = !it
             }
-            var scoreValue by rememberSaveable { mutableStateOf("") }
+            var scoreValue by rememberSaveable {
+                mutableStateOf(if (filtersContainer.scoreEqualsValue == null) "" else filtersContainer.scoreEqualsValue.toString())
+            }
             OutlinedTextField(
                 value = scoreValue,
                 onValueChange = {
