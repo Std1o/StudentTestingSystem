@@ -64,7 +64,9 @@ class TestPassingViewModel @Inject constructor(
         }
         val userAnswers = arrayListOf<UserAnswer>()
         for (ans in currentQuestion.answers) {
-            userAnswers += UserAnswer(ans.id!!, ans.isRight)
+            val ansCopy = ans.copy() // to avoid bugs with further test takings
+            userAnswers += UserAnswer(ansCopy.id!!, ansCopy.isRight)
+            ans.isRight = false
         }
         userQuestions += UserQuestion(currentQuestion.id!!, userAnswers)
         if (contentStateVar.position == test.questions.size - 1) {
