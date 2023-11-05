@@ -51,11 +51,19 @@ fun ResultsReviewScreen(test: Test) {
                     .fillMaxSize()
                     .padding(contentPadding)
             ) {
+                var hideResultsList by remember { mutableStateOf(false) }
                 ResultsList(
                     isLoading = contentState.results is LoadableData.Loading,
-                    hidden = false,
+                    hidden = hideResultsList,
                     results = contentState.results,
                 )
+                UIReactionOnResultsListState(
+                    loadableData = contentState.results,
+                    onRetry = { viewModel.getResults() },
+                    emptyListText = R.string.empty_results
+                ) {
+                    hideResultsList = it
+                }
             }
         }
         if (showBottomFiltersSheet) {
