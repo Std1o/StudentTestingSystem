@@ -60,7 +60,7 @@ class TestPassingFragment : Fragment(R.layout.fragment_passing_test) {
             if (test.questions.count() - 1 == position) {
                 if (isUserModerator) {
                     viewModel.calculateDemoResult(test.courseId, test.id)
-                        .subscribeOnLoadableInUI(this, binding.progressBar) {
+                        .subscribeInUI(this, binding.progressBar) {
                             requireActivity().onBackPressed()
                             val action = TestPassingFragmentDirections.viewResult(it)
                             findNavController().navigate(action)

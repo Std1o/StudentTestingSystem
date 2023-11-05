@@ -105,6 +105,10 @@ class TestsViewModel @Inject constructor(
         }
     }
 
+    fun onCheckOptionSelected() {
+        courseNavigator.tryNavigateTo(Destination.TestPassingScreen())
+    }
+
     // TODO remove
     fun getResult(testId: Int, courseId: Int): StateFlow<ResultState<TestResult>> {
         val stateFlow = MutableStateFlow<ResultState<TestResult>>(OperationState.Loading())

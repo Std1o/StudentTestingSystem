@@ -98,8 +98,8 @@ class TestPassingViewModel @Inject constructor(
         return stateFlow
     }
 
-    fun calculateDemoResult(courseId: Int, testId: Int): StateFlow<LoadableData<TestResult>> {
-        val stateFlow = MutableStateFlow<LoadableData<TestResult>>(LoadableData.Loading())
+    fun calculateDemoResult(courseId: Int, testId: Int): StateFlow<OperationState<TestResult>> {
+        val stateFlow = MutableStateFlow<OperationState<TestResult>>(OperationState.Loading())
         viewModelScope.launch {
             val requestResult = repository.calculateDemoResult(courseId, testId, userQuestions)
             stateFlow.emit(requestResult)

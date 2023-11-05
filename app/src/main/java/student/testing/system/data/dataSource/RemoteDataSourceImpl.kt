@@ -40,7 +40,7 @@ class RemoteDataSourceImpl @Inject constructor(private val mainService: MainServ
         courseId: Int,
         testId: Int,
         request: List<UserQuestion>
-    ) = loadData { mainService.calculateDemoResult(courseId, testId, request) }
+    ) = executeOperation { mainService.calculateDemoResult(courseId, testId, request) }
 
     override suspend fun getResult(testId: Int, courseId: Int) =
         executeOperation(TestsOperations.GET_RESULT) { mainService.getResult(testId, courseId) }

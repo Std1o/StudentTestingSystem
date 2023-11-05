@@ -35,7 +35,7 @@ interface RemoteDataSource {
         courseId: Int,
         testId: Int,
         request: List<UserQuestion>
-    ): LoadableData<TestResult>
+    ): OperationState<TestResult>
 
     suspend fun getResult(testId: Int, courseId: Int): OperationState<TestResult>
 

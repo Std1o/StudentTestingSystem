@@ -55,7 +55,7 @@ fun TestsScreen(
     val contentState by testsVM.contentState.collectAsState()
     var deletingTestId by remember { mutableStateOf<Int?>(null) }
     val options = listOf(context.getString(R.string.check), context.getString(R.string.delete))
-    var showOptionsDialog by remember { mutableStateOf<Pair<Int?, Boolean>>(Pair(null, false)) }
+    var selectedTest by remember { mutableStateOf<Test?>(null) }
 
     Surface {
         Scaffold(
@@ -92,7 +92,7 @@ fun TestsScreen(
                         onTestClicked(it)
                         testsVM.onTestClicked(it)
                     },
-                    onLongClick = { showOptionsDialog = Pair(it.id, true) })
+                    onLongClick = { selectedTest = it })
                 UIReactionOnListState(
                     loadableData = contentState.tests,
                     onRetry = { testsVM.getTests() },
@@ -113,11 +113,15 @@ fun TestsScreen(
             )
         }
     }
-    if (showOptionsDialog.second) {
-        OptionsDialog(options = options, onDismiss = { showOptionsDialog = Pair(null, false) }) {
+    selectedTest?.let { test ->
+        OptionsDialog(options = options, onDismiss = { selectedTest = null }) {
             when (it) {
-                0 -> {}
-                1 -> deletingTestId = showOptionsDialog.first
+                0 -> {
+                    onTestClicked(test)
+                    testsVM.onCheckOptionSelected()
+                }
+
+                1 -> deletingTestId = test.id
             }
         }
     }
