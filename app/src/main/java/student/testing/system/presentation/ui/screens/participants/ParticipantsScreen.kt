@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
+import student.testing.system.common.AccountSession
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.Participant
@@ -51,6 +52,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
             ParticipantsList(
                 hidden = false,
                 participants = course.participants,
+                currentParticipant = viewModel.getCurrentParticipant(course),
                 onAppointModerator = { id, wasModerator ->
                     if (wasModerator) {
                         viewModel.deleteModerator(course.id, id)
@@ -58,7 +60,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
                         viewModel.addModerator(course.id, id)
                     }
                 },
-                onDelete = {})
+                onDelete = { viewModel.deleteParticipant(course.id, it) })
         }
     }
     with(lastOperationState) {
@@ -77,6 +79,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
 fun ParticipantsList(
     hidden: Boolean,
     participants: List<Participant>,
+    currentParticipant: Participant,
     onAppointModerator: (Int, Boolean) -> Unit,
     onDelete: (Int) -> Unit
 ) {
@@ -116,7 +119,7 @@ fun ParticipantsList(
                                         )
                                     }
                                 }
-                                if (!participant.isOwner) {
+                                if (currentParticipant.isOwner && !participant.isOwner) {
                                     ParticipantContextMenu(
                                         modifier = Modifier
                                             .align(Alignment.CenterEnd),

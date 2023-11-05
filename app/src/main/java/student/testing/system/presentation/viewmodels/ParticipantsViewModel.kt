@@ -4,13 +4,26 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.launch
+import student.testing.system.common.AccountSession
 import student.testing.system.domain.MainRepository
 import student.testing.system.domain.states.operationStates.protect
+import student.testing.system.models.CourseResponse
+import student.testing.system.models.Participant
 import javax.inject.Inject
 
 @HiltViewModel
 class ParticipantsViewModel @Inject constructor(private val repository: MainRepository) :
     StatesViewModel() {
+
+    private var currentParticipant: Participant? = null
+
+    fun getCurrentParticipant(course: CourseResponse): Participant {
+        if (currentParticipant == null) {
+            currentParticipant = course.participants
+                .first { it.userId == AccountSession.instance.userId }
+        }
+        return currentParticipant as Participant
+    }
 
     fun addModerator(courseId: Int, moderatorId: Int) {
         viewModelScope.launch {
