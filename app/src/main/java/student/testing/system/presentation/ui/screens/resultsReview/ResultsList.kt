@@ -100,8 +100,10 @@ fun ResultsList(
                             Row {
                                 Text(
                                     text = score,
+                                    fontSize = 12.sp,
                                     modifier = Modifier
                                         .widthIn(min = 40.dp)
+                                        .padding(top = if (isLoading) 3.dp else 0.dp)
                                         .clip(if (isLoading) CircleShape else RectangleShape)
                                         .placeholder(isLoading, Shimmer()),
                                     color = Color.DarkGray,
@@ -124,7 +126,10 @@ fun ResultsList(
                         modifier = Modifier.padding(vertical = 5.dp)
                     )
                     Text(
-                        text = stringResource(R.string.passing_time, participantResult.passingTime),
+                        text = if (participantResult.passingTime.isEmpty()) "" else stringResource(
+                            R.string.passing_time,
+                            participantResult.passingTime
+                        ),
                         modifier = Modifier
                             .clip(if (isLoading) CircleShape else RectangleShape)
                             .placeholder(isLoading, Shimmer())
