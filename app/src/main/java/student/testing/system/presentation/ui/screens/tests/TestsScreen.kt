@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +32,7 @@ import student.testing.system.models.Test
 import student.testing.system.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
+import student.testing.system.presentation.ui.components.OptionsDialog
 import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.UIReactionOnListState
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
@@ -45,12 +47,15 @@ fun TestsScreen(
     val testsVM = hiltViewModel<TestsViewModel>()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val lastOperationState by testsVM.lastOperationState.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
     testsVM.course = course
     testsVM.courseId = course.id
     val contentState by testsVM.contentState.collectAsState()
     var deletingTestId by remember { mutableStateOf<Int?>(null) }
+    val options = listOf(context.getString(R.string.check), context.getString(R.string.delete))
+    var showOptionsDialog by remember { mutableStateOf<Pair<Int?, Boolean>>(Pair(null, false)) }
 
     Surface {
         Scaffold(
@@ -87,7 +92,7 @@ fun TestsScreen(
                         onTestClicked(it)
                         testsVM.onTestClicked(it)
                     },
-                    onLongClick = { deletingTestId = it.id })
+                    onLongClick = { showOptionsDialog = Pair(it.id, true) })
                 UIReactionOnListState(
                     loadableData = contentState.tests,
                     onRetry = { testsVM.getTests() },
@@ -106,6 +111,14 @@ fun TestsScreen(
                 },
                 dialogText = stringResource(id = R.string.delete_request)
             )
+        }
+    }
+    if (showOptionsDialog.second) {
+        OptionsDialog(options = options, onDismiss = { showOptionsDialog = Pair(null, false) }) {
+            when (it) {
+                0 -> {}
+                1 -> deletingTestId = showOptionsDialog.first
+            }
         }
     }
     LaunchedEffect(key1 = Unit) {

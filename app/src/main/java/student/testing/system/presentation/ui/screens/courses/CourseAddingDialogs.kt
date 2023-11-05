@@ -123,7 +123,7 @@ fun CourseAddingDialogs(
                     showCourseJoiningDialog = true
                     onClick()
                 }
-                .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+                .padding(vertical = 8.dp, horizontal = 16.dp)
         )
     }
 }
