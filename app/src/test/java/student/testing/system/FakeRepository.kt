@@ -80,7 +80,7 @@ class FakeRepository : MainRepository {
         courseId: Int,
         testId: Int,
         request: List<UserQuestion>
-    ): LoadableData<TestResult> {
+    ): OperationState<TestResult> {
         TODO("Not yet implemented")
     }
 
