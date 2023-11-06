@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import student.testing.system.common.Constants
+import student.testing.system.common.Utils
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.CourseResponse
@@ -52,7 +53,7 @@ fun CoursesList(
                     .placeholder(isLoading, Shimmer())
                     .combinedClickable(
                         onClick = { onClick(course) },
-                        onLongClick = { onLongClick(course) },
+                        onLongClick = { if (Utils.isUserAnOwner(course)) onLongClick(course) else null },
                     )
             ) {
                 AsyncImage(

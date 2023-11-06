@@ -92,7 +92,7 @@ fun TestsScreen(
                         onTestClicked(it)
                         testsVM.onTestClicked(it)
                     },
-                    onLongClick = { selectedTest = it })
+                    onLongClick = { if (testsVM.isUserAModerator) selectedTest = it else null })
                 UIReactionOnListState(
                     loadableData = contentState.tests,
                     onRetry = { testsVM.getTests() },
