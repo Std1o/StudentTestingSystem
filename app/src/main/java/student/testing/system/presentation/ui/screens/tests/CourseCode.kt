@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.common.Constants
 import student.testing.system.models.CourseResponse
-import student.testing.system.presentation.ui.fragments.TestsFragment
 
 @Composable
 fun CourseCode(
@@ -37,7 +37,7 @@ fun CourseCode(
                 val clipboard =
                     context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip =
-                    ClipData.newPlainText(TestsFragment.COURSE_CODE, course.courseCode);
+                    ClipData.newPlainText(Constants.COURSE_CODE, course.courseCode);
                 clipboard.setPrimaryClip(clip)
                 scope.launch {
                     snackbarHostState.showSnackbar(courseCodeWasCopied)
