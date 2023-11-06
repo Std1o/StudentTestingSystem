@@ -48,8 +48,8 @@ class TestsViewModel @Inject constructor(
         if (oldValue != newValue) getTests()
     }
 
-    val isUserModerator by lazy {
-        Utils.isUserModerator(course)
+    val isUserAModerator by lazy {
+        Utils.isUserAModerator(course)
     }
 
     fun getTests() {
@@ -87,7 +87,7 @@ class TestsViewModel @Inject constructor(
     }
 
     fun onTestClicked(test: Test) {
-        if (isUserModerator) {
+        if (isUserAModerator) {
             courseNavigator.tryNavigateTo(Destination.ResultsReviewScreen())
         } else {
             viewModelScope.launch {

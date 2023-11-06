@@ -127,7 +127,7 @@ fun CourseReviewScreen() {
             composable(Destination.ResultReviewScreen) { ResultReviewScreen(testResult) }
             composable(Destination.ResultsReviewScreen) { ResultsReviewScreen(clickedTest) }
             composable(Destination.TestPassingScreen) {
-                TestPassingScreen(clickedTest, viewModel.isUserModerator) {
+                TestPassingScreen(clickedTest, viewModel.isUserAModerator) {
                     testResult = it
                 }
             }

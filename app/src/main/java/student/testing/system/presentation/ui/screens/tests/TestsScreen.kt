@@ -63,7 +63,7 @@ fun TestsScreen(
                 SnackbarHost(hostState = snackbarHostState)
             },
             floatingActionButton = {
-                if (testsVM.isUserModerator) {
+                if (testsVM.isUserAModerator) {
                     FloatingActionButton(
                         onClick = {
                             testsVM.navigateToTestCreation(course)
