@@ -31,7 +31,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
             ParticipantsList(
                 hidden = false,
                 participants = course.participants,
-                currentParticipant = viewModel.getCurrentParticipant(course),
+                isUserAnOwner = viewModel.isUserAnOwner(course),
                 onAppointModerator = { id, wasModerator ->
                     if (wasModerator) {
                         viewModel.deleteModerator(course.id, id)

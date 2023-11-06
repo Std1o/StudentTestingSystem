@@ -33,7 +33,7 @@ import student.testing.system.presentation.ui.components.Avatar
 fun ParticipantsList(
     hidden: Boolean,
     participants: List<Participant>,
-    currentParticipant: Participant,
+    isUserAnOwner: Boolean,
     onAppointModerator: (Int, Boolean) -> Unit,
     onDelete: (Int) -> Unit
 ) {
@@ -73,7 +73,7 @@ fun ParticipantsList(
                                         )
                                     }
                                 }
-                                if (currentParticipant.isOwner && !participant.isOwner) {
+                                if (isUserAnOwner && !participant.isOwner) {
                                     ParticipantContextMenu(
                                         modifier = Modifier.align(Alignment.CenterEnd),
                                         isModerator = participant.isModerator,

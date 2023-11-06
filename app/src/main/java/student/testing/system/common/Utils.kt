@@ -9,4 +9,10 @@ object Utils {
             .first { it.userId == AccountSession.instance.userId }
         return currentParticipant.isModerator || currentParticipant.isOwner
     }
+
+    fun isUserAnOwner(course: CourseResponse): Boolean {
+        val currentParticipant = course.participants
+            .first { it.userId == AccountSession.instance.userId }
+        return currentParticipant.isOwner
+    }
 }
