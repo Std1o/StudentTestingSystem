@@ -14,7 +14,6 @@ import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class ResultsViewModel @Inject constructor(private val repository: MainRepository) :
