@@ -78,7 +78,7 @@
     <string name="start">Начало</string>
     <string name="end">Конец</string>
     <string name="apply">Применить</string>
-    <string name="empty_courses">Список курсов пуст. Вы можете присоединиться к курсу по коду или создать собственный курс.</string>
+    <string name="empty_courses">Список курсов пуст. Чтобы добавить курс, нажмите на \"+\" в правом нижнем углу экрана</string>
     <string name="empty_tests">В этот курс ещё не добавлены тесты</string>
     <string name="empty_results">Результаты прохождений теста отсуствуют</string>
     <string name="check">Проверить</string>
