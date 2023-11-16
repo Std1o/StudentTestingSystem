@@ -11,20 +11,12 @@ class AppNavigatorImpl @Inject constructor() : AppNavigator {
     )
 
     override suspend fun navigateBack(route: String?, inclusive: Boolean) {
-        navigationChannel.send(
-            NavigationIntent.NavigateBack(
-                route = route,
-                inclusive = inclusive
-            )
-        )
+        navigationChannel.send(NavigationIntent.NavigateBack(route = route, inclusive = inclusive))
     }
 
     override fun tryNavigateBack(route: String?, inclusive: Boolean) {
         navigationChannel.trySend(
-            NavigationIntent.NavigateBack(
-                route = route,
-                inclusive = inclusive
-            )
+            NavigationIntent.NavigateBack(route = route, inclusive = inclusive)
         )
     }
 

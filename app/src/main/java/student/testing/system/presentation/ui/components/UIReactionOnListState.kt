@@ -20,23 +20,14 @@ fun UIReactionOnListState(
     onHideList: (Boolean) -> Unit
 ) {
     when (loadableData) {
-        is LoadableData.Empty204 -> {
-            onHideList(true)
-        }
-
+        is LoadableData.Empty204 -> onHideList(true)
         is LoadableData.Error -> {
             onHideList(true)
             ErrorScreen(message = loadableData.exception, onRetry = onRetry)
         }
 
-        is LoadableData.Loading -> {
-            onHideList(false)
-        }
-
-        LoadableData.NoState -> {
-            onHideList(false)
-        }
-
+        is LoadableData.Loading -> onHideList(false)
+        is LoadableData.NoState -> onHideList(false)
         is LoadableData.Success -> {
             if (loadableData.data.isEmpty()) {
                 onHideList(true)

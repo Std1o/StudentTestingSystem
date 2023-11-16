@@ -30,8 +30,8 @@ fun <T> UIReactionOnLastOperationState(
                 }
             }
 
-            is OperationState.Empty204, // it mustn't reach here, it must be replaced with Success in the ViewModel
-            is OperationState.Success,// for this use method below
+            is OperationState.Empty204,
+            is OperationState.Success,
             is OperationState.NoState -> {
                 // do nothing
             }

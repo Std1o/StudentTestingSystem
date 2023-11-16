@@ -10,7 +10,7 @@ import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
+@Singleton // TODO remove, because since 11.09.22 repository is provided by AppModule
 class MainRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : MainRepository {
