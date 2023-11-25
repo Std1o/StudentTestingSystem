@@ -10,13 +10,6 @@ import student.testing.system.models.Test
 
 interface MainService {
 
-    @POST("auth/sign-in")
-    @Headers("accept: application/json", "Content-Type: application/x-www-form-urlencoded")
-    suspend fun auth(@Body request: String): Response<PrivateUser>
-
-    @POST("auth/sign-up")
-    suspend fun signUp(@Body request: SignUpReq): Response<PrivateUser>
-
     @GET("courses/")
     suspend fun getCourses(): Response<List<CourseResponse>>
 

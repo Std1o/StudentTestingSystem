@@ -2,6 +2,7 @@ package student.testing.system.data.dataSource
 
 import godofappstates.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.MainService
+import student.testing.system.data.api.AuthApi
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.operationTypes.TestsOperations
 import student.testing.system.models.CourseCreationReq
@@ -11,10 +12,14 @@ import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 
-class RemoteDataSourceImpl @Inject constructor(private val mainService: MainService) :
+class RemoteDataSourceImpl @Inject constructor(
+    private val mainService: MainService,
+    private val authApi: AuthApi
+) :
     BaseRemoteDataSource(), RemoteDataSource {
-    override suspend fun auth(request: String) = executeOperation { mainService.auth(request) }
-    override suspend fun signUp(request: SignUpReq) = executeOperation { mainService.signUp(request) }
+    override suspend fun auth(request: String) = executeOperation { authApi.auth(request) }
+    override suspend fun signUp(request: SignUpReq) =
+        executeOperation { authApi.signUp(request) }
 
     override suspend fun getCourses() = loadData { mainService.getCourses() }
     override suspend fun createCourse(request: CourseCreationReq) =
