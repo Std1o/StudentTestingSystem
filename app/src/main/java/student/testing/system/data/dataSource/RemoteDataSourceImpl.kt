@@ -1,7 +1,7 @@
 package student.testing.system.data.dataSource
 
 import godofappstates.data.dataSource.BaseRemoteDataSource
-import student.testing.system.data.CourseManagementApi
+import student.testing.system.data.api.CourseManagementApi
 import student.testing.system.data.api.AuthApi
 import student.testing.system.data.api.CoursesApi
 import student.testing.system.data.api.TestsApi

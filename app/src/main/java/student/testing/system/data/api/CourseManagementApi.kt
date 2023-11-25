@@ -1,4 +1,4 @@
-package student.testing.system.data
+package student.testing.system.data.api
 
 import retrofit2.Response
 import retrofit2.http.*

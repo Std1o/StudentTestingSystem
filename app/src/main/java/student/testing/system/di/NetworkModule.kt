@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import student.testing.system.common.Constants
-import student.testing.system.data.CourseManagementApi
+import student.testing.system.data.api.CourseManagementApi
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.data.api.AuthApi
 import student.testing.system.data.api.CoursesApi
