@@ -14,21 +14,12 @@ import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-    private val coursesApi: CoursesApi,
     private val testsApi: TestsApi,
     private val courseManagementApi: CourseManagementApi
 ) :
     BaseRemoteDataSource(), RemoteDataSource {
 
-    override suspend fun getCourses() = loadData { coursesApi.getCourses() }
-    override suspend fun createCourse(request: CourseCreationReq) =
-        executeOperation(CourseAddingOperations.CREATE_COURSE) { coursesApi.createCourse(request) }
 
-    override suspend fun joinCourse(courseCode: String) =
-        executeOperation(CourseAddingOperations.JOIN_COURSE) { coursesApi.joinCourse(courseCode) }
-
-    override suspend fun deleteCourse(courseId: Int) =
-        executeOperation { coursesApi.deleteCourse(courseId) }
 
     override suspend fun getTests(courseId: Int) = loadData { testsApi.getTests(courseId) }
     override suspend fun createTest(request: TestCreationReq) =

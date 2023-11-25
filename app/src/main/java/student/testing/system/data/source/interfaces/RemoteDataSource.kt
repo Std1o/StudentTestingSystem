@@ -14,14 +14,6 @@ import student.testing.system.models.UserQuestion
 
 interface RemoteDataSource {
 
-    suspend fun getCourses(): LoadableData<List<CourseResponse>>
-
-    suspend fun createCourse(request: CourseCreationReq): OperationState<CourseResponse>
-
-    suspend fun joinCourse(courseCode: String): OperationState<CourseResponse>
-
-    suspend fun deleteCourse(courseId: Int): OperationState<Void>
-
     suspend fun getTests(courseId: Int): LoadableData<List<Test>>
 
     // TODO мб тут подходит LoadableData
