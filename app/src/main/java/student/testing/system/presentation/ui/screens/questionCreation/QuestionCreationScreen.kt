@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
-import student.testing.system.domain.addQuestion.QuestionState
+import student.testing.system.domain.states.QuestionState
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.requiredTextField

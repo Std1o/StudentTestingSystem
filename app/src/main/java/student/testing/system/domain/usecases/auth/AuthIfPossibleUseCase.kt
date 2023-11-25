@@ -1,4 +1,4 @@
-package student.testing.system.domain.auth
+package student.testing.system.domain.usecases.auth
 
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.OperationState

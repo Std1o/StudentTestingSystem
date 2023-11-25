@@ -1,4 +1,4 @@
-package student.testing.system.domain.addQuestion
+package student.testing.system.domain.states
 
 sealed class QuestionState {
     data object NoState : QuestionState()

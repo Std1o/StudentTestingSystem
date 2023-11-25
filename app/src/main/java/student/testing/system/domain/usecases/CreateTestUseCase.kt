@@ -1,5 +1,6 @@
-package student.testing.system.domain
+package student.testing.system.domain.usecases
 
+import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.models.Test
 import student.testing.system.models.TestCreationReq

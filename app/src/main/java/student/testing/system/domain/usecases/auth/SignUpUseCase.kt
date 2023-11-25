@@ -1,32 +1,42 @@
-package student.testing.system.domain.auth
+package student.testing.system.domain.usecases.auth
 
+import student.testing.system.R
 import student.testing.system.common.AccountSession
-import student.testing.system.domain.MainRepository
+import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.models.PrivateUser
+import student.testing.system.models.SignUpReq
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 
-class LoginUseCase @Inject constructor(
+class SignUpUseCase @Inject constructor(
     private val repository: MainRepository,
     private val prefsUtils: PrefsUtils,
     private val validateAuthDataUseCase: ValidateAuthDataUseCase
 ) {
 
-    suspend operator fun invoke(email: String, password: String): AuthState<PrivateUser> {
+    suspend operator fun invoke(
+        email: String,
+        username: String,
+        password: String
+    ): SignUpState<PrivateUser> {
+        if (username.isEmpty()) return SignUpState.NameError(R.string.error_empty_field)
         val validationResult = validateAuthDataUseCase(email = email, password = password)
         return if (validationResult is AuthState.ValidationSuccesses) {
-            auth(email, password)
+            signUp(email = email, username = username, password = password)
         } else {
             validationResult
         }
     }
 
-    private suspend fun auth(email: String, password: String): AuthState<PrivateUser> {
-        val authRequest =
-            "grant_type=&username=$email&password=$password&scope=&client_id=&client_secret="
-        val requestResult = repository.auth(authRequest)
+    private suspend fun signUp(
+        email: String,
+        username: String,
+        password: String
+    ): AuthState<PrivateUser> {
+        val requestResult = repository.signUp(SignUpReq(email, username, password))
         if (requestResult is OperationState.Success) {
             saveAuthData(email, password)
             createSession(requestResult.data)

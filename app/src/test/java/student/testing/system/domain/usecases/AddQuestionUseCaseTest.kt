@@ -1,7 +1,9 @@
-package student.testing.system.domain.addQuestion
+package student.testing.system.domain.usecases
 
 import org.junit.Assert.*
 import org.junit.Test
+import student.testing.system.domain.states.QuestionState
+import student.testing.system.domain.usecases.AddQuestionUseCase
 import student.testing.system.models.Answer
 import student.testing.system.models.Question
 

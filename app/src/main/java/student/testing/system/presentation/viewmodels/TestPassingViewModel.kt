@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.R
 import student.testing.system.common.Constants
-import student.testing.system.domain.MainRepository
+import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.models.Test
 import student.testing.system.models.TestResult

@@ -1,5 +1,6 @@
-package student.testing.system.domain.addQuestion
+package student.testing.system.domain.usecases
 
+import student.testing.system.domain.states.QuestionState
 import student.testing.system.models.Question
 import javax.inject.Inject
 

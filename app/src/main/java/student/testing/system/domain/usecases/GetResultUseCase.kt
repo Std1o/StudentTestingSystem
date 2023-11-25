@@ -1,6 +1,6 @@
-package student.testing.system.domain.getResult
+package student.testing.system.domain.usecases
 
-import student.testing.system.domain.MainRepository
+import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.models.TestResult

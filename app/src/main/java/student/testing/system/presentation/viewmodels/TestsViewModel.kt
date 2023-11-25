@@ -5,15 +5,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import student.testing.system.common.Utils
-import student.testing.system.domain.MainRepository
-import student.testing.system.domain.getResult.GetResultUseCase
+import student.testing.system.domain.repository.MainRepository
+import student.testing.system.domain.usecases.GetResultUseCase
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState

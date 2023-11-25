@@ -1,4 +1,4 @@
-package student.testing.system.domain.auth
+package student.testing.system.domain.usecases.auth
 
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,9 +12,11 @@ import org.junit.Test
 import student.testing.system.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.R
-import student.testing.system.FakeRepository
+import student.testing.system.domain.repository.FakeRepository
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.usecases.auth.LoginUseCase
+import student.testing.system.domain.usecases.auth.ValidateAuthDataUseCase
 
 
 @ExperimentalCoroutinesApi

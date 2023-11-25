@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
-import student.testing.system.domain.auth.AuthIfPossibleUseCase
-import student.testing.system.domain.auth.LoginUseCase
+import student.testing.system.domain.usecases.auth.AuthIfPossibleUseCase
+import student.testing.system.domain.usecases.auth.LoginUseCase
 import student.testing.system.domain.states.operationStates.LoginState
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.PrivateUser

@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
 import student.testing.system.common.formatToString
-import student.testing.system.domain.CreateTestUseCase
-import student.testing.system.domain.addQuestion.AddQuestionUseCase
-import student.testing.system.domain.addQuestion.QuestionState
+import student.testing.system.domain.usecases.CreateTestUseCase
+import student.testing.system.domain.usecases.AddQuestionUseCase
+import student.testing.system.domain.states.QuestionState
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.models.Answer

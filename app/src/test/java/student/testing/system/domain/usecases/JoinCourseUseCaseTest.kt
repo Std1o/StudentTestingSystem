@@ -8,7 +8,7 @@ import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import student.testing.system.FakeRepository
+import student.testing.system.domain.repository.FakeRepository
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
 import student.testing.system.models.CourseResponse

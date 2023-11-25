@@ -5,7 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.common.Utils
-import student.testing.system.domain.MainRepository
+import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Participant

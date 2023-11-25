@@ -1,14 +1,12 @@
 package student.testing.system.data.repository
 
 import student.testing.system.data.dataSource.RemoteDataSource
-import student.testing.system.domain.MainRepository
+import student.testing.system.domain.repository.MainRepository
 import student.testing.system.models.CourseCreationReq
 import student.testing.system.models.SignUpReq
 import student.testing.system.models.TestCreationReq
 import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.models.UserQuestion
-import javax.inject.Inject
-import javax.inject.Singleton
 
 class MainRepositoryImpl(private val remoteDataSource: RemoteDataSource) : MainRepository {
 

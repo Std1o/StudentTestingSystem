@@ -1,4 +1,4 @@
-package student.testing.system.domain.auth
+package student.testing.system.domain.usecases.auth
 
 import androidx.core.util.PatternsCompat
 import student.testing.system.R
