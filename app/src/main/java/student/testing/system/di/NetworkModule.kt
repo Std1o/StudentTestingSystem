@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import student.testing.system.common.Constants
-import student.testing.system.data.MainService
+import student.testing.system.data.CourseManagementApi
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.data.api.AuthApi
 import student.testing.system.data.api.CoursesApi
@@ -44,11 +44,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMainService(retrofit: Retrofit): MainService =
-        retrofit.create(MainService::class.java)
-
-    @Provides
-    @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
 
     @Provides
@@ -58,4 +53,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideTestsApi(retrofit: Retrofit): TestsApi = retrofit.create(TestsApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCourseManagementApi(retrofit: Retrofit): CourseManagementApi =
+        retrofit.create(CourseManagementApi::class.java)
 }

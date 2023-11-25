@@ -3,12 +3,9 @@ package student.testing.system.data
 import retrofit2.Response
 import retrofit2.http.*
 import student.testing.system.models.*
-import student.testing.system.models.CourseResponse
-import student.testing.system.models.TestResult
-import student.testing.system.models.Test
 
 
-interface MainService {
+interface CourseManagementApi {
 
     @POST("course/moderators/")
     suspend fun addModerator(

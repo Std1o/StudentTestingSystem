@@ -1,7 +1,7 @@
 package student.testing.system.data.dataSource
 
 import godofappstates.data.dataSource.BaseRemoteDataSource
-import student.testing.system.data.MainService
+import student.testing.system.data.CourseManagementApi
 import student.testing.system.data.api.AuthApi
 import student.testing.system.data.api.CoursesApi
 import student.testing.system.data.api.TestsApi
@@ -15,10 +15,10 @@ import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-    private val mainService: MainService,
     private val authApi: AuthApi,
     private val coursesApi: CoursesApi,
-    private val testsApi: TestsApi
+    private val testsApi: TestsApi,
+    private val courseManagementApi: CourseManagementApi
 ) :
     BaseRemoteDataSource(), RemoteDataSource {
     override suspend fun auth(request: String) = executeOperation { authApi.auth(request) }
@@ -58,11 +58,11 @@ class RemoteDataSourceImpl @Inject constructor(
         loadData { testsApi.getResults(testId, courseId, params) }
 
     override suspend fun addModerator(courseId: Int, moderatorId: Int) =
-        executeOperation { mainService.addModerator(courseId, moderatorId) }
+        executeOperation { courseManagementApi.addModerator(courseId, moderatorId) }
 
     override suspend fun deleteModerator(courseId: Int, moderatorId: Int) =
-        executeOperation { mainService.deleteModerator(courseId, moderatorId) }
+        executeOperation { courseManagementApi.deleteModerator(courseId, moderatorId) }
 
     override suspend fun deleteParticipant(courseId: Int, participantId: Int) =
-        executeOperation { mainService.deleteParticipant(courseId, participantId) }
+        executeOperation { courseManagementApi.deleteParticipant(courseId, participantId) }
 }
