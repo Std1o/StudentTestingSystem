@@ -12,6 +12,7 @@ import student.testing.system.common.Constants
 import student.testing.system.data.MainService
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.data.api.AuthApi
+import student.testing.system.data.api.CoursesApi
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -48,4 +49,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCoursesApi(retrofit: Retrofit): CoursesApi = retrofit.create(CoursesApi::class.java)
 }

@@ -10,20 +10,6 @@ import student.testing.system.models.Test
 
 interface MainService {
 
-    @GET("courses/")
-    suspend fun getCourses(): Response<List<CourseResponse>>
-
-    @POST("courses/")
-    suspend fun createCourse(@Body request: CourseCreationReq): Response<CourseResponse>
-
-    @POST("courses/{course_code}")
-    suspend fun joinCourse(@Path("course_code") courseCode: String): Response<CourseResponse>
-
-    @DELETE("courses/{course_id}")
-    suspend fun deleteCourse(
-        @Path("course_id") courseId: Int,
-    ): Response<Void>
-
     @GET("tests/")
     suspend fun getTests(@Query("course_id") courseId: Int): Response<List<Test>>
 

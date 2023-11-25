@@ -3,6 +3,7 @@ package student.testing.system.data.dataSource
 import godofappstates.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.MainService
 import student.testing.system.data.api.AuthApi
+import student.testing.system.data.api.CoursesApi
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.operationTypes.TestsOperations
 import student.testing.system.models.CourseCreationReq
@@ -14,22 +15,23 @@ import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
     private val mainService: MainService,
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val coursesApi: CoursesApi
 ) :
     BaseRemoteDataSource(), RemoteDataSource {
     override suspend fun auth(request: String) = executeOperation { authApi.auth(request) }
     override suspend fun signUp(request: SignUpReq) =
         executeOperation { authApi.signUp(request) }
 
-    override suspend fun getCourses() = loadData { mainService.getCourses() }
+    override suspend fun getCourses() = loadData { coursesApi.getCourses() }
     override suspend fun createCourse(request: CourseCreationReq) =
-        executeOperation(CourseAddingOperations.CREATE_COURSE) { mainService.createCourse(request) }
+        executeOperation(CourseAddingOperations.CREATE_COURSE) { coursesApi.createCourse(request) }
 
     override suspend fun joinCourse(courseCode: String) =
-        executeOperation(CourseAddingOperations.JOIN_COURSE) { mainService.joinCourse(courseCode) }
+        executeOperation(CourseAddingOperations.JOIN_COURSE) { coursesApi.joinCourse(courseCode) }
 
     override suspend fun deleteCourse(courseId: Int) =
-        executeOperation { mainService.deleteCourse(courseId) }
+        executeOperation { coursesApi.deleteCourse(courseId) }
 
     override suspend fun getTests(courseId: Int) = loadData { mainService.getTests(courseId) }
     override suspend fun createTest(request: TestCreationReq) =
