@@ -1,14 +1,18 @@
-package student.testing.system.data.dataSource
+package student.testing.system.data.source.interfaces
 
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.*
+import student.testing.system.models.CourseCreationReq
+import student.testing.system.models.CourseResponse
+import student.testing.system.models.Participant
+import student.testing.system.models.ParticipantsResults
+import student.testing.system.models.Test
+import student.testing.system.models.TestCreationReq
+import student.testing.system.models.TestResult
+import student.testing.system.models.TestResultsRequestParams
+import student.testing.system.models.UserQuestion
 
 interface RemoteDataSource {
-
-    suspend fun auth(request: String): OperationState<PrivateUser>
-
-    suspend fun signUp(request: SignUpReq): OperationState<PrivateUser>
 
     suspend fun getCourses(): LoadableData<List<CourseResponse>>
 

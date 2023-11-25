@@ -14,8 +14,9 @@ import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
 import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
 import student.testing.system.data.repository.MainRepositoryImpl
+import student.testing.system.data.source.interfaces.AuthRemoteDataSource
+import student.testing.system.data.source.interfaces.RemoteDataSource
 import student.testing.system.domain.repository.MainRepository
-import student.testing.system.data.dataSource.RemoteDataSource
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.AppNavigatorImpl
 import student.testing.system.sharedPreferences.PrefsUtils
@@ -30,8 +31,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRepository(remoteDataSource: RemoteDataSource) =
-        MainRepositoryImpl(remoteDataSource) as MainRepository
+    fun provideRepository(
+        remoteDataSource: RemoteDataSource,
+        authRemoteDataSource: AuthRemoteDataSource
+    ) =
+        MainRepositoryImpl(remoteDataSource, authRemoteDataSource) as MainRepository
 
     @Provides
     @Singleton

@@ -1,29 +1,24 @@
-package student.testing.system.data.dataSource
+package student.testing.system.data.source.impl
 
 import godofappstates.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.api.CourseManagementApi
-import student.testing.system.data.api.AuthApi
 import student.testing.system.data.api.CoursesApi
 import student.testing.system.data.api.TestsApi
+import student.testing.system.data.source.interfaces.RemoteDataSource
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.operationTypes.TestsOperations
 import student.testing.system.models.CourseCreationReq
-import student.testing.system.models.SignUpReq
 import student.testing.system.models.TestCreationReq
 import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.models.UserQuestion
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-    private val authApi: AuthApi,
     private val coursesApi: CoursesApi,
     private val testsApi: TestsApi,
     private val courseManagementApi: CourseManagementApi
 ) :
     BaseRemoteDataSource(), RemoteDataSource {
-    override suspend fun auth(request: String) = executeOperation { authApi.auth(request) }
-    override suspend fun signUp(request: SignUpReq) =
-        executeOperation { authApi.signUp(request) }
 
     override suspend fun getCourses() = loadData { coursesApi.getCourses() }
     override suspend fun createCourse(request: CourseCreationReq) =
