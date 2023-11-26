@@ -2,7 +2,6 @@ package student.testing.system.domain.usecases
 
 import kotlinx.coroutines.flow.flow
 import student.testing.system.R
-import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.domain.states.operationStates.ValidatableOperationState

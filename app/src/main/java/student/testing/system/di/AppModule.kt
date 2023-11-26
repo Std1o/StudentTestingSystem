@@ -13,12 +13,6 @@ import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
 import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
-import student.testing.system.data.repository.MainRepositoryImpl
-import student.testing.system.data.source.interfaces.AuthRemoteDataSource
-import student.testing.system.data.source.interfaces.CoursesRemoteDataSource
-import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
-import student.testing.system.data.source.interfaces.TestsRemoteDataSource
-import student.testing.system.domain.repository.MainRepository
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.AppNavigatorImpl
 import student.testing.system.sharedPreferences.PrefsUtils

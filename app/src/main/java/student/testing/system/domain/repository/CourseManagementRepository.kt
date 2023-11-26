@@ -1,10 +1,9 @@
 package student.testing.system.domain.repository
 
-import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.*
 
-interface MainRepository {
+interface CourseManagementRepository {
 
     suspend fun addModerator(
         courseId: Int,

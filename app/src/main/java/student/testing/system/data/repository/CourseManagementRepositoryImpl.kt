@@ -1,16 +1,12 @@
 package student.testing.system.data.repository
 
 import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
-import student.testing.system.data.source.interfaces.TestsRemoteDataSource
-import student.testing.system.domain.repository.MainRepository
-import student.testing.system.models.TestCreationReq
-import student.testing.system.models.TestResultsRequestParams
-import student.testing.system.models.UserQuestion
+import student.testing.system.domain.repository.CourseManagementRepository
 import javax.inject.Inject
 
-class MainRepositoryImpl @Inject constructor(
+class CourseManagementRepositoryImpl @Inject constructor(
     private val courseManagementRemoteDataSource: CourseManagementRemoteDataSource,
-) : MainRepository {
+) : CourseManagementRepository {
 
     override suspend fun addModerator(courseId: Int, moderatorId: Int) =
         courseManagementRemoteDataSource.addModerator(courseId, moderatorId)

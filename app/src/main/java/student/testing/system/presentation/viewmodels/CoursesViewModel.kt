@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.common.Constants.LOG_TAG
-import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.domain.states.loadableData.LoadableData
