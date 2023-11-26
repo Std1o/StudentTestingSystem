@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AnswerResult(
     val answer: String,
-    @SerializedName("is_right") var isRight: Boolean,
-    @SerializedName("is_selected") var isSelected: Boolean, val id: Int
+    @SerializedName("is_right") val isRight: Boolean,
+    @SerializedName("is_selected") val isSelected: Boolean, val id: Int
 ) : Parcelable
