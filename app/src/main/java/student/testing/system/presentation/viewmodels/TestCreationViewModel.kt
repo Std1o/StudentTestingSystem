@@ -17,11 +17,11 @@ import student.testing.system.domain.usecases.AddQuestionUseCase
 import student.testing.system.domain.states.QuestionState
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.TestCreationState
-import student.testing.system.models.Answer
-import student.testing.system.models.CourseResponse
-import student.testing.system.models.Question
-import student.testing.system.models.Test
-import student.testing.system.models.TestCreationReq
+import student.testing.system.domain.models.Answer
+import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Question
+import student.testing.system.domain.models.Test
+import student.testing.system.domain.models.TestCreationReq
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.screenSession.QuestionCreationScreenSession

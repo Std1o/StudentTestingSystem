@@ -13,7 +13,7 @@ import student.testing.system.R
 import student.testing.system.data.repository.FakeAuthRepository
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.PrivateUser
+import student.testing.system.domain.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 
 

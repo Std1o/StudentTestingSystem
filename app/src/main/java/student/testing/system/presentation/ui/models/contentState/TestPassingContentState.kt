@@ -1,6 +1,6 @@
 package student.testing.system.presentation.ui.models.contentState
 
-import student.testing.system.models.Answer
+import student.testing.system.domain.models.Answer
 
 data class TestPassingContentState(
     val question: String = "",

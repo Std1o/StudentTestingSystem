@@ -19,7 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.common.Constants
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 
 @Composable
 fun CourseCode(

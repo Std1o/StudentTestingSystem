@@ -6,8 +6,8 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import student.testing.system.models.CourseCreationReq
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseCreationReq
+import student.testing.system.domain.models.CourseResponse
 
 interface CoursesApi {
     @GET("courses/")

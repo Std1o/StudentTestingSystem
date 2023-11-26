@@ -7,12 +7,12 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
-import student.testing.system.models.ParticipantsResults
-import student.testing.system.models.Test
-import student.testing.system.models.TestCreationReq
-import student.testing.system.models.TestResult
-import student.testing.system.models.TestResultsRequestParams
-import student.testing.system.models.UserQuestion
+import student.testing.system.domain.models.ParticipantsResults
+import student.testing.system.domain.models.Test
+import student.testing.system.domain.models.TestCreationReq
+import student.testing.system.domain.models.TestResult
+import student.testing.system.domain.models.TestResultsRequestParams
+import student.testing.system.domain.models.UserQuestion
 
 interface TestsApi {
     @GET("tests/")

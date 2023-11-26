@@ -1,4 +1,4 @@
-package student.testing.system.models
+package student.testing.system.domain.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

@@ -19,7 +19,7 @@ import student.testing.system.domain.states.operationStates.ValidatableOperation
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.CoursesContentState

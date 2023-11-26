@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
-import student.testing.system.models.Test
-import student.testing.system.models.TestResultsRequestParams
+import student.testing.system.domain.models.Test
+import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject

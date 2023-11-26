@@ -1,6 +1,6 @@
 package student.testing.system.common
 
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 
 object Utils {
 

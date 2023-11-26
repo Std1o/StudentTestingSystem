@@ -4,7 +4,7 @@ import io.mockk.mockk
 import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 
 class FakeCoursesRepository : CoursesRepository {
 

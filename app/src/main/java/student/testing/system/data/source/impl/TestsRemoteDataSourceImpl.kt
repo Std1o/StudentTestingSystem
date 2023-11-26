@@ -4,9 +4,9 @@ import godofappstates.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.api.TestsApi
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
 import student.testing.system.domain.operationTypes.TestsOperations
-import student.testing.system.models.TestCreationReq
-import student.testing.system.models.TestResultsRequestParams
-import student.testing.system.models.UserQuestion
+import student.testing.system.domain.models.TestCreationReq
+import student.testing.system.domain.models.TestResultsRequestParams
+import student.testing.system.domain.models.UserQuestion
 import javax.inject.Inject
 
 class TestsRemoteDataSourceImpl @Inject constructor(private val testsApi: TestsApi) :

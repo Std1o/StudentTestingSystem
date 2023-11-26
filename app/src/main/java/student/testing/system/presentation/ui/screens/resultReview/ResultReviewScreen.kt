@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
-import student.testing.system.models.TestResult
+import student.testing.system.domain.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 
 @Composable

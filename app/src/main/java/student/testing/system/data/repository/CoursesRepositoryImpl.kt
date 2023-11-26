@@ -2,7 +2,7 @@ package student.testing.system.data.repository
 
 import student.testing.system.data.source.interfaces.CoursesRemoteDataSource
 import student.testing.system.domain.repository.CoursesRepository
-import student.testing.system.models.CourseCreationReq
+import student.testing.system.domain.models.CourseCreationReq
 import javax.inject.Inject
 
 class CoursesRepositoryImpl @Inject constructor(private val remoteDataSource: CoursesRemoteDataSource) :

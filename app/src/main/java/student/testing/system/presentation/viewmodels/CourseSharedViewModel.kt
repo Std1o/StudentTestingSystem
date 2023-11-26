@@ -6,8 +6,8 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import student.testing.system.models.CourseResponse
-import student.testing.system.models.Test
+import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Test
 
 class CourseSharedViewModel : ViewModel() {
 

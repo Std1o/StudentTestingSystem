@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.loadableData.LoadableData
-import student.testing.system.models.ParticipantResult
-import student.testing.system.models.ParticipantsResults
+import student.testing.system.domain.models.ParticipantResult
+import student.testing.system.domain.models.ParticipantsResults
 import student.testing.system.presentation.ui.components.Avatar
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder

@@ -27,7 +27,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.common.iTems
-import student.testing.system.models.Answer
+import student.testing.system.domain.models.Answer
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

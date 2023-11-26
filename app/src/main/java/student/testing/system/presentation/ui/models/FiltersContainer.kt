@@ -1,6 +1,6 @@
 package student.testing.system.presentation.ui.models
 
-import student.testing.system.models.enums.OrderingType
+import student.testing.system.domain.enums.OrderingType
 import kotlin.properties.Delegates
 
 class FiltersContainer(

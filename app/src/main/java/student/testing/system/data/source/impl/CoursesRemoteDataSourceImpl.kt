@@ -4,7 +4,7 @@ import godofappstates.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.api.CoursesApi
 import student.testing.system.data.source.interfaces.CoursesRemoteDataSource
 import student.testing.system.domain.operationTypes.CourseAddingOperations
-import student.testing.system.models.CourseCreationReq
+import student.testing.system.domain.models.CourseCreationReq
 import javax.inject.Inject
 
 class CoursesRemoteDataSourceImpl @Inject constructor(private val coursesApi: CoursesApi) :

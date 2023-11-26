@@ -3,7 +3,7 @@ package student.testing.system.domain.usecases.auth
 import androidx.core.util.PatternsCompat
 import student.testing.system.R
 import student.testing.system.domain.states.operationStates.AuthState
-import student.testing.system.models.PrivateUser
+import student.testing.system.domain.models.PrivateUser
 import javax.inject.Inject
 
 class ValidateAuthDataUseCase @Inject constructor() {

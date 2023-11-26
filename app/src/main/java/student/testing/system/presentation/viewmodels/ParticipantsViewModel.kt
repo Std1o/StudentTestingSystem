@@ -7,8 +7,8 @@ import kotlinx.coroutines.launch
 import student.testing.system.common.Utils
 import student.testing.system.domain.repository.CourseManagementRepository
 import student.testing.system.domain.states.operationStates.protect
-import student.testing.system.models.CourseResponse
-import student.testing.system.models.Participant
+import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Participant
 import javax.inject.Inject
 
 @HiltViewModel

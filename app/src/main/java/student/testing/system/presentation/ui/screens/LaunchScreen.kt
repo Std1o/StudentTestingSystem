@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 import student.testing.system.presentation.navigation.CustomType
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.navigation.Destination.CourseReviewScreen.COURSE_KEY

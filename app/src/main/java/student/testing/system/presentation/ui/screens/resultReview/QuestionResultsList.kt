@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.common.iTems
-import student.testing.system.models.QuestionResult
+import student.testing.system.domain.models.QuestionResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 
 @OptIn(ExperimentalFoundationApi::class)

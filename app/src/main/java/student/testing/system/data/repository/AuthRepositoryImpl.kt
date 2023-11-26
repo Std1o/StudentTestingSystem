@@ -2,7 +2,7 @@ package student.testing.system.data.repository
 
 import student.testing.system.data.source.interfaces.AuthRemoteDataSource
 import student.testing.system.domain.repository.AuthRepository
-import student.testing.system.models.SignUpReq
+import student.testing.system.domain.models.SignUpReq
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(private val remoteDataSource: AuthRemoteDataSource) :

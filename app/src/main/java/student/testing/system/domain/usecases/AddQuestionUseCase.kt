@@ -1,7 +1,7 @@
 package student.testing.system.domain.usecases
 
 import student.testing.system.domain.states.QuestionState
-import student.testing.system.models.Question
+import student.testing.system.domain.models.Question
 import javax.inject.Inject
 
 class AddQuestionUseCase @Inject constructor() {

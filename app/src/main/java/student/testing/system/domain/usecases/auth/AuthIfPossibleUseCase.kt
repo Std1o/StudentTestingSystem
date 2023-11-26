@@ -2,7 +2,7 @@ package student.testing.system.domain.usecases.auth
 
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.PrivateUser
+import student.testing.system.domain.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
 

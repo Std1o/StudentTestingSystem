@@ -13,10 +13,10 @@ import student.testing.system.R
 import student.testing.system.common.Constants
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.operationStates.protect
-import student.testing.system.models.Test
-import student.testing.system.models.TestResult
-import student.testing.system.models.UserAnswer
-import student.testing.system.models.UserQuestion
+import student.testing.system.domain.models.Test
+import student.testing.system.domain.models.TestResult
+import student.testing.system.domain.models.UserAnswer
+import student.testing.system.domain.models.UserQuestion
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.TestPassingContentState

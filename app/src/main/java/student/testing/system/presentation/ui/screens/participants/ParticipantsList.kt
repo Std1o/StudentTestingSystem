@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.common.iTems
-import student.testing.system.models.Participant
+import student.testing.system.domain.models.Participant
 import student.testing.system.presentation.ui.activity.ui.theme.BlueColor
 import student.testing.system.presentation.ui.activity.ui.theme.GrayColor
 import student.testing.system.presentation.ui.components.Avatar

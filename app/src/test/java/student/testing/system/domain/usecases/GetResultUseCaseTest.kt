@@ -10,7 +10,7 @@ import org.junit.Test
 import student.testing.system.data.repository.FakeTestsRepository
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState
-import student.testing.system.models.TestResult
+import student.testing.system.domain.models.TestResult
 
 
 @ExperimentalCoroutinesApi

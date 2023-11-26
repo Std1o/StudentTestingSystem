@@ -17,9 +17,9 @@ import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.domain.usecases.GetResultUseCase
-import student.testing.system.models.CourseResponse
-import student.testing.system.models.Test
-import student.testing.system.models.TestResult
+import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Test
+import student.testing.system.domain.models.TestResult
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.TestsContentState

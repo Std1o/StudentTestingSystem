@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.Participant
+import student.testing.system.domain.models.Participant
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState

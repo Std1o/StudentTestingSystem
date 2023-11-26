@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import student.testing.system.common.Utils.isUserAModerator
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import javax.inject.Inject

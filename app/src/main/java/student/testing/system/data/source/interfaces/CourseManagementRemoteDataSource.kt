@@ -1,7 +1,7 @@
 package student.testing.system.data.source.interfaces
 
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.Participant
+import student.testing.system.domain.models.Participant
 
 interface CourseManagementRemoteDataSource {
     suspend fun addModerator(

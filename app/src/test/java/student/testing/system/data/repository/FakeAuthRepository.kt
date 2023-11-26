@@ -2,8 +2,8 @@ package student.testing.system.data.repository
 
 import student.testing.system.domain.repository.AuthRepository
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.PrivateUser
-import student.testing.system.models.SignUpReq
+import student.testing.system.domain.models.PrivateUser
+import student.testing.system.domain.models.SignUpReq
 
 class FakeAuthRepository : AuthRepository {
 

@@ -1,4 +1,4 @@
-package student.testing.system.models.enums
+package student.testing.system.domain.enums
 
 enum class OrderingType {
     SCORE, SCORE_DESC, DATE, DATE_DESC;

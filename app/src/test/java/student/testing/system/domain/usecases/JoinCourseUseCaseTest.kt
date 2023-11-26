@@ -11,7 +11,7 @@ import org.junit.Test
 import student.testing.system.data.repository.FakeCoursesRepository
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 
 @ExperimentalCoroutinesApi
 class JoinCourseUseCaseTest {

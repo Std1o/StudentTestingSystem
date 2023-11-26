@@ -4,8 +4,8 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
-import student.testing.system.models.PrivateUser
-import student.testing.system.models.SignUpReq
+import student.testing.system.domain.models.PrivateUser
+import student.testing.system.domain.models.SignUpReq
 
 interface AuthApi {
     @POST("auth/sign-in")

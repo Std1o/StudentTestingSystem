@@ -13,7 +13,7 @@ import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.domain.usecases.auth.SignUpUseCase
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.SignUpState
-import student.testing.system.models.PrivateUser
+import student.testing.system.domain.models.PrivateUser
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.screenSession.SignUpScreenSession

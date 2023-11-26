@@ -2,12 +2,12 @@ package student.testing.system.data.source.interfaces
 
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.ParticipantsResults
-import student.testing.system.models.Test
-import student.testing.system.models.TestCreationReq
-import student.testing.system.models.TestResult
-import student.testing.system.models.TestResultsRequestParams
-import student.testing.system.models.UserQuestion
+import student.testing.system.domain.models.ParticipantsResults
+import student.testing.system.domain.models.Test
+import student.testing.system.domain.models.TestCreationReq
+import student.testing.system.domain.models.TestResult
+import student.testing.system.domain.models.TestResultsRequestParams
+import student.testing.system.domain.models.UserQuestion
 
 interface TestsRemoteDataSource {
     suspend fun getTests(courseId: Int): LoadableData<List<Test>>

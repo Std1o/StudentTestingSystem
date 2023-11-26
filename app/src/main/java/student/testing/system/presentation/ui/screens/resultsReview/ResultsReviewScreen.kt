@@ -19,7 +19,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.domain.states.loadableData.LoadableData
-import student.testing.system.models.Test
+import student.testing.system.domain.models.Test
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.SearchAppBar
 import student.testing.system.presentation.ui.screens.resultsFilterDialog.ResultsFilterDialog

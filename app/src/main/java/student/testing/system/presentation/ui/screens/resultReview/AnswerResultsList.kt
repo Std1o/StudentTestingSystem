@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import student.testing.system.models.AnswerResult
+import student.testing.system.domain.models.AnswerResult
 
 @Composable
 fun AnswerResultsList(answerResults: List<AnswerResult>) {

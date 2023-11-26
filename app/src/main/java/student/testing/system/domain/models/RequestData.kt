@@ -1,7 +1,7 @@
-package student.testing.system.models
+package student.testing.system.domain.models
 
 import com.google.gson.annotations.SerializedName
-import student.testing.system.models.enums.OrderingType
+import student.testing.system.domain.enums.OrderingType
 
 data class CourseCreationReq(val name: String)
 

@@ -3,7 +3,7 @@ package student.testing.system.domain.usecases
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState
-import student.testing.system.models.TestResult
+import student.testing.system.domain.models.TestResult
 import javax.inject.Inject
 
 class GetResultUseCase @Inject constructor(private val repository: TestsRepository) {

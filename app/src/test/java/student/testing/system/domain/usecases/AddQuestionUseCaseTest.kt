@@ -4,8 +4,8 @@ import org.junit.Assert.*
 import org.junit.Test
 import student.testing.system.domain.states.QuestionState
 import student.testing.system.domain.usecases.AddQuestionUseCase
-import student.testing.system.models.Answer
-import student.testing.system.models.Question
+import student.testing.system.domain.models.Answer
+import student.testing.system.domain.models.Question
 
 class AddQuestionUseCaseTest {
 

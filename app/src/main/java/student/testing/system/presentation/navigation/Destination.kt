@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.google.gson.Gson
 import student.testing.system.R
-import student.testing.system.models.CourseResponse
+import student.testing.system.domain.models.CourseResponse
 import student.testing.system.presentation.navigation.Destination.CourseReviewScreen.COURSE_KEY
 
 sealed class Destination(

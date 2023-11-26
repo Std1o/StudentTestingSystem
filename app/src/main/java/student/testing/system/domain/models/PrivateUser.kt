@@ -1,4 +1,4 @@
-package student.testing.system.models
+package student.testing.system.domain.models
 
 import com.google.gson.annotations.SerializedName
 

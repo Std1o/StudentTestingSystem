@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import student.testing.system.domain.states.loadableData.LoadableData
-import student.testing.system.models.ParticipantsResults
+import student.testing.system.domain.models.ParticipantsResults
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ErrorScreen
 
