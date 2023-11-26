@@ -1,9 +1,8 @@
 package student.testing.system.data.repository
 
-import student.testing.system.domain.repository.MainRepository
+import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.Participant
 import student.testing.system.models.ParticipantsResults
 import student.testing.system.models.Test
 import student.testing.system.models.TestCreationReq
@@ -11,7 +10,7 @@ import student.testing.system.models.TestResult
 import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.models.UserQuestion
 
-class FakeMainRepository : MainRepository {
+class FakeTestsRepository : TestsRepository {
 
     override suspend fun getTests(courseId: Int): LoadableData<List<Test>> {
         TODO("Not yet implemented")
@@ -60,26 +59,4 @@ class FakeMainRepository : MainRepository {
     ): LoadableData<ParticipantsResults> {
         TODO("Not yet implemented")
     }
-
-    override suspend fun addModerator(
-        courseId: Int,
-        moderatorId: Int
-    ): OperationState<List<Participant>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deleteModerator(
-        courseId: Int,
-        moderatorId: Int
-    ): OperationState<List<Participant>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun deleteParticipant(
-        courseId: Int,
-        participantId: Int
-    ): OperationState<List<Participant>> {
-        TODO("Not yet implemented")
-    }
-
 }

@@ -7,7 +7,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import student.testing.system.data.repository.FakeMainRepository
+import student.testing.system.data.repository.FakeTestsRepository
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.models.TestResult
@@ -16,7 +16,7 @@ import student.testing.system.models.TestResult
 @ExperimentalCoroutinesApi
 class GetResultUseCaseTest {
 
-    private val repository = FakeMainRepository()
+    private val repository = FakeTestsRepository()
     private val getResultUseCase = GetResultUseCase(repository)
 
     @Test

@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import student.testing.system.common.Utils
-import student.testing.system.domain.repository.MainRepository
-import student.testing.system.domain.usecases.GetResultUseCase
+import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.domain.states.operationStates.protect
+import student.testing.system.domain.usecases.GetResultUseCase
 import student.testing.system.models.CourseResponse
 import student.testing.system.models.Test
 import student.testing.system.models.TestResult
@@ -30,7 +30,7 @@ import kotlin.properties.Delegates
 @HiltViewModel
 class TestsViewModel @Inject constructor(
     @Named(COURSE_REVIEW_NAVIGATION) private val courseNavigator: AppNavigator,
-    private val repository: MainRepository,
+    private val repository: TestsRepository,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
 

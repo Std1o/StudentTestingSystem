@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
-import student.testing.system.domain.repository.MainRepository
+import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.models.Test
 import student.testing.system.models.TestResultsRequestParams
@@ -16,7 +16,7 @@ import student.testing.system.presentation.ui.models.contentState.ResultsContent
 import javax.inject.Inject
 
 @HiltViewModel
-class ResultsViewModel @Inject constructor(private val repository: MainRepository) :
+class ResultsViewModel @Inject constructor(private val repository: TestsRepository) :
     StatesViewModel() {
 
     private val _contentState = MutableStateFlow(ResultsContentState())

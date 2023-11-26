@@ -5,17 +5,17 @@ import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.models.CourseCreationReq
 import javax.inject.Inject
 
-class CoursesRepositoryImpl @Inject constructor(private val coursesRemoteDataSource: CoursesRemoteDataSource) :
+class CoursesRepositoryImpl @Inject constructor(private val remoteDataSource: CoursesRemoteDataSource) :
     CoursesRepository {
 
-    override suspend fun getCourses() = coursesRemoteDataSource.getCourses()
+    override suspend fun getCourses() = remoteDataSource.getCourses()
 
     override suspend fun createCourse(name: String) =
-        coursesRemoteDataSource.createCourse(CourseCreationReq(name))
+        remoteDataSource.createCourse(CourseCreationReq(name))
 
     override suspend fun joinCourse(courseCode: String) =
-        coursesRemoteDataSource.joinCourse(courseCode)
+        remoteDataSource.joinCourse(courseCode)
 
     override suspend fun deleteCourse(courseId: Int) =
-        coursesRemoteDataSource.deleteCourse(courseId)
+        remoteDataSource.deleteCourse(courseId)
 }
