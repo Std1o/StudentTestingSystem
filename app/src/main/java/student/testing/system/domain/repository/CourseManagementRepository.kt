@@ -2,7 +2,6 @@ package student.testing.system.domain.repository
 
 import student.testing.system.domain.models.Participant
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.models.*
 
 interface CourseManagementRepository {
 

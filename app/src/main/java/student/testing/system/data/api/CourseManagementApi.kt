@@ -3,8 +3,6 @@ package student.testing.system.data.api
 import retrofit2.Response
 import retrofit2.http.*
 import student.testing.system.domain.models.Participant
-import student.testing.system.models.*
-
 
 interface CourseManagementApi {
 
