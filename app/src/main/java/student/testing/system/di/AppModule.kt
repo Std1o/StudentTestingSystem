@@ -16,7 +16,7 @@ import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
 import student.testing.system.data.repository.MainRepositoryImpl
 import student.testing.system.data.source.interfaces.AuthRemoteDataSource
 import student.testing.system.data.source.interfaces.CoursesRemoteDataSource
-import student.testing.system.data.source.interfaces.RemoteDataSource
+import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
 import student.testing.system.domain.repository.MainRepository
 import student.testing.system.presentation.navigation.AppNavigator
@@ -34,16 +34,16 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRepository(
-        remoteDataSource: RemoteDataSource,
         authRemoteDataSource: AuthRemoteDataSource,
         coursesRemoteDataSource: CoursesRemoteDataSource,
-        testsRemoteDataSource: TestsRemoteDataSource
+        testsRemoteDataSource: TestsRemoteDataSource,
+        courseManagementRemoteDataSource: CourseManagementRemoteDataSource,
     ) =
         MainRepositoryImpl(
-            remoteDataSource,
             authRemoteDataSource,
             coursesRemoteDataSource,
-            testsRemoteDataSource
+            testsRemoteDataSource,
+            courseManagementRemoteDataSource
         ) as MainRepository
 
     @Provides

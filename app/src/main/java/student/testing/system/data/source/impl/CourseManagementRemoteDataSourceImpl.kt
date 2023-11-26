@@ -2,15 +2,11 @@ package student.testing.system.data.source.impl
 
 import godofappstates.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.api.CourseManagementApi
-import student.testing.system.data.source.interfaces.RemoteDataSource
-import student.testing.system.domain.operationTypes.TestsOperations
-import student.testing.system.models.TestCreationReq
-import student.testing.system.models.TestResultsRequestParams
-import student.testing.system.models.UserQuestion
+import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
 import javax.inject.Inject
 
-class RemoteDataSourceImpl @Inject constructor(private val courseManagementApi: CourseManagementApi) :
-    BaseRemoteDataSource(), RemoteDataSource {
+class CourseManagementRemoteDataSourceImpl @Inject constructor(private val courseManagementApi: CourseManagementApi) :
+    BaseRemoteDataSource(), CourseManagementRemoteDataSource {
 
     override suspend fun addModerator(courseId: Int, moderatorId: Int) =
         executeOperation { courseManagementApi.addModerator(courseId, moderatorId) }

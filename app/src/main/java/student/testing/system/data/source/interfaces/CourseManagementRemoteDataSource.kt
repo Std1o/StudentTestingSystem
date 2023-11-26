@@ -3,7 +3,7 @@ package student.testing.system.data.source.interfaces
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.Participant
 
-interface RemoteDataSource {
+interface CourseManagementRemoteDataSource {
     suspend fun addModerator(
         courseId: Int,
         moderatorId: Int

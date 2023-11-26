@@ -2,7 +2,7 @@ package student.testing.system.data.repository
 
 import student.testing.system.data.source.interfaces.AuthRemoteDataSource
 import student.testing.system.data.source.interfaces.CoursesRemoteDataSource
-import student.testing.system.data.source.interfaces.RemoteDataSource
+import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
 import student.testing.system.domain.repository.MainRepository
 import student.testing.system.models.CourseCreationReq
@@ -12,10 +12,10 @@ import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.models.UserQuestion
 
 class MainRepositoryImpl(
-    private val remoteDataSource: RemoteDataSource,
     private val authRemoteDataSource: AuthRemoteDataSource,
     private val coursesRemoteDataSource: CoursesRemoteDataSource,
-    private val testsRemoteDataSource: TestsRemoteDataSource
+    private val testsRemoteDataSource: TestsRemoteDataSource,
+    private val courseManagementRemoteDataSource: CourseManagementRemoteDataSource,
 ) : MainRepository {
 
     override suspend fun auth(request: String) = authRemoteDataSource.auth(request)
@@ -63,14 +63,14 @@ class MainRepositoryImpl(
 
 
     override suspend fun addModerator(courseId: Int, moderatorId: Int) =
-        remoteDataSource.addModerator(courseId, moderatorId)
+        courseManagementRemoteDataSource.addModerator(courseId, moderatorId)
 
 
     override suspend fun deleteModerator(courseId: Int, moderatorId: Int) =
-        remoteDataSource.deleteModerator(courseId, moderatorId)
+        courseManagementRemoteDataSource.deleteModerator(courseId, moderatorId)
 
 
     override suspend fun deleteParticipant(courseId: Int, participantId: Int) =
-        remoteDataSource.deleteParticipant(courseId, participantId)
+        courseManagementRemoteDataSource.deleteParticipant(courseId, participantId)
 
 }
