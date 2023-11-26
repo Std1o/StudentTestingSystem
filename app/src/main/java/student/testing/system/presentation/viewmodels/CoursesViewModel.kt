@@ -13,6 +13,7 @@ import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.common.Constants.LOG_TAG
 import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
+import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
@@ -30,7 +31,7 @@ import javax.inject.Named
 
 @HiltViewModel
 class CoursesViewModel @Inject constructor(
-    private val repository: MainRepository,
+    private val repository: CoursesRepository,
     private val prefUtils: PrefsUtils,
     @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,

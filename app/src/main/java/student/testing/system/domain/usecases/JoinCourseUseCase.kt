@@ -4,10 +4,11 @@ import kotlinx.coroutines.flow.flow
 import student.testing.system.R
 import student.testing.system.domain.repository.MainRepository
 import student.testing.system.domain.operationTypes.CourseAddingOperations
+import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
 import javax.inject.Inject
 
-class JoinCourseUseCase @Inject constructor(private val repository: MainRepository) {
+class JoinCourseUseCase @Inject constructor(private val repository: CoursesRepository) {
 
     suspend operator fun invoke(courseCode: String) = flow {
         if (courseCode.isEmpty()) {

@@ -5,17 +5,6 @@ import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.models.*
 
 interface MainRepository {
-    suspend fun auth(request: String): OperationState<PrivateUser>
-
-    suspend fun signUp(request: SignUpReq): OperationState<PrivateUser>
-
-    suspend fun getCourses(): LoadableData<List<CourseResponse>>
-
-    suspend fun createCourse(name: String): OperationState<CourseResponse>
-
-    suspend fun joinCourse(courseCode: String): OperationState<CourseResponse>
-
-    suspend fun deleteCourse(courseId: Int): OperationState<Void>
 
     suspend fun getTests(courseId: Int): LoadableData<List<Test>>
 

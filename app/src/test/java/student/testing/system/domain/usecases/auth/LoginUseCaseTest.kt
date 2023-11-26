@@ -9,20 +9,18 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import student.testing.system.models.PrivateUser
-import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.R
-import student.testing.system.domain.repository.FakeRepository
+import student.testing.system.data.repository.FakeAuthRepository
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.domain.usecases.auth.LoginUseCase
-import student.testing.system.domain.usecases.auth.ValidateAuthDataUseCase
+import student.testing.system.models.PrivateUser
+import student.testing.system.sharedPreferences.PrefsUtils
 
 
 @ExperimentalCoroutinesApi
 class LoginUseCaseTest {
 
-    private val repository = FakeRepository()
+    private val repository = FakeAuthRepository()
     private val prefsUtils = mockk<PrefsUtils>(relaxed = true)
     private val validateAuthDataUseCase = ValidateAuthDataUseCase()
     private val loginUseCase = LoginUseCase(repository, prefsUtils, validateAuthDataUseCase)

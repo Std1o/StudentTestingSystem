@@ -31,21 +31,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Singleton
-    @Provides
-    fun provideRepository(
-        authRemoteDataSource: AuthRemoteDataSource,
-        coursesRemoteDataSource: CoursesRemoteDataSource,
-        testsRemoteDataSource: TestsRemoteDataSource,
-        courseManagementRemoteDataSource: CourseManagementRemoteDataSource,
-    ) =
-        MainRepositoryImpl(
-            authRemoteDataSource,
-            coursesRemoteDataSource,
-            testsRemoteDataSource,
-            courseManagementRemoteDataSource
-        ) as MainRepository
-
     @Provides
     @Singleton
     fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {

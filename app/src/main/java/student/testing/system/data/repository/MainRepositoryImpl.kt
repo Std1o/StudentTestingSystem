@@ -1,36 +1,17 @@
 package student.testing.system.data.repository
 
-import student.testing.system.data.source.interfaces.AuthRemoteDataSource
-import student.testing.system.data.source.interfaces.CoursesRemoteDataSource
 import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
 import student.testing.system.domain.repository.MainRepository
-import student.testing.system.models.CourseCreationReq
-import student.testing.system.models.SignUpReq
 import student.testing.system.models.TestCreationReq
 import student.testing.system.models.TestResultsRequestParams
 import student.testing.system.models.UserQuestion
+import javax.inject.Inject
 
-class MainRepositoryImpl(
-    private val authRemoteDataSource: AuthRemoteDataSource,
-    private val coursesRemoteDataSource: CoursesRemoteDataSource,
+class MainRepositoryImpl @Inject constructor(
     private val testsRemoteDataSource: TestsRemoteDataSource,
     private val courseManagementRemoteDataSource: CourseManagementRemoteDataSource,
 ) : MainRepository {
-
-    override suspend fun auth(request: String) = authRemoteDataSource.auth(request)
-
-    override suspend fun signUp(request: SignUpReq) = authRemoteDataSource.signUp(request)
-
-    override suspend fun getCourses() = coursesRemoteDataSource.getCourses()
-    override suspend fun createCourse(name: String) =
-        coursesRemoteDataSource.createCourse(CourseCreationReq(name))
-
-    override suspend fun joinCourse(courseCode: String) =
-        coursesRemoteDataSource.joinCourse(courseCode)
-
-    override suspend fun deleteCourse(courseId: Int) =
-        coursesRemoteDataSource.deleteCourse(courseId)
 
     override suspend fun getTests(courseId: Int) = testsRemoteDataSource.getTests(courseId)
 
