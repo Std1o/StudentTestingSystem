@@ -1,6 +1,5 @@
 package student.testing.system.presentation.ui.screens.resultReview
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,13 +16,11 @@ import student.testing.system.common.iTems
 import student.testing.system.domain.models.QuestionResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun QuestionResultsList(questionResults: List<QuestionResult>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 70.dp)
     ) {
         iTems(questionResults, key = { it }) { (question, answers) ->
             val shape = RoundedCornerShape(5.dp)
