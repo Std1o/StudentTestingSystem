@@ -44,10 +44,6 @@ android {
     }
     namespace 'student.testing.system'
 
-    lint {
-        // TODO make custom avatar view without agency.tango.android:avatar-view
-        lintConfig = file("$rootDir/avatar_picasso_lint.xml")
-    }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.2"
     }
@@ -64,8 +60,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    implementation 'agency.tango.android:avatar-view:0.0.2'
-    implementation 'agency.tango.android:avatar-view-picasso:0.0.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
