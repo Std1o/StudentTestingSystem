@@ -32,10 +32,10 @@ import student.testing.system.domain.states.QuestionState
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.requiredTextField
-import student.testing.system.presentation.viewmodels.TestCreationViewModel
+import student.testing.system.presentation.viewmodels.TestCreationSharedViewModel
 
 @Composable
-fun QuestionCreationScreen(parentViewModel: TestCreationViewModel) {
+fun QuestionCreationScreen(parentViewModel: TestCreationSharedViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
     val questionState by parentViewModel.questionState.collectAsState()
     val screenSession = parentViewModel.questionCreationScreenSession

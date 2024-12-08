@@ -31,7 +31,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class TestCreationViewModel @Inject constructor(
+class TestCreationSharedViewModel @Inject constructor(
     @Named(TEST_CREATION_NAVIGATION) private val appNavigator: AppNavigator,
     private val addQuestionUseCase: AddQuestionUseCase,
     private val createTestUseCase: CreateTestUseCase

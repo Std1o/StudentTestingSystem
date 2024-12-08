@@ -39,11 +39,11 @@ import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.requiredTextField
-import student.testing.system.presentation.viewmodels.TestCreationViewModel
+import student.testing.system.presentation.viewmodels.TestCreationSharedViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TestCreationScreen(parentViewModel: TestCreationViewModel) {
+fun TestCreationScreen(parentViewModel: TestCreationSharedViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
     val lastOperationState by parentViewModel.lastOperationState.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()

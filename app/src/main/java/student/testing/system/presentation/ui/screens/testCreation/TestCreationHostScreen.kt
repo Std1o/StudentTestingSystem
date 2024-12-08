@@ -18,7 +18,7 @@ import student.testing.system.presentation.ui.components.NavigationEffects
 import student.testing.system.presentation.ui.screens.questionCreation.QuestionCreationScreen
 import student.testing.system.presentation.viewmodels.CourseSharedViewModel
 import student.testing.system.presentation.viewmodels.TestCreationHostViewModel
-import student.testing.system.presentation.viewmodels.TestCreationViewModel
+import student.testing.system.presentation.viewmodels.TestCreationSharedViewModel
 
 @Composable
 fun TestCreationHostScreen(parentViewModel: CourseSharedViewModel, onTestCreated: (Test) -> Unit) {
@@ -27,7 +27,7 @@ fun TestCreationHostScreen(parentViewModel: CourseSharedViewModel, onTestCreated
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val sharedViewModel = navBackStackEntry
-        ?.viewModelScopedTo<TestCreationViewModel>(
+        ?.viewModelScopedTo<TestCreationSharedViewModel>(
             navController,
             Destination.TestCreationScreen.fullRoute
         )
