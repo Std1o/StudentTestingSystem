@@ -29,7 +29,7 @@ fun <T> UIReactionOnLastOperationState(
     with(event) {
         when (this) {
             is OperationState.ErrorSingle -> {
-                LaunchedEffect(Unit) { // the key define when the block is relaunched
+                LaunchedEffect(operationState) { // the key define when the block is relaunched
                     onError?.invoke(exception, code, operationType)
                         ?: snackbarHostState.showSnackbar(exception)
                 }
