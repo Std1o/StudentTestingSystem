@@ -24,6 +24,7 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
     val snackbarHostState = remember { SnackbarHostState() }
     val course by parentViewModel.courseFlow.collectAsState()
     val viewModel = hiltViewModel<ParticipantsViewModel>()
+    val events by viewModel.events.collectAsState(OperationState.NoState)
     val lastOperationState by viewModel.lastOperationState.collectAsState()
     var deletingParticipantId by remember { mutableStateOf<Int?>(null) }
     Surface {
@@ -58,9 +59,5 @@ fun ParticipantsScreen(parentViewModel: CourseSharedViewModel) {
             parentViewModel.setCourse(course.copy(participants = data as List<Participant>))
         }
     }
-    UIReactionOnLastOperationState(
-        lastOperationState,
-        { viewModel.onErrorReceived() },
-        snackbarHostState
-    )
+    UIReactionOnLastOperationState(lastOperationState, events, snackbarHostState)
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.common.iTems
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.CenteredColumn
@@ -49,6 +50,7 @@ fun TestCreationScreen(parentViewModel: TestCreationSharedViewModel) {
     val course by parentViewModel.courseFlow.collectAsState()
     val testState by parentViewModel.testState.collectAsState()
     val screenSession = parentViewModel.testCreationScreenSession
+    val events by parentViewModel.events.collectAsState(OperationState.NoState)
     Surface {
         Scaffold(
             snackbarHost = {
@@ -128,9 +130,5 @@ fun TestCreationScreen(parentViewModel: TestCreationSharedViewModel) {
             }
         }
     }
-    UIReactionOnLastOperationState(
-        lastOperationState,
-        { parentViewModel.onErrorReceived() },
-        snackbarHostState
-    )
+    UIReactionOnLastOperationState(lastOperationState, events, snackbarHostState)
 }

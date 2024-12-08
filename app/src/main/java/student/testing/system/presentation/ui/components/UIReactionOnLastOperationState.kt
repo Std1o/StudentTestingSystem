@@ -3,6 +3,7 @@ package student.testing.system.presentation.ui.components
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import godofappstates.domain.EventFlow
 import stdio.godofappstates.core.domain.OperationType
 import student.testing.system.domain.states.operationStates.OperationState
 
@@ -14,7 +15,7 @@ import student.testing.system.domain.states.operationStates.OperationState
 @Composable
 fun <T> UIReactionOnLastOperationState(
     operationState: OperationState<T>,
-    onErrorReceived: () -> Unit,
+    event: OperationState<T>,
     snackbarHostState: SnackbarHostState,
     onLoading: ((OperationType) -> Unit)? = null,
     onError: ((String, Int, OperationType) -> Unit)? = null
@@ -22,19 +23,19 @@ fun <T> UIReactionOnLastOperationState(
     with(operationState) {
         when (this) {
             is OperationState.Loading -> onLoading?.invoke(operationType) ?: LoadingIndicator()
-            is OperationState.Error -> {
+            else -> {}
+        }
+    }
+    with(event) {
+        when (this) {
+            is OperationState.ErrorSingle -> {
                 LaunchedEffect(Unit) { // the key define when the block is relaunched
                     onError?.invoke(exception, code, operationType)
                         ?: snackbarHostState.showSnackbar(exception)
-                    onErrorReceived()
                 }
             }
 
-            is OperationState.Empty204,
-            is OperationState.Success,
-            is OperationState.NoState -> {
-                // do nothing
-            }
+            else -> {}
         }
     }
 }

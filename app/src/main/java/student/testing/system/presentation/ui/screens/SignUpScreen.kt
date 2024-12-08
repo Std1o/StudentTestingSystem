@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.domain.states.operationStates.AuthState
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
@@ -27,6 +28,7 @@ fun SignUpScreen() {
     val viewModel = hiltViewModel<SignUpViewModel>()
     val signUpState by viewModel.signUpState.collectAsState()
     val lastOperationState by viewModel.lastOperationState.collectAsState()
+    val events by viewModel.events.collectAsState(OperationState.NoState)
     val snackbarHostState = remember { SnackbarHostState() }
     val screenSession = viewModel.screenSession
     Scaffold(
@@ -66,9 +68,5 @@ fun SignUpScreen() {
             }
         }
     }
-    UIReactionOnLastOperationState(
-        lastOperationState,
-        { viewModel.onErrorReceived() },
-        snackbarHostState
-    )
+    UIReactionOnLastOperationState(lastOperationState, events, snackbarHostState)
 }

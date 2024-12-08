@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResult
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.MediumButton
 import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
@@ -42,6 +43,7 @@ fun TestPassingScreen(test: Test, isUserModerator: Boolean, onResultReview: (Tes
     viewModel.setInitialData(test, isUserModerator)
     val lastOperationState by viewModel.lastOperationState.collectAsState()
     val contentState by viewModel.contentState.collectAsState()
+    val events by viewModel.events.collectAsState(OperationState.NoState)
     Surface {
         Scaffold(
             snackbarHost = {
@@ -89,9 +91,5 @@ fun TestPassingScreen(test: Test, isUserModerator: Boolean, onResultReview: (Tes
             }
         }
     }
-    UIReactionOnLastOperationState(
-        lastOperationState,
-        { viewModel.onErrorReceived() },
-        snackbarHostState
-    )
+    UIReactionOnLastOperationState(lastOperationState, events, snackbarHostState)
 }

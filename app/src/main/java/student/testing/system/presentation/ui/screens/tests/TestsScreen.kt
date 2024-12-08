@@ -30,6 +30,7 @@ import student.testing.system.R
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResult
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ConfirmationDialog
 import student.testing.system.presentation.ui.components.OptionsDialog
@@ -50,6 +51,7 @@ fun TestsScreen(
     val context = LocalContext.current
     val lastOperationState by testsVM.lastOperationState.collectAsState()
     val course by parentViewModel.courseFlow.collectAsState()
+    val events by testsVM.events.collectAsState(OperationState.NoState)
     testsVM.course = course
     testsVM.courseId = course.id
     val contentState by testsVM.contentState.collectAsState()
@@ -137,9 +139,5 @@ fun TestsScreen(
             }
         }
     }
-    UIReactionOnLastOperationState(
-        lastOperationState,
-        { testsVM.onErrorReceived() },
-        snackbarHostState
-    )
+    UIReactionOnLastOperationState(lastOperationState, events, snackbarHostState)
 }

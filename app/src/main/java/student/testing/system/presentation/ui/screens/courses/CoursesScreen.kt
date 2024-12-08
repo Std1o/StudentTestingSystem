@@ -34,10 +34,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.presentation.ui.activity.LaunchActivity
 import student.testing.system.presentation.ui.components.ConfirmationDialog
-import student.testing.system.presentation.ui.components.UIReactionOnListState
 import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
+import student.testing.system.presentation.ui.components.UIReactionOnListState
 import student.testing.system.presentation.viewmodels.CoursesViewModel
 
 @Composable
@@ -47,6 +48,7 @@ fun CoursesScreen() {
     val contentState by viewModel.contentState.collectAsState()
     val lastOperationState by viewModel.lastOperationState.collectAsState()
     val coursesState by viewModel.coursesState.collectAsState()
+    val events by viewModel.events.collectAsState(OperationState.NoState)
     var showUserInfoDialog by rememberSaveable { mutableStateOf(false) }
     var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
     var deletingCourseId by remember { mutableStateOf<Int?>(null) }
@@ -147,9 +149,5 @@ fun CoursesScreen() {
             )
         }
     }
-    UIReactionOnLastOperationState(
-        lastOperationState,
-        { viewModel.onErrorReceived() },
-        snackbarHostState
-    )
+    UIReactionOnLastOperationState(lastOperationState, events, snackbarHostState)
 }

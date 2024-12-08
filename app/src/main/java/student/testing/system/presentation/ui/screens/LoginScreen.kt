@@ -1,12 +1,17 @@
 package student.testing.system.presentation.ui.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -16,13 +21,14 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.LoginState
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.ErrorScreen
-import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.LoadingIndicator
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
+import student.testing.system.presentation.ui.components.emailTextField
 import student.testing.system.presentation.ui.components.passwordTextField
 import student.testing.system.presentation.viewmodels.LoginViewModel
 
@@ -31,6 +37,7 @@ fun LoginScreen() {
     val viewModel = hiltViewModel<LoginViewModel>()
     val loginState by viewModel.loginState.collectAsState()
     val lastOperationState by viewModel.lastOperationState.collectAsState()
+    val events by viewModel.events.collectAsState(OperationState.NoState)
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val screenSession = viewModel.screenSession
@@ -92,7 +99,7 @@ fun LoginScreen() {
     }
     UIReactionOnLastOperationState(
         lastOperationState,
-        { viewModel.onErrorReceived() },
+        events,
         snackbarHostState,
         onError = { exception, code, _ ->
             if (loginState !is LoginState.ErrorWhenAuthorized) {
