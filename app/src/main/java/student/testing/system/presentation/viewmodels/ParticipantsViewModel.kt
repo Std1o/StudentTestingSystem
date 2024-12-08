@@ -5,17 +5,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.common.Utils
+import student.testing.system.domain.models.CourseResponse
 import student.testing.system.domain.repository.CourseManagementRepository
 import student.testing.system.domain.states.operationStates.protect
-import student.testing.system.domain.models.CourseResponse
-import student.testing.system.domain.models.Participant
 import javax.inject.Inject
 
 @HiltViewModel
 class ParticipantsViewModel @Inject constructor(private val repository: CourseManagementRepository) :
     StatesViewModel() {
-
-    private var currentParticipant: Participant? = null
 
     fun isUserAnOwner(course: CourseResponse) = Utils.isUserAnOwner(course)
 
