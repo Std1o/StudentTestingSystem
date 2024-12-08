@@ -29,7 +29,7 @@ import student.testing.system.presentation.ui.components.InputDialog
 @Composable
 fun CourseAddingDialogs(
     showBottomSheet: Boolean,
-    lastValidationState: ValidatableOperationState<CourseResponse>,
+    coursesState: ValidatableOperationState<CourseResponse>,
     onNeedResetValidation: (ResetValidationReasons) -> Unit,
     onCreateCourse: (String) -> Unit,
     onJoinCourse: (String) -> Unit,
@@ -42,7 +42,7 @@ fun CourseAddingDialogs(
     var showCourseJoiningDialog by remember { mutableStateOf(false) }
 
     if (showCourseCreatingDialog) {
-        val error = (lastValidationState as? ValidatableOperationState.ValidationError)
+        val error = (coursesState as? ValidatableOperationState.ValidationError)
             ?.let {
                 if (it.operationType == CourseAddingOperations.CREATE_COURSE) it.messageResId else 0
             } ?: 0
@@ -63,7 +63,7 @@ fun CourseAddingDialogs(
     }
 
     if (showCourseJoiningDialog) {
-        val error = (lastValidationState as? ValidatableOperationState.ValidationError)
+        val error = (coursesState as? ValidatableOperationState.ValidationError)
             ?.let {
                 if (it.operationType == CourseAddingOperations.JOIN_COURSE) it.messageResId else 0
             } ?: 0
@@ -84,7 +84,7 @@ fun CourseAddingDialogs(
         }
     }
 
-    (lastValidationState as? ValidatableOperationState.SuccessfulValidation)?.let {
+    (coursesState as? ValidatableOperationState.SuccessfulValidation)?.let {
         when (it.operationType) {
             CourseAddingOperations.CREATE_COURSE -> showCourseCreatingDialog = false
             CourseAddingOperations.JOIN_COURSE -> showCourseJoiningDialog = false

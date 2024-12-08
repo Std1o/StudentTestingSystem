@@ -46,7 +46,7 @@ fun CoursesScreen() {
     val viewModel = hiltViewModel<CoursesViewModel>()
     val contentState by viewModel.contentState.collectAsState()
     val lastOperationState by viewModel.lastOperationState.collectAsState()
-    val lastValidationState by viewModel.lastValidationState.collectAsState()
+    val coursesState by viewModel.coursesState.collectAsState()
     var showUserInfoDialog by rememberSaveable { mutableStateOf(false) }
     var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
     var deletingCourseId by remember { mutableStateOf<Int?>(null) }
@@ -117,7 +117,7 @@ fun CoursesScreen() {
 
         CourseAddingDialogs(
             showBottomSheet = showBottomSheet,
-            lastValidationState = lastValidationState,
+            coursesState = coursesState,
             onNeedResetValidation = { viewModel.onNeedResetValidation(it) },
             onCreateCourse = { viewModel.createCourse(it) },
             onJoinCourse = { viewModel.joinCourse(it) }

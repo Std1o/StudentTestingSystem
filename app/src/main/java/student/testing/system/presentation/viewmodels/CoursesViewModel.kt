@@ -37,9 +37,9 @@ class CoursesViewModel @Inject constructor(
     private val joinCourseUseCase: JoinCourseUseCase
 ) : StatesViewModel() {
 
-    private val _lastValidationState =
+    private val _coursesState =
         MutableStateFlow<ValidatableOperationState<CourseResponse>>(OperationState.NoState)
-    val lastValidationState = _lastValidationState.asStateFlow()
+    val coursesState = _coursesState.asStateFlow()
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState = _contentState.asStateFlow()
@@ -88,7 +88,7 @@ class CoursesViewModel @Inject constructor(
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {
-                _lastValidationState.value = it
+                _coursesState.value = it
             }
         }
     }
@@ -102,7 +102,7 @@ class CoursesViewModel @Inject constructor(
             ) { courseResponse ->
                 addCourseToContent(courseResponse)
             }.collect {
-                _lastValidationState.value = it
+                _coursesState.value = it
             }
         }
     }
@@ -124,6 +124,6 @@ class CoursesViewModel @Inject constructor(
 
     fun onNeedResetValidation(resetValidationReason: ResetValidationReasons) {
         Log.d(LOG_TAG, resetValidationReason.toString())
-        _lastValidationState.value = OperationState.NoState
+        _coursesState.value = OperationState.NoState
     }
 }
