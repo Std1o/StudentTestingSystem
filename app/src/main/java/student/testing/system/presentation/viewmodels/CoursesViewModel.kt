@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.common.Constants.LOG_TAG
+import student.testing.system.domain.models.CourseResponse
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.domain.states.loadableData.LoadableData
@@ -19,7 +20,6 @@ import student.testing.system.domain.states.operationStates.ValidatableOperation
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.domain.usecases.CreateCourseUseCase
 import student.testing.system.domain.usecases.JoinCourseUseCase
-import student.testing.system.domain.models.CourseResponse
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.CoursesContentState
@@ -110,17 +110,20 @@ class CoursesViewModel @Inject constructor(
     private fun addCourseToContent(course: CourseResponse) {
         try {
             contentStateVar = contentStateVar.copy(
-                courses = LoadableData.Success(
-                    listOf(
-                        *(contentStateVar.courses as LoadableData.Success).data.toTypedArray(),
-                        course
-                    )
-                )
+                courses = addToLoadableList(contentStateVar.courses, course)
             )
         } catch (e: ClassCastException) {
             e.printStackTrace()
         }
     }
+
+    private inline fun <reified T> addToLoadableList(list: LoadableData<List<T>>, newItem: T) =
+        LoadableData.Success(
+            listOf(
+                *(list as LoadableData.Success).data.toTypedArray(),
+                newItem
+            )
+        )
 
     fun onNeedResetValidation(resetValidationReason: ResetValidationReasons) {
         Log.d(LOG_TAG, resetValidationReason.toString())
