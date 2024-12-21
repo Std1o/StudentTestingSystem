@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -15,19 +16,20 @@ import student.testing.system.presentation.ui.components.CenteredColumn
 
 @Composable
 fun ResultReviewScreen(testResult: TestResult) {
+    val savedTestResult = rememberSaveable { testResult}
     Surface {
         CenteredColumn {
-            val score = if (testResult.score % 1.0 != 0.0) {
+            val score = if (savedTestResult.score % 1.0 != 0.0) {
                 stringResource(
                     R.string.total_user_result,
-                    testResult.score,
-                    testResult.maxScore
+                    savedTestResult.score,
+                    savedTestResult.maxScore
                 )
             } else {
                 stringResource(
                     R.string.total_user_result_int,
-                    testResult.score.toInt(),
-                    testResult.maxScore
+                    savedTestResult.score.toInt(),
+                    savedTestResult.maxScore
                 )
             }
             Text(
@@ -36,7 +38,7 @@ fun ResultReviewScreen(testResult: TestResult) {
                 color = Color.Black,
                 modifier = Modifier.padding(30.dp)
             )
-            QuestionResultsList(questionResults = testResult.questions)
+            QuestionResultsList(questionResults = savedTestResult.questions)
         }
     }
 }
