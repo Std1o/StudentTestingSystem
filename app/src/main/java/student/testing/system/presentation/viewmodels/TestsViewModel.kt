@@ -2,9 +2,11 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import godofappstates.domain.EventFlow
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -38,8 +40,8 @@ class TestsViewModel @Inject constructor(
     val contentState = _contentState.asStateFlow()
     private var contentStateVar by stateFlowVar(_contentState)
 
-    private val _resultReviewChannel = Channel<TestResult>()
-    val resultReviewFlow = _resultReviewChannel.receiveAsFlow()
+    private val _resultReviewEvent = EventFlow<TestResult>()
+    val resultReviewFlow = _resultReviewEvent.asSharedFlow()
 
     lateinit var course: CourseResponse
 
@@ -94,7 +96,7 @@ class TestsViewModel @Inject constructor(
                     getResultUseCase(testId = test.id, courseId = test.courseId)
                 }, TestResult::class)
                 if (requestResult is OperationState.Success) {
-                    _resultReviewChannel.send(requestResult.data)
+                    _resultReviewEvent.emit(requestResult.data)
                     courseNavigator.tryNavigateTo(Destination.ResultReviewScreen())
                 }
                 if (requestResult is ResultState.NoResult) {

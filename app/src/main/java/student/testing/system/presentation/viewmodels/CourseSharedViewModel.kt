@@ -2,8 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.channels.Channel
+import godofappstates.domain.EventFlow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.domain.models.CourseResponse
@@ -13,8 +12,8 @@ class CourseSharedViewModel : ViewModel() {
 
     private val _courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
     val courseFlow = _courseFlow.asStateFlow()
-    private val _testChannel = Channel<Test>()
-    val testFlow = _testChannel.receiveAsFlow()
+    private val _testEvent = EventFlow<Test>()
+    val testFlow = _testEvent.asSharedFlow()
 
     fun setCourse(course: CourseResponse) {
         viewModelScope.launch {
@@ -23,6 +22,6 @@ class CourseSharedViewModel : ViewModel() {
     }
 
     fun onTestAdded(test: Test) {
-        _testChannel.trySend(test)
+        _testEvent.tryEmit(test)
     }
 }

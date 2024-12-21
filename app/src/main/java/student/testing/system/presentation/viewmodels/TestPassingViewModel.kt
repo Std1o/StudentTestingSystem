@@ -4,23 +4,19 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import godofappstates.domain.EventFlow
 import godofappstates.presentation.viewmodel.StatesViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.R
 import student.testing.system.common.Constants
-import student.testing.system.domain.repository.TestsRepository
-import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResult
 import student.testing.system.domain.models.UserAnswer
 import student.testing.system.domain.models.UserQuestion
-import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.domain.states.operationStates.TestPassingState
+import student.testing.system.domain.repository.TestsRepository
+import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.TestPassingContentState
@@ -45,8 +41,8 @@ class TestPassingViewModel @Inject constructor(
     private var isUserModerator = false
 
     val userQuestions: ArrayList<UserQuestion> = arrayListOf()
-    private val _snackbarChannel = Channel<Int>()
-    val snackbarFlow = _snackbarChannel.receiveAsFlow()
+    private val _snackbarEvent = EventFlow<Int>()
+    val snackbarFlow = _snackbarEvent.asSharedFlow()
 
     fun setInitialData(test: Test, isUserModerator: Boolean) {
         this.test = test
@@ -58,7 +54,7 @@ class TestPassingViewModel @Inject constructor(
     fun onNextQuestion() {
         val currentQuestion = test.questions[contentStateVar.position]
         if (!currentQuestion.answers.any { it.isRight }) {
-            _snackbarChannel.trySend(R.string.error_select_answers)
+            _snackbarEvent.tryEmit(R.string.error_select_answers)
             return
         }
         val userAnswers = arrayListOf<UserAnswer>()
