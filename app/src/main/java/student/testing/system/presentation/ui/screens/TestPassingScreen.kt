@@ -86,7 +86,7 @@ fun TestPassingScreen(test: Test, isUserModerator: Boolean, onResultReview: (Tes
             }
         }
         scope.launch {
-            viewModel.resultReviewFlow.collect {
+            viewModel.testPassingState.collect {
                 onResultReview(it)
             }
         }

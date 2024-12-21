@@ -2,9 +2,11 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import godofappstates.domain.EventFlow
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -17,6 +19,8 @@ import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResult
 import student.testing.system.domain.models.UserAnswer
 import student.testing.system.domain.models.UserQuestion
+import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.TestPassingState
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.TestPassingContentState
@@ -34,8 +38,8 @@ class TestPassingViewModel @Inject constructor(
     val contentState = _contentState.asStateFlow()
     private var contentStateVar by stateFlowVar(_contentState)
 
-    private val _resultReviewChannel = Channel<TestResult>()
-    val resultReviewFlow = _resultReviewChannel.receiveAsFlow()
+    private val _testPassingState = EventFlow<TestResult>()
+    val testPassingState = _testPassingState.asSharedFlow()
 
     private lateinit var test: Test
     private var isUserModerator = false
@@ -73,7 +77,7 @@ class TestPassingViewModel @Inject constructor(
                         },
                         type = TestResult::class
                     ) {
-                        _resultReviewChannel.trySend(it)
+                        _testPassingState.tryEmit(it)
                         navigateToResult()
                     }
                 } else {
@@ -100,7 +104,7 @@ class TestPassingViewModel @Inject constructor(
     private fun getResult() {
         viewModelScope.launch {
             executeOperation({ repository.getResult(test.id, test.courseId) }, TestResult::class) {
-                _resultReviewChannel.trySend(it)
+                _testPassingState.tryEmit(it)
                 navigateToResult()
             }.protect()
         }
