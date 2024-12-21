@@ -2,7 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import godofappstates.domain.EventFlow
+import godofappstates.domain.SingleEventFlow
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -38,7 +38,7 @@ class TestsViewModel @Inject constructor(
     val contentState = _contentState.asStateFlow()
     private var contentStateVar by stateFlowVar(_contentState)
 
-    private val _resultReviewEvent = EventFlow<TestResult>()
+    private val _resultReviewEvent = SingleEventFlow<TestResult>()
     val resultReviewFlow = _resultReviewEvent.asSharedFlow()
 
     lateinit var course: CourseResponse

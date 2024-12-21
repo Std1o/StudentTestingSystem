@@ -2,7 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import godofappstates.domain.EventFlow
+import godofappstates.domain.SingleEventFlow
 import godofappstates.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -34,14 +34,14 @@ class TestPassingViewModel @Inject constructor(
     val contentState = _contentState.asStateFlow()
     private var contentStateVar by stateFlowVar(_contentState)
 
-    private val _testPassingState = EventFlow<TestResult>()
+    private val _testPassingState = SingleEventFlow<TestResult>()
     val testPassingState = _testPassingState.asSharedFlow()
 
     private lateinit var test: Test
     private var isUserModerator = false
 
     val userQuestions: ArrayList<UserQuestion> = arrayListOf()
-    private val _snackbarEvent = EventFlow<Int>()
+    private val _snackbarEvent = SingleEventFlow<Int>()
     val snackbarFlow = _snackbarEvent.asSharedFlow()
 
     fun setInitialData(test: Test, isUserModerator: Boolean) {
