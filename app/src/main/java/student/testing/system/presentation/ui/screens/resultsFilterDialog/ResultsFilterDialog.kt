@@ -115,8 +115,5 @@ fun ResultsFilterDialog(
                 modifier = Modifier.padding(vertical = 30.dp)
             ) { onDismissRequest() }
         }
-        LaunchedEffect(Unit) {
-            println(sheetState.hasExpandedState)
-        }
     }
 }
