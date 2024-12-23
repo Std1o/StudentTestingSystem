@@ -1,6 +1,6 @@
 package student.testing.system.data.source.impl
 
-import godofappstates.data.dataSource.BaseRemoteDataSource
+import lilith.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.api.CourseManagementApi
 import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
 import javax.inject.Inject

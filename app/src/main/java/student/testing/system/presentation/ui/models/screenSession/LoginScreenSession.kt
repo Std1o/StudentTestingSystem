@@ -1,6 +1,6 @@
 package student.testing.system.presentation.ui.models.screenSession
 
-import stdio.godofappstates.annotations.ScreenSession
+import stdio.lilith.annotations.ScreenSession
 
 // TODO replace with rememberSaveable
 /**

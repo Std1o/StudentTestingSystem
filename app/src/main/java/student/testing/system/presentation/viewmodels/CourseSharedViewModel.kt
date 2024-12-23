@@ -2,7 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import godofappstates.domain.SingleEventFlow
+import lilith.domain.SingleEventFlow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.domain.models.CourseResponse

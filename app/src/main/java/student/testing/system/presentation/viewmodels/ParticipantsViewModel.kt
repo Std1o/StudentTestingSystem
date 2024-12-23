@@ -2,7 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import godofappstates.presentation.viewmodel.StatesViewModel
+import lilith.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.launch
 import student.testing.system.common.Utils
 import student.testing.system.domain.models.CourseResponse

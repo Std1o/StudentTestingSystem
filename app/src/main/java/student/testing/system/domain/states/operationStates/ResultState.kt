@@ -1,6 +1,6 @@
 package student.testing.system.domain.states.operationStates
 
-import stdio.godofappstates.annotations.OperationState
+import stdio.lilith.annotations.OperationState
 
 @OperationState
 sealed interface ResultState<out R> {

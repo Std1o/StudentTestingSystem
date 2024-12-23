@@ -1,6 +1,6 @@
 package student.testing.system.data.source.impl
 
-import godofappstates.data.dataSource.BaseRemoteDataSource
+import lilith.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.api.TestsApi
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
 import student.testing.system.domain.operationTypes.TestsOperations

@@ -1,6 +1,6 @@
 package student.testing.system.domain.states.loadableData
 
-import stdio.godofappstates.annotations.LoadableData
+import stdio.lilith.annotations.LoadableData
 
 @LoadableData
 sealed interface LoadableDataTrigger<out R>

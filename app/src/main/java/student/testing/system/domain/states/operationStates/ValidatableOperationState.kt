@@ -1,9 +1,9 @@
 package student.testing.system.domain.states.operationStates
 
 import androidx.annotation.StringRes
-import stdio.godofappstates.annotations.StillLoading
-import stdio.godofappstates.core.domain.OperationType
-import stdio.godofappstates.annotations.OperationState
+import stdio.lilith.annotations.StillLoading
+import stdio.lilith.core.domain.OperationType
+import stdio.lilith.annotations.OperationState
 
 @OperationState
 sealed interface ValidatableOperationState<out R> {

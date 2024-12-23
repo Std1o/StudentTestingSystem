@@ -2,13 +2,13 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import godofappstates.domain.SingleEventFlow
-import godofappstates.presentation.viewmodel.StatesViewModel
+import lilith.domain.SingleEventFlow
+import lilith.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import stdio.godofappstates.core.delegates.StateFlowVar.Companion.stateFlowVar
+import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
 import student.testing.system.common.Utils
 import student.testing.system.domain.repository.TestsRepository

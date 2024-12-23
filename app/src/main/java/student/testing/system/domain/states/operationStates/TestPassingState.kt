@@ -1,7 +1,7 @@
 package student.testing.system.domain.states.operationStates
 
-import stdio.godofappstates.annotations.OperationState
-import stdio.godofappstates.annotations.SingleEvents
+import stdio.lilith.annotations.OperationState
+import stdio.lilith.annotations.SingleEvents
 import student.testing.system.domain.models.TestResult
 
 @SingleEvents
