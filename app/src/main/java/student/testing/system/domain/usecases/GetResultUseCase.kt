@@ -10,7 +10,7 @@ class GetResultUseCase @Inject constructor(private val repository: TestsReposito
 
     suspend operator fun invoke(testId: Int, courseId: Int): ResultState<TestResult> {
         val requestResult = repository.getResult(testId, courseId)
-        if (requestResult is OperationState.Error && requestResult.code == 404) {
+        if (requestResult is OperationState.ErrorSingle && requestResult.code == 404) {
             return ResultState.NoResult
         }
         return requestResult
