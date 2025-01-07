@@ -29,7 +29,7 @@ class GetResultUseCaseTest {
     @Test
     fun `all errors except 404 returns Error state`() = runTest {
         val actual = getResultUseCase(-1, 1)
-        assertTrue(actual is OperationState.Error)
+        assertTrue(actual is OperationState.ErrorSingle)
     }
 
     @Test
