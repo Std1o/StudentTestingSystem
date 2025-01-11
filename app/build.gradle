@@ -100,4 +100,11 @@ dependencies {
     androidTestImplementation libs.androidx.espresso.core
     testImplementation libs.mockk
     testImplementation libs.kotlinx.coroutines.test
+
+    def ktor_version = "3.0.0-beta-1"
+
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+    implementation("io.ktor:ktor-client-websockets:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
 }
