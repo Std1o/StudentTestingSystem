@@ -1,25 +1,25 @@
 package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
-import student.testing.system.data.api.KtorWebsocketClientImpl
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.webSockets.KtorWebsocketClient
-import student.testing.system.domain.webSockets.WebsocketEvents
 import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject
+
 
 @Suppress("UNREACHABLE_CODE")
 @HiltViewModel
@@ -70,6 +70,12 @@ class ResultsViewModel @Inject constructor(
 
         viewModelScope.launch {
             client.connect()
+        }
+        viewModelScope.launch {
+            delay(1000)
+            val jsonObject = Gson().toJson(params)
+            client.send(jsonObject)
+            println("Keeeeek")
         }
     }
 

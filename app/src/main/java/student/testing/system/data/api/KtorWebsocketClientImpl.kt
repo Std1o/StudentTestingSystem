@@ -4,6 +4,9 @@ import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
@@ -24,6 +27,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import org.json.JSONObject
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.webSockets.KtorWebsocketClient
 import student.testing.system.domain.webSockets.WebsocketEvents
@@ -52,7 +56,10 @@ class KtorWebsocketClientImpl(
             }
         }
 
-        install(Logging)
+        install(Logging) {
+            logger = Logger.ANDROID
+            level = LogLevel.ALL
+        }
         install(WebSockets)
     }
 
