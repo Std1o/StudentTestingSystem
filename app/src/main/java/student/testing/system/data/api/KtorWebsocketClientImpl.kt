@@ -7,12 +7,8 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
-import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.client.utils.EmptyContent
-import io.ktor.client.utils.EmptyContent.headers
 import io.ktor.http.HttpHeaders
-import io.ktor.http.headers
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.close
@@ -29,12 +25,22 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import student.testing.system.common.AccountSession
+import student.testing.system.domain.webSockets.KtorWebsocketClient
+import student.testing.system.domain.webSockets.WebsocketEvents
 import java.util.concurrent.TimeUnit
 
-class KtorWebsocketClient(
+class KtorWebsocketClientImpl(
     private val url: String,
     private val listener: WebsocketEvents,
-) {
+): KtorWebsocketClient {
+
+    companion object {
+        private const val RECONNECT_DELAY = 10_000L
+        private val PING_INTERVAL = 5_000L
+
+        private const val TAG = "WebSocketClient"
+    }
+
     private val client = HttpClient(OkHttp) {
         defaultRequest {
             header(HttpHeaders.Authorization, "Bearer ${AccountSession.instance.token!!}")
@@ -58,7 +64,7 @@ class KtorWebsocketClient(
 
     private var session: WebSocketSession? = null
 
-    suspend fun connect() {
+    override suspend fun connect() {
         try {
             Log.d(TAG, "Connecting to websocket at $url...")
 
@@ -87,7 +93,7 @@ class KtorWebsocketClient(
         }
     }
 
-    private fun reconnect() {
+    override fun reconnect() {
         job?.cancel()
         Log.d(TAG, "Reconnecting to websocket in ${RECONNECT_DELAY}ms...")
 
@@ -98,28 +104,15 @@ class KtorWebsocketClient(
         }
     }
 
-    suspend fun stop() {
+    override suspend fun stop() {
         Log.d(TAG, "Closing websocket session...")
         session?.close()
         session = null
     }
 
-    suspend fun send(message: String) {
+    override suspend fun send(message: String) {
         Log.d(TAG, "Sending message: $message")
 
         session?.send(Frame.Text(message))
-    }
-
-    interface WebsocketEvents{
-        fun onReceive(data: String)
-        fun onConnected()
-        fun onDisconnected(reason: String)
-    }
-
-    companion object {
-        private const val RECONNECT_DELAY = 10_000L
-        private val PING_INTERVAL = 5_000L
-
-        private const val TAG = "WebSocketClient"
     }
 }
