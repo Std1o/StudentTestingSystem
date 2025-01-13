@@ -22,6 +22,7 @@ import student.testing.system.R
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.LoginState
 import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.ValidatableOperationState
 import student.testing.system.presentation.ui.activity.ui.theme.LoginTextColor
 import student.testing.system.presentation.ui.components.BigButton
 import student.testing.system.presentation.ui.components.CenteredColumn
@@ -72,17 +73,22 @@ fun LoginScreen() {
             )
             val isEmailError = loginState is AuthState.EmailError
             val isPasswordError = loginState is AuthState.PasswordError
+            val inputIsInvalid = loginState is AuthState.InputIsInvalid
             val email = emailTextField(
                 onTextChanged = { viewModel.onTextFieldChanged() },
                 emailState = screenSession.emailState,
-                isEmailError = isEmailError,
-                errorText = if (isEmailError) (loginState as AuthState.EmailError).messageResId else 0
+                isEmailError = isEmailError || inputIsInvalid,
+                errorText = if (isEmailError) (loginState as AuthState.EmailError).messageResId
+                else if (inputIsInvalid) (loginState as AuthState.InputIsInvalid).mailResId
+                else 0
             )
             val password = passwordTextField(
                 onTextChanged = { viewModel.onTextFieldChanged() },
                 screenSession.passwordState,
-                isPasswordError = isPasswordError,
-                errorText = if (isPasswordError) (loginState as AuthState.PasswordError).messageResId else 0
+                isPasswordError = isPasswordError || inputIsInvalid,
+                errorText = if (isPasswordError) (loginState as AuthState.PasswordError).messageResId
+                else if (inputIsInvalid) (loginState as AuthState.InputIsInvalid).passResId
+                else 0
             )
             BigButton(text = R.string.sign_in) {
                 viewModel.auth(email = email, password = password)

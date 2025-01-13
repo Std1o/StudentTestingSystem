@@ -7,6 +7,8 @@ import stdio.lilith.annotations.OperationState
 sealed interface AuthState<out R> : SignUpState<R>, LoginState<R> {
     data class EmailError(@StringRes val messageResId: Int) : AuthState<Nothing>
     data class PasswordError(@StringRes val messageResId: Int) : AuthState<Nothing>
+    data class InputIsInvalid(@StringRes val mailResId: Int, @StringRes val passResId: Int) :
+        AuthState<Nothing>
 
     object ValidationSuccesses : AuthState<Nothing>
 }
