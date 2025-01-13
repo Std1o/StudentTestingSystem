@@ -26,8 +26,8 @@ class LoginUseCaseTest {
     private val loginUseCase = LoginUseCase(repository, prefsUtils, validateAuthDataUseCase)
 
     @Test
-    fun `empty email returns EmailError`() = runTest {
-        val expected = AuthState.EmailError(R.string.error_empty_field)
+    fun `empty data returns InputIsInvalid`() = runTest {
+        val expected = AuthState.InputIsInvalid(R.string.error_empty_field, R.string.error_empty_field)
         val actual = loginUseCase.invoke("", "")
         assertEquals(expected, actual)
     }
@@ -35,7 +35,7 @@ class LoginUseCaseTest {
     @Test
     fun `invalid E-mail format returns EmailError`() = runTest {
         val expected = AuthState.EmailError(R.string.error_invalid_email)
-        val actual = loginUseCase.invoke("someEmail", "")
+        val actual = loginUseCase.invoke("someEmail", "pass")
         assertEquals(expected, actual)
     }
 
