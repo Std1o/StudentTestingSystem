@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.data.api.KtorWebsocketClientImpl
+import student.testing.system.domain.models.ParticipantsResults
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.repository.TestsRepository
@@ -38,20 +39,34 @@ class ResultsViewModel @Inject constructor(
     var searchPrefix: String? = null
     val filtersContainer = FiltersContainer()
 
-    private val client: KtorWebsocketClient = KtorWebsocketClientImpl(url = "wss://testingsystem.ru/tests/ws/results/58?course_id=1",
+    private val client: KtorWebsocketClient by lazy {
+        KtorWebsocketClientImpl(url = "wss://testingsystem.ru/tests/ws/results/${test.id}?course_id=${test.courseId}",
             object : WebsocketEvents {
                 override fun onReceive(data: String) {
-                    println("onReceive")
+                    val dataJson = Gson().fromJson(
+                        data,
+                        ParticipantsResults::class.java
+                    )
+                    contentStateVar = contentStateVar.copy(
+                        results = LoadableData.Success(dataJson)
+                    )
+                    if (filtersContainer.maxScore == 0) {
+                        filtersContainer.maxScore = dataJson.maxScore
+                        if (filtersContainer.maxScore == 0) {
+                            filtersContainer.maxScore = 100 // this can happen if there are no results
+                        }
+                    }
                 }
 
                 override fun onConnected() {
-                    println("onConnected")
+
                 }
 
                 override fun onDisconnected(reason: String) {
                     println("onDisconnected")
                 }
             })
+    }
 
     fun setInitialData(test: Test) {
         this.test = test
@@ -73,8 +88,10 @@ class ResultsViewModel @Inject constructor(
             throwable.printStackTrace()
         }
 
+        contentStateVar = ResultsContentState(LoadableData.Loading())
+
         viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-            loadData { repository.getResults(test.id, test.courseId, params) }.collect {
+            /*loadData { repository.getResults(test.id, test.courseId, params) }.collect {
                 contentStateVar = contentStateVar.copy(results = it)
                 if (it is LoadableData.Success && filtersContainer.maxScore == 0) {
                     filtersContainer.maxScore = it.data.maxScore
@@ -82,7 +99,7 @@ class ResultsViewModel @Inject constructor(
                         filtersContainer.maxScore = 100 // this can happen if there are no results
                     }
                 }
-            }
+            }*/
         }
 
         viewModelScope.launch {
