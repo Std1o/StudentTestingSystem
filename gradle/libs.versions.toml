@@ -17,6 +17,12 @@ junitVersion = "1.1.5"
 kotlinReflect = "1.8.10"
 kotlinxCoroutinesCore = "1.7.1"
 kotlinxCoroutinesTest = "1.6.4"
+ktorClientContentNegotiation = "3.0.0-beta-1"
+ktorClientCore = "3.0.0-beta-1"
+ktorClientLogging = "3.0.0-beta-1"
+ktorClientOkhttp = "3.0.0-beta-1"
+ktorClientWebsockets = "3.0.0-beta-1"
+ktorSerializationKotlinxJson = "3.0.0-beta-1"
 legacySupportV4 = "1.0.0"
 library = "4.0.0"
 libraryNoOp = "4.0.0"
@@ -65,6 +71,12 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "library" }
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "libraryNoOp" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientContentNegotiation" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientLogging" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientOkhttp" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktorClientWebsockets" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorSerializationKotlinxJson" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 lilith-appstatesmanager = { module = "com.github.Std1o:Lilith-AppStatesManager", version.ref = "lilithAppstatesmanager" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }

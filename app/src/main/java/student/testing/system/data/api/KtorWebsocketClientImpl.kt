@@ -39,7 +39,7 @@ class KtorWebsocketClientImpl(
 
     companion object {
         private const val RECONNECT_DELAY = 10_000L
-        private val PING_INTERVAL = 5_000L
+        private const val PING_INTERVAL = 5_000L
 
         private const val TAG = "WebSocketClient"
     }
