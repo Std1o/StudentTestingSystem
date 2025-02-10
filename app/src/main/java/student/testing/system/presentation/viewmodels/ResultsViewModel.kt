@@ -11,11 +11,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
+import student.testing.system.data.api.KtorWebsocketClientImpl
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.webSockets.KtorWebsocketClient
+import student.testing.system.domain.webSockets.WebsocketEvents
 import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject
@@ -25,7 +27,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ResultsViewModel @Inject constructor(
     private val repository: TestsRepository,
-    private val client: KtorWebsocketClient
 ) :
     StatesViewModel() {
 
@@ -36,6 +37,22 @@ class ResultsViewModel @Inject constructor(
     private lateinit var test: Test
     var searchPrefix: String? = null
     val filtersContainer = FiltersContainer()
+
+    private val client: KtorWebsocketClient = KtorWebsocketClientImpl(url = "wss://testingsystem.ru/tests/ws/results/58?course_id=1",
+            object : WebsocketEvents {
+                override fun onReceive(data: String) {
+                    println("onReceive")
+                }
+
+                override fun onConnected() {
+                    println("onConnected")
+                }
+
+                override fun onDisconnected(reason: String) {
+                    println("onDisconnected")
+                }
+            })
+
     fun setInitialData(test: Test) {
         this.test = test
         getResults()
@@ -75,7 +92,6 @@ class ResultsViewModel @Inject constructor(
             delay(1000)
             val jsonObject = Gson().toJson(params)
             client.send(jsonObject)
-            println("Keeeeek")
         }
     }
 

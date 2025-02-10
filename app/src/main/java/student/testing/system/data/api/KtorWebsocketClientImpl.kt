@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import org.json.JSONObject
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.webSockets.KtorWebsocketClient
 import student.testing.system.domain.webSockets.WebsocketEvents
@@ -36,7 +35,7 @@ import java.util.concurrent.TimeUnit
 class KtorWebsocketClientImpl(
     private val url: String,
     private val listener: WebsocketEvents,
-): KtorWebsocketClient {
+) : KtorWebsocketClient {
 
     companion object {
         private const val RECONNECT_DELAY = 10_000L
@@ -63,7 +62,8 @@ class KtorWebsocketClientImpl(
         install(WebSockets)
     }
 
-    private val scope = CoroutineScope(Dispatchers.IO) + SupervisorJob() + CoroutineExceptionHandler { _, throwable ->
+    private val scope =
+        CoroutineScope(Dispatchers.IO) + SupervisorJob() + CoroutineExceptionHandler { _, throwable ->
             Log.d(TAG, "Error: ${throwable.message}")
         }
 
