@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.R
 import student.testing.system.common.Constants
+import student.testing.system.common.CourseReviewNavigation
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResult
 import student.testing.system.domain.models.UserAnswer
@@ -26,7 +27,7 @@ import javax.inject.Named
 @HiltViewModel
 class TestPassingViewModel @Inject constructor(
     private val repository: TestsRepository,
-    @Named(Constants.COURSE_REVIEW_NAVIGATION) private val courseNavigator: AppNavigator,
+    @CourseReviewNavigation private val courseNavigator: AppNavigator,
 ) :
     StatesViewModel() {
 

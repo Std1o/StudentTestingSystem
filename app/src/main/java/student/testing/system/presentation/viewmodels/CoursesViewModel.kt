@@ -3,14 +3,14 @@ package student.testing.system.presentation.viewmodels
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import lilith.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
-import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.common.Constants.LOG_TAG
+import student.testing.system.common.LaunchNavigation
 import student.testing.system.domain.models.CourseResponse
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.repository.CoursesRepository
@@ -26,13 +26,12 @@ import student.testing.system.presentation.ui.models.contentState.CoursesContent
 import student.testing.system.presentation.ui.screens.courses.ResetValidationReasons
 import student.testing.system.sharedPreferences.PrefsUtils
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class CoursesViewModel @Inject constructor(
     private val repository: CoursesRepository,
     private val prefUtils: PrefsUtils,
-    @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator,
+    @LaunchNavigation private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,
     private val joinCourseUseCase: JoinCourseUseCase
 ) : StatesViewModel() {

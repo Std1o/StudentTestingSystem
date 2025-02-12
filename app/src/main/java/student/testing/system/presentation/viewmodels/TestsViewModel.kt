@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
-import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
+import student.testing.system.common.CourseReviewNavigation
 import student.testing.system.common.Utils
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
@@ -24,12 +24,11 @@ import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.TestsContentState
 import javax.inject.Inject
-import javax.inject.Named
 import kotlin.properties.Delegates
 
 @HiltViewModel
 class TestsViewModel @Inject constructor(
-    @Named(COURSE_REVIEW_NAVIGATION) private val courseNavigator: AppNavigator,
+    @CourseReviewNavigation private val courseNavigator: AppNavigator,
     private val repository: TestsRepository,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
