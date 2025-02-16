@@ -8,21 +8,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
-import student.testing.system.data.api.KtorWebsocketClientImpl
 import student.testing.system.domain.models.ParticipantsResults
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResultsRequestParams
+import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
-import student.testing.system.domain.webSockets.KtorWebsocketClient
-import student.testing.system.domain.webSockets.WebsocketEvents
+import student.testing.system.domain.webSockets.WebsocketEvent
 import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject
-import kotlin.properties.Delegates
-
 
 @HiltViewModel
-class ResultsViewModel @Inject constructor() : ViewModel() {
+class ResultsViewModel @Inject constructor(
+    val repository: TestsRepository
+) : ViewModel() {
 
     private val _contentState = MutableStateFlow(ResultsContentState())
     val contentState = _contentState.asStateFlow()
@@ -31,39 +30,6 @@ class ResultsViewModel @Inject constructor() : ViewModel() {
     private lateinit var test: Test
     var searchPrefix: String? = null
     val filtersContainer = FiltersContainer()
-    var isConnected: Boolean by Delegates.observable(false) { _, _, new ->
-        if (new) {
-            val params = getTestResultsRequestParams()
-            viewModelScope.launch {
-                val jsonObject = Gson().toJson(params)
-                client.send(jsonObject)
-            }
-        }
-    }
-
-    private val client: KtorWebsocketClient by lazy {
-        KtorWebsocketClientImpl(url = "wss://testingsystem.ru/tests/ws/results/${test.id}?course_id=${test.courseId}",
-            object : WebsocketEvents {
-                override fun onReceive(data: String) {
-                    val dataJson = Gson().fromJson(
-                        data,
-                        ParticipantsResults::class.java
-                    )
-                    contentStateVar = contentStateVar.copy(
-                        results = LoadableData.Success(dataJson)
-                    )
-                    configureMaxScore(dataJson)
-                }
-
-                override fun onConnected() {
-                    isConnected = true
-                }
-
-                override fun onDisconnected(reason: String) {
-                    println("onDisconnected")
-                }
-            })
-    }
 
     fun setInitialData(test: Test) {
         this.test = test
@@ -74,7 +40,18 @@ class ResultsViewModel @Inject constructor() : ViewModel() {
         contentStateVar = ResultsContentState(LoadableData.Loading())
 
         viewModelScope.launch {
-            client.connect()
+            repository.getResults(test.id, test.courseId, getTestResultsRequestParams()).collect {
+                if (it is WebsocketEvent.Receive) {
+                    val dataJson = Gson().fromJson(
+                        it.data,
+                        ParticipantsResults::class.java
+                    )
+                    contentStateVar = contentStateVar.copy(
+                        results = LoadableData.Success(dataJson)
+                    )
+                    configureMaxScore(dataJson)
+                }
+            }
         }
     }
 
@@ -95,12 +72,5 @@ class ResultsViewModel @Inject constructor() : ViewModel() {
                 filtersContainer.maxScore = 100 // this can happen if there are no results
             }
         }
-    }
-
-    override fun onCleared() {
-        viewModelScope.launch {
-            client.stop()
-        }
-        super.onCleared()
     }
 }
