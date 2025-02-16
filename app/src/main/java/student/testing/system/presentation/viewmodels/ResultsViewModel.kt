@@ -22,6 +22,7 @@ import student.testing.system.domain.webSockets.WebsocketEvents
 import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 
 @Suppress("UNREACHABLE_CODE")
@@ -38,6 +39,24 @@ class ResultsViewModel @Inject constructor(
     private lateinit var test: Test
     var searchPrefix: String? = null
     val filtersContainer = FiltersContainer()
+    var isConnected: Boolean by Delegates.observable(false) { _, _, new ->
+        if (new) {
+            val params = with(filtersContainer) {
+                TestResultsRequestParams(
+                    onlyMaxResult = showOnlyMaxResults, searchPrefix = searchPrefix,
+                    upperBound = if (ratingRangeEnabled) upperBound else null,
+                    lowerBound = if (ratingRangeEnabled) lowerBound else null,
+                    scoreEquals = if (scoreEqualsEnabled) scoreEqualsValue else null,
+                    dateFrom = dateFrom, dateTo = dateTo, ordering = orderingType
+                )
+            }
+
+            viewModelScope.launch {
+                val jsonObject = Gson().toJson(params)
+                client.send(jsonObject)
+            }
+        }
+    }
 
     private val client: KtorWebsocketClient by lazy {
         KtorWebsocketClientImpl(url = "wss://testingsystem.ru/tests/ws/results/${test.id}?course_id=${test.courseId}",
@@ -59,7 +78,7 @@ class ResultsViewModel @Inject constructor(
                 }
 
                 override fun onConnected() {
-
+                    isConnected = true
                 }
 
                 override fun onDisconnected(reason: String) {
@@ -74,41 +93,10 @@ class ResultsViewModel @Inject constructor(
     }
 
     fun getResults() {
-        val params = with(filtersContainer) {
-            TestResultsRequestParams(
-                onlyMaxResult = showOnlyMaxResults, searchPrefix = searchPrefix,
-                upperBound = if (ratingRangeEnabled) upperBound else null,
-                lowerBound = if (ratingRangeEnabled) lowerBound else null,
-                scoreEquals = if (scoreEqualsEnabled) scoreEqualsValue else null,
-                dateFrom = dateFrom, dateTo = dateTo, ordering = orderingType
-            )
-        }
-
-        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
-        }
-
         contentStateVar = ResultsContentState(LoadableData.Loading())
-
-        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
-            /*loadData { repository.getResults(test.id, test.courseId, params) }.collect {
-                contentStateVar = contentStateVar.copy(results = it)
-                if (it is LoadableData.Success && filtersContainer.maxScore == 0) {
-                    filtersContainer.maxScore = it.data.maxScore
-                    if (filtersContainer.maxScore == 0) {
-                        filtersContainer.maxScore = 100 // this can happen if there are no results
-                    }
-                }
-            }*/
-        }
 
         viewModelScope.launch {
             client.connect()
-        }
-        viewModelScope.launch {
-            delay(1000)
-            val jsonObject = Gson().toJson(params)
-            client.send(jsonObject)
         }
     }
 
