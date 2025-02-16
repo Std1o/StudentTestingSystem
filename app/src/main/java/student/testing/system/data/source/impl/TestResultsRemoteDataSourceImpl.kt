@@ -28,8 +28,8 @@ class TestResultsRemoteDataSourceImpl @Inject constructor() : TestResultsRemoteD
         }
     }
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    lateinit var params: TestResultsRequestParams
-    lateinit var client: KtorWebsocketClient
+    private lateinit var params: TestResultsRequestParams
+    private lateinit var client: KtorWebsocketClient
 
     override fun getResults(
         testId: Int,
