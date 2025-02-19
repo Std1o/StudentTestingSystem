@@ -9,15 +9,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import student.testing.system.common.Constants.COURSE_REVIEW_NAVIGATION
-import student.testing.system.common.Constants.LAUNCH_NAVIGATION
 import student.testing.system.common.Constants.SHARED_PREFERENCES_NAME
-import student.testing.system.common.Constants.TEST_CREATION_NAVIGATION
+import student.testing.system.common.CourseReviewNavigation
+import student.testing.system.common.LaunchNavigation
+import student.testing.system.common.TestCreationNavigation
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.AppNavigatorImpl
 import student.testing.system.sharedPreferences.PrefsUtils
 import student.testing.system.sharedPreferences.PrefsUtilsImpl
-import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -48,16 +47,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    @Named(LAUNCH_NAVIGATION)
+    @LaunchNavigation
     fun provideLaunchNavigation() = AppNavigatorImpl() as AppNavigator
 
     @Singleton
     @Provides
-    @Named(COURSE_REVIEW_NAVIGATION)
+    @CourseReviewNavigation
     fun provideCourseReviewNavigation() = AppNavigatorImpl() as AppNavigator
 
     @Singleton
     @Provides
-    @Named(TEST_CREATION_NAVIGATION)
+    @TestCreationNavigation
     fun provideTestCreationNavigation() = AppNavigatorImpl() as AppNavigator
 }

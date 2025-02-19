@@ -7,10 +7,12 @@ import dagger.hilt.components.SingletonComponent
 import student.testing.system.data.source.impl.AuthRemoteDataSourceImpl
 import student.testing.system.data.source.impl.CourseManagementRemoteDataSourceImpl
 import student.testing.system.data.source.impl.CoursesRemoteDataSourceImpl
+import student.testing.system.data.source.impl.TestResultsRemoteDataSourceImpl
 import student.testing.system.data.source.impl.TestsRemoteDataSourceImpl
 import student.testing.system.data.source.interfaces.AuthRemoteDataSource
 import student.testing.system.data.source.interfaces.CourseManagementRemoteDataSource
 import student.testing.system.data.source.interfaces.CoursesRemoteDataSource
+import student.testing.system.data.source.interfaces.TestResultsRemoteDataSource
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
 
 @Module
@@ -28,4 +30,7 @@ abstract class RemoteDataSourceModule {
 
     @Binds
     abstract fun bindCourseManagementRemoteDataSource(dataSourceImpl: CourseManagementRemoteDataSourceImpl): CourseManagementRemoteDataSource
+
+    @Binds
+    abstract fun bindTestResultsRemoteDataSource(dataSourceImpl: TestResultsRemoteDataSourceImpl): TestResultsRemoteDataSource
 }

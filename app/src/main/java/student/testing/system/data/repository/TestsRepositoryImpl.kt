@@ -1,5 +1,6 @@
 package student.testing.system.data.repository
 
+import student.testing.system.data.source.interfaces.TestResultsRemoteDataSource
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.models.TestCreationReq
@@ -9,6 +10,7 @@ import javax.inject.Inject
 
 class TestsRepositoryImpl @Inject constructor(
     private val remoteDataSource: TestsRemoteDataSource,
+    private val resultsRemoteDataSource: TestResultsRemoteDataSource
 ) : TestsRepository {
 
     override suspend fun getTests(courseId: Int) = remoteDataSource.getTests(courseId)
@@ -32,9 +34,9 @@ class TestsRepositoryImpl @Inject constructor(
     override suspend fun getResult(testId: Int, courseId: Int) =
         remoteDataSource.getResult(testId, courseId)
 
-    override suspend fun getResults(
+    override fun getResults(
         testId: Int,
         courseId: Int,
         params: TestResultsRequestParams
-    ) = remoteDataSource.getResults(testId, courseId, params)
+    ) = resultsRemoteDataSource.getResults(testId, courseId, params)
 }

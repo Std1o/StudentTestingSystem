@@ -4,27 +4,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import lilith.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import student.testing.system.common.Constants.LAUNCH_NAVIGATION
-import student.testing.system.domain.usecases.auth.AuthIfPossibleUseCase
-import student.testing.system.domain.usecases.auth.LoginUseCase
+import lilith.presentation.viewmodel.StatesViewModel
+import student.testing.system.common.LaunchNavigation
+import student.testing.system.domain.models.PrivateUser
 import student.testing.system.domain.states.operationStates.LoginState
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.domain.models.PrivateUser
+import student.testing.system.domain.usecases.auth.AuthIfPossibleUseCase
+import student.testing.system.domain.usecases.auth.LoginUseCase
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.screenSession.LoginScreenSession
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val authIfPossibleUseCase: AuthIfPossibleUseCase,
-    @Named(LAUNCH_NAVIGATION) private val appNavigator: AppNavigator
+    @LaunchNavigation private val appNavigator: AppNavigator
 ) : StatesViewModel() {
 
     private val _loginState = MutableStateFlow<LoginState<PrivateUser>>(LoginState.HiddenUI)
