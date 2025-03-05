@@ -15,10 +15,10 @@ interface CoursesApi {
     suspend fun getCourses(): Response<List<CourseDTO>>
 
     @POST("courses/")
-    suspend fun createCourse(@Body request: CourseCreationReq): Response<Course>
+    suspend fun createCourse(@Body request: CourseCreationReq): Response<CourseDTO>
 
     @POST("courses/{course_code}")
-    suspend fun joinCourse(@Path("course_code") courseCode: String): Response<Course>
+    suspend fun joinCourse(@Path("course_code") courseCode: String): Response<CourseDTO>
 
     @DELETE("courses/{course_id}")
     suspend fun deleteCourse(

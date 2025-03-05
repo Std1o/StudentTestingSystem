@@ -8,7 +8,7 @@ import student.testing.system.domain.models.Course
 
 interface CoursesRemoteDataSource {
     suspend fun getCourses(): LoadableData<List<CourseDTO>>
-    suspend fun createCourse(request: CourseCreationReq): OperationState<Course>
-    suspend fun joinCourse(courseCode: String): OperationState<Course>
+    suspend fun createCourse(request: CourseCreationReq): OperationState<CourseDTO>
+    suspend fun joinCourse(courseCode: String): OperationState<CourseDTO>
     suspend fun deleteCourse(courseId: Int): OperationState<Void>
 }
