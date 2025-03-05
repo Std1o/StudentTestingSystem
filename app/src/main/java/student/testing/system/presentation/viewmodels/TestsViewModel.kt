@@ -17,7 +17,7 @@ import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ResultState
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.domain.usecases.GetResultUseCase
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestResult
 import student.testing.system.presentation.navigation.AppNavigator
@@ -40,7 +40,7 @@ class TestsViewModel @Inject constructor(
     private val _resultReviewEvent = SingleEventFlow<TestResult>()
     val resultReviewFlow = _resultReviewEvent.asSharedFlow()
 
-    lateinit var course: CourseResponse
+    lateinit var course: Course
 
     var courseId: Int by Delegates.observable(-1) { _, oldValue, newValue ->
         if (oldValue != newValue) getTests()
@@ -58,7 +58,7 @@ class TestsViewModel @Inject constructor(
         }
     }
 
-    fun navigateToTestCreation(course: CourseResponse) {
+    fun navigateToTestCreation(course: Course) {
         courseNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
     }
 

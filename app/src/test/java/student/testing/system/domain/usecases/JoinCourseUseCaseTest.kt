@@ -11,7 +11,7 @@ import org.junit.Test
 import student.testing.system.data.repository.FakeCoursesRepository
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 
 @ExperimentalCoroutinesApi
 class JoinCourseUseCaseTest {
@@ -39,7 +39,7 @@ class JoinCourseUseCaseTest {
         assertTrue(actual[1] is OperationState.Success)
         assertThat(
             (actual[1] as OperationState.Success).data,
-            instanceOf(CourseResponse::class.java)
+            instanceOf(Course::class.java)
         )
     }
 }

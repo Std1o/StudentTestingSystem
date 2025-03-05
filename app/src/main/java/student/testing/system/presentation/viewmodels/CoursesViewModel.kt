@@ -11,7 +11,7 @@ import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.common.Constants.LOG_TAG
 import student.testing.system.common.LaunchNavigation
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.repository.CoursesRepository
 import student.testing.system.domain.states.loadableData.LoadableData
@@ -37,14 +37,14 @@ class CoursesViewModel @Inject constructor(
 ) : StatesViewModel() {
 
     private val _coursesState =
-        MutableStateFlow<ValidatableOperationState<CourseResponse>>(OperationState.NoState)
+        MutableStateFlow<ValidatableOperationState<Course>>(OperationState.NoState)
     val coursesState = _coursesState.asStateFlow()
 
     private val _contentState = MutableStateFlow(CoursesContentState())
     val contentState = _contentState.asStateFlow()
     private var contentStateVar by stateFlowVar(_contentState)
 
-    private val defaultType = CourseResponse::class
+    private val defaultType = Course::class
 
     init {
         getCourses()
@@ -74,7 +74,7 @@ class CoursesViewModel @Inject constructor(
         _contentState.update { it.copy(isLoggedOut = true) }
     }
 
-    fun onCourseClicked(course: CourseResponse) {
+    fun onCourseClicked(course: Course) {
         appNavigator.tryNavigateTo(Destination.CourseReviewScreen(course = course))
     }
 
@@ -106,7 +106,7 @@ class CoursesViewModel @Inject constructor(
         }
     }
 
-    private fun addCourseToContent(course: CourseResponse) {
+    private fun addCourseToContent(course: Course) {
         try {
             contentStateVar = contentStateVar.copy(
                 courses = addToLoadableList(contentStateVar.courses, course)

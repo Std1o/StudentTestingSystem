@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import student.testing.system.common.CourseReviewNavigation
 import student.testing.system.common.Utils.isUserAModerator
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class CourseReviewViewModel @Inject constructor(
     @CourseReviewNavigation appNavigator: AppNavigator,
 ) : ViewModel() {
 
-    val course: CourseResponse =
+    val course: Course =
         checkNotNull(savedStateHandle[Destination.CourseReviewScreen.COURSE_KEY])
 
     val navigationChannel = appNavigator.navigationChannel

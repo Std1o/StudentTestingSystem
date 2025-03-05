@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.google.gson.Gson
 import student.testing.system.R
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 import student.testing.system.presentation.navigation.Destination.CourseReviewScreen.COURSE_KEY
 
 sealed class Destination(
@@ -44,7 +44,7 @@ sealed class Destination(
         Destination("course_review", params = arrayOf("course")) {
         const val COURSE_KEY = "course"
 
-        operator fun invoke(course: CourseResponse): String {
+        operator fun invoke(course: Course): String {
             val courseJson = Gson().toJson(course)
             return route.appendParams(COURSE_KEY to courseJson)
         }
@@ -65,7 +65,7 @@ sealed class Destination(
     )
 
     data object TestCreationHostScreen : Destination("test_creation_host", params = arrayOf(COURSE_KEY)) {
-        operator fun invoke(course: CourseResponse): String {
+        operator fun invoke(course: Course): String {
             val courseJson = Gson().toJson(course)
             return route.appendParams(COURSE_KEY to courseJson)
         }

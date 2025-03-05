@@ -7,9 +7,9 @@ import java.io.Serializable
 
 @Parcelize
 data class Participant(
-    @SerializedName("email") val email: String = "",
-    @SerializedName("username") val username: String = "",
-    @SerializedName("user_id") val userId: Int = 0,
-    @SerializedName("is_moderator") val isModerator: Boolean = false,
-    @SerializedName("is_owner") val isOwner: Boolean = false
+    val email: String = "",
+    val username: String = "",
+    val userId: Int = 0,
+    val isModerator: Boolean = false,
+    val isOwner: Boolean = false
 ) : Parcelable

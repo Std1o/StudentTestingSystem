@@ -18,7 +18,7 @@ import student.testing.system.domain.states.QuestionState
 import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.domain.models.Answer
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 import student.testing.system.domain.models.Question
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestCreationReq
@@ -36,7 +36,7 @@ class TestCreationSharedViewModel @Inject constructor(
     private val createTestUseCase: CreateTestUseCase
 ) : StatesViewModel() {
 
-    val courseFlow = MutableStateFlow(CourseResponse("", 0, "", "", listOf()))
+    val courseFlow = MutableStateFlow(Course("", 0, "", "", listOf()))
 
     private val _questionState = MutableStateFlow<QuestionState>(QuestionState.NoState)
     val questionState = _questionState.asStateFlow()
@@ -48,7 +48,7 @@ class TestCreationSharedViewModel @Inject constructor(
         private set
     var testCreationScreenSession by mutableStateOf(TestCreationScreenSession())
 
-    fun setCourse(course: CourseResponse) {
+    fun setCourse(course: Course) {
         viewModelScope.launch {
             courseFlow.tryEmit(course)
         }

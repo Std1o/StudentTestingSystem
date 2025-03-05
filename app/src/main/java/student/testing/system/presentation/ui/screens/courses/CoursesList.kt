@@ -25,7 +25,7 @@ import student.testing.system.common.Constants
 import student.testing.system.common.Utils
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.loadableData.LoadableData
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder
 
@@ -34,13 +34,13 @@ import student.testing.system.presentation.ui.components.modifiers.placeholder
 fun CoursesList(
     isLoading: Boolean,
     hidden: Boolean,
-    courses: LoadableData<List<CourseResponse>>,
-    onClick: (CourseResponse) -> Unit,
-    onLongClick: (CourseResponse) -> Unit
+    courses: LoadableData<List<Course>>,
+    onClick: (Course) -> Unit,
+    onLongClick: (Course) -> Unit
 ) {
     if (hidden) return
     val data = (courses as? LoadableData.Success)?.data
-    val fakeCourses = listOf(CourseResponse(id = 0), CourseResponse(id = 1), CourseResponse(id = 2))
+    val fakeCourses = listOf(Course(id = 0), Course(id = 1), Course(id = 2))
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         iTems(data ?: fakeCourses, key = { it }) { course ->
             Box(
