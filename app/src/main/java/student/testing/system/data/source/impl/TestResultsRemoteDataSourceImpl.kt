@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import student.testing.system.data.api.KtorWebsocketClientImpl
 import student.testing.system.data.source.interfaces.TestResultsRemoteDataSource
+import student.testing.system.domain.models.ParticipantsResults
 import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.webSockets.KtorWebsocketClient
 import student.testing.system.domain.webSockets.WebsocketEvent
@@ -35,11 +36,15 @@ class TestResultsRemoteDataSourceImpl @Inject constructor() : TestResultsRemoteD
         testId: Int,
         courseId: Int,
         params: TestResultsRequestParams
-    ): Flow<WebsocketEvent> = callbackFlow {
+    ): Flow<WebsocketEvent<ParticipantsResults>> = callbackFlow {
         this@TestResultsRemoteDataSourceImpl.params = params
         val callback = object : WebsocketEvents {
             override fun onReceive(data: String) {
-                trySendBlocking(WebsocketEvent.Receive(data))
+                val dataJson = Gson().fromJson(
+                    data,
+                    ParticipantsResults::class.java
+                )
+                trySendBlocking(WebsocketEvent.Receive(dataJson))
             }
 
             override fun onConnected() {
