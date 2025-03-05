@@ -3,10 +3,9 @@ package student.testing.system.data.dto
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 
 @Parcelize
-data class Participant(
+data class ParticipantDTO(
     @SerializedName("email") val email: String = "",
     @SerializedName("username") val username: String = "",
     @SerializedName("user_id") val userId: Int = 0,
