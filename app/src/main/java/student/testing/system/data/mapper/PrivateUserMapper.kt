@@ -1,7 +1,7 @@
 package student.testing.system.data.mapper
 
 import student.testing.system.data.dto.PrivateUserDTO
-import student.testing.system.domain.OperationStateMapper
+import student.testing.system.domain.mapper.OperationStateMapper
 import student.testing.system.domain.models.PrivateUser
 import student.testing.system.domain.states.operationStates.OperationState
 

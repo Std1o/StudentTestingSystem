@@ -1,9 +1,10 @@
-package student.testing.system.domain
+package student.testing.system.domain.mapper
 
 import student.testing.system.domain.states.operationStates.OperationState
 
-abstract class OperationStateMapper<I, O> : Mapper<OperationState<I>, OperationState<O>> {
-    override fun map(input: OperationState<I>): OperationState<O> =
+abstract class OperationStateListMapper<I, O> :
+    Mapper<OperationState<List<I>>, OperationState<List<O>>> {
+    override fun map(input: OperationState<List<I>>): OperationState<List<O>> =
         when (input) {
             is OperationState.NoState -> OperationState.NoState
             is OperationState.Empty204 -> OperationState.Empty204(input.code, input.operationType)
@@ -20,8 +21,8 @@ abstract class OperationStateMapper<I, O> : Mapper<OperationState<I>, OperationS
             )
 
             is OperationState.Loading -> OperationState.Loading(input.operationType)
-            is OperationState.Success -> OperationState.Success(getSuccess(input))
+            is OperationState.Success -> OperationState.Success(input.data.map(::getSuccess))
         }
 
-    protected abstract fun getSuccess(input: OperationState.Success<I>): O
+    protected abstract fun getSuccess(input: I): O
 }

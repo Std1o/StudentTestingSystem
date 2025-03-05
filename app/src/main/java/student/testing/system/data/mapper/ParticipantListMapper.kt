@@ -1,7 +1,7 @@
 package student.testing.system.data.mapper
 
 import student.testing.system.data.dto.ParticipantDTO
-import student.testing.system.domain.OperationStateListMapper
+import student.testing.system.domain.mapper.OperationStateListMapper
 import student.testing.system.domain.models.Participant
 
 class ParticipantListMapper : OperationStateListMapper<ParticipantDTO, Participant>() {

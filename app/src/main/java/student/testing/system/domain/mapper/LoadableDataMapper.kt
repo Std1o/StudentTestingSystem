@@ -1,10 +1,9 @@
-package student.testing.system.domain
+package student.testing.system.domain.mapper
 
 import student.testing.system.domain.states.loadableData.LoadableData
 
-abstract class LoadableDataListMapper<I, O> :
-    Mapper<LoadableData<List<I>>, LoadableData<List<O>>> {
-    override fun map(input: LoadableData<List<I>>): LoadableData<List<O>> =
+abstract class LoadableDataMapper<I, O> : Mapper<LoadableData<I>, LoadableData<O>> {
+    override fun map(input: LoadableData<I>): LoadableData<O> =
         when (input) {
             is LoadableData.NoState -> LoadableData.NoState
             is LoadableData.Empty204 -> LoadableData.Empty204(input.code, input.dataType)
@@ -15,8 +14,8 @@ abstract class LoadableDataListMapper<I, O> :
             )
 
             is LoadableData.Loading -> LoadableData.Loading(input.dataType)
-            is LoadableData.Success -> LoadableData.Success(input.data.map(::getSuccess))
+            is LoadableData.Success -> LoadableData.Success(getSuccess(input))
         }
 
-    protected abstract fun getSuccess(input: I): O
+    protected abstract fun getSuccess(input: LoadableData.Success<I>): O
 }

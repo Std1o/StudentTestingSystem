@@ -1,7 +1,7 @@
 package student.testing.system.data.mapper
 
 import student.testing.system.data.dto.CourseDTO
-import student.testing.system.domain.LoadableDataListMapper
+import student.testing.system.domain.mapper.LoadableDataListMapper
 import student.testing.system.domain.models.Course
 
 class CoursesListMapper : LoadableDataListMapper<CourseDTO, Course>() {
