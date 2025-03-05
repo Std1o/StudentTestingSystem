@@ -4,7 +4,7 @@ import student.testing.system.data.dto.ParticipantDTO
 import student.testing.system.domain.OperationStateListMapper
 import student.testing.system.domain.models.Participant
 
-class ParticipantMapper : OperationStateListMapper<ParticipantDTO, Participant>() {
+class ParticipantListMapper : OperationStateListMapper<ParticipantDTO, Participant>() {
     override fun getSuccess(input: ParticipantDTO): Participant =
         Participant(
             email = input.email,
