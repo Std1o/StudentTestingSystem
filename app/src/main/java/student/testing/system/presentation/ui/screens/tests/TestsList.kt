@@ -40,7 +40,7 @@ fun TestsList(
     val data = (tests as? LoadableData.Success)?.data
     val mockTests = listOf(Test(id = 0), Test(id = 1), Test(id = 2))
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        iTems(data ?: mockTests, key = { it }) { test ->
+        iTems(data ?: mockTests, key = { it.id }) { test ->
             val shape = RoundedCornerShape(5.dp)
             Card(
                 elevation = 10.dp,

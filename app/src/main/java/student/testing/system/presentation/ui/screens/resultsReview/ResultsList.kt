@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.common.iTems
-import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.models.ParticipantResult
 import student.testing.system.domain.models.ParticipantsResults
+import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.presentation.ui.components.Avatar
 import student.testing.system.presentation.ui.components.Shimmer
 import student.testing.system.presentation.ui.components.modifiers.placeholder
@@ -43,9 +43,13 @@ fun ResultsList(
 ) {
     if (hidden) return
     val data = (results as? LoadableData.Success)?.data
-    val mockTests = listOf(ParticipantResult(), ParticipantResult(), ParticipantResult())
+    val mockTests = listOf(
+        ParticipantResult(userId = 0),
+        ParticipantResult(userId = 1),
+        ParticipantResult(userId = 2)
+    )
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        iTems(data?.results ?: mockTests) { participantResult ->
+        iTems(data?.results ?: mockTests, key = { it.userId }) { participantResult ->
             val shape = RoundedCornerShape(5.dp)
             Card(
                 elevation = 10.dp,

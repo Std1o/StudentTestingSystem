@@ -42,7 +42,7 @@ fun CoursesList(
     val data = (courses as? LoadableData.Success)?.data
     val fakeCourses = listOf(Course(id = 0), Course(id = 1), Course(id = 2))
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        iTems(data ?: fakeCourses, key = { it }) { course ->
+        iTems(data ?: fakeCourses, key = { it.id }) { course ->
             Box(
                 modifier = Modifier
                     .animateItemPlacement()
