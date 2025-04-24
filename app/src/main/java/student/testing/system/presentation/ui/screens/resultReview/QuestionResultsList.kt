@@ -22,7 +22,7 @@ fun QuestionResultsList(questionResults: List<QuestionResult>) {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        iTems(questionResults, key = { it }) { (question, answers) ->
+        iTems(questionResults, key = { it.id }) { (question, answers) ->
             val shape = RoundedCornerShape(5.dp)
             Card(
                 elevation = 10.dp,

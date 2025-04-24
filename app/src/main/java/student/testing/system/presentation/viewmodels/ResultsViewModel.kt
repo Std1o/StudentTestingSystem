@@ -41,15 +41,11 @@ class ResultsViewModel @Inject constructor(
 
         viewModelScope.launch {
             repository.getResults(test.id, test.courseId, getTestResultsRequestParams()).collect {
-                if (it is WebsocketEvent.Receive) {
-                    val dataJson = Gson().fromJson(
-                        it.data,
-                        ParticipantsResults::class.java
-                    )
+                if (it is WebsocketEvent.Receive<ParticipantsResults>) {
                     contentStateVar = contentStateVar.copy(
-                        results = LoadableData.Success(dataJson)
+                        results = LoadableData.Success(it.data)
                     )
-                    configureMaxScore(dataJson)
+                    configureMaxScore(it.data)
                 }
             }
         }

@@ -30,5 +30,5 @@ interface TestsRepository {
 
     fun getResults(
         testId: Int, courseId: Int, params: TestResultsRequestParams
-    ): Flow<WebsocketEvent>
+    ): Flow<WebsocketEvent<ParticipantsResults>>
 }

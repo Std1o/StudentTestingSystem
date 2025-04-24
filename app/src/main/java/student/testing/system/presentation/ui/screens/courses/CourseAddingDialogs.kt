@@ -22,14 +22,14 @@ import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
-import student.testing.system.domain.models.CourseResponse
+import student.testing.system.domain.models.Course
 import student.testing.system.presentation.ui.components.InputDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CourseAddingDialogs(
     showBottomSheet: Boolean,
-    coursesState: ValidatableOperationState<CourseResponse>,
+    coursesState: ValidatableOperationState<Course>,
     onNeedResetValidation: (ResetValidationReasons) -> Unit,
     onCreateCourse: (String) -> Unit,
     onJoinCourse: (String) -> Unit,

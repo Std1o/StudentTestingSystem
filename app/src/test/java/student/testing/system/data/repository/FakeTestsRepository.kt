@@ -58,7 +58,7 @@ class FakeTestsRepository : TestsRepository {
         testId: Int,
         courseId: Int,
         params: TestResultsRequestParams
-    ): Flow<WebsocketEvent> {
+    ): Flow<WebsocketEvent<ParticipantsResults>> {
         TODO("Not yet implemented")
     }
 }

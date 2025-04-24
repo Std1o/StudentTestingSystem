@@ -39,7 +39,7 @@ fun ParticipantsList(
 ) {
     if (hidden) return
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        iTems(participants, key = { it }) { participant ->
+        iTems(participants, key = { it.userId }) { participant ->
             val shape = RoundedCornerShape(5.dp)
             Card(
                 elevation = 10.dp,
