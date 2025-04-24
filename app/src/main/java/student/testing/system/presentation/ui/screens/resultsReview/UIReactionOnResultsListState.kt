@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.models.ParticipantsResults
+import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.ErrorScreen
 
@@ -23,23 +23,14 @@ fun UIReactionOnResultsListState(
     onHideList: (Boolean) -> Unit
 ) {
     when (loadableData) {
-        is LoadableData.Empty204 -> {
-            onHideList(true)
-        }
-
+        is LoadableData.Empty204 -> onHideList(true)
         is LoadableData.Error -> {
             onHideList(true)
             ErrorScreen(message = loadableData.exception, onRetry = onRetry)
         }
 
-        is LoadableData.Loading -> {
-            onHideList(false)
-        }
-
-        LoadableData.NoState -> {
-            onHideList(false)
-        }
-
+        is LoadableData.Loading -> onHideList(false)
+        is LoadableData.NoState -> onHideList(false)
         is LoadableData.Success -> {
             if (loadableData.data.results.isEmpty()) {
                 onHideList(true)
