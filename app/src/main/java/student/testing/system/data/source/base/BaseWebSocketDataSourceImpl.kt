@@ -50,7 +50,7 @@ open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor() {
             }
 
             override fun onDisconnected(reason: String) {
-                trySendBlocking(WebsocketEvent.Disconnected)
+                trySendBlocking(WebsocketEvent.Disconnected(reason))
             }
         }
         client = KtorWebsocketClientImpl(

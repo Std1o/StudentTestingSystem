@@ -47,6 +47,11 @@ class ResultsViewModel @Inject constructor(
                     )
                     configureMaxScore(it.data)
                 }
+                if (it is WebsocketEvent.Disconnected) {
+                    contentStateVar = contentStateVar.copy(
+                        results = LoadableData.Error(it.reason)
+                    )
+                }
             }
         }
     }
