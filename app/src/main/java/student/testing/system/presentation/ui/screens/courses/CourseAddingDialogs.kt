@@ -20,9 +20,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.domain.models.Course
 import student.testing.system.domain.operationTypes.CourseAddingOperations
 import student.testing.system.domain.states.operationStates.ValidatableOperationState
-import student.testing.system.domain.models.Course
 import student.testing.system.presentation.ui.components.InputDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,10 +42,9 @@ fun CourseAddingDialogs(
     var showCourseJoiningDialog by remember { mutableStateOf(false) }
 
     if (showCourseCreatingDialog) {
-        val error = (coursesState as? ValidatableOperationState.ValidationError)
-            ?.let {
-                if (it.operationType == CourseAddingOperations.CREATE_COURSE) it.messageResId else 0
-            } ?: 0
+        val error = (coursesState as? ValidatableOperationState.ValidationError)?.let {
+            if (it.operationType == CourseAddingOperations.CREATE_COURSE) it.messageResId else 0
+        } ?: 0
         InputDialog(
             titleResId = R.string.create_course,
             hintResId = R.string.input_name,
@@ -63,10 +62,9 @@ fun CourseAddingDialogs(
     }
 
     if (showCourseJoiningDialog) {
-        val error = (coursesState as? ValidatableOperationState.ValidationError)
-            ?.let {
-                if (it.operationType == CourseAddingOperations.JOIN_COURSE) it.messageResId else 0
-            } ?: 0
+        val error = (coursesState as? ValidatableOperationState.ValidationError)?.let {
+            if (it.operationType == CourseAddingOperations.JOIN_COURSE) it.messageResId else 0
+        } ?: 0
         InputDialog(
             titleResId = R.string.join_course,
             hintResId = R.string.course_code_hint,
@@ -88,7 +86,6 @@ fun CourseAddingDialogs(
         when (it.operationType) {
             CourseAddingOperations.CREATE_COURSE -> showCourseCreatingDialog = false
             CourseAddingOperations.JOIN_COURSE -> showCourseJoiningDialog = false
-            else -> {}
         }
         onNeedResetValidation(ResetValidationReasons.OnValidationSuccess)
     }
