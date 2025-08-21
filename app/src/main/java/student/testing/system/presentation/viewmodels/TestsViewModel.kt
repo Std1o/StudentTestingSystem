@@ -63,14 +63,7 @@ class TestsViewModel @Inject constructor(
     }
 
     fun onTestAdded(test: Test) {
-        contentStateVar = contentStateVar.copy(
-            tests = LoadableData.Success(
-                listOf(
-                    *(contentStateVar.tests as LoadableData.Success).data.toTypedArray(),
-                    test
-                )
-            )
-        )
+        getTests()
     }
 
     fun deleteTest(testId: Int, courseId: Int) {
