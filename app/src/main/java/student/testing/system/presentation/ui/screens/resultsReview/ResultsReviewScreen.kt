@@ -67,7 +67,7 @@ fun ResultsReviewScreen(test: Test) {
             }
         }
         if (showBottomFiltersSheet) {
-            ResultsFilterDialog(viewModel.filtersContainer) {
+            ResultsFilterDialog(viewModel) {
                 showBottomFiltersSheet = false
                 viewModel.getResults()
             }

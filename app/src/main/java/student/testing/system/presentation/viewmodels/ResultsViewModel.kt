@@ -2,10 +2,10 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.domain.models.ParticipantsResults
@@ -14,6 +14,7 @@ import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.webSockets.WebsocketEvent
+import student.testing.system.presentation.ui.models.FilterIntent
 import student.testing.system.presentation.ui.models.FiltersContainer
 import student.testing.system.presentation.ui.models.contentState.ResultsContentState
 import javax.inject.Inject
@@ -29,7 +30,8 @@ class ResultsViewModel @Inject constructor(
 
     private lateinit var test: Test
     var searchPrefix: String? = null
-    val filtersContainer = FiltersContainer()
+    private val _filtersContainer = MutableStateFlow(FiltersContainer())
+    val filtersContainer = _filtersContainer.asStateFlow()
 
     fun setInitialData(test: Test) {
         this.test = test
@@ -56,7 +58,7 @@ class ResultsViewModel @Inject constructor(
         }
     }
 
-    private fun getTestResultsRequestParams() = with(filtersContainer) {
+    private fun getTestResultsRequestParams() = with(filtersContainer.value) {
         TestResultsRequestParams(
             onlyMaxResult = showOnlyMaxResults, searchPrefix = searchPrefix,
             upperBound = if (ratingRangeEnabled) upperBound else null,
@@ -66,11 +68,24 @@ class ResultsViewModel @Inject constructor(
         )
     }
 
-    private fun configureMaxScore(participantsResults: ParticipantsResults) {
-        if (filtersContainer.maxScore == 0) {
-            filtersContainer.maxScore = participantsResults.maxScore
-            if (filtersContainer.maxScore == 0) {
-                filtersContainer.maxScore = 100 // this can happen if there are no results
+    private fun configureMaxScore(participantsResults: ParticipantsResults) =
+        with(filtersContainer.value) {
+            if (maxScore == 0) {
+                _filtersContainer.update { it.copyWithMaxScore(maxScore = participantsResults.maxScore) }
+                if (participantsResults.maxScore == 0) {
+                    _filtersContainer.update { it.copyWithMaxScore(maxScore = 100) } // this can happen if there are no results
+                }
+            }
+        }
+
+    fun updateFilter(intent: FilterIntent) {
+        when (intent) {
+            is FilterIntent.UpdateShowOnlyMaxResults -> {
+                _filtersContainer.update { it.copy(showOnlyMaxResults = intent.showOnlyMaxResults) }
+            }
+
+            is FilterIntent.UpdateRatingRangeEnabled -> {
+                _filtersContainer.update { it.copy(ratingRangeEnabled = intent.ratingRangeEnabled) }
             }
         }
     }

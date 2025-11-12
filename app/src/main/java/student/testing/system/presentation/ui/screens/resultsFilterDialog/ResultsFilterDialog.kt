@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,17 +28,21 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import student.testing.system.R
 import student.testing.system.presentation.ui.components.MediumButton
+import student.testing.system.presentation.ui.models.FilterIntent
 import student.testing.system.presentation.ui.models.FiltersContainer
+import student.testing.system.presentation.viewmodels.ResultsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun ResultsFilterDialog(
-    filtersContainer: FiltersContainer,
+    viewModel: ResultsViewModel,
     onDismissRequest: () -> Unit
 ) {
     val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val filtersContainer by viewModel.filtersContainer.collectAsState()
     var scoreFieldEnabled by remember { mutableStateOf(filtersContainer.scoreEqualsEnabled) }
 
     ModalBottomSheet(
@@ -55,7 +60,7 @@ fun ResultsFilterDialog(
             )
             Divider(color = Color.DarkGray, thickness = 0.5.dp)
             OnlyMaxResultsCheckBox(filtersContainer.showOnlyMaxResults) {
-                filtersContainer.showOnlyMaxResults = it
+                viewModel.updateFilter(FilterIntent.UpdateShowOnlyMaxResults(it))
             }
             Text(text = stringResource(id = R.string.ratings_range), fontSize = 14.sp)
             var sliderPosition by remember {
@@ -82,7 +87,7 @@ fun ResultsFilterDialog(
             ScoreEqualsCheckBox(scoreFieldEnabled) {
                 scoreFieldEnabled = it
                 filtersContainer.scoreEqualsEnabled = it
-                filtersContainer.ratingRangeEnabled = !it
+                viewModel.updateFilter(FilterIntent.UpdateRatingRangeEnabled(!it))
             }
             var scoreValue by rememberSaveable {
                 mutableStateOf(if (filtersContainer.scoreEqualsValue == null) "" else filtersContainer.scoreEqualsValue.toString())
