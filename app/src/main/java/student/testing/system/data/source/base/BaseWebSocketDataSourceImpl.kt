@@ -3,6 +3,8 @@ package student.testing.system.data.source.base
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +39,7 @@ open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor() {
         this@BaseWebSocketDataSourceImpl.params = params
         val callback = object : WebsocketEvents {
             override fun onReceive(data: String) {
+                println(data)
                 val dataJson = Gson().fromJson(
                     data,
                     resultType
@@ -63,5 +66,10 @@ open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor() {
                 client.stop()
             }
         }
+    }
+
+    fun closeConnection(): Job = coroutineScope.launch {
+        client.stop()
+        coroutineScope.cancel()
     }
 }

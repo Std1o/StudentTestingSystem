@@ -1,5 +1,6 @@
 package student.testing.system.domain.repository
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
@@ -31,4 +32,6 @@ interface TestsRepository {
     fun getResults(
         testId: Int, courseId: Int, params: TestResultsRequestParams
     ): Flow<WebsocketEvent<ParticipantsResults>>
+
+    fun closeResultsConnection(): Job
 }

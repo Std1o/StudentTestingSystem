@@ -89,4 +89,9 @@ class ResultsViewModel @Inject constructor(
             }
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.closeResultsConnection()
+    }
 }

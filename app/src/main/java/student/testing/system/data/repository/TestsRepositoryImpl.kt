@@ -39,4 +39,6 @@ class TestsRepositoryImpl @Inject constructor(
         courseId: Int,
         params: TestResultsRequestParams
     ) = resultsRemoteDataSource.getResults(testId, courseId, params)
+
+    override fun closeResultsConnection() = resultsRemoteDataSource.closeConnection()
 }

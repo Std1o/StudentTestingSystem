@@ -1,5 +1,6 @@
 package student.testing.system.data.source.interfaces
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import student.testing.system.domain.models.ParticipantsResults
 import student.testing.system.domain.models.TestResultsRequestParams
@@ -11,4 +12,6 @@ interface TestResultsRemoteDataSource {
         courseId: Int,
         params: TestResultsRequestParams
     ): Flow<WebsocketEvent<ParticipantsResults>>
+
+    fun closeConnection(): Job
 }
