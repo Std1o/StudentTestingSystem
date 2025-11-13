@@ -36,6 +36,10 @@ open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor() {
         params: Params,
         resultType: Class<Result>
     ): Flow<WebsocketEvent<Result>> = callbackFlow {
+        if (this@BaseWebSocketDataSourceImpl::client.isInitialized) {
+            client.stop()
+        }
+
         this@BaseWebSocketDataSourceImpl.params = params
         val callback = object : WebsocketEvents {
             override fun onReceive(data: String) {
