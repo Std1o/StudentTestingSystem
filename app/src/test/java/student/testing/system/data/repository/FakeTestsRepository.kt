@@ -1,5 +1,6 @@
 package student.testing.system.data.repository
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
@@ -59,6 +60,10 @@ class FakeTestsRepository : TestsRepository {
         courseId: Int,
         params: TestResultsRequestParams
     ): Flow<WebsocketEvent<ParticipantsResults>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun closeResultsConnection(): Job {
         TODO("Not yet implemented")
     }
 }
