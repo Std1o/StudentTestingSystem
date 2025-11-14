@@ -93,7 +93,7 @@ fun TestCreationScreen(parentViewModel: TestCreationSharedViewModel) {
                                 elevation = 10.dp,
                                 shape = shape,
                                 modifier = Modifier
-                                    .animateItemPlacement()
+                                    .animateItem()
                                     .padding(vertical = 10.dp, horizontal = 16.dp)
                                     .fillMaxWidth()
                             ) {

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -27,7 +28,7 @@ fun CourseCode(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState
 ) {
-    val context = LocalContext.current as? Activity
+    val context = LocalActivity.current
     val courseCodeWasCopied = stringResource(R.string.course_code_copied)
     Text(
         text = stringResource(R.string.course_code, course.courseCode),

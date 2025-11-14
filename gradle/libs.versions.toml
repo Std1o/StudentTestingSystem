@@ -1,5 +1,6 @@
 [versions]
 activityCompose = "1.7.2"
+activityComposeVersion = "1.11.0"
 appcompat = "1.6.1"
 coilCompose = "2.4.0"
 composeBom = "2023.08.00"
@@ -41,6 +42,7 @@ uiAndroid = "1.5.1"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-compose-bom-v20230300 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }

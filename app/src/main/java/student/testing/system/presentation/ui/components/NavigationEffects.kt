@@ -1,6 +1,7 @@
 package student.testing.system.presentation.ui.components
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
@@ -14,7 +15,7 @@ fun NavigationEffects(
     navigationChannel: Channel<NavigationIntent>,
     navHostController: NavHostController
 ) {
-    val activity = (LocalContext.current as? Activity)
+    val activity = LocalActivity.current
     LaunchedEffect(activity, navHostController, navigationChannel) {
         navigationChannel.receiveAsFlow().collect { intent ->
             if (activity?.isFinishing == true) {

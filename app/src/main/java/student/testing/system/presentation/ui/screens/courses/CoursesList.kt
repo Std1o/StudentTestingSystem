@@ -45,7 +45,7 @@ fun CoursesList(
         iTems(data ?: fakeCourses, key = { it.id }) { course ->
             Box(
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .padding(vertical = 10.dp, horizontal = 16.dp)
                     .height(150.dp)
                     .fillMaxWidth()

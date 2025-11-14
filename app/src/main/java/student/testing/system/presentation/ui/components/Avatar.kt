@@ -3,6 +3,7 @@ package student.testing.system.presentation.ui.components
 import android.app.Activity
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
@@ -18,7 +19,7 @@ import kotlin.random.Random
 
 @Composable
 fun Avatar(name: String) {
-    val activity = (LocalContext.current as? Activity)
+    val activity = LocalActivity.current
     val prefs = activity?.getSharedPreferences("PreferencesName", MODE_PRIVATE)
     val text = name.first().toString().uppercase()
     var color = Color(getColor(text, prefs).toULong())

@@ -2,6 +2,7 @@ package student.testing.system.presentation.ui.screens.courses
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,7 +56,7 @@ fun CoursesScreen() {
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if (contentState.isLoggedOut) { // TODO check comment in CoursesContentState
-        val activity = (LocalContext.current as? Activity)
+        val activity = LocalActivity.current
         activity?.finish()
         activity?.startActivity(Intent(activity, LaunchActivity::class.java))
     }
