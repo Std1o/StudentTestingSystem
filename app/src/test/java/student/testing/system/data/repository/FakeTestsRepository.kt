@@ -19,6 +19,10 @@ class FakeTestsRepository : TestsRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getAIQuestion(request: String): OperationState<String> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun createTest(request: TestCreationReq): OperationState<Test> {
         TODO("Not yet implemented")
     }
