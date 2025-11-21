@@ -12,24 +12,29 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import student.testing.system.R
+import student.testing.system.domain.models.Course
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.models.Test
+import student.testing.system.domain.models.TestResult
 import student.testing.system.presentation.ui.components.CenteredColumn
 import student.testing.system.presentation.ui.components.SearchAppBar
 import student.testing.system.presentation.ui.screens.resultsFilterDialog.ResultsFilterDialog
 import student.testing.system.presentation.viewmodels.ResultsViewModel
 
 @Composable
-fun ResultsReviewScreen(test: Test) {
+fun ResultsReviewScreen(test: Test, course: Course, onResultReview: (TestResult) -> Unit) {
     val viewModel = hiltViewModel<ResultsViewModel>()
     val contentState by viewModel.contentState.collectAsState()
     var showBottomFiltersSheet by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
     Surface {
         Scaffold(
             topBar = {
@@ -56,7 +61,9 @@ fun ResultsReviewScreen(test: Test) {
                     isLoading = contentState.results is LoadableData.Loading,
                     hidden = hideResultsList,
                     results = contentState.results,
-                )
+                ) {
+                    viewModel.getResult(it)
+                }
                 UIReactionOnResultsListState(
                     loadableData = contentState.results,
                     onRetry = { viewModel.getResults() },
@@ -74,6 +81,11 @@ fun ResultsReviewScreen(test: Test) {
         }
     }
     LaunchedEffect(key1 = Unit) {
-        viewModel.setInitialData(test)
+        viewModel.setInitialData(test, course)
+        scope.launch {
+            viewModel.resultReviewFlow.collect {
+                onResultReview(it)
+            }
+        }
     }
 }

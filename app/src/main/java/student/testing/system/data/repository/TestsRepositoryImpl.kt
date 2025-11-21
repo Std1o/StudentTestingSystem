@@ -2,11 +2,12 @@ package student.testing.system.data.repository
 
 import student.testing.system.data.source.interfaces.TestResultsRemoteDataSource
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
-import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.models.TestCreationReq
+import student.testing.system.domain.models.TestResult
 import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.models.UserQuestion
-import student.testing.system.domain.states.loadableData.LoadableData
+import student.testing.system.domain.repository.TestsRepository
+import student.testing.system.domain.states.operationStates.OperationState
 import javax.inject.Inject
 
 class TestsRepositoryImpl @Inject constructor(
@@ -36,6 +37,16 @@ class TestsRepositoryImpl @Inject constructor(
 
     override suspend fun getResult(testId: Int, courseId: Int) =
         remoteDataSource.getResult(testId, courseId)
+
+    override suspend fun getParticipantResult(
+        testId: Int,
+        courseId: Int,
+        participantId: Int
+    ): OperationState<TestResult> = remoteDataSource.getParticipantResult(
+        testId = testId,
+        courseId = courseId,
+        participantId = participantId
+    )
 
     override fun getResults(
         testId: Int,

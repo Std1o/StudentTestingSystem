@@ -32,6 +32,8 @@ interface TestsRemoteDataSource {
 
     suspend fun getResult(testId: Int, courseId: Int): OperationState<TestResult>
 
+    suspend fun getParticipantResult(testId: Int, courseId: Int, participantId: Int): OperationState<TestResult>
+
     suspend fun getResults(
         testId: Int,
         courseId: Int,

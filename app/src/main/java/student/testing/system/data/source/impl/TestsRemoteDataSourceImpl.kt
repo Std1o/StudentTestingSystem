@@ -32,6 +32,13 @@ class TestsRemoteDataSourceImpl @Inject constructor(private val testsApi: TestsA
     override suspend fun getResult(testId: Int, courseId: Int) =
         executeOperation(TestsOperations.GET_RESULT) { testsApi.getResult(testId, courseId) }
 
+    override suspend fun getParticipantResult(testId: Int, courseId: Int, participantId: Int) =
+        executeOperation {
+            testsApi.getParticipantResult(
+                testId = testId, courseId = courseId, participantId = participantId
+            )
+        }
+
     override suspend fun getResults(testId: Int, courseId: Int, params: TestResultsRequestParams) =
         loadData { testsApi.getResults(testId, courseId, params) }
 }

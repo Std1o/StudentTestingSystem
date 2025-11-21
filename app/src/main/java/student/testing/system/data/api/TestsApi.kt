@@ -50,6 +50,13 @@ interface TestsApi {
         @Query("course_id") courseId: Int
     ): Response<TestResult>
 
+    @GET("tests/get_participant_result/{test_id}")
+    suspend fun getParticipantResult(
+        @Path("test_id") testId: Int,
+        @Query("course_id") courseId: Int,
+        @Query("participant_id") participantId: Int
+    ): Response<TestResult>
+
     @POST("tests/results/{test_id}")
     suspend fun getResults(
         @Path("test_id") testId: Int,

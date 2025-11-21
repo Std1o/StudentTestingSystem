@@ -1,6 +1,7 @@
 package student.testing.system.presentation.ui.screens.resultsReview
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,7 +40,8 @@ import student.testing.system.presentation.ui.components.modifiers.placeholder
 fun ResultsList(
     isLoading: Boolean,
     hidden: Boolean,
-    results: LoadableData<ParticipantsResults>
+    results: LoadableData<ParticipantsResults>,
+    onResultClicked: (ParticipantResult) -> Unit
 ) {
     if (hidden) return
     val data = (results as? LoadableData.Success)?.data
@@ -57,6 +59,9 @@ fun ResultsList(
                 modifier = Modifier
                     .padding(vertical = 10.dp, horizontal = 16.dp)
                     .fillMaxWidth()
+                    .clickable {
+                        onResultClicked(participantResult)
+                    }
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
