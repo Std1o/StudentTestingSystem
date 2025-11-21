@@ -1,10 +1,13 @@
 package student.testing.system.presentation.ui.screens.questionCreation
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -24,13 +27,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.domain.states.QuestionState
+import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.presentation.ui.components.CenteredColumn
+import student.testing.system.presentation.ui.components.LoadingDialog
 import student.testing.system.presentation.ui.components.MediumButton
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.requiredTextField
 import student.testing.system.presentation.viewmodels.TestCreationSharedViewModel
 
@@ -40,6 +47,8 @@ fun QuestionCreationScreen(parentViewModel: TestCreationSharedViewModel) {
     val questionState by parentViewModel.questionState.collectAsState()
     val screenSession = parentViewModel.questionCreationScreenSession
     var showAnswerAddingDialog by rememberSaveable { mutableStateOf(false) }
+    val lastOperationState by parentViewModel.lastOperationState.collectAsState()
+    val events by parentViewModel.events.collectAsState(OperationState.NoState)
     Surface {
         Scaffold(
             snackbarHost = {
@@ -70,14 +79,28 @@ fun QuestionCreationScreen(parentViewModel: TestCreationSharedViewModel) {
                         .fillMaxSize()
                         .padding(contentPadding)
                 ) {
-                    question = requiredTextField(
-                        modifier = Modifier.padding(top = 30.dp),
-                        onTextChanged = { parentViewModel.onQuestionStateReceived() },
-                        fieldState = screenSession.questionState,
-                        isError = questionState is QuestionState.EmptyQuestion,
-                        errorText = R.string.error_empty_field,
-                        hint = R.string.input_question,
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 30.dp, end = 16.dp)
+                    ) {
+                        question = requiredTextField(
+                            modifier = Modifier
+                                .padding(start = 32.dp, end = 8.dp)
+                                .weight(1f),
+                            onTextChanged = { parentViewModel.onQuestionStateReceived() },
+                            fieldState = screenSession.questionState,
+                            isError = questionState is QuestionState.EmptyQuestion,
+                            errorText = R.string.error_empty_field,
+                            hint = R.string.input_question,
+                        )
+                        IconButton(onClick = { parentViewModel.getAIQuestion(screenSession.questionState.fieldValue) }) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_ai),
+                                contentDescription = "",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
                     Text(text = stringResource(R.string.answers), fontSize = 16.sp)
                     AnswersList(answers = screenSession.answers)
                 }
@@ -95,4 +118,9 @@ fun QuestionCreationScreen(parentViewModel: TestCreationSharedViewModel) {
             )
         }
     }
+    UIReactionOnLastOperationState(lastOperationState, events, snackbarHostState, onLoading = {
+        LoadingDialog(stringResource(R.string.question_generation_in_progress)) {
+            parentViewModel.cancelQuestionGeneration()
+        }
+    })
 }

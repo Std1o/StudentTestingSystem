@@ -3,16 +3,19 @@ package student.testing.system.data.source.impl
 import lilith.data.dataSource.BaseRemoteDataSource
 import student.testing.system.data.api.TestsApi
 import student.testing.system.data.source.interfaces.TestsRemoteDataSource
-import student.testing.system.domain.operationTypes.TestsOperations
 import student.testing.system.domain.models.TestCreationReq
 import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.models.UserQuestion
+import student.testing.system.domain.operationTypes.TestsOperations
 import javax.inject.Inject
 
 class TestsRemoteDataSourceImpl @Inject constructor(private val testsApi: TestsApi) :
     BaseRemoteDataSource(), TestsRemoteDataSource {
 
     override suspend fun getTests(courseId: Int) = loadData { testsApi.getTests(courseId) }
+    override suspend fun getAIQuestion(request: String) =
+        executeOperation { testsApi.getAIQuestion(request) }
+
     override suspend fun createTest(request: TestCreationReq) =
         executeOperation(TestsOperations.CREATE_TEST) { testsApi.createTest(request) }
 

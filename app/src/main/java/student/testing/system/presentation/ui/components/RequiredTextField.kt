@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -32,7 +33,14 @@ fun requiredTextField(
     @StringRes hint: Int
 ): String {
     var localIsError = isError
-    var fieldValue by remember { mutableStateOf(TextFieldValue(fieldState.fieldValue)) }
+    var fieldValue by remember(fieldState.fieldValue) {
+        mutableStateOf(
+            TextFieldValue(
+                text = fieldState.fieldValue,
+                selection = TextRange(fieldState.fieldValue.length)
+            )
+        )
+    }
     OutlinedTextField(
         modifier = modifier,
         value = fieldValue,

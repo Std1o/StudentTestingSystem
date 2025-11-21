@@ -16,7 +16,7 @@ fun <T> UIReactionOnLastOperationState(
     operationState: OperationState<T>,
     event: OperationState<T>,
     snackbarHostState: SnackbarHostState,
-    onLoading: ((OperationType) -> Unit)? = null,
+    onLoading: @Composable ((OperationType) -> Unit)? = null,
     onError: ((String, Int, OperationType) -> Unit)? = null
 ) {
     with(operationState) {

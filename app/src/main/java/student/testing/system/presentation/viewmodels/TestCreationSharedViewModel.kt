@@ -5,25 +5,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import lilith.presentation.viewmodel.StatesViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import lilith.presentation.viewmodel.StatesViewModel
 import student.testing.system.R
 import student.testing.system.common.TestCreationNavigation
 import student.testing.system.common.formatToString
-import student.testing.system.domain.usecases.CreateTestUseCase
-import student.testing.system.domain.usecases.AddQuestionUseCase
-import student.testing.system.domain.states.QuestionState
-import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.domain.models.Answer
 import student.testing.system.domain.models.Course
 import student.testing.system.domain.models.Question
 import student.testing.system.domain.models.Test
 import student.testing.system.domain.models.TestCreationReq
+import student.testing.system.domain.repository.TestsRepository
+import student.testing.system.domain.states.QuestionState
+import student.testing.system.domain.states.operationStates.OperationState
+import student.testing.system.domain.states.operationStates.TestCreationState
+import student.testing.system.domain.usecases.AddQuestionUseCase
+import student.testing.system.domain.usecases.CreateTestUseCase
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
+import student.testing.system.presentation.ui.models.RequiredFieldState
 import student.testing.system.presentation.ui.models.screenSession.QuestionCreationScreenSession
 import student.testing.system.presentation.ui.models.screenSession.TestCreationScreenSession
 import java.util.Date
@@ -33,7 +37,8 @@ import javax.inject.Inject
 class TestCreationSharedViewModel @Inject constructor(
     @TestCreationNavigation private val appNavigator: AppNavigator,
     private val addQuestionUseCase: AddQuestionUseCase,
-    private val createTestUseCase: CreateTestUseCase
+    private val createTestUseCase: CreateTestUseCase,
+    private val testRepository: TestsRepository
 ) : StatesViewModel() {
 
     val courseFlow = MutableStateFlow(Course("", 0, "", "", listOf()))
@@ -48,6 +53,8 @@ class TestCreationSharedViewModel @Inject constructor(
         private set
     var testCreationScreenSession by mutableStateOf(TestCreationScreenSession())
 
+    private lateinit var aiQuestionJob: Job
+
     fun setCourse(course: Course) {
         viewModelScope.launch {
             courseFlow.tryEmit(course)
@@ -56,6 +63,32 @@ class TestCreationSharedViewModel @Inject constructor(
 
     fun navigateToQuestionCreation() {
         appNavigator.tryNavigateTo(Destination.QuestionCreationScreen())
+    }
+
+    fun getAIQuestion(request: String) {
+        aiQuestionJob = viewModelScope.launch {
+            if (isActive) {
+                val response =
+                    executeOperation(
+                        call = { testRepository.getAIQuestion(request) },
+                        String::class
+                    )
+                if (response is OperationState.Success) {
+                    questionCreationScreenSession =
+                        questionCreationScreenSession.copy(
+                            questionState = RequiredFieldState(
+                                fieldValue = response.data
+                            )
+                        )
+                }
+            }
+        }
+    }
+
+    fun cancelQuestionGeneration() {
+        aiQuestionJob.cancel()
+        clearOperationState()
+        clearEvents()
     }
 
     /**

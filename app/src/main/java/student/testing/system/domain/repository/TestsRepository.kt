@@ -15,6 +15,8 @@ import student.testing.system.domain.webSockets.WebsocketEvent
 interface TestsRepository {
     suspend fun getTests(courseId: Int): LoadableData<List<Test>>
 
+    suspend fun getAIQuestion(request: String): OperationState<String>
+
     suspend fun createTest(request: TestCreationReq): OperationState<Test>
 
     suspend fun deleteTest(testId: Int, courseId: Int): OperationState<Void>

@@ -18,6 +18,9 @@ interface TestsApi {
     @GET("tests/")
     suspend fun getTests(@Query("course_id") courseId: Int): Response<List<Test>>
 
+    @GET("ai/get_ai_question/")
+    suspend fun getAIQuestion(@Query("request") request: String): Response<String>
+
     @POST("tests/")
     suspend fun createTest(@Body request: TestCreationReq): Response<Test>
 

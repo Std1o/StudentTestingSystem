@@ -6,6 +6,7 @@ import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.models.TestCreationReq
 import student.testing.system.domain.models.TestResultsRequestParams
 import student.testing.system.domain.models.UserQuestion
+import student.testing.system.domain.states.loadableData.LoadableData
 import javax.inject.Inject
 
 class TestsRepositoryImpl @Inject constructor(
@@ -14,6 +15,8 @@ class TestsRepositoryImpl @Inject constructor(
 ) : TestsRepository {
 
     override suspend fun getTests(courseId: Int) = remoteDataSource.getTests(courseId)
+
+    override suspend fun getAIQuestion(request: String) = remoteDataSource.getAIQuestion(request)
 
     override suspend fun createTest(request: TestCreationReq) =
         remoteDataSource.createTest(request)
