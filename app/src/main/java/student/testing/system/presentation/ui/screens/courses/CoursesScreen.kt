@@ -103,7 +103,9 @@ fun CoursesScreen() {
                 CoursesList(
                     isLoading = coursesIsLoading,
                     hidden = hideCoursesList,
-                    courses = contentState.courses, onClick = { viewModel.onCourseClicked(it) },
+                    courses = contentState.courses,
+                    isUserAnOwner = { viewModel.isUserAnOwner(it) },
+                    onClick = { viewModel.onCourseClicked(it) },
                     onLongClick = { deletingCourseId = it.id },
                 )
                 UIReactionOnListState(
@@ -125,7 +127,7 @@ fun CoursesScreen() {
         ) { showBottomSheet = false }
 
         if (showUserInfoDialog) {
-            AlertUserInfoDialog { showUserInfoDialog = false }
+            AlertUserInfoDialog(viewModel.accountSession) { showUserInfoDialog = false }
         }
         if (showLogoutDialog) {
             ConfirmationDialog(

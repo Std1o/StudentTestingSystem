@@ -130,7 +130,7 @@ fun TestsScreen(
     LaunchedEffect(key1 = Unit) {
         scope.launch {
             parentViewModel.testFlow.collect {
-                testsVM.onTestAdded(it)
+                testsVM.onTestAdded()
             }
         }
         scope.launch {

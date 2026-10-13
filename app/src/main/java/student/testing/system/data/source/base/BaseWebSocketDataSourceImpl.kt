@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import student.testing.system.common.AccountSession
 import student.testing.system.data.api.KtorWebsocketClientImpl
 import student.testing.system.domain.webSockets.KtorWebsocketClient
 import student.testing.system.domain.webSockets.WebsocketEvent
@@ -17,7 +18,7 @@ import student.testing.system.domain.webSockets.WebsocketEvents
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
-open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor() {
+open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor(private val accountSession: AccountSession) {
 
     private var isConnected: Boolean by Delegates.observable(false) { _, _, new ->
         if (new) {
@@ -62,7 +63,8 @@ open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor() {
         }
         client = KtorWebsocketClientImpl(
             url = url,
-            callback
+            callback,
+            accountSession
         )
         client.connect()
         awaitClose {

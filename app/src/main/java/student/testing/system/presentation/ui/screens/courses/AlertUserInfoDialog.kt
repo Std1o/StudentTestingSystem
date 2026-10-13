@@ -10,18 +10,17 @@ import student.testing.system.R
 import student.testing.system.common.AccountSession
 
 @Composable
-fun AlertUserInfoDialog(onDismissRequest: () -> Unit) {
+fun AlertUserInfoDialog(accountSession: AccountSession, onDismissRequest: () -> Unit) {
     AlertDialog(
         title = {
             Text(text = stringResource(R.string.we_remind_you))
         },
         text = {
-            val account = AccountSession.instance
             Text(
                 text = stringResource(
                     R.string.user_info,
-                    account.username ?: "",
-                    account.email ?: ""
+                    accountSession.username ?: "",
+                    accountSession.email ?: ""
                 )
             )
         },

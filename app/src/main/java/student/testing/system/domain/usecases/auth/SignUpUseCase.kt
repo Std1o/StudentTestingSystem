@@ -14,6 +14,7 @@ import javax.inject.Inject
 class SignUpUseCase @Inject constructor(
     private val repository: AuthRepository,
     private val prefsUtils: PrefsUtils,
+    private val accountSession: AccountSession,
     private val validateAuthDataUseCase: ValidateAuthDataUseCase
 ) {
 
@@ -39,16 +40,9 @@ class SignUpUseCase @Inject constructor(
         val requestResult = repository.signUp(SignUpReq(email, username, password))
         if (requestResult is OperationState.Success) {
             saveAuthData(email, password)
-            createSession(requestResult.data)
+            accountSession.save(requestResult.data)
         }
         return requestResult
-    }
-
-    private fun createSession(privateUser: PrivateUser) {
-        AccountSession.instance.token = privateUser.token
-        AccountSession.instance.userId = privateUser.id
-        AccountSession.instance.email = privateUser.email
-        AccountSession.instance.username = privateUser.username
     }
 
     private fun saveAuthData(email: String, password: String) {

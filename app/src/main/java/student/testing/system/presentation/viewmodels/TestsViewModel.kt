@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
+import student.testing.system.common.CoursePermissions
 import student.testing.system.common.CourseReviewNavigation
-import student.testing.system.common.Utils
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.loadableData.LoadableData
 import student.testing.system.domain.states.operationStates.OperationState
@@ -30,6 +30,7 @@ import kotlin.properties.Delegates
 class TestsViewModel @Inject constructor(
     @CourseReviewNavigation private val courseNavigator: AppNavigator,
     private val repository: TestsRepository,
+    private val сoursePermissions: CoursePermissions,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
 
@@ -47,7 +48,7 @@ class TestsViewModel @Inject constructor(
     }
 
     val isUserAModerator by lazy {
-        Utils.isUserAModerator(course)
+        сoursePermissions.isUserAModerator(course)
     }
 
     fun getTests() {
@@ -62,7 +63,7 @@ class TestsViewModel @Inject constructor(
         courseNavigator.tryNavigateTo(Destination.TestCreationHostScreen(course = course))
     }
 
-    fun onTestAdded(test: Test) {
+    fun onTestAdded() {
         getTests()
     }
 

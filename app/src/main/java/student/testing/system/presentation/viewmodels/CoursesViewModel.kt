@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
+import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants.LOG_TAG
+import student.testing.system.common.CoursePermissions
 import student.testing.system.common.LaunchNavigation
 import student.testing.system.domain.models.Course
 import student.testing.system.domain.operationTypes.CourseAddingOperations
@@ -33,6 +35,8 @@ class CoursesViewModel @Inject constructor(
     private val prefUtils: PrefsUtils,
     @LaunchNavigation private val appNavigator: AppNavigator,
     private val createCourseUseCase: CreateCourseUseCase,
+    val accountSession: AccountSession,
+    private val permissions: CoursePermissions,
     private val joinCourseUseCase: JoinCourseUseCase
 ) : StatesViewModel() {
 
@@ -71,6 +75,7 @@ class CoursesViewModel @Inject constructor(
 
     fun logout() {
         prefUtils.clearData()
+        accountSession.clear()                    // ← сбрасываем сессию
         _contentState.update { it.copy(isLoggedOut = true) }
     }
 
@@ -128,4 +133,6 @@ class CoursesViewModel @Inject constructor(
         Log.d(LOG_TAG, resetValidationReason.toString())
         _coursesState.value = OperationState.NoState
     }
+
+    fun isUserAnOwner(course: Course): Boolean = permissions.isUserAnOwner(course)
 }

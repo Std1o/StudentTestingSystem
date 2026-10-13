@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 import lilith.domain.SingleEventFlow
 import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
+import student.testing.system.common.CoursePermissions
 import student.testing.system.common.CourseReviewNavigation
-import student.testing.system.common.Utils
 import student.testing.system.domain.models.Course
 import student.testing.system.domain.models.ParticipantResult
 import student.testing.system.domain.models.ParticipantsResults
@@ -34,7 +34,7 @@ import javax.inject.Inject
 class ResultsViewModel @Inject constructor(
     @CourseReviewNavigation private val courseNavigator: AppNavigator,
     val repository: TestsRepository,
-    private val getResultUseCase: GetResultUseCase,
+    private val coursePermissions: CoursePermissions
 ) : StatesViewModel() {
 
     private val _contentState = MutableStateFlow(ResultsContentState())
@@ -57,7 +57,7 @@ class ResultsViewModel @Inject constructor(
     }
 
     val isUserAModerator by lazy {
-        Utils.isUserAModerator(course)
+        coursePermissions.isUserAModerator(course)
     }
 
     fun getResults() {

@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants
 import student.testing.system.data.OAuthInterceptor
 import student.testing.system.data.api.AuthApi
@@ -32,12 +33,13 @@ object NetworkModule {
     @Provides
     fun getHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        accountSession: AccountSession
     ): OkHttpClient.Builder =
         OkHttpClient.Builder()
             .callTimeout(1, TimeUnit.MINUTES)
             .retryOnConnectionFailure(true)
-            .addInterceptor(OAuthInterceptor())
+            .addInterceptor(OAuthInterceptor(accountSession))
             .addInterceptor(httpLoggingInterceptor)
             .addNetworkInterceptor(ChuckerInterceptor(context))
 

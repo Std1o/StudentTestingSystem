@@ -3,14 +3,14 @@ package student.testing.system.data.api
 import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.logging.ANDROID
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.plugin
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
-import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
@@ -23,7 +23,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -35,20 +34,16 @@ import java.util.concurrent.TimeUnit
 class KtorWebsocketClientImpl(
     private val url: String,
     private val listener: WebsocketEvents,
+    private val accountSession: AccountSession,
 ) : KtorWebsocketClient {
 
     companion object {
         private const val RECONNECT_DELAY = 10_000L
         private const val PING_INTERVAL = 5_000L
-
         private const val TAG = "WebSocketClient"
     }
 
     private val client = HttpClient(OkHttp) {
-        defaultRequest {
-            header(HttpHeaders.Authorization, "Bearer ${AccountSession.instance.token!!}")
-        }
-
         engine {
             config {
                 pingInterval(PING_INTERVAL, TimeUnit.MILLISECONDS)
@@ -60,6 +55,19 @@ class KtorWebsocketClientImpl(
             level = LogLevel.ALL
         }
         install(WebSockets)
+    }.apply {
+        // Перехватываем КАЖДЫЙ запрос — читаем токен в момент отправки
+        plugin(HttpSend).intercept { request ->
+            accountSession.token
+                ?.takeIf { it.isNotBlank() }
+                ?.let { token ->
+                    request.headers.append(
+                        HttpHeaders.Authorization,
+                        "Bearer $token"
+                    )
+                }
+            execute(request)
+        }
     }
 
     private val scope =
@@ -68,7 +76,6 @@ class KtorWebsocketClientImpl(
         }
 
     private var job: Job? = null
-
     private var session: WebSocketSession? = null
 
     override suspend fun connect() {
@@ -84,18 +91,14 @@ class KtorWebsocketClientImpl(
             session!!.incoming
                 .receiveAsFlow()
                 .filterIsInstance<Frame.Text>()
-                .filterNotNull()
                 .collect { data ->
                     val message = data.readText()
                     listener.onReceive(message)
-
                     Log.i(TAG, "Received message: $message")
                 }
         } catch (e: Exception) {
             listener.onDisconnected(e.message ?: "Unknown error")
-
             Log.d(TAG, "Error: ${e.message}")
-
             reconnect()
         }
     }
@@ -119,7 +122,6 @@ class KtorWebsocketClientImpl(
 
     override suspend fun send(message: String) {
         Log.d(TAG, "Sending message: $message")
-
         session?.send(Frame.Text(message))
     }
 }
