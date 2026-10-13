@@ -59,6 +59,14 @@ class FakeTestsRepository : TestsRepository {
         }
     }
 
+    override suspend fun getParticipantResult(
+        testId: Int,
+        courseId: Int,
+        participantId: Int
+    ): OperationState<TestResult> {
+        TODO("Not yet implemented")
+    }
+
     override fun getResults(
         testId: Int,
         courseId: Int,

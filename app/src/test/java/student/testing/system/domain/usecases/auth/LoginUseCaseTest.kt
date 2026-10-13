@@ -10,10 +10,11 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import student.testing.system.R
+import student.testing.system.common.AccountSession
 import student.testing.system.data.repository.FakeAuthRepository
+import student.testing.system.domain.models.PrivateUser
 import student.testing.system.domain.states.operationStates.AuthState
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.domain.models.PrivateUser
 import student.testing.system.sharedPreferences.PrefsUtils
 
 
@@ -23,11 +24,13 @@ class LoginUseCaseTest {
     private val repository = FakeAuthRepository()
     private val prefsUtils = mockk<PrefsUtils>(relaxed = true)
     private val validateAuthDataUseCase = ValidateAuthDataUseCase()
-    private val loginUseCase = LoginUseCase(repository, prefsUtils, validateAuthDataUseCase)
+    private val loginUseCase =
+        LoginUseCase(repository, prefsUtils, AccountSession(), validateAuthDataUseCase)
 
     @Test
     fun `empty data returns InputIsInvalid`() = runTest {
-        val expected = AuthState.InputIsInvalid(R.string.error_empty_field, R.string.error_empty_field)
+        val expected =
+            AuthState.InputIsInvalid(R.string.error_empty_field, R.string.error_empty_field)
         val actual = loginUseCase.invoke("", "")
         assertEquals(expected, actual)
     }
