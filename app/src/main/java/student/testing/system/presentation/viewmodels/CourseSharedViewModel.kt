@@ -2,13 +2,16 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import lilith.domain.SingleEventFlow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import student.testing.system.domain.models.Course
 import student.testing.system.domain.models.Test
+import javax.inject.Inject
 
-class CourseSharedViewModel : ViewModel() {
+@HiltViewModel
+class CourseSharedViewModel @Inject constructor() : ViewModel() {
 
     private val _courseFlow = MutableStateFlow(Course("", 0, "", "", listOf()))
     val courseFlow = _courseFlow.asStateFlow()

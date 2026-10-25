@@ -46,6 +46,7 @@ class ResultsViewModel @Inject constructor(
 
     private lateinit var test: Test
     private lateinit var course: Course
+    private var isUserAModerator: Boolean = false
     var searchPrefix: String? = null
     private val _filtersContainer = MutableStateFlow(FiltersContainer())
     val filtersContainer = _filtersContainer.asStateFlow()
@@ -53,11 +54,8 @@ class ResultsViewModel @Inject constructor(
     fun setInitialData(test: Test, course: Course) {
         this.test = test
         this.course = course
+        this.isUserAModerator = coursePermissions.isUserAModerator(course)
         getResults()
-    }
-
-    val isUserAModerator by lazy {
-        coursePermissions.isUserAModerator(course)
     }
 
     fun getResults() {

@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt") // TODO remove
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
@@ -20,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "student.testing.system"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 4
         versionName = "1.0.1"
 

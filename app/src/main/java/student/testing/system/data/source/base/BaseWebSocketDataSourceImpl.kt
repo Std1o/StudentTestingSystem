@@ -45,15 +45,15 @@ open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor(private
         val callback = object : WebsocketEvents {
             override fun onReceive(data: String) {
                 println(data)
-                val dataJson = Gson().fromJson(
-                    data,
-                    resultType
-                )
+                val dataJson = Gson().fromJson(data, resultType)
                 trySendBlocking(WebsocketEvent.Receive(dataJson))
             }
 
             override fun onConnected() {
-                isConnected = true
+                launch {
+                    val jsonObject = Gson().toJson(params)
+                    client.send(jsonObject)
+                }
                 trySendBlocking(WebsocketEvent.Connected)
             }
 
@@ -61,16 +61,13 @@ open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor(private
                 trySendBlocking(WebsocketEvent.Disconnected(reason))
             }
         }
-        client = KtorWebsocketClientImpl(
-            url = url,
-            callback,
-            accountSession
-        )
-        client.connect()
+
+        client = KtorWebsocketClientImpl(url, callback, accountSession)
+
+        launch { client.connect() }
+
         awaitClose {
-            coroutineScope.launch {
-                client.stop()
-            }
+            launch { client.stop() }
         }
     }
 

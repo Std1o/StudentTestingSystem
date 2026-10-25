@@ -30,7 +30,7 @@ import kotlin.properties.Delegates
 class TestsViewModel @Inject constructor(
     @CourseReviewNavigation private val courseNavigator: AppNavigator,
     private val repository: TestsRepository,
-    private val сoursePermissions: CoursePermissions,
+    private val coursePermissions: CoursePermissions,
     private val getResultUseCase: GetResultUseCase,
 ) : StatesViewModel() {
 
@@ -42,13 +42,16 @@ class TestsViewModel @Inject constructor(
     val resultReviewFlow = _resultReviewEvent.asSharedFlow()
 
     lateinit var course: Course
+    var isUserAModerator: Boolean = false
+        private set
 
-    var courseId: Int by Delegates.observable(-1) { _, oldValue, newValue ->
-        if (oldValue != newValue) getTests()
-    }
+    var courseId: Int = -1
+        private set
 
-    val isUserAModerator by lazy {
-        сoursePermissions.isUserAModerator(course)
+    fun loadTests(courseId: Int) {
+        this.courseId = courseId
+        this.isUserAModerator = coursePermissions.isUserAModerator(course)
+        getTests()
     }
 
     fun getTests() {
