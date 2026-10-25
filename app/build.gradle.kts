@@ -14,6 +14,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -27,6 +28,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "TEST_URL", "\"http://192.168.2.102/\"")
+        buildConfigField("String", "TEST_WEBSOCKET_URL", "\"ws://192.168.2.102/\"")
     }
 
     buildTypes {

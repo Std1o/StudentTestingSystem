@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import student.testing.system.BuildConfig
 import student.testing.system.common.Constants
 import student.testing.system.common.iTems
 import student.testing.system.domain.states.loadableData.LoadableData
@@ -57,7 +58,7 @@ fun CoursesList(
                     )
             ) {
                 AsyncImage(
-                    model = "${Constants.BASE_URL}images/${course.img}",
+                    model = "${BuildConfig.TEST_URL}images/${course.img}",
                     contentDescription = "Translated description of what the image contains",
                     modifier = Modifier.fillMaxWidth(),
                     contentScale = ContentScale.FillWidth

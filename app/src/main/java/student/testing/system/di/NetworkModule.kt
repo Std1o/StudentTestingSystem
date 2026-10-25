@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import student.testing.system.BuildConfig
 import student.testing.system.common.AccountSession
 import student.testing.system.common.Constants
 import student.testing.system.data.OAuthInterceptor
@@ -49,7 +50,7 @@ object NetworkModule {
         val builder = GsonBuilder().disableHtmlEscaping().create()
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(builder))
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(BuildConfig.TEST_URL)
             .client(httpBuilder.build())
             .build()
     }

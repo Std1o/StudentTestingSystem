@@ -1,6 +1,7 @@
 package student.testing.system.data.source.impl
 
 import kotlinx.coroutines.flow.Flow
+import student.testing.system.BuildConfig
 import student.testing.system.common.AccountSession
 import student.testing.system.data.source.base.BaseWebSocketDataSourceImpl
 import student.testing.system.data.source.interfaces.TestResultsRemoteDataSource
@@ -18,7 +19,7 @@ class TestResultsRemoteDataSourceImpl @Inject constructor(accountSession: Accoun
         params: TestResultsRequestParams
     ): Flow<WebsocketEvent<ParticipantsResults>> =
         getData(
-            url = "ws://192.168.2.102/tests/ws/results/$testId?course_id=$courseId",
+            url = "${BuildConfig.TEST_WEBSOCKET_URL}tests/ws/results/$testId?course_id=$courseId",
             params,
             ParticipantsResults::class.java
         )
