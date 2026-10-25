@@ -26,10 +26,12 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import kotlinx.coroutines.withContext
 import student.testing.system.common.AccountSession
 import student.testing.system.domain.webSockets.KtorWebsocketClient
 import student.testing.system.domain.webSockets.WebsocketEvents
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 class KtorWebsocketClientImpl(
     private val url: String,
@@ -42,6 +44,8 @@ class KtorWebsocketClientImpl(
         private const val PING_INTERVAL = 5_000L
         private const val TAG = "WebSocketClient"
     }
+
+    private val isReconnecting = AtomicBoolean(false)
 
     private val client = HttpClient(OkHttp) {
         engine {
@@ -78,7 +82,7 @@ class KtorWebsocketClientImpl(
     private var job: Job? = null
     private var session: WebSocketSession? = null
 
-    override suspend fun connect() {
+    override suspend fun connect() = withContext(Dispatchers.IO) {
         try {
             Log.d(TAG, "Connecting to websocket at $url...")
 
@@ -88,7 +92,7 @@ class KtorWebsocketClientImpl(
 
             Log.i(TAG, "Connected to websocket at $url")
 
-            session!!.incoming
+            (session ?: return@withContext).incoming
                 .receiveAsFlow()
                 .filterIsInstance<Frame.Text>()
                 .collect { data ->
@@ -99,7 +103,10 @@ class KtorWebsocketClientImpl(
         } catch (e: Exception) {
             listener.onDisconnected(e.message ?: "Unknown error")
             Log.d(TAG, "Error: ${e.message}")
-            reconnect()
+            // Вызываем реконнект только если ещё не в процессе
+            if (isReconnecting.compareAndSet(false, true)) {
+                reconnect()
+            }
         }
     }
 
@@ -110,7 +117,12 @@ class KtorWebsocketClientImpl(
         job = scope.launch {
             stop()
             delay(RECONNECT_DELAY)
-            connect()
+            try {
+                connect()
+            } finally {
+                // Сбрасываем флаг после завершения попытки
+                isReconnecting.set(false)
+            }
         }
     }
 
