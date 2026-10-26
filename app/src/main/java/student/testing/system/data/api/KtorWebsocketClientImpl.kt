@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -32,6 +33,7 @@ import student.testing.system.domain.webSockets.KtorWebsocketClient
 import student.testing.system.domain.webSockets.WebsocketEvents
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.cancellation.CancellationException
 
 class KtorWebsocketClientImpl(
     private val url: String,
@@ -82,53 +84,61 @@ class KtorWebsocketClientImpl(
     private var job: Job? = null
     private var session: WebSocketSession? = null
 
-    override suspend fun connect() = withContext(Dispatchers.IO) {
-        try {
-            Log.d(TAG, "Connecting to websocket at $url...")
+    override suspend fun connect(): Unit = withContext(Dispatchers.IO) {
+        if (isReconnecting.compareAndSet(false, true)) {
+            job = scope.launch {
+                try {
+                    while (true) {
+                        try {
+                            Log.d(TAG, "Connecting to websocket at $url...")
+                            session = client.webSocketSession(url)
+                            listener.onConnected()
+                            isReconnecting.set(false)
 
-            session = client.webSocketSession(url)
+                            Log.i(TAG, "Connected to websocket at $url")
 
-            listener.onConnected()
+                            session?.incoming
+                                ?.receiveAsFlow()
+                                ?.filterIsInstance<Frame.Text>()
+                                ?.collect { data ->
+                                    val message = data.readText()
+                                    listener.onReceive(message)
+                                    Log.i(TAG, "Received message: $message")
+                                }
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            listener.onDisconnected(e.message ?: "Unknown error")
+                            Log.d(TAG, "Error: ${e.message}")
+                            isReconnecting.set(true)
+                            runCatching { session?.close() }
+                            session = null
+                        }
 
-            Log.i(TAG, "Connected to websocket at $url")
-
-            (session ?: return@withContext).incoming
-                .receiveAsFlow()
-                .filterIsInstance<Frame.Text>()
-                .collect { data ->
-                    val message = data.readText()
-                    listener.onReceive(message)
-                    Log.i(TAG, "Received message: $message")
+                        Log.d(TAG, "Reconnecting in ${RECONNECT_DELAY}ms...")
+                        delay(RECONNECT_DELAY)
+                    }
+                } finally {
+                    isReconnecting.set(false)
                 }
-        } catch (e: Exception) {
-            listener.onDisconnected(e.message ?: "Unknown error")
-            Log.d(TAG, "Error: ${e.message}")
-            // Вызываем реконнект только если ещё не в процессе
-            if (isReconnecting.compareAndSet(false, true)) {
-                reconnect()
             }
+        } else {
+            Log.d(TAG, "connect() skipped: already connected or connecting")
         }
     }
 
     override fun reconnect() {
-        job?.cancel()
-        Log.d(TAG, "Reconnecting to websocket in ${RECONNECT_DELAY}ms...")
-
-        job = scope.launch {
-            stop()
-            delay(RECONNECT_DELAY)
-            try {
-                connect()
-            } finally {
-                // Сбрасываем флаг после завершения попытки
-                isReconnecting.set(false)
-            }
+        scope.launch {
+            job?.cancelAndJoin()
+            connect()
         }
     }
 
     override suspend fun stop() {
         Log.d(TAG, "Closing websocket session...")
-        session?.close()
+        job?.cancelAndJoin()
+        job = null
+        runCatching { session?.close() }
         session = null
     }
 
