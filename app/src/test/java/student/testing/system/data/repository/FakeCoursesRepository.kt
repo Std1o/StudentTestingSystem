@@ -26,7 +26,7 @@ class FakeCoursesRepository : CoursesRepository {
         }
     }
 
-    override suspend fun deleteCourse(courseId: Int): OperationState<Void> {
+    override suspend fun deleteCourse(courseId: Int): OperationState<Unit> {
         TODO("Not yet implemented")
     }
 }
