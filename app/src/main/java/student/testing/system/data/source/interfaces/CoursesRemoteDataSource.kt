@@ -10,5 +10,5 @@ interface CoursesRemoteDataSource {
     suspend fun getCourses(): LoadableData<List<CourseDTO>>
     suspend fun createCourse(request: CourseCreationReq): OperationState<CourseDTO>
     suspend fun joinCourse(courseCode: String): OperationState<CourseDTO>
-    suspend fun deleteCourse(courseId: Int): OperationState<Void>
+    suspend fun deleteCourse(courseId: Int): OperationState<Unit>
 }

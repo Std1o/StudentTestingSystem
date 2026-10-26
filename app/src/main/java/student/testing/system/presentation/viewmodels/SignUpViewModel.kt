@@ -16,7 +16,6 @@ import student.testing.system.domain.states.operationStates.SignUpState
 import student.testing.system.domain.usecases.auth.SignUpUseCase
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
-import student.testing.system.presentation.ui.models.screenSession.SignUpScreenSession
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,9 +27,26 @@ class SignUpViewModel @Inject constructor(
     private val _signUpState = MutableStateFlow<SignUpState<PrivateUser>>(OperationState.NoState)
     val signUpState = _signUpState.asStateFlow()
 
-    var screenSession by mutableStateOf(SignUpScreenSession())
+    var email by mutableStateOf("")
+        private set
+    var password by mutableStateOf("")
+        private set
+    var username by mutableStateOf("")
+        private set
 
-    fun signUp(email: String, username: String, password: String) {
+    fun onEmailChange(newEmail: String) {
+        email = newEmail
+    }
+
+    fun onPasswordChange(newPassword: String) {
+        password = newPassword
+    }
+
+    fun onUsernameChange(newUsername: String) {
+        username = newUsername
+    }
+
+    fun signUp() {
         viewModelScope.launch {
             val requestResult = executeOperationAndIgnoreData({
                 signUpUseCase(email = email, username = username, password = password)

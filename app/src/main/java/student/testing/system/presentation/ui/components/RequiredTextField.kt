@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,24 +24,16 @@ import androidx.compose.ui.text.input.TextFieldValue
 import student.testing.system.presentation.ui.models.RequiredFieldState
 
 @Composable
-fun requiredTextField(
+fun RequiredTextField(
     modifier: Modifier = Modifier,
-    onTextChanged: () -> Unit,
-    fieldState: RequiredFieldState,
+    onTextChanged: (String) -> Unit,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
     isError: Boolean,
     @StringRes errorText: Int,
     @StringRes hint: Int
-): String {
+) {
     var localIsError = isError
-    var fieldValue by remember(fieldState.fieldValue) {
-        mutableStateOf(
-            TextFieldValue(
-                text = fieldState.fieldValue,
-                selection = TextRange(fieldState.fieldValue.length)
-            )
-        )
-    }
+    var fieldValue by rememberSaveable { mutableStateOf("") }
     OutlinedTextField(
         modifier = modifier,
         value = fieldValue,
@@ -61,14 +54,12 @@ fun requiredTextField(
         },
         onValueChange = {
             fieldValue = it
-            fieldState.fieldValue = it.text
             localIsError = false
-            onTextChanged()
+            onTextChanged(it)
         },
         trailingIcon = {
             if (localIsError) Icon(
                 Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error
             )
         })
-    return fieldValue.text
 }

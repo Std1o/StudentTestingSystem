@@ -12,24 +12,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import student.testing.system.R
-import student.testing.system.presentation.ui.models.screenSession.EmailState
 
 @Composable
-fun emailTextField(
-    onTextChanged: () -> Unit,
-    emailState: EmailState,
+fun EmailTextField(
+    onTextChanged: (String) -> Unit,
     isEmailError: Boolean,
     @StringRes errorText: Int
-): String {
+) {
     var isEmailError = isEmailError
-    var email by remember { mutableStateOf(TextFieldValue(emailState.email)) }
+    var email by rememberSaveable { mutableStateOf("")}
     OutlinedTextField(
         value = email,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -46,14 +43,12 @@ fun emailTextField(
         },
         onValueChange = {
             email = it
-            emailState.email = it.text
             isEmailError = false
-            onTextChanged()
+            onTextChanged(it)
         },
         trailingIcon = {
             if (isEmailError) Icon(
                 Icons.Filled.Error, "error", tint = MaterialTheme.colorScheme.error
             )
         })
-    return email.text
 }

@@ -1,10 +1,6 @@
 package student.testing.system.presentation.ui.screens.questionCreation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.IconButton
@@ -16,14 +12,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,11 +24,7 @@ import androidx.compose.ui.unit.sp
 import student.testing.system.R
 import student.testing.system.domain.states.QuestionState
 import student.testing.system.domain.states.operationStates.OperationState
-import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.LoadingDialog
-import student.testing.system.presentation.ui.components.MediumButton
-import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
-import student.testing.system.presentation.ui.components.requiredTextField
+import student.testing.system.presentation.ui.components.*
 import student.testing.system.presentation.viewmodels.TestCreationSharedViewModel
 
 @Composable
@@ -83,17 +69,19 @@ fun QuestionCreationScreen(parentViewModel: TestCreationSharedViewModel) {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(top = 30.dp, end = 16.dp)
                     ) {
-                        question = requiredTextField(
+                        RequiredTextField(
                             modifier = Modifier
                                 .padding(start = 32.dp, end = 8.dp)
                                 .weight(1f),
-                            onTextChanged = { parentViewModel.onQuestionStateReceived() },
-                            fieldState = screenSession.questionState,
+                            onTextChanged = {
+                                parentViewModel.onQuestionStrChange(it)
+                                parentViewModel.onQuestionStateReceived()
+                            },
                             isError = questionState is QuestionState.EmptyQuestion,
                             errorText = R.string.error_empty_field,
                             hint = R.string.input_question,
                         )
-                        IconButton(onClick = { parentViewModel.getAIQuestion(screenSession.questionState.fieldValue) }) {
+                        IconButton(onClick = { parentViewModel.getAIQuestion() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_ai),
                                 contentDescription = "",
@@ -107,7 +95,7 @@ fun QuestionCreationScreen(parentViewModel: TestCreationSharedViewModel) {
                 MediumButton(
                     text = R.string.save,
                     modifier = Modifier.align(Alignment.BottomCenter)
-                ) { parentViewModel.addQuestion(question) }
+                ) { parentViewModel.addQuestion() }
             }
         }
 

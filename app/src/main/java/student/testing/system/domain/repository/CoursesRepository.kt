@@ -8,5 +8,5 @@ interface CoursesRepository {
     suspend fun getCourses(): LoadableData<List<Course>>
     suspend fun createCourse(name: String): OperationState<Course>
     suspend fun joinCourse(courseCode: String): OperationState<Course>
-    suspend fun deleteCourse(courseId: Int): OperationState<Void>
+    suspend fun deleteCourse(courseId: Int): OperationState<Unit>
 }

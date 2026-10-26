@@ -2,11 +2,7 @@ package student.testing.system.presentation.ui.screens.testCreation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,9 +33,9 @@ import student.testing.system.domain.states.operationStates.OperationState
 import student.testing.system.domain.states.operationStates.TestCreationState
 import student.testing.system.presentation.ui.activity.ui.theme.Purple700
 import student.testing.system.presentation.ui.components.CenteredColumn
-import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.ui.components.MediumButton
-import student.testing.system.presentation.ui.components.requiredTextField
+import student.testing.system.presentation.ui.components.RequiredTextField
+import student.testing.system.presentation.ui.components.UIReactionOnLastOperationState
 import student.testing.system.presentation.viewmodels.TestCreationSharedViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -73,10 +69,12 @@ fun TestCreationScreen(parentViewModel: TestCreationSharedViewModel) {
                         .fillMaxSize()
                         .padding(contentPadding)
                 ) {
-                    requiredTextField(
+                    RequiredTextField(
                         modifier = Modifier.padding(top = 30.dp),
-                        onTextChanged = { parentViewModel.onTestNameChanged() },
-                        fieldState = screenSession.testNameState,
+                        onTextChanged = {
+                            parentViewModel.onTestNameChanged(it)
+                            parentViewModel.onTestNameChanged()
+                        },
                         isError = testState is TestCreationState.EmptyName,
                         errorText = R.string.error_empty_field,
                         hint = R.string.test_name,

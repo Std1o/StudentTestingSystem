@@ -14,11 +14,7 @@ import lilith.presentation.viewmodel.StatesViewModel
 import student.testing.system.R
 import student.testing.system.common.TestCreationNavigation
 import student.testing.system.common.formatToString
-import student.testing.system.domain.models.Answer
-import student.testing.system.domain.models.Course
-import student.testing.system.domain.models.Question
-import student.testing.system.domain.models.Test
-import student.testing.system.domain.models.TestCreationReq
+import student.testing.system.domain.models.*
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.QuestionState
 import student.testing.system.domain.states.operationStates.OperationState
@@ -55,22 +51,36 @@ class TestCreationSharedViewModel @Inject constructor(
 
     private lateinit var aiQuestionJob: Job
 
+    var testName by mutableStateOf("")
+        private set
+
+    var questionStr by mutableStateOf("")
+        private set
+
     fun setCourse(course: Course) {
         viewModelScope.launch {
             courseFlow.tryEmit(course)
         }
     }
 
+    fun onTestNameChanged(newTestName: String) {
+        testName = newTestName
+    }
+
+    fun onQuestionStrChange(newQuestionStr: String) {
+        questionStr = newQuestionStr
+    }
+
     fun navigateToQuestionCreation() {
         appNavigator.tryNavigateTo(Destination.QuestionCreationScreen())
     }
 
-    fun getAIQuestion(request: String) {
+    fun getAIQuestion() {
         aiQuestionJob = viewModelScope.launch {
             if (isActive) {
                 val response =
                     executeOperation(
-                        call = { testRepository.getAIQuestion(request) },
+                        call = { testRepository.getAIQuestion(questionStr) },
                         String::class
                     )
                 if (response is OperationState.Success) {
@@ -104,7 +114,7 @@ class TestCreationSharedViewModel @Inject constructor(
         return 0
     }
 
-    fun addQuestion(questionStr: String) {
+    fun addQuestion() {
         val question = Question(questionStr, questionCreationScreenSession.answers)
         val state = addQuestionUseCase(question)
         if (state is QuestionState.QuestionSuccess) {
@@ -123,7 +133,7 @@ class TestCreationSharedViewModel @Inject constructor(
                 createTestUseCase(
                     TestCreationReq(
                         courseId,
-                        testCreationScreenSession.testNameState.fieldValue,
+                        testName,
                         Date().formatToString("yyyy-MM-dd")!!,
                         testCreationScreenSession.questions
                     )

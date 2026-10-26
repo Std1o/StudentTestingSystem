@@ -23,5 +23,5 @@ interface CoursesApi {
     @DELETE("courses/{course_id}")
     suspend fun deleteCourse(
         @Path("course_id") courseId: Int,
-    ): Response<Void>
+    ): Response<Unit>
 }

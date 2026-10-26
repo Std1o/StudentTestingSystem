@@ -2,6 +2,7 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,6 @@ import student.testing.system.domain.usecases.auth.AuthIfPossibleUseCase
 import student.testing.system.domain.usecases.auth.LoginUseCase
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
-import student.testing.system.presentation.ui.models.screenSession.LoginScreenSession
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,10 +29,21 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableStateFlow<LoginState<PrivateUser>>(LoginState.HiddenUI)
     val loginState = _loginState.asStateFlow()
 
-    val screenSession by mutableStateOf(LoginScreenSession())
+    var email by mutableStateOf("")
+        private set
+    var password by mutableStateOf("")
+        private set
 
     init {
         authIfPossible()
+    }
+
+    fun onEmailChange(newEmail: String) {
+        email = newEmail
+    }
+
+    fun onPasswordChange(newPassword: String) {
+        password = newPassword
     }
 
     fun authIfPossible() {
@@ -51,7 +62,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun auth(email: String, password: String) {
+    fun auth() {
         viewModelScope.launch {
             val requestResult = executeOperationAndIgnoreData({ loginUseCase(email, password) }) {
                 navigateToCourses()
