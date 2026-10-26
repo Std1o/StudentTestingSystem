@@ -1,5 +1,8 @@
 package student.testing.system.presentation.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import lilith.domain.SingleEventFlow
@@ -42,15 +45,17 @@ class TestsViewModel @Inject constructor(
     val resultReviewFlow = _resultReviewEvent.asSharedFlow()
 
     lateinit var course: Course
-    var isUserAModerator: Boolean = false
+    var isUserAModerator by mutableStateOf(false)
         private set
 
-    var courseId: Int = -1
-        private set
+    var courseId: Int by Delegates.observable(-1) { _, oldValue, newValue ->
+        if (oldValue != newValue) {
+            isUserAModerator = coursePermissions.isUserAModerator(course)
+        }
+    }
 
     fun loadTests(courseId: Int) {
         this.courseId = courseId
-        this.isUserAModerator = coursePermissions.isUserAModerator(course)
         getTests()
     }
 

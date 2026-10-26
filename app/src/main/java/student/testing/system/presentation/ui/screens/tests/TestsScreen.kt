@@ -53,7 +53,9 @@ fun TestsScreen(
     val course by parentViewModel.courseFlow.collectAsState()
     val events by testsVM.events.collectAsState(OperationState.NoState)
     testsVM.course = course
-    testsVM.loadTests(course.id)
+    LaunchedEffect(course) {
+        testsVM.loadTests(course.id)
+    }
     val contentState by testsVM.contentState.collectAsState()
     var deletingTestId by remember { mutableStateOf<Int?>(null) }
     val options = listOf(context.getString(R.string.check), context.getString(R.string.delete))
