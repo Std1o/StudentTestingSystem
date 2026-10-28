@@ -31,7 +31,7 @@ import student.testing.system.domain.models.Answer
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AnswersList(answers: List<Answer>) {
+fun AnswersList(answers: List<Answer>, onAnswerToggled: (Answer) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -54,26 +54,23 @@ fun AnswersList(answers: List<Answer>) {
                             onLongClick = { },
                         )
                 ) {
-                    var checked by rememberSaveable { mutableStateOf(false) }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .toggleable(
-                                value = checked,
+                                value = answer.isRight,
                                 role = Role.Checkbox,
                                 onValueChange = {
-                                    checked = !checked
-                                    answer.isRight = checked
+                                    onAnswerToggled(answer)
                                 }
                             )
                             .padding(8.dp)
                             .fillMaxWidth()
                     ) {
                         Checkbox(
-                            checked = checked,
+                            checked = answer.isRight,
                             onCheckedChange = { isRight ->
-                                checked = !checked
-                                answer.isRight = isRight
+                                onAnswerToggled(answer)
                             })
                         Text(
                             text = answer.answer, modifier = Modifier

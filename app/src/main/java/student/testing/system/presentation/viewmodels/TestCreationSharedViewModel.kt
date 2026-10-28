@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import lilith.presentation.viewmodel.StatesViewModel
@@ -75,6 +76,22 @@ class TestCreationSharedViewModel @Inject constructor(
         appNavigator.tryNavigateTo(Destination.QuestionCreationScreen())
     }
 
+    private val _answers = MutableStateFlow<List<Answer>>(emptyList())
+
+    val answers = _answers.asStateFlow()
+
+    fun toggleAnswer(answer: Answer) {
+        _answers.update { currentList ->
+            currentList.map {
+                if (it.answer == answer.answer) {
+                    it.copy(isRight = !it.isRight)
+                } else {
+                    it
+                }
+            }
+        }
+    }
+
     fun getAIQuestion() {
         aiQuestionJob = viewModelScope.launch {
             if (isActive) {
@@ -107,15 +124,13 @@ class TestCreationSharedViewModel @Inject constructor(
     fun addAnswer(answerStr: String): Int {
         if (answerStr.isEmpty()) return R.string.error_empty_field
         val answer = Answer(answerStr, false)
-        if (questionCreationScreenSession.answers.contains(answer)) return R.string.duplicate_element
-        questionCreationScreenSession = questionCreationScreenSession.copy(
-            answers = listOf(*questionCreationScreenSession.answers.toTypedArray(), answer)
-        )
+        if (_answers.value.contains(answer)) return R.string.duplicate_element
+        _answers.value = listOf(*_answers.value.toTypedArray(), answer)
         return 0
     }
 
     fun addQuestion() {
-        val question = Question(questionStr, questionCreationScreenSession.answers)
+        val question = Question(questionStr, answers.value)
         val state = addQuestionUseCase(question)
         if (state is QuestionState.QuestionSuccess) {
             testCreationScreenSession.questions += question

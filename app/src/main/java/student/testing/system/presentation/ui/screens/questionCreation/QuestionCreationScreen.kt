@@ -90,7 +90,9 @@ fun QuestionCreationScreen(parentViewModel: TestCreationSharedViewModel) {
                         }
                     }
                     Text(text = stringResource(R.string.answers), fontSize = 16.sp)
-                    AnswersList(answers = screenSession.answers)
+                    AnswersList(
+                        answers = parentViewModel.answers.collectAsState().value,
+                        onAnswerToggled = { parentViewModel.toggleAnswer(it) })
                 }
                 MediumButton(
                     text = R.string.save,

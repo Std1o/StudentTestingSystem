@@ -3,17 +3,8 @@ package student.testing.system.presentation.ui.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import student.testing.system.R
 import student.testing.system.domain.models.Test
@@ -62,7 +52,9 @@ fun TestPassingScreen(test: Test, isUserModerator: Boolean, onResultReview: (Tes
                         color = Color.Black,
                         modifier = Modifier.padding(30.dp)
                     )
-                    AnswersList(answers = contentState.answers)
+                    AnswersList(
+                        answers = contentState.answers,
+                        onAnswerToggled = { viewModel.toggleAnswer(it) })
                 }
                 CenteredColumn(modifier = Modifier.align(Alignment.BottomCenter)) {
                     Text(

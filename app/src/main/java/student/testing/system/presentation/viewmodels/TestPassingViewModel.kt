@@ -2,32 +2,27 @@ package student.testing.system.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import lilith.domain.SingleEventFlow
-import lilith.presentation.viewmodel.StatesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import lilith.domain.SingleEventFlow
+import lilith.presentation.viewmodel.StatesViewModel
 import stdio.lilith.core.delegates.StateFlowVar.Companion.stateFlowVar
 import student.testing.system.R
-import student.testing.system.common.Constants
 import student.testing.system.common.CourseReviewNavigation
-import student.testing.system.domain.models.Test
-import student.testing.system.domain.models.TestResult
-import student.testing.system.domain.models.UserAnswer
-import student.testing.system.domain.models.UserQuestion
+import student.testing.system.domain.models.*
 import student.testing.system.domain.repository.TestsRepository
 import student.testing.system.domain.states.operationStates.protect
 import student.testing.system.presentation.navigation.AppNavigator
 import student.testing.system.presentation.navigation.Destination
 import student.testing.system.presentation.ui.models.contentState.TestPassingContentState
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class TestPassingViewModel @Inject constructor(
     private val repository: TestsRepository,
-    @CourseReviewNavigation private val courseNavigator: AppNavigator,
+    @CourseReviewNavigation private val courseNavigator: AppNavigator
 ) :
     StatesViewModel() {
 
@@ -52,17 +47,29 @@ class TestPassingViewModel @Inject constructor(
         updateTestPassingContentState(0)
     }
 
+    fun toggleAnswer(answer: Answer) {
+        val updatedAnswers = contentStateVar.answers.map {
+            if (it.id == answer.id) {
+                it.copy(isRight = !it.isRight) // Создаем копию
+            } else {
+                it
+            }
+        }
+
+        contentStateVar = contentStateVar.copy(answers = updatedAnswers)
+    }
+
     fun onNextQuestion() {
         val currentQuestion = test.questions[contentStateVar.position]
-        if (!currentQuestion.answers.any { it.isRight }) {
+        val currentAnswers = contentStateVar.answers
+        if (!currentAnswers.any { it.isRight }) {
             _snackbarEvent.tryEmit(R.string.error_select_answers)
             return
         }
         val userAnswers = arrayListOf<UserAnswer>()
-        for (ans in currentQuestion.answers) {
+        for (ans in currentAnswers) {
             val ansCopy = ans.copy() // to avoid bugs with further test takings
             userAnswers += UserAnswer(ansCopy.id!!, ansCopy.isRight)
-            ans.isRight = false
         }
         userQuestions += UserQuestion(currentQuestion.id!!, userAnswers)
         if (contentStateVar.position == test.questions.size - 1) {
