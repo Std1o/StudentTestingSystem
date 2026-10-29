@@ -21,6 +21,7 @@ class GetResultUseCaseTest {
 
     @Test
     fun `when 404 returns NoResult state`() = runTest {
+        repository.getResultResponse = OperationState.ErrorSingle("Not found", 404)
         val expected = ResultState.NoResult
         val actual = getResultUseCase(1, 1)
         assertEquals(expected, actual)
@@ -28,14 +29,18 @@ class GetResultUseCaseTest {
 
     @Test
     fun `all errors except 404 returns Error state`() = runTest {
+        repository.getResultResponse = OperationState.ErrorSingle("Access error", 403)
         val actual = getResultUseCase(-1, 1)
         assertTrue(actual is OperationState.ErrorSingle)
     }
 
     @Test
     fun `success response returns TestResult`() = runTest {
+        val expectedResult = TestResult(emptyList(), maxScore = 10, score = 8.9)
+        repository.getResultResponse = OperationState.Success(expectedResult)
         val actual = getResultUseCase(13, 1)
         assertTrue(actual is OperationState.Success)
         assertThat((actual as OperationState.Success).data, instanceOf(TestResult::class.java))
+        assertEquals(expectedResult, actual.data)
     }
 }

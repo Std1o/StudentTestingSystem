@@ -15,6 +15,8 @@ import student.testing.system.domain.webSockets.WebsocketEvent
 
 class FakeTestsRepository : TestsRepository {
 
+    var getResultResponse: OperationState<TestResult> = OperationState.Success(TestResult())
+
     override suspend fun getTests(courseId: Int): LoadableData<List<Test>> {
         TODO("Not yet implemented")
     }
@@ -47,17 +49,7 @@ class FakeTestsRepository : TestsRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getResult(testId: Int, courseId: Int): OperationState<TestResult> {
-        if (testId == -1 || courseId == -1) {
-            return OperationState.ErrorSingle("Access error", 403)
-        }
-        val passedTests = listOf(12, 24, 13)
-        if (passedTests.contains(testId)) {
-            return OperationState.Success(TestResult(emptyList(), 10, 8.9))
-        } else {
-            return OperationState.ErrorSingle("Not found", 404)
-        }
-    }
+    override suspend fun getResult(testId: Int, courseId: Int) = getResultResponse
 
     override suspend fun getParticipantResult(
         testId: Int,
