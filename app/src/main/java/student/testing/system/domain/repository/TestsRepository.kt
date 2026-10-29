@@ -41,5 +41,5 @@ interface TestsRepository {
         testId: Int, courseId: Int, params: TestResultsRequestParams
     ): Flow<WebsocketEvent<ParticipantsResults>>
 
-    fun closeResultsConnection(): Job
+    fun closeResultsConnection(): Job?
 }

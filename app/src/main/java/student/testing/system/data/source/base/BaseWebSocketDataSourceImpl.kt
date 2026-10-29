@@ -1,12 +1,9 @@
 package student.testing.system.data.source.base
 
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
@@ -16,63 +13,58 @@ import student.testing.system.domain.webSockets.KtorWebsocketClient
 import student.testing.system.domain.webSockets.WebsocketEvent
 import student.testing.system.domain.webSockets.WebsocketEvents
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 open class BaseWebSocketDataSourceImpl<Params : Any> @Inject constructor(private val accountSession: AccountSession) {
 
-    private var isConnected: Boolean by Delegates.observable(false) { _, _, new ->
-        if (new) {
-            coroutineScope.launch {
-                val jsonObject = Gson().toJson(params)
-                client.send(jsonObject)
-            }
-        }
-    }
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private lateinit var params: Params
-    private lateinit var client: KtorWebsocketClient
+    private val gson = Gson()
+
+    @Volatile
+    private var connectionJob: Job? = null
 
     fun <Result> getData(
         url: String,
         params: Params,
         resultType: Class<Result>
     ): Flow<WebsocketEvent<Result>> = callbackFlow {
-        if (this@BaseWebSocketDataSourceImpl::client.isInitialized) {
-            client.stop()
-        }
+        connectionJob?.cancelAndJoin()
 
-        this@BaseWebSocketDataSourceImpl.params = params
+        var clientRef: KtorWebsocketClient? = null
+
         val callback = object : WebsocketEvents {
             override fun onReceive(data: String) {
-                println(data)
-                val dataJson = Gson().fromJson(data, resultType)
-                trySendBlocking(WebsocketEvent.Receive(dataJson))
+                trySend(WebsocketEvent.Receive(gson.fromJson(data, resultType)))
             }
 
             override fun onConnected() {
-                launch {
-                    val jsonObject = Gson().toJson(params)
-                    client.send(jsonObject)
+                clientRef?.let { c ->
+                    launch {
+                        runCatching { c.send(gson.toJson(params)) }.onFailure {
+                            trySend(
+                                WebsocketEvent.Disconnected(it.message ?: "Unknown error")
+                            )
+                        }
+                    }
                 }
-                trySendBlocking(WebsocketEvent.Connected)
+                trySend(WebsocketEvent.Connected)
             }
 
             override fun onDisconnected(reason: String) {
-                trySendBlocking(WebsocketEvent.Disconnected(reason))
+                trySend(WebsocketEvent.Disconnected(reason))
             }
         }
 
-        client = KtorWebsocketClientImpl(url, callback, accountSession)
+        clientRef = KtorWebsocketClientImpl(url, callback, accountSession)
 
-        launch { client.connect() }
+        val connectJob = launch { clientRef?.connect() }
+        connectionJob = connectJob
 
         awaitClose {
-            launch { client.stop() }
+            connectJob.cancel()
+            launch { clientRef?.stop() }
+            clientRef = null
+            if (connectionJob === connectJob) connectionJob = null
         }
     }
 
-    fun closeConnection(): Job = coroutineScope.launch {
-        client.stop()
-        coroutineScope.cancel()
-    }
+    fun closeConnection(): Job? = connectionJob?.also { it.cancel() }
 }

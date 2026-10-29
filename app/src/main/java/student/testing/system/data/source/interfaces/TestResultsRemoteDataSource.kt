@@ -13,5 +13,5 @@ interface TestResultsRemoteDataSource {
         params: TestResultsRequestParams
     ): Flow<WebsocketEvent<ParticipantsResults>>
 
-    fun closeConnection(): Job
+    fun closeConnection(): Job?
 }
